@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ColabEdu - Centro de Inteligencia Institucional</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4F46E5',
+                        accent: '#10B981',
+                        dark: '#0F172A',
+                        neutral: '#F8FAFC',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #F8FAFC; }
+        .chart-container { position: relative; width: 100%; max-width: 600px; margin-left: auto; margin-right: auto; height: 350px; max-height: 400px; }
+        .tab-active { border-bottom: 2px solid #4F46E5; color: #4F46E5; }
+        .glass-panel { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(226, 232, 240, 0.8); }
+        .bento-item { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .bento-item:hover { transform: translateY(-4px); box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1); }
+    </style>
+</head>
+<body class="text-slate-900">
+
+    <nav class="fixed w-full z-50 glass-panel">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center space-x-2">
+                    <span class="text-2xl font-extrabold tracking-tighter">Colab<span class="text-primary">Edu</span></span>
+                    <span class="bg-slate-100 text-slate-500 text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-widest border border-slate-200">Institutional</span>
+                </div>
+                <div class="hidden md:flex space-x-1">
+                    <button onclick="switchView('teacher')" id="btn-teacher" class="px-4 py-2 text-sm font-semibold transition-all tab-active">Para Profesores</button>
+                    <button onclick="switchView('schools')" id="btn-schools" class="px-4 py-2 text-sm font-semibold transition-all text-slate-500 hover:text-primary">Para Instituciones</button>
+                </div>
+                <div class="flex items-center">
+                    <button class="bg-dark text-white px-5 py-2 rounded-full text-sm font-bold shadow-lg hover:bg-slate-800 transition-all">Consola Admin</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-24 pb-12">
+        <div id="view-teacher" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <header class="mb-12">
+                <h1 class="text-4xl font-extrabold text-dark tracking-tight sm:text-6xl">Evaluación que devuelve <span class="text-primary">tiempo.</span></h1>
+                <p class="mt-6 text-xl text-slate-600 max-w-3xl">La carga administrativa consume el 80% del tiempo docente. Nuestra IA automatiza el procesamiento multimodal para que puedas volver a lo que importa: inspirar.</p>
+            </header>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+                <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm bento-item">
+                    <div class="text-primary text-3xl mb-4">&#128394;</div>
+                    <h3 class="text-xl font-bold mb-2">Manuscritos a Datos</h3>
+                    <p class="text-slate-500 text-sm">OCR avanzado con 99% de precisión que interpreta incluso la caligrafía más compleja.</p>
+                </div>
+                <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm bento-item">
+                    <div class="text-primary text-3xl mb-4">&#127897;</div>
+                    <h3 class="text-xl font-bold mb-2">Voz e Interacción</h3>
+                    <p class="text-slate-500 text-sm">Evaluación en tiempo real de fluidez y contenido en presentaciones orales de idiomas.</p>
+                </div>
+                <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm bento-item">
+                    <div class="text-primary text-3xl mb-4">&#128203;</div>
+                    <h3 class="text-xl font-bold mb-2">Rúbricas Dinámicas</h3>
+                    <p class="text-slate-500 text-sm">Generación automática de descriptores alineados a estándares internacionales.</p>
+                </div>
+            </div>
+
+            <section class="bg-dark rounded-[2.5rem] p-8 md:p-16 text-white overflow-hidden relative">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
+                    <div>
+                        <h2 class="text-3xl font-bold mb-6">Ahorro de Tiempo Semanal</h2>
+                        <p class="text-slate-400 mb-8">Visualiza la transformación operativa. El tiempo ganado se traduce en una reducción directa del burnout docente.</p>
+                        <div class="space-y-4">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center text-primary">&#10003;</div>
+                                <span>17 minutos ahorrados por cada ensayo evaluado.</span>
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <div class="w-12 h-12 rounded-full bg-accent/20 flex items-center justify-center text-accent">&#10003;</div>
+                                <span>Sincronización automática con el Gradebook del LMS.</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-slate-800/50 p-6 rounded-2xl border border-slate-700">
+                        <div class="chart-container">
+                            <canvas id="teacherTimeChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <div id="view-schools" class="hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <header class="mb-12">
+                <h1 class="text-4xl font-extrabold text-dark tracking-tight sm:text-6xl">Estandarización y <span class="text-primary">Equidad Académica.</span></h1>
+                <p class="mt-6 text-xl text-slate-600 max-w-3xl">Esta sección detalla cómo ColabEdu escala la excelencia pedagógica desde un solo aula hasta todo un sistema educativo regional, resolviendo el desafío de la consistencia en la evaluación.</p>
+            </header>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-12">
+                <div class="md:col-span-2 bg-indigo-600 p-8 rounded-3xl text-white flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-2xl font-bold mb-4">Elimina la Deriva Pedagógica</h3>
+                        <p class="text-indigo-100 opacity-90">Asegura que cada profesor, en cada escuela, evalúe bajo los mismos criterios de éxito. Las Recetas Maestras garantizan la equidad para cada estudiante.</p>
+                    </div>
+                    <div class="mt-8 pt-8 border-t border-indigo-500">
+                        <p class="text-sm font-medium">Beneficio: Reducción del 45% en discrepancias de calificación entre docentes.</p>
+                    </div>
+                </div>
+                <div class="md:col-span-2 bg-white p-8 rounded-3xl border border-slate-200">
+                    <h3 class="text-xl font-bold mb-4">Consistencia en Tiempo Real</h3>
+                    <div class="chart-container h-64">
+                        <canvas id="consistencyChart"></canvas>
+                    </div>
+                </div>
+                <div class="bg-slate-100 p-6 rounded-3xl border border-slate-200 flex flex-col items-center text-center">
+                    <div class="text-3xl mb-2">&#128202;</div>
+                    <h4 class="font-bold">Analítica Masiva</h4>
+                    <p class="text-xs text-slate-500 mt-2">Detección de brechas por competencia en todo el distrito.</p>
+                </div>
+                <div class="bg-slate-100 p-6 rounded-3xl border border-slate-200 flex flex-col items-center text-center">
+                    <div class="text-3xl mb-2">&#128274;</div>
+                    <h4 class="font-bold">LTI 1.3 Advantage</h4>
+                    <p class="text-xs text-slate-500 mt-2">Seguridad de grado institucional y sincronización profunda.</p>
+                </div>
+                <div class="bg-slate-100 p-6 rounded-3xl border border-slate-200 flex flex-col items-center text-center">
+                    <div class="text-3xl mb-2">&#128101;</div>
+                    <h4 class="font-bold">Retención Docente</h4>
+                    <p class="text-xs text-slate-500 mt-2">Tecnología "Anti-Burnout" para retener a los mejores maestros.</p>
+                </div>
+                <div class="bg-slate-100 p-6 rounded-3xl border border-slate-200 flex flex-col items-center text-center">
+                    <div class="text-3xl mb-2">&#128214;</div>
+                    <h4 class="font-bold">Soberanía de Datos</h4>
+                    <p class="text-xs text-slate-500 mt-2">Control total sobre la IP pedagógica de la institución.</p>
+                </div>
+            </div>
+
+            <section class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+                <div class="bg-white p-10 rounded-[2.5rem] border border-slate-200">
+                    <h2 class="text-2xl font-bold mb-6">Mapa de Brechas por Competencia</h2>
+                    <p class="text-slate-600 mb-8 text-sm">Este reporte visual permite a los directores identificar qué departamentos necesitan refuerzo. Los datos fluyen directamente de las evaluaciones diarias, eliminando la necesidad de reportes manuales.</p>
+                    <div class="chart-container">
+                        <canvas id="competencyMapChart"></canvas>
+                    </div>
+                </div>
+                <div class="space-y-6">
+                    <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm">
+                        <h4 class="font-bold text-primary mb-2">Para Escuelas y Departamentos</h4>
+                        <p class="text-slate-600 text-sm">Implementa un banco compartido de rúbricas. El "Curator Agent" ingiere tus programas actuales y los convierte en evaluadores inteligentes en minutos.</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm">
+                        <h4 class="font-bold text-accent mb-2">Para Gobiernos y Ministerios</h4>
+                        <p class="text-slate-600 text-sm">Monitorea el cumplimiento de estándares nacionales (LOMLOE, SEP, Common Core) sin burocracia. Genera reportes de nivel nacional con un clic.</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm">
+                        <h4 class="font-bold text-orange-500 mb-2">Para Editoriales</h4>
+                        <p class="text-slate-600 text-sm">Revitaliza tu catálogo estático. Convierte tus libros de texto en "Tutores Socráticos" interactivos que evalúan y guían al estudiante.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <section id="cta" class="py-20 bg-dark relative overflow-hidden text-center">
+        <div class="max-w-4xl mx-auto px-4 relative z-10">
+            <h2 class="text-3xl md:text-5xl font-extrabold text-white mb-8">El futuro de la evaluación es <span class="text-primary">colaborativo.</span></h2>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <button class="px-8 py-4 bg-primary text-white font-bold rounded-full hover:bg-indigo-700 transition-all shadow-xl">Solicitar Demo Institucional</button>
+                <button class="px-8 py-4 bg-white text-dark font-bold rounded-full hover:bg-slate-100 transition-all shadow-md">Consultar Precios</button>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-neutral py-12 border-t border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="text-slate-400 text-sm">&copy; 2026 ColabEdu. Potenciando la enseñanza con Inteligencia Pedagógica. Sin compromiso de IP.</p>
+        </div>
+    </footer>
+
+    <script>
+        let charts = {};
+
+        function switchView(view) {
+            document.getElementById('view-teacher').classList.add('hidden');
+            document.getElementById('view-schools').classList.add('hidden');
+            document.getElementById('btn-teacher').classList.remove('tab-active');
+            document.getElementById('btn-schools').classList.remove('tab-active');
+            document.getElementById('btn-teacher').classList.add('text-slate-500');
+            document.getElementById('btn-schools').classList.add('text-slate-500');
+
+            if (view === 'teacher') {
+                document.getElementById('view-teacher').classList.remove('hidden');
+                document.getElementById('btn-teacher').classList.add('tab-active');
+                document.getElementById('btn-teacher').classList.remove('text-slate-500');
+            } else {
+                document.getElementById('view-schools').classList.remove('hidden');
+                document.getElementById('btn-schools').classList.add('tab-active');
+                document.getElementById('btn-schools').classList.remove('text-slate-500');
+            }
+            renderCharts();
+        }
+
+        function renderCharts() {
+            Object.values(charts).forEach(chart => chart.destroy());
+
+            // Teacher Savings Chart
+            const ctx1 = document.getElementById('teacherTimeChart').getContext('2d');
+            charts.teacher = new Chart(ctx1, {
+                type: 'bar',
+                data: {
+                    labels: ['Corrección Manual', 'Corrección ColabEdu'],
+                    datasets: [{
+                        label: 'Horas Semanales',
+                        data: [30, 5],
+                        backgroundColor: ['#6366F1', '#10B981'],
+                        borderRadius: 12
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { grid: { color: 'rgba(255,255,255,0.1)' }, ticks: { color: '#94a3b8' } },
+                        x: { ticks: { color: '#94a3b8' } }
+                    }
+                }
+            });
+
+            // Consistency Chart (Radar)
+            const ctx2 = document.getElementById('consistencyChart').getContext('2d');
+            charts.consistency = new Chart(ctx2, {
+                type: 'radar',
+                data: {
+                    labels: ['Gramática', 'Contenido', 'Vocabulario', 'Tono', 'Estructura'],
+                    datasets: [{
+                        label: 'Varianza Humana',
+                        data: [80, 75, 90, 60, 85],
+                        borderColor: '#F43F5E',
+                        backgroundColor: 'rgba(244, 63, 94, 0.2)'
+                    }, {
+                        label: 'Estandarización ColabEdu',
+                        data: [98, 97, 99, 95, 98],
+                        borderColor: '#10B981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.2)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { r: { grid: { color: '#e2e8f0' }, pointLabels: { font: { size: 10 } } } }
+                }
+            });
+
+            // Competency Map (Horizontal Bar)
+            const ctx3 = document.getElementById('competencyMapChart').getContext('2d');
+            charts.competency = new Chart(ctx3, {
+                type: 'bar',
+                indexAxis: 'y',
+                data: {
+                    labels: ['Pensamiento Crítico', 'Uso de Evidencias', 'Concordancia', 'Fluidez Oral', 'Análisis Literario'],
+                    datasets: [{
+                        label: 'Nivel de Dominio Distrital (%)',
+                        data: [65, 42, 88, 55, 70],
+                        backgroundColor: '#4F46E5',
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { max: 100, ticks: { callback: v => v + '%' } }
+                    }
+                }
+            });
+        }
+
+        window.onload = renderCharts;
+    </script>
+</body>
+</html>
