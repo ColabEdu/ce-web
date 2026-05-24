@@ -1,46 +1,51 @@
-# Astro Starter Kit: Basics
+# ColabEdu Web (ce-web)
 
-```sh
-npm create astro@latest -- --template basics
+Este monorepo contiene los sitios web estáticos (SSG) basados en Astro para la plataforma ColabEdu.
+Se compone de dos proyectos principales:
+- `colabedu-org`: El sitio web principal / documentación abierta (usando Starlight).
+- `colabedu-ai`: La landing / sitio comercial de AI.
+
+## 🚀 Entorno de Desarrollo Local
+
+El proyecto usa `pnpm` y está configurado como un workspace.
+
+1. **Instalar dependencias**:
+   ```bash
+   pnpm install
+   ```
+
+2. **Arrancar servidores de desarrollo**:
+   - Para el sitio web principal (Org/Docs):
+     ```bash
+     pnpm run dev:org
+     ```
+   - Para el sitio web de AI:
+     ```bash
+     pnpm run dev:ai
+     ```
+
+## ☁️ Despliegue en Firebase Hosting
+
+La infraestructura de `ce-web` está preconfigurada para servir estos sitios ultrarrápidamente a través del CDN global de Firebase Hosting.
+
+### Configuración inicial (Solo la primera vez)
+Para vincular los targets (los nombres de los sitios en la configuración) a tu proyecto de Firebase, ejecuta:
+```bash
+firebase target:apply hosting colabedu-org <tu-firebase-project-id>
+firebase target:apply hosting colabedu-ai <tu-firebase-project-id>
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+### Despliegue Manual
+1. Compila los sitios a su versión estática:
+   ```bash
+   pnpm build
+   ```
+2. Sube a los servidores de Firebase:
+   ```bash
+   firebase deploy --only hosting
+   ```
+   *(También puedes desplegar un solo sitio haciendo `firebase deploy --only hosting:colabedu-org`)*
 
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
-```
-
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+### CI/CD
+Se ha configurado un workflow en GitHub Actions (`.github/workflows/deploy-ce-web.yml`) que generará entornos de Preview para cada Pull Request y publicará al canal Live cuando se mergeen cambios a la rama `main`.
+Asegúrate de configurar los secretos `FIREBASE_SERVICE_ACCOUNT` correspondientes en GitHub.

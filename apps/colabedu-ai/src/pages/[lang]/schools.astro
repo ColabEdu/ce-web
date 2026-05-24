@@ -1,0 +1,14 @@
+---
+import SchoolsPage from "../../components/templates/SchoolsPage.astro";
+import { languages } from "../../i18n/ui";
+
+export function getStaticPaths() {
+    return Object.keys(languages).map((lang) => {
+        return { params: { lang } };
+    });
+}
+
+const { lang } = Astro.params;
+---
+
+<SchoolsPage lang={lang} />

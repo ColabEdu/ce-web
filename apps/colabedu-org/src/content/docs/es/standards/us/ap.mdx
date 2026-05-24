@@ -1,0 +1,80 @@
+---
+title: "Advanced Placement (AP)"
+description: "Compendio Maestro de Normativa Educativa y Arquitectura de Evaluación para Advanced Placement (AP)."
+sidebar:
+  order: 2
+---
+
+A diferencia de los currículos nacionales dictados por leyes gubernamentales, el programa **Advanced Placement (AP)**, gestionado privadamente por el **College Board**, representa un marco curricular estandarizado a nivel mundial. Su principal propuesta de valor es ofrecer cursos de rigor y exigencia universitaria a estudiantes de escuela secundaria (*High School*), permitiéndoles convalidar créditos antes de ingresar a la universidad.
+
+El enfoque pedagógico del programa AP se corona en un examen final de alto impacto (*high-stakes testing*) altamente estandarizado, que se califica en una **escala logarítmica del 1 al 5**. Alcanzar un 3, 4 o 5 otorga créditos universitarios en miles de instituciones de educación superior a nivel global. La evaluación AP se divide típicamente en dos grandes secciones: las *Multiple Choice Questions (MCQ)*, que son de corrección algorítmica y determinista tradicional, y las *Free Response Questions (FRQ)*.
+
+Las secciones **FRQ (Preguntas de Respuesta Libre)** conforman el verdadero desafío pedagógico y logístico del ecosistema. Estas incluyen la redacción de ensayos analíticos largos, el análisis de fuentes y documentos históricos primarios, y la resolución de problemas matemáticos, científicos o de código manuscrito. Evaluar FRQs exige horas interminables de corrección manual por parte de los docentes, quienes deben aplicar rúbricas extremadamente densas y complejas.
+
+Esta carga de trabajo extrema y el consecuente síndrome de agotamiento docente ("Burnout") convierten al ecosistema AP en el **mercado ideal y de mayor disposición de pago (TAM - Total Addressable Market)** para el modelo de **Assessment as Code (Evaluación como Código)** de ColabEdu. Los colegios están dispuestos a pagar tarifas *premium* por una herramienta que alivie esta carga mientras garantiza una preparación fiel al examen real.
+
+Este documento sirve como el **Índice Maestro (Source of Truth)** de las guías de cursos oficiales (*Course and Exam Descriptions - CEDs*). El *Curator Agent* de ColabEdu utilizará estos marcos para comprender la ontología AP, mapear las habilidades cognitivas requeridas y generar los `RUBRIC_BLOCKS` maestros. Al ser un estándar de alcance internacional, estos bloques se registrarán en la base de datos con un `authority_scope: "GLOBAL"`.
+
+## 🏛️ La Arquitectura de Evaluación del Programa AP
+
+El ecosistema AP no requiere cursar un bloque completo de asignaturas para obtener un diploma (salvo el programa opcional *AP Capstone*). Su arquitectura es **puramente modular**, lo que otorga a ColabEdu una ventaja comercial estratégica: permite vender licencias o "Recetas de Evaluación" por asignatura individual (*Per-Course Pricing*), facilitando una entrada gradual (*Land and Expand*) en los distritos escolares.
+
+La inteligencia artificial de ColabEdu se centrará casi exclusivamente en automatizar, auditar y guiar la preparación de las secciones **FRQ (Free Response Questions)**, utilizando las rúbricas analíticas hiper-detalladas del College Board. La plataforma actuará no solo como un calificador, sino como un **Tutor Socrático** que entrena al alumno para dominar la estructura de pensamiento que exige el College Board.
+
+## 🎓 Compendio de Asignaturas (Course and Exam Descriptions - CEDs)
+
+A continuación se listan los enfoques y enlaces a las páginas oficiales de las guías **CED (Course and Exam Description)** del College Board. Estas guías (a menudo de más de 200 páginas) contienen el "Course Framework" y las rúbricas de calificación oficiales.
+
+*Nota Legal y Operativa de Seguridad (ColabEdu):* Los CEDs y, sobre todo, las "Released FRQs" están protegidos por **estrictos derechos de autor del College Board**. ColabEdu utiliza un modelo **BYOG (Bring Your Own Guide / Safe Harbor)**: la plataforma aporta la arquitectura de software, pero es el colegio cliente quien debe subir sus propios PDFs oficiales de *AP Classroom* para que el *Curator Agent* extraiga los criterios exactos.
+
+### 🇪🇸 Lenguas y Literaturas del Mundo (El Foco Estratégico de ColabEdu)
+
+El dominio del español en EE.UU. es el mercado de entrada (*beachhead market*) natural para ColabEdu, aprovechando nuestra ventaja competitiva en procesamiento multilingüe avanzado.
+
+#### 1. AP Spanish Language and Culture
+- [Guía CED AP Spanish Language](https://apcentral.collegeboard.org/courses/ap-spanish-language-and-culture/course)
+  - *Desafío Multimodal (FRQ):* Evaluación altamente compleja que incluye Email Reply, Argumentative Essay (síntesis de artículo, gráfico y audio), Simulated Conversation, y Cultural Comparison.
+  - *Arquitectura ColabEdu:* La plataforma resuelve la pesadilla logística mediante su **Integración Multimodal Avanzada**. Utilizando WebRTC (LiveKit) y los modelos *Speech-to-Text* de Gemini, ColabEdu captura el audio del alumno en tiempo real y aplica la rúbrica AP de "Pronunciación, Registro, Control Sintáctico y Variedad de Vocabulario".
+
+#### 2. AP Spanish Literature and Culture
+- [Guía CED AP Spanish Literature](https://apcentral.collegeboard.org/courses/ap-spanish-literature-and-culture/course)
+  - *Contexto Pedagógico:* Requiere la lectura analítica de una lista de **38 obras literarias canónicas obligatorias**.
+  - *Arquitectura ColabEdu (RAG + Vision):* Escenario perfecto para el **Context Caching**. El *Curator Agent* pre-carga las 38 obras completas. Cuando el alumno entrega un ensayo, el *Evaluator Agent* verifica instantáneamente las citas textuales. Además, para la pregunta de *Text and Art Comparison*, ColabEdu utiliza su motor **Multimodal (Vision)** para ingerir la pintura analizada por el estudiante.
+
+### 📜 Historia y Ciencias Sociales
+
+- **AP U.S. History (APUSH), AP World History, AP European History:** [Marcos Curriculares de Historia](https://apcentral.collegeboard.org/courses/ap-united-states-history/course)
+  - *Contexto ColabEdu (El desafío DBQ):* La pieza central es el **DBQ (Document-Based Question)**. El alumno recibe un prompt y 7 documentos, y debe redactar un ensayo usando al menos 4-6 documentos como evidencia.
+  - *Implementación:* La IA despliega un **RAG (Retrieval-Augmented Generation) avanzado** para verificar si el alumno citó correctamente los documentos y aplicó el análisis **HIPP**. La rúbrica es un sistema binario de 7 puntos fijos (Tesis, Contextualización, Evidencia [x2], Análisis y Razonamiento [x2]).
+
+### 🖋️ Inglés
+
+- **AP English Language and Composition & AP English Literature and Composition:**
+  - *Mapeo de Rúbrica:* Utiliza una estricta **Rúbrica de 6 puntos (1-4-1)**: 1 punto por Tesis, 4 puntos por Evidencia y Comentario, y 1 punto por "Sofisticación".
+  - *Ejecución de la IA:* El *Evaluator Agent* aísla la Tesis y cuantifica la Evidencia. Sin embargo, requerirá la intervención del docente a través de **Human-in-the-Loop (HITL)** para validar el punto de "Sofisticación" altamente subjetivo.
+
+### 🔬 Ciencias
+
+- **AP Biology, AP Chemistry, AP Physics, AP Environmental Science:**
+  - *Directivas IA:* Debe ajustarse estrictamente a `scoring_mode: DETERMINISTIC`. La IA identifica "puntos de anclaje" para otorgar *crédito parcial*. Este módulo hace uso exhaustivo del motor de **Visión OCR**, ya que los estudiantes dibujarán gráficos de dispersión o diagramas de cuerpo libre a mano.
+
+### 💻 Matemáticas e Informática
+
+- **AP Calculus, AP Statistics, AP Computer Science A (Java), AP CSP:**
+  - *Contexto ColabEdu:* Para *AP Computer Science A*, los alumnos escriben código Java **a mano en papel**. ColabEdu simula esto exigiendo a los alumnos que suban fotos de su código manuscrito. El pipeline de OCR Multimodal extraerá el texto y lo evaluará, aplicando *leniency* (clemencia) en errores sintácticos humanos menores.
+
+## ⚙️ Implicaciones Arquitectónicas, Tecnológicas y de Negocio
+
+### 1. El Conflicto de Autoridad ("Double Inheritance")
+
+El sistema educativo estadounidense está altamente descentralizado. Un profesor en Texas debe preparar al alumno para el examen global AP, pero también cumplir los estándares de Texas (TEKS).
+- **La Solución Arquitectónica:** El grafo jerárquico (`spec_graph_nodes`) y el *Late Binding* de ColabEdu ensamblan una receta con **doble herencia**. Hereda el `RUBRIC_BLOCK` del nodo GLOBAL (AP), y superpone los "Tags de Metadatos de Conocimiento" del nodo NATIONAL/DISTRICT (Texas TEKS).
+
+### 2. El Ciclo de Retroalimentación de Liberación Anual (DataOps e IA Anclada)
+
+Cada otoño, el College Board libera los exámenes FRQ y muestras reales de ensayos de alumnos (Alto, Medio, Bajo).
+- **Few-Shot RAG Prompting:** ColabEdu realiza una búsqueda semántica ultrarrápida para inyectar en el prompt de la IA los ensayos de muestra reales que obtuvieron un "3", un "4" o un "5". Esto "ancla" matemáticamente a la IA a los estándares reales de calificación humana.
+
+### 3. Aislamiento Soberano de Propiedad Intelectual (El Safe Harbor)
+
+- **Flujo "Safe Harbor":** ColabEdu ofrece la *Infraestructura (OAS)*, pero no el contenido protegido. Los distritos escolares suben sus PDFs legales a su "Bóveda Privada" (`tenant_id`). El sistema los marca inquebrantablemente como privados (`is_public: false`).

@@ -1,0 +1,94 @@
+---
+title: "Crosswalk Global: Mapeo de Conceptos Educativos (OAS V2)"
+description: "La Piedra Rosetta de la plataforma ColabEdu, traduciendo marcos educativos a primitivas arquitectónicas inmutables."
+sidebar:
+  order: 1
+---
+
+**Arquitectura:** Open Assessment Standard (OAS v1beta1)
+
+**Propósito:** Este documento actúa como la **Piedra Rosetta** de la plataforma ColabEdu. Traduce la jerga burocrática, legal y pedagógica de los cinco principales marcos educativos hispanohablantes (España, México, EE. UU., AP e IB) a las primitivas arquitectónicas inmutables de nuestra base de datos.
+
+Entender este mapeo es crucial para el *Curator Agent* y el equipo de ingeniería. El mayor fracaso de las plataformas EdTech tradicionales es el "efecto silo": construyen una base de datos entera para un país y luego tienen que reescribir el código desde cero para entrar a otro mercado.
+
+En ColabEdu, resolvemos la **Brecha Semántica** mediante este estándar. Esto permite extraer la normativa de un denso PDF del gobierno mexicano (SEP) y asignarle exactamente las mismas clases, metadatos y entidades de software que a un Real Decreto del gobierno español o a un *Syllabus* del College Board. La IA orquestadora no ve "países", ve pesos, nodos y tensores matemáticos.
+
+## 1. El Marco Legal y la Jerarquía Normativa (Capa C0)
+
+¿Cómo llama cada país a las reglas del juego? Cada ministerio de educación inventa sus propios términos para describir la jerarquía del conocimiento. Esta tabla mapea los conceptos desde la ley macro hasta el criterio microscópico que la IA debe evaluar en tiempo de ejecución.
+
+| **Arquitectura OAS (ColabEdu)** | **España (LOMLOE)** | **México (NEM / MCCEMS)** | **EE. UU. (Common Core / WL)** | **Advanced Placement (AP)** | **Bachillerato Internacional (IB)** |
+| --- | --- | --- | --- | --- | --- |
+| **Documento Maestro (La Ley)** | Real Decreto / Decreto Autonómico | Programa Sintético / MCCEMS | State Standards / Framework | Course and Exam Description (CED) | Subject Guide (Guía de la Asignatura) |
+| **Dominio Macro (category)** | Materia (Ej. Lengua Castellana y Literatura) | Recurso Sociocognitivo (Ej. Lengua y Comunicación) | Strand / Domain (Ej. Reading, Interpersonal Communication) | Modality (Ej. Interpersonal Writing) | Component (Ej. Paper 1, Internal Assessment) |
+| **Objetivo General (BLOCK_GOAL)** | Competencia Específica / Saberes Básicos | Meta de Aprendizaje | Anchor Standard / Core Competency | Learning Objective / Skill | Assessment Objective / Aim |
+| **Unidad de Evaluación (BLOCK_RUBRIC)** | Criterio de Evaluación | Progresión de Aprendizaje | Performance Expectation | Scoring Guideline / Rubric | Criterion (Ej. Criterio A: Lenguaje) |
+| **Niveles de Desempeño (L0-L4)** | Insuficiente, Bien, Notable, Sobresaliente | Requiere Apoyo, En Desarrollo, Nivel Esperado | Novice, Intermediate, Advanced (ACTFL) | Score 1 to 5 (Holistic Scale) | Markbands (Ej. 1-3, 4-6, 10-12) |
+
+### **Implicaciones Arquitectónicas y de Base de Datos**
+
+- **La Profundidad del Árbol:** Mientras que el sistema de EE. UU. (Common Core) tiende a ser muy plano y amplio (cientos de *Performance Expectations* granulares), los sistemas europeos e iberoamericanos (LOMLOE, NEM) son profundamente jerárquicos. El campo `category` y `subcategories` (array de strings) en OAS absorbe esta varianza sin requerir migraciones en el esquema SQL de PostgreSQL.
+- **El Mapeo de Puntos:** Los niveles L0-L4 no siempre representan notas del 0 al 10. En AP, un nivel 5 holístico puede equivaler a un 100%. En el IB, una banda de marcas (Markband) de "10-12" equivale a la nota máxima de un criterio. El *Spec Manager* normaliza estos valores flotantes en el backend antes de presentarlos en la interfaz.
+
+## 2. Ejes Transversales y Auditorías B2G (Taxonomy Crosswalks)
+
+Casi todos los sistemas educativos modernos exigen que una materia (ej. Literatura) evalúe habilidades que trascienden el aula (ej. Ciudadanía, Tecnología, Trabajo en Equipo). En ColabEdu, esto se resuelve con el array `taxonomy_crosswalks`.
+
+Este es nuestro **mayor argumento de venta (Killer Feature) B2B/B2G**: permite a un colegio privado evaluar a su manera, pero reportar automáticamente los resultados a los tableros de auditoría del gobierno sin doble esfuerzo.
+
+| **Arquitectura OAS (ColabEdu)** | **España (LOMLOE)** | **México (NEM / MCCEMS)** | **EE. UU. (Common Core / WL)** | **Advanced Placement (AP)** | **Bachillerato Internacional (IB)** |
+| --- | --- | --- | --- | --- | --- |
+| **Habilidades Transversales (taxonomy_ref)** | Competencias Clave (Ej. CCL, CD, CPSAA) | Ejes Articuladores (Ej. Pensamiento Crítico, Inclusión) | Cross-Disciplinary Skills / 21st Century Skills | The 6 Themes (Ej. Desafíos Mundiales, Identidad) | Conceptos (Ej. Identidad, Perspectiva, Transformación) |
+| **Perfil del Egresado (taxonomy_ref)** | Perfil de Salida del Alumnado | Perfil de Egreso | College and Career Readiness | AP Scholar Profile | El Perfil de la Comunidad del IB |
+| **Socioemocional (SEL)** | Educación en Valores Cívicos y Éticos | Fomento a la Identidad y Cultura de Paz | CASEL Framework (Self-Awareness, Relationship Skills) | N/A (Centrado puramente en lo académico) | Approaches to Learning (ATL Skills) |
+
+### **Ejemplo de Flujo de Datos Transversal**
+
+1. Un alumno en México escribe un ensayo sobre la Revolución Mexicana (evaluado con una *Progresión* de Historia).
+2. El motor LLM califica la cohesión y el análisis histórico del texto.
+3. Silenciosamente, gracias al `taxonomy_crosswalk`, la base de datos inyecta esos puntos en el nodo transversal del "Eje Articulador: Pensamiento Crítico".
+4. El Director de la escuela puede ver un *Dashboard* que muestra cómo evoluciona el Pensamiento Crítico de la institución, sin haber creado jamás un "examen de Pensamiento Crítico".
+
+## 3. Instrumentos y Tipos de Ejercicios (Capa C1)
+
+¿Cómo se materializa la abstracción legal en la pantalla del dispositivo de un alumno? Esta tabla alinea los nombres burocráticos de las pruebas con nuestros "Moldes" de interfaz gráfica nativos (`ExerciseTypes`) construidos en Flutter / React.
+
+| **Molde UI de ColabEdu (ExerciseType)** | **España (LOMLOE / EBAU)** | **México (CENEVAL / SEP)** | **EE. UU. (State Testing)** | **Advanced Placement (AP)** | **Bachillerato Internacional (IB)** |
+| --- | --- | --- | --- | --- | --- |
+| **Split-Pane Essay (Panel Doble)** | Comentario de Texto / Disertación Histórica | Redacción Indirecta (Adaptado) | DBQ (Document-Based Q.) / Analytical Essay | Argumentative Essay (FRQ 2 con 3 fuentes) | Análisis Guiado (Paper 1 con estímulo visual/textual) |
+| **Strict Limit Editor (Resumen breve)** | Resumen Objetivo y Extracción de Tema | Síntesis de Texto | Short Constructed Response (SCR) | Email Reply (FRQ 1 - Límites de palabras) | Text Formats (Blog, Carta formal corta) |
+| **Multimodal MCQ (Opción múltiple)** | Cuestionario de Lectura Crítica | Comprensión Lectora (Textos continuos/discontinuos) | SBAC / CAASPP Reading Comprehension | Multiple Choice Section (Textos y Gráficas) | Listening Comprehension (Paper 2) |
+| **Voice Chatbot / Audio Recorder** | Exposición Oral Individual | Participación en Panel (SEP) | ELPAC Speaking / Simulated Conversation | Simulated Conversation / Cultural Comparison | Evaluación Interna Oral (IA - 15 minutos) |
+| **Closed-Book Editor (Sin fuentes)** | Tema de Literatura (Memoria pura) | N/A | In-class timed essay / On-Demand Writing | N/A | Ensayo Comparativo (Paper 2 - Sin libros permitidos) |
+
+### **Restricciones de UX por Sistema**
+
+- **AP (Advanced Placement):** El molde *Split-Pane Essay* es indispensable aquí porque el ensayo argumentativo del AP exige que el estudiante lea un artículo, mire una gráfica y escuche un audio **al mismo tiempo** antes de escribir. La UI debe acomodar múltiples pestañas de fuentes (C2) en el lado izquierdo.
+- **IB (Bachillerato Internacional):** El molde *Voice Chatbot* para la Evaluación Interna requiere controles de tiempo draconianos. El estudiante tiene exactamente 15 minutos para hablar. El UI debe bloquearse irrevocablemente al llegar al segundo cero, simulando el estrés del entorno real.
+
+## 4. Filosofía Punitiva vs. Formativa (Capa C3 - Directivas)
+
+La mayor diferencia entre estos sistemas educativos no es el formato del examen, sino **cómo la IA debe tratar y penalizar los errores del estudiante**. Esto se controla mediante inyecciones en la Capa C3 (`preprocessing_directives`), las cuales alteran el "System Prompt" del orquestador LangGraph antes de llamar al LLM.
+
+| **Parámetro de IA** | **España (EBAU)** | **México (EXANI-II)** | **EE. UU. (Common Core)** | **Advanced Placement (AP)** | **Bachillerato Internacional (IB)** |
+| --- | --- | --- | --- | --- | --- |
+| **Tolerancia Ortográfica** | **Cero Absoluto.** Deducciones matemáticas exactas (-0.25 pt por cada tilde o falta). | **Muy Baja.** Penalización severa por vicios sintácticos (dequeísmo, gerundio incorrecto). | **Media-Alta.** Se premia la intención comunicativa y el "Translanguaging". | **Alta.** Se ignoran errores menores siempre que no impidan la comprensión del lector. | **Media.** Se valora el registro adecuado y la fluidez sobre la perfección mecánica aislada. |
+| **Enfoque Dialectal (Protección)** | Estándar Peninsular. | Español Estándar Mexicano (Se protege el uso formal de "Ustedes"). | Español de Herencia (Chicano/Bilingüe académicamente validado). | Global / Inclusivo. Acepta regionalismos (carro/coche, jugo/zumo). | Global / Inclusivo. Exige consistencia en la variante elegida por el alumno. |
+| **Política de Control Factual** | Baja (Evalúa más la forma que el fondo). | Media (Requiere coherencia interna). | Alta (Exige citar fuentes textuales "Evidence-Based"). | Alta (Debe referenciar las 3 fuentes provistas en el FRQ2). | Crítica (Penaliza duramente si el alumno inventa datos de la obra). |
+| **Estilo de Feedback IA** | Analítico, Estructural y Punitivo ("Has fallado en X"). | Normativo y Directo. | Formativo y de Crecimiento (Growth Mindset - "Intenta revisar Y"). | Holístico, orientado al éxito general del Task. | Reflexivo y Socrático (Enfoque TOK - "¿Por qué crees que el autor usó esta palabra?"). |
+
+### **Escenario Práctico de Orquestación (Directiva Dialectal)**
+
+Si un estudiante en Madrid escribe "vosotros sabéis" y el sistema está configurado en México (SEP), la directiva C3 intercepta el texto e instruye al modelo: *"Marca 'vosotros' como un error de registro, el alumno debe usar 'ustedes'"*. Inversamente, si un estudiante en Texas usa "computadora", el sistema de España no debe marcarlo como error (ordenador) si la directiva de tolerancia global está activa.
+
+## 5. El Flujo de Vida del Dato (Resumen de Ingeniería)
+
+Independientemente del país que estemos procesando o de lo exóticas que sean sus reglas, la arquitectura de base de datos de ColabEdu se mantiene inmutable. Este es el ciclo de vida exacto del dato a través de la plataforma:
+
+1. **Ingesta (El Contrato C0):** Un documento legal de cualquier país se traduce a la tabla `goals` (`BLOCK_GOAL`) y su matriz de evaluación a `rubrics` (`BLOCK_RUBRIC`). Esto establece las "Leyes de la Física" del sistema.
+2. **Ensamblaje (El Instrumento C1/C2):** El profesor crea una tarea seleccionando un `ExerciseType` (ej. Panel Doble), conectándolo con un texto histórico de la tabla `contexts` (`BLOCK_CONTEXT`) y adjuntando la rúbrica del paso 1. Esto genera una Receta (Recipe).
+3. **Ejecución (El Payload Runtime):** El estudiante abre su iPad o Chromebook. La UI lee la receta y dibuja la pantalla. El estudiante escribe su ensayo y pulsa "Enviar". El frontend empaqueta un payload JSON puro.
+4. **Evaluación (LangGraph + C3):** El payload llega al backend. LangGraph inyecta las modificaciones de comportamiento (`BLOCK_DIRECTIVE`), ensambla el contexto completo y fuerza al LLM a devolver un esquema estructurado (Structured Output).
+5. **Propagación (Crosswalks):** La nota se guarda en la base de datos relacional y se dispara a través de los nodos transversales, actualizando los *Dashboards* de competencias clave de la escuela o el gobierno en tiempo real.
+
+*La magia arquitectónica de ColabEdu es esta: el orquestador principal (LangGraph) no sabe absolutamente nada sobre el sistema educativo mexicano, español o estadounidense. Solo sabe obedecer pesos, límites y tensores que el Spec Manager ensambló dinámicamente en el Payload JSON final. Hemos abstraído la burocracia educativa convirtiéndola en matemáticas.*

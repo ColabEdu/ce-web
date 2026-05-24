@@ -1,0 +1,42 @@
+---
+title: "Why an Open Standard (Open Specs)?"
+description: "The strategic benefits of adopting the OAS specification for Governments, EdTech providers, educators, and AI developers."
+sidebar:
+  order: 2
+---
+
+The current educational ecosystem suffers from a serious problem of fragmentation and technological lock-in (Vendor Lock-in). Each EdTech platform invents its own way of storing exams, rubrics, and student profiles, creating opaque information silos.
+
+The **Open Assessment Specification (OAS)** is born under the philosophy that **pedagogy and regulations should not be the private property of any software company**. By opening the standard, ColabEdu fosters an ecosystem of **Digital Sovereignty** and interoperability that benefits all involved stakeholders.
+
+## 🏛️ For Governments and Public Institutions
+
+Ministries of education and regional secretariats (such as the Departament d'Educació or the SEP) need to modernize without losing control of their data or their legal framework.
+
+*   **Technological Sovereignty:** By adopting an open standard, governments are not tied to a single vendor. They can audit the code, host it on their own servers (On-Premise), and use national infrastructure (e.g., the Barcelona Supercomputing Center).
+*   **Auditability and Transparency:** Each rubric and grading level (Layer C0) is documented in a human-readable format (YAML). If a parent or a judge demands to know why an AI system failed a student, the flow is mathematically traceable back to the law (e.g., the Royal Decree of the BOE).
+*   **National Interoperability:** Allows different autonomous communities or states to use distinct platforms that, at the end of the day, report data to the ministry under the same competency and metrics scheme.
+
+## 🚀 For EdTech Providers and Startups
+
+For companies in the education sector, developing assessment engines from scratch and dealing with the educational laws of each country is a massive barrier to entry and a money pit.
+
+*   **Drastic Cost Reduction (R&D):** Instead of spending millions trying to prevent an LLM from hallucinating when grading mathematics in Mexico, a startup can adopt the OAS format and plug into an already solved deterministic engine.
+*   **Focus on Real Value (UX and Content):** Publishers and platforms can stop fighting over backend infrastructure and focus their resources on creating the best content, the best videos, and the best user experience (Frontend).
+*   **Market Agnosticism:** If a European EdTech wants to enter the US market, it only needs to load the Common Core (Layer C0) YAMLs into its system. Its software will work immediately without rewriting code.
+
+## 👩‍🏫 For Educators and Schools
+
+AI in classrooms has generated skepticism and fear due to the opacity of algorithms (black boxes). OAS returns control to educators.
+
+*   **Pedagogical Trust:** Teachers know that AI is not inventing criteria. AI is rigidly bound to follow the rubric (C0) that the department or teacher previously approved.
+*   **The "Mathematical Zero":** OAS forces AI to be able to award zero scores when the student fails to meet minimum requirements, eliminating the typical lenient bias of ChatGPT or Claude.
+*   **Automatic Cross-Curricular Assessment:** Educators assess a specific subject (e.g., History), and the standard takes care of propagating grades to cross-curricular competencies (Critical Thinking, Citizenship) automatically thanks to Crosswalks.
+
+## 🤖 For AI and LLM Developers
+
+Foundational models (OpenAI, Anthropic, Mistral, ALIA) are brilliant at understanding language, but terrible at following strict formats without an engineering harness.
+
+*   **Determinism and Algorithmic Harness:** OAS provides Layers C1 and C3 that inject behavioral directives (e.g., spelling tolerance, dialectal protection). It forces the model to respond in a structured and validated JSON schema.
+*   **Synthetic Data and Fine-Tuning:** An OAS-based ecosystem generates millions of iterations of perfectly structured assessments (Student Text + Rubric C0 + AI Justification). This clean and standardized data is pure gold for training (Fine-Tune) the next generation of local educational models.
+*   **Model Independence:** The Assessment as Code architecture allows switching models in the backend (for example, moving from GPT-4o to a local Open Source model like LLaMA 3) without any alteration to the pedagogy or the platform. The knowledge resides in the YAMLs, not in the neural weights of the model.

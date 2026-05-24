@@ -1,0 +1,62 @@
+---
+title: Agent Ecosystem
+description: The neural network of roles (Curator, Evaluator, Modernizer) in the ColabEdu architecture.
+sidebar:
+  order: 4
+---
+
+## The Agent Ecosystem and OAS
+
+The OAS standard is not solely designed for evaluating exams. It is conceived as a structured *Data Lake* where a swarm of specialized artificial intelligences (each with a specific role) collaborates to autonomously create, update, and execute the educational lifecycle.
+
+```mermaid
+graph TD
+    OAS[(OAS Specs Repository\nYAMLs)]
+    
+    Evaluator[Evaluator Agents\nEvaluate students against C0 Rubrics] -->|Lectura| OAS
+    Curator[Curator Agents\nProcess PDFs/Docs to generate C0/C1/C2 Layers] -->|Lectura/Escritura| OAS
+    Manager[Spec Managers\nOrchestrate and Compile Recipes] -->|Lectura| OAS
+    Modernizer[Modernizer Agents\nMigrate old LMS packages to OAS] -->|Escritura| OAS
+    ExerciseGen["Exercise Creation Agents\nGenerate dynamic exercises (C1)"] -->|Escritura| OAS
+    ResourceGen["Learning Resources Agents\nSynthesize educational material (C2)"] -->|Escritura| OAS
+    
+    style OAS fill:#f9f,stroke:#333,stroke-width:2px
+```
+
+*   **Evaluator Agents (Evaluators):** Consume the read-only standard. They cross-reference the `ExerciseSpec` with the student's payload to issue precise mathematical scores and formative *feedback*.
+*   **Curator Agents (Curators):** Are responsible for ingesting raw knowledge. They analyze documents, laws in PDF, or raw texts and generate the different layers of the standard (extracting C0 taxonomies, designing C1 tasks, or preparing C2 context banks), saving the result as new YAML files.
+*   **Modernizer Agents (Modernizers):** Act as an *ETL Pipeline* for *legacy* systems. They ingest exported packages from traditional LMS platforms (Moodle, Canvas, Blackboard ZIP files, or formats like IMS QTI) and automatically transform them into the structural ecosystem of OAS.
+*   **Exercise Creation Agents (Exercise Creators):** Use didactic specifications and pre-existing contexts to iteratively generate new dynamic exercises aligned with the standards, saving them as structured instances in OAS.
+*   **Learning Resources Agents (Learning Resource Generators):** Responsible for distilling theoretical content and generating synthetic, adaptive, or pedagogical support educational material to feed the resource banks (C2).
+
+## Agent Network: Implementation in ColabEdu
+
+Within the ColabEdu infrastructure, this ecosystem does not operate in isolation. We use a multi-agent approach where an orchestrator model routes requests to specialized *Workers*, ensuring optimal performance and context isolation.
+
+```mermaid
+graph LR
+    User((Teacher / Student))
+    
+    subgraph ColabEdu Cloud
+        Gateway[API Gateway]
+        Supervisor[LangGraph Supervisor]
+        
+        Worker1[Evaluator Worker]
+        Worker2[Curator Worker]
+        Worker3[Rubric Generator]
+        
+        Supervisor -->|Delegates Tasks| Worker1
+        Supervisor -->|Delegates Tasks| Worker2
+        Supervisor -->|Delegates Tasks| Worker3
+    end
+    
+    User <--> Gateway
+    Gateway <--> Supervisor
+    Worker1 -.-> SpecManager[Spec Manager API]
+    Worker2 -.-> SpecManager
+    Worker3 -.-> SpecManager
+    
+    style ColabEdu Cloud fill:#f0f8ff,stroke:#00509E,stroke-width:2px
+```
+
+The **Supervisor (based on LangGraph)** acts as the traffic brain. It analyzes the user's intent (e.g., *"Evaluate this History essay"*) and exclusively awakens the *Evaluator Worker* with precise instructions. In turn, all these agents lack their own long-term memory; they use the **SpecManager API** as their single source of truth, ensuring that any change in law or rubric is immediately applied to all agents.

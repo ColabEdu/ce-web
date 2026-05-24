@@ -1,0 +1,60 @@
+---
+title: El Motor de Evaluación y UI
+description: La magia del Late Binding, el protocolo A2UI, y los motores de generación de reportes Server-Driven.
+sidebar:
+  order: 3
+---
+
+En el ecosistema de ColabEdu, el **Spec Manager** y el **Recipe Compiler** actúan como los motores centrales responsables de traducir un estándar legal y pedagógico en un artefacto de evaluación ejecutable por la IA, sin requerir reentrenamiento del modelo (*Fine-Tuning*).
+
+## La Magia Arquitectónica: Late Binding (Enlace Tardío)
+
+Uno de los problemas invisibles de escalar plataformas EdTech es la "explosión combinatoria" (cada profesor asignando docenas de textos distintos para una misma rúbrica). OAS v1beta1 lo soluciona con **Late Binding**:
+
+1. **El Molde Hueco:** La plantilla C1 (ej. "Ensayo Argumentativo") se guarda en Git completamente vacía de contenido contextual (`requires_dynamic_context: true`).
+2. **El Gatillo:** Cuando el profesor asigna la tarea, simplemente selecciona o adjunta el artículo de contexto (Capa C2).
+3. **Just-in-Time Compilation:** No se crea ningún ejercicio nuevo en la base de datos. Solo en el milisegundo exacto en que el alumno abre la aplicación, el motor enlaza dinámicamente C2 dentro del molde hueco C1.
+
+## Fusión Determinista y Forzado Matemático
+
+Nuestra plataforma permite que modelos fundacionales *Off-the-Shelf* evalúen de forma estricta o empática en milisegundos gracias a pilares fundamentales:
+
+### A. El Nodo Pre-Compilador
+El sistema delega la mediación semántica a un micro-agente. Si la Ley (C0) dice *"Penaliza por cada error de tilde"* pero el Profesor (C3) instruye *"Ignora las tildes por dislexia"*, el nodo pre-compilador ejecuta el *Merge Lógico*, anula la instrucción punitiva y escupe un JSON unificado. **El LLM Evaluador principal jamás recibe instrucciones contradictorias.**
+
+### B. El Forzado Matemático (Structured Outputs)
+Prohibimos al modelo comportarse como un procesador de textos. Mediante **Guided Decoding** y **Structured Outputs**, el motor de inferencia bloquea matemáticamente al LLM para que devuelva exclusivamente datos puros bajo el esquema JSON exacto (El Payload Compilado o JSON Contract). Al forzar la gramática, el modelo enfoca todo su poder en la *evaluación*, no en el formato. Esto garantiza:
+1. Zero Hallucination (Determinismo).
+2. Salida Estructurada Garantizada (API Contract).
+3. Eficiencia Computacional y Ahorro Masivo de Tokens.
+
+### C. "Needle In A Haystack" (NIAH) y RAG
+Cuando la Capa C2 inyecta un artículo completo en el contexto, el LLM no sufre sobrecarga cognitiva; lo mantiene perfectamente mapeado en su *KV Cache* mientras analiza el texto del alumno gracias a la inmensa ventana de contexto de los modelos modernos.
+
+## Separación de Presentación y Datos (Server-Driven UI)
+
+OAS libera a la IA del diseño Frontend aplicando estrictamente el patrón *Server-Driven UI* a través del protocolo **A2UI (Agent-to-UI)**. La IA devuelve un JSON estructurado y el backend mapea esas variables dentro de los Widgets de Flutter de manera determinista.
+
+- **Primitivas y Componentes:** `pdf_viewer`, `markdown_editor`, `forms_mcq`, etc.
+- **El Chatbot Companion:** Un "Sidecar" acoplable a cualquier widget para ofrecer tutoría socrática en tiempo real.
+
+### Parametrización (Key-Value)
+El ingeniero declara el `configuration_schema` en el ExerciseType, y el pedagogo inyecta las variables en la Receta C1 (ej. `word_count_min: 250`, `enable_companion_chatbot: true`).
+
+## El Motor de Informes: Convención sobre Configuración
+
+### Default Layouts (Zero-Config Report)
+Los profesores no programan interfaces. El protocolo A2UI posee plantillas por defecto. Un creador solo apunta al `exerciseTypeRef` y el backend ensambla automáticamente el reporte. El catálogo de reporte incluye:
+- **Familia A (Layout):** `document_header_widget` (protege la PII), `section_title_widget`, `divider_widget`.
+- **Familia B (Core Evaluation):** `score_header_widget`, `criteria_breakdown_list_widget`, `spelling_diff_table_widget`.
+- **Familia C (Feedback Creativo):** `markdown_viewer_widget` (la "Vía de Escape" para la creatividad del docente a través de `constructive_feedback`, protegiendo la nota estructurada `overall_score`).
+
+### Sobrescritura Avanzada (The Override Pattern)
+Un distrito escolar puede alterar el reporte por defecto declarando explícitamente el bloque `report_components` en su YAML, reordenando widgets o añadiendo nuevos (ej. `competency_radar_chart_widget`).
+
+## Beneficios Finales de la Abstracción
+
+1. **UX Inmaculada:** Cero código para el docente.
+2. **Ahorro de Tokens:** El LLM devuelve JSON puro, no diseña tablas Markdown.
+3. **Privacidad de Datos (PII/FERPA):** El LLM jamás ve el nombre del alumno, el backend lo inyecta luego en el `document_header_widget`.
+4. **Trazabilidad Forense:** Fundamental para auditorías Gubernamentales (B2G).

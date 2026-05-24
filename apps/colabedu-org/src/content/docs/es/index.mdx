@@ -1,0 +1,89 @@
+---
+title: Documentación de ColabEdu
+description: Portal oficial de documentación de ColabEdu y Open Assessment Standard (OAS).
+template: splash
+hero:
+  tagline: Explora el estándar pedagógico, flujos de GitOps y casos de uso de IA.
+  actions:
+    - text: Leer el Libro Blanco
+      link: /es/oas-spec/
+      icon: right-arrow
+      variant: primary
+    - text: Ver Estándares Educativos
+      link: /es/standards/
+      icon: external
+---
+
+import { CardGrid, LinkCard, Card } from '@astrojs/starlight/components';
+
+<br/>
+
+<Card title="Últimas Novedades y Lanzamientos" icon="rocket">
+    Mantente al día con nuestras integraciones de estándares educativos en el repositorio OAS.
+</Card>
+
+<CardGrid>
+  <LinkCard
+    title="Arquitectura SEP y MCCEMS para México"
+    description="Mapeo a nivel nacional de los estándares educativos mexicanos y de las Evaluaciones Diagnósticas CENEVAL / MEJOREDU."
+    href="/es/news/2026-04-20-sep-mexico"
+  />
+  <LinkCard
+    title="Simulacros de Selectividad (EBAU/EvAU)"
+    description="Preparación para el acceso a la universidad en España con evaluación automatizada de comentarios de texto y redacciones."
+    href="/es/news/2026-03-30-ebau"
+  />
+  <LinkCard
+    title="LOMLOE entra a la plataforma"
+    description="Adaptación total a los saberes básicos, competencias específicas y criterios de evaluación de la LOMLOE española."
+    href="/es/news/2026-03-05-lomloe"
+  />
+</CardGrid>
+
+<br/>
+
+<div style="text-align: center;">
+  <a href="/es/news" style="display: inline-block; padding: 0.5rem 1rem; border-radius: 4px; background: var(--sl-color-accent); color: var(--sl-color-text-invert); font-weight: bold; text-decoration: none;">Ver todas las noticias →</a>
+</div>
+
+<br/>
+
+---
+
+<br/>
+
+## Un Ecosistema Abierto y Colaborativo
+
+El proyecto ColabEdu y el estándar **OAS** nacen con un único objetivo central: **colaborar para mejorar la educación**. No somos un "jardín vallado", somos una infraestructura abierta donde distintos actores suman fuerzas garantizando en todo momento la soberanía de los datos:
+
+<CardGrid stagger>
+  <Card title="Para Educadores y Estudiantes" icon="open-book">
+    Soluciones de apoyo diario como Copilotos Docentes y Tutores Socráticos interactivos que liberan la carga burocrática y acompañan al alumno sin darle la respuesta.
+  </Card>
+  <Card title="Para Gobiernos y Distritos" icon="document">
+    Gobernanza federada para auditar evaluaciones a gran escala, asegurando el cumplimiento legal y proporcionando herramientas de control contra la "deriva pedagógica".
+  </Card>
+  <Card title="Para Proveedores EdTech" icon="puzzle">
+    Herramientas de modernización masiva (*Modernizers*). Transforma PDFs, libros de texto y repositorios heredados al nuevo estándar de evaluación impulsado por IA.
+  </Card>
+  <Card title="Para Ingenieros y Developers" icon="setting">
+    El formato OAS (YAML) y la arquitectura GitOps son 100% abiertos. Te invitamos a crear tus propias implementaciones, integrar OAS en tu LMS o diseñar nuevos Agentes.
+  </Card>
+</CardGrid>
+
+<br/>
+
+<div style="text-align: center;">
+  <a href="/es/oas-spec/ecosistema-comunidad/" style="display: inline-block; padding: 0.5rem 1rem; border-radius: 4px; border: 2px solid var(--sl-color-accent); color: var(--sl-color-text); font-weight: bold; text-decoration: none;">Descubre el Ecosistema y Únete →</a>
+</div>
+
+<br/>
+
+<div style="margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--sl-color-gray-6); text-align: center; display: flex; flex-direction: column; gap: 0.5rem;">
+  <div style="font-size: var(--sl-text-sm); font-weight: 600; color: var(--sl-color-gray-2);">
+    🌍 Built in California & Spain
+  </div>
+  <div style="font-size: var(--sl-text-xs); color: var(--sl-color-gray-4); letter-spacing: 0.05em;">
+    San Jose | Madrid | Ciudad de México
+  </div>
+</div>

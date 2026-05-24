@@ -1,0 +1,73 @@
+---
+title: "Recipe"
+description: "Reference documentation for the Recipe resource in OAS."
+sidebar:
+  order: 2
+---
+
+The `Recipe` resource functions as a linker or pedagogical "assembly recipe". It links workflow engine configurations (such as whether a score should be calculated or a report issued) with Layer 0 pedagogical components (rubrics and objectives) and exercise types.
+
+A `Recipe` tells the system *what elements* to combine to generate or evaluate an exam.
+
+## Schema
+
+### Metadata (`metadata`)
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `id` | `string` | Yes | Unique identifier for the recipe (e.g., `global.c1.ib...`). |
+| `title` | `string` | Yes | Descriptive title of the assessment recipe. |
+| `version` | `string` | Yes | Semantic version of the resource (e.g., `1.0.0`). |
+
+### Workflow Configuration (`workflow_parameters`)
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `scoring` | `boolean` | No | Indicates whether the engine should assign a quantitative score to the assessment. |
+| `report_format` | `string` | No | Expected format for the final report (e.g., `PDF`). |
+
+### Pedagogical Assembly (`pedagogical_assembly`)
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `rubric` | `object` | No | Contains the rubric layers (C0) to be applied. |
+| `rubric.layers` | `array` | No | List of rubric layers. Each layer includes `level` (e.g., `C0`), `block_id` (reference to the rubric), and `status` (e.g., `ACTIVE`). |
+
+### Assembly Specification (`spec.assembly`)
+
+The main block where references to be injected into the LLM prompt are consolidated.
+
+| Field | Type | Description |
+|---|---|---|
+| `param_refs` | `string[]` | List of `ExerciseType` IDs (base parameters for the exercise format). |
+| `rubric_refs` | `string[]` | List of `Rubric` resource IDs to apply evaluative criteria. |
+| `directive_refs` | `string[]` | List of `Directive` resource IDs (hard instructions for the AI). |
+
+## Usage Example
+
+Below is an example of a `Recipe` for an IB Literature assessment:
+
+```yaml
+apiVersion: colabedu.ai/v1beta1
+kind: Recipe
+metadata:
+  id: global.c1.ib.spanish_a.literature.hl.2026.v1.v1.cf8880
+  title: Recipe for IB 2026 - Spanish A Literature HL - Assessment Outline
+  version: 1.0.0
+workflow_parameters:
+  scoring: true
+  report_format: PDF
+pedagogical_assembly:
+  rubric:
+    layers:
+    - level: C0
+      block_id: global.c0.ap.spanish_literature.essay.text_comparison.v1.v1.6a4ae1
+      status: ACTIVE
+spec:
+  assembly:
+    param_refs:
+    - global.exercise_type.free_text.v1
+    rubric_refs:
+    - global.c0.ap.spanish_literature.essay.text_comparison.v1.v1.6a4ae1
+    directive_refs: []
+```

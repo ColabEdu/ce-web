@@ -1,0 +1,266 @@
+---
+title: "Catálogo de Casos Prácticos: Ecosistema Educativo de México (EXANI-II y MEJOREDU) bajo OAS V2"
+description: "Cómo ColabEdu utiliza el Assessment as Code para implementar el sistema mexicano, desde EXANI-II hasta MEJOREDU."
+---
+
+**Arquitectura:** Open Assessment Standard (OAS v1beta1)
+
+**Scope Educativo:** Examen Nacional de Ingreso a la Educación Superior (EXANI-II de CENEVAL), Examen de Asignación a la Educación Media Superior (COMIPEMS) y Evaluaciones Diagnósticas de Educación Básica (MEJOREDU / SEP).
+
+El ecosistema de evaluación en México representa uno de los mercados educativos (Total Addressable Market) más grandes, complejos y competitivos del mundo hispanohablante. Se caracteriza por una profunda dualidad: por un lado, un marco curricular nacional humanista, constructivista y formativo impulsado por el Estado (La Nueva Escuela Mexicana - NEM); y por otro, un sistema de filtros de acceso estandarizados, de altísimo impacto (High-Stakes) y rigor psicométrico, operado por entidades autónomas (CENEVAL).
+
+A diferencia de otros países donde prevalece el "ensayo largo" (redacción directa en un lienzo en blanco) para acceder a la universidad, el sistema mexicano evalúa el dominio del lenguaje a través de la **Comprensión Lectora Avanzada** y la **Redacción Indirecta** (identificación estructural y corrección de errores morfosintácticos, vicios del lenguaje y coherencia textual en textos ajenos).
+
+Este documento detalla exhaustivamente la implementación en **Assessment as Code** de las pruebas mexicanas. Demostraremos cómo la plataforma ColabEdu, mediante componentes interactivos A2UI (Agent-to-UI) desarrollados en Flutter y directivas algorítmicas de protección dialectal en la Capa C3, puede emular perfectamente la experiencia técnica y la presión del CENEVAL, mapeándola a nuestra matriz matemática de niveles y pesos.
+
+## 1. EXANI-II: Redacción Indirecta (CENEVAL)
+
+La "Redacción Indirecta" es un paradigma de evaluación fascinante desde el punto de vista de la ingeniería. Evalúa la capacidad del aspirante para fungir como un "editor profesional": debe seleccionar fragmentos textuales que mejoren la coherencia, cohesión y corrección normativa de un texto deficiente preexistente. El alumno no escribe desde cero; reescribe, reordena o elige la mejor opción léxica para subsanar un error estructural (solecismos, anacolutos, barbarismos, discordancias de género/número o tiempos verbales).
+
+### A. El Motor UI/UX (ExerciseType) y el Reto de la Interfaz
+
+El reto técnico aquí es superar el anticuado formato de "papel y lápiz" o los formularios estáticos (Google Forms) que usan actualmente las academias. Mostrar un texto largo con números entre corchetes [1] y luego hacer preguntas abajo rompe la concentración del alumno (fricción cognitiva).
+
+Para digitalizar esta experiencia de forma verdaderamente interactiva, el `ExerciseType` de ColabEdu despliega un **Inline Error Correction Widget**. Este componente de Flutter permite que el alumno haga clic directamente sobre la palabra o frase subrayada en el texto, desplegando un menú contextual (pop-over) con las opciones de corrección, manteniendo la lectura fluida.
+
+```yaml
+apiVersion: colabedu.ai/v1beta1
+kind: ExerciseType
+metadata:
+  id: "mx.etype.exani.redaccion_indirecta.v1"
+  title: "Motor UI: EXANI-II Redacción Indirecta Interactiva"
+  description: "Simulador de edición en tiempo real para detección de vicios del lenguaje y mejora textual."
+spec:
+  # FASE DE RESOLUCIÓN (LO QUE VE EL ALUMNO)
+  ui_components:
+    - type: "split_pane_widget"
+      left: "document_viewer_widget" # Renderiza el texto base, insertando marcas visuales en los fragmentos problemáticos.
+      right: "inline_error_correction_widget" # Cuestionario dinámico ligado bidireccionalmente a las marcas del texto. Al hacer hover a la derecha, se ilumina el texto a la izquierda.
+
+  # FASE DE RETROALIMENTACIÓN (LO QUE VE EL PROFESOR Y EL ALUMNO TRAS LA CALIFICACIÓN)
+  report_components:
+    - type: "score_header_widget"
+      data_mapping: "overall_ceneval_index_score" # Traducción automática a la escala 700-1300
+    - type: "grammar_rule_breakdown_widget" # Muestra un análisis granular: "Dominas la acentuación diacrítica (90%), pero fallas en gerundios de posterioridad (20%)".
+    - type: "markdown_viewer_widget"
+
+  configuration_schema:
+    - key: "timer_duration_minutes"
+      type: "integer"
+      default: 50
+    - key: "strict_mode"
+      type: "boolean"
+      default: true
+      description: "Bloquea el uso de diccionarios, pestañas externas y el portapapeles."
+```
+
+### B. Capa C0 (La Rúbrica Normativa CENEVAL) y Capa C3 (Defensa Dialectal)
+
+El EXANI-II evalúa el Español Estándar de México. Aquí existe un peligro inherente al usar Inteligencia Artificial: la mayoría de los LLMs fundacionales han sido entrenados con grandes corpus de la Real Academia Española (RAE) orientados al español peninsular (España). Si no configuramos "guardarraíles" (guardrails) arquitectónicos, la IA podría penalizar injustamente a un alumno mexicano por no usar el pronombre "vosotros" o por utilizar estructuras perfectamente cultas y aceptadas en América Latina.
+
+Para resolverlo, calibramos matemáticamente a la IA utilizando una rúbrica estructurada por pesos y niveles (L0-L4) en la Capa C0, y luego inyectamos una "armadura dialectal" en la Capa C3.
+
+```yaml
+# CAPA C0 (Rúbrica Estándar Matemática)
+# Define la inmutabilidad de la puntuación.
+- id: "mx.rub.ceneval.exani2.redaccion.v1"
+  level: "C0"
+  type: "BLOCK_RUBRIC"
+  authority_scope: "NATIONAL"
+  content: |
+    Scale: 0-4 (El backend realizará la equivalencia interna al Índice CENEVAL 700-1300)
+    Criteria:
+    - Coherencia y Cohesión Textual (35%):
+      L4: Conexión lógica impecable entre oraciones. Uso adecuado de nexos sintácticos y concordancia gramatical perfecta (sujeto-verbo, género-número). Capacidad para reordenar párrafos lógicamente.
+      L2: Errores menores de concordancia a larga distancia o uso de nexos repetitivos que empobrecen el texto pero no rompen totalmente el sentido.
+      L0: Incoherencia grave. Textos desconectados, uso contradictorio de nexos adversativos o causales, y errores severos de concordancia estructural.
+
+    - Convenciones de la Lengua (35%):
+      L4: Dominio absoluto de la ortografía, acentuación (diacrítica, agudas, llanas, esdrújulas) y puntuación (uso de la coma incidental y punto y coma). Uso correcto de preposiciones.
+      L2: Presenta errores esporádicos en signos de puntuación de nivel intermedio o tildes que no alteran drásticamente el significado léxico de la palabra.
+      L0: Multiplicidad de faltas ortográficas graves, confusión de grafías (s/c/z, b/v) y omisión de puntuación básica que imposibilita la lectura fluida y cambia el sentido de la oración.
+
+    - Vicios del Lenguaje (30%):
+      L4: Ausencia total de vicios. El texto resultante es limpio, directo y de registro académico impecable.
+      L2: Presencia ocasional de pleonasmos menores o muletillas en la transición, pero elude los errores normativos más graves del idioma.
+      L0: Uso constante e incapacidad para corregir barbarismos, dequeísmos ("me dijo de que"), queísmos, anacolutos (ruptura de la frase) o el incorrecto gerundio de posterioridad.
+
+# CAPA C3 (Gatekeeper Dialectal Mexicano)
+# Define las reglas de orquestación en tiempo de vuelo para el LLM.
+- id: "mx.dir.ceneval.norma_mexicana.v1"
+  level: "C3"
+  type: "BLOCK_DIRECTIVE"
+  content: |
+    persona: "Evaluador psicométrico del CENEVAL, experto purista en sintaxis y en la normativa exclusiva del español culto de México."
+    preprocessing_directives:
+    - rule: "Protección Dialectal Activa: Acepta como perfectamente válido, culto y académico el uso del pronombre 'ustedes' y sus conjugaciones correspondientes para la segunda persona del plural. Bajo NINGUNA circunstancia exijas, sugieras o evalúes como correcto el uso de 'vosotros' o sus formas verbales."
+    - rule: "Vigilancia de Vicios Específicos: Aplica automáticamente un descenso directo hacia el nivel L0 (0 puntos) en el criterio 'Vicios del Lenguaje' si detectas que el alumno no ha identificado o corregido de forma exitosa un 'dequeísmo' explícito (ej. 'pienso de que'), un pleonasmo evidente ('subir arriba', 'entrar adentro') o un gerundio de posterioridad ('salió de casa, llegando a Madrid horas después')."
+```
+
+### C. La Receta Final (C1) y la Generación Procedural
+
+Lo que hace a este sistema escalable para las academias de preparación en México es que **no necesitan crear cada pregunta a mano**. Al inyectar un texto en la Capa C2, un agente de LangGraph "ensucia" o "rompe" el texto a propósito, sembrando errores gramaticales basados en el historial de fallos del alumno, creando simulacros infinitos.
+
+```yaml
+apiVersion: colabedu.ai/v1beta1
+kind: Recipe
+metadata:
+  id: "mx.recipe.template.exani2.redaccion.v1"
+  title: "Simulacro EXANI-II: Redacción Indirecta Adaptativa"
+spec:
+  level: "C1"
+  exerciseTypeRef: "mx.etype.exani.redaccion_indirecta.v1"
+  rubric_refs: ["mx.rub.ceneval.exani2.redaccion.v1"]
+  directive_refs: ["mx.dir.ceneval.norma_mexicana.v1"]
+
+  context_refs: [] # LATE BINDING: Se inyecta el texto, y el Curator Agent siembra los errores dinámicamente antes de renderizar la UI.
+  requires_dynamic_context: true
+  variables:
+    timer_duration_minutes: 50
+```
+
+## 2. EXANI-II: Comprensión Lectora (Textos Continuos y Discontinuos)
+
+La prueba de comprensión lectora evalúa procesos cognitivos profundos: identificar información oculta, comprender la superestructura argumentativa, e inferir intenciones y propósitos del autor. El examen utiliza tanto textos continuos (artículos científicos, literarios, ensayos) como textos discontinuos (infografías, gráficas estadísticas, mapas conceptuales).
+
+### A. El Motor UI/UX (ExerciseType) y los Distractores Semánticos
+
+Para simular el examen, utilizamos un motor de cuestionarios dinámicos (MCQ). Sin embargo, a diferencia de los creadores de tests tradicionales, la IA de ColabEdu en el backend (*Curator Agent*) se encarga de generar **distractores semánticos complejos (Respuestas Incorrectas Plausibles)** en tiempo de vuelo. La IA escanea el texto y crea opciones falsas que parecen correctas si el alumno hizo una lectura superficial o no comprendió una ironía, tal como lo hacen los psicómetras del CENEVAL.
+
+```yaml
+apiVersion: colabedu.ai/v1beta1
+kind: ExerciseType
+metadata:
+  id: "mx.etype.exani.comprension_lectora.v1"
+  title: "Motor UI: EXANI-II Comprensión Lectora"
+spec:
+  ui_components:
+    - type: "split_pane_widget"
+      left: "rich_media_viewer_widget" # Capaz de renderizar tanto texto enriquecido como gráficas vectoriales (textos discontinuos).
+      right: "dynamic_mcq_forms_widget"
+
+  report_components:
+    - type: "score_header_widget"
+    - type: "reading_skills_radar_chart" # Gráfico de araña visualizando competencias: Extracción Literal vs Inferencia Crítica.
+    - type: "pedagogical_hints_widget" # Muestra la justificación del porqué la respuesta elegida era un "distractor".
+```
+
+### B. Capa C0 (Métricas de Comprensión Lectora Ponderadas)
+
+```yaml
+- id: "mx.rub.ceneval.exani2.lectura.v1"
+  level: "C0"
+  type: "BLOCK_RUBRIC"
+  authority_scope: "NATIONAL"
+  content: |
+    Scale: 0-4 (Índice de precisión escalable)
+    Criteria:
+    - Extracción de Información Explícita (30%):
+      L4: Localiza con exactitud quirúrgica datos, hechos y detalles explícitos dentro de textos complejos y densos, discriminándolos de información complementaria.
+      L2: Localiza la información principal pero tiende a confundirse cuando se presentan detalles secundarios o distractores menores en el texto cercano.
+      L0: Falla consistentemente al intentar recuperar información que está directamente escrita y explícita en el documento.
+
+    - Comprensión de la Estructura (30%):
+      L4: Identifica perfectamente la tesis central del autor, sabe diferenciar premisas de conclusiones, y reconoce la organización lógica (causa-efecto, problema-solución) del texto.
+      L2: Identifica el tema general, pero tiene dificultades para distinguir la jerarquía entre los argumentos principales y las evidencias o anécdotas de soporte.
+      L0: No logra identificar la idea principal, la tesis ni la superestructura organizativa del documento analizado.
+
+    - Inferencia, Propósito y Tono (40%):
+      L4: Deduce magistralmente la intención comunicativa del autor, el tono emocional o discursivo (ej. irónico, objetivo, sarcástico, persuasivo) y extrae el significado exacto de neologismos o palabras polisémicas por su contexto, sin usar diccionario.
+      L2: Realiza inferencias lógicas básicas, pero falla reiteradamente en captar matices sutiles, dobles sentidos, ironías o el propósito subyacente y no declarado del autor.
+      L0: Incapaz de leer "entre líneas"; interpreta toda la información de forma puramente literal, lo que le lleva a deducir conclusiones completamente erróneas.
+```
+
+## 3. Pruebas Diagnósticas de Educación Básica (MEJOREDU / SEP)
+
+La Comisión Nacional para la Mejora Continua de la Educación (MEJOREDU) y la Secretaría de Educación Pública (SEP) aplican pruebas diagnósticas (anteriormente conocidas como PLANEA y ENLACE) al inicio del ciclo escolar (ej. 3º de Secundaria o 1º de Preparatoria) para conocer el estado real de los **"Aprendizajes Esperados"** (ahora Procesos de Desarrollo de Aprendizaje - PDA).
+
+A diferencia del CENEVAL, estas pruebas son puramente **formativas y diagnósticas**, no punitivas. Su objetivo no es excluir alumnos, sino guiar al docente sobre qué temas repasar.
+
+### A. El Motor UI/UX (ExerciseType)
+
+El diseño de interfaz es más amigable y guiado, reduciendo la ansiedad de la evaluación. Combina lectura, selección múltiple y expresión escrita breve, fomentando el pensamiento crítico estructurado.
+
+```yaml
+apiVersion: colabedu.ai/v1beta1
+kind: ExerciseType
+metadata:
+  id: "mx.etype.mejoredu.diagnostico.v1"
+  title: "Motor UI: Diagnóstico Educación Básica (Lenguaje y Comunicación)"
+spec:
+  ui_components:
+    - type: "stepper_assessment_widget" # Navegación por pasos guiados (Paso 1: Lee, Paso 2: Responde, Paso 3: Reflexiona)
+      steps:
+        - "reading_dossier_viewer" # Infografía, leyenda tradicional, cuento o noticia actual.
+        - "reading_comprehension_mcq" # Validación de comprensión lectora básica.
+        - "short_answer_editor" # Respuesta abierta breve para evaluar argumentación.
+
+  report_components:
+    - type: "score_header_widget"
+    - type: "aprendizajes_esperados_tracker_widget" # Mapea los resultados obtenidos directamente con los códigos del currículo de la SEP (ej. AE1, PDA-3).
+    - type: "pedagogical_hints_widget" # Genera sugerencias de repaso en lugar de penalizaciones.
+```
+
+### B. Capa C0 (Aprendizajes Esperados SEP) y Capa C3 (Enfoque Formativo)
+
+```yaml
+# CAPA C0 (Evaluación Formativa Ponderada)
+- id: "mx.rub.sep.secundaria.lenguaje.v1"
+  level: "C0"
+  type: "BLOCK_RUBRIC"
+  authority_scope: "NATIONAL"
+  content: |
+    Scale: 0-4 (Niveles de Logro SEP: 0=Requiere Apoyo, 2=En Desarrollo, 4=Nivel Esperado)
+    Criteria:
+    - AE1: Identificación y Función de Textos (30%):
+      L4: Identifica perfectamente las características, la superestructura y la función social de un artículo de opinión o texto periodístico.
+      L2: Reconoce el tipo de texto de manera general, pero omite o confunde partes de su estructura funcional.
+      L0: Confunde totalmente el tipo de texto (ej. cree que un artículo de opinión subjetivo es una noticia informativa objetiva).
+
+    - AE2: Argumentación y Postura Crítica (40%):
+      L4: Argumenta sus puntos de vista respecto al tema de forma lógica, clara y sólidamente apoyada en evidencias del texto leído.
+      L2: Presenta una opinión personal válida, pero su argumentación es débil, circular o no se apoya en evidencias del texto base.
+      L0: Emite opiniones al azar sin justificación alguna o se limita a copiar fragmentos literales sin asimilarlos.
+
+    - AE3: Uso de Nexos Articuladores (30%):
+      L4: Utiliza nexos variados y precisos para articular sus opiniones (ej. 'por tanto', 'en cambio', 'de manera que', 'sin embargo').
+      L2: Usa conectores básicos ('y', 'pero', 'porque') de manera altamente repetitiva y poco sofisticada.
+      L0: Ausencia de conectores, resultando en un texto tipo telegrama, con oraciones inconexas y difíciles de seguir.
+
+# CAPA C3 (Enfoque Formativo y Socrático)
+- id: "mx.dir.mejoredu.formativo.v1"
+  level: "C3"
+  type: "BLOCK_DIRECTIVE"
+  content: |
+    persona: "Tutor diagnóstico de la SEP, profundamente empático, amigable y observador."
+    evaluation_directives:
+    - rule: "Evaluación Constructiva: Si el alumno obtiene L0 o L2 en la respuesta abierta argumentativa, NO uses un tono punitivo ni te centres exclusivamente en el error. Explica de forma alentadora y breve por qué la respuesta no es precisa, rescata lo que sí hizo bien, y genera un 'pedagogical_hint' recomendando un ejercicio interactivo para repasar el uso de nexos o la estructura básica del ensayo."
+```
+
+## 4. Estrategia GTM en México: De "Shadow IT" a Licencias Institucionales (B2B/B2G)
+
+El mercado mexicano presenta una oportunidad gigantesca de adopción. Sin embargo, las ventas directas a escuelas ("Top-Down") suelen encontrarse con barreras burocráticas severas: los colegios públicos (SEP) y universidades autónomas (UNAM, prepas estatales) están obligados por normativa a utilizar sistemas legacy como **Moodle**, haciendo rechazo inicial a plataformas nuevas.
+
+Para superar esto, ColabEdu emplea una estrategia de crecimiento **Bottom-Up (De abajo hacia arriba)** apalancando el agotamiento (Burnout) de los docentes y utilizando la plataforma como un "Caballo de Troya" mediante la técnica de **Enlaces Mágicos y Shadow IT**.
+
+### A. La Adopción "Bottom-Up": El Problema de los Docentes
+
+Un profesor de preparatoria en México fácilmente maneja grupos masivos de 40 a 50 alumnos por aula. Calificar 50 ensayos con el rigor absoluto del EXANI-II toma todo el fin de semana, provocando un *burnout* severo. Los profesores buscan herramientas de IA por su cuenta (ChatGPT), pero se frustran porque la IA general no conoce las reglas del CENEVAL y da un feedback difuso. ColabEdu ya tiene la Capa C0 (Leyes Mexicanas) precargada, resolviendo su problema al instante.
+
+### B. La Estrategia del "Enlace de Entrega" (Magic Links)
+
+En lugar de pedirle al colegio que instale un nuevo software o pague una integración compleja (LTI 1.3), o forzar al profesor a hacer "copy-paste" de los textos de sus alumnos uno por uno desde Moodle hacia ColabEdu, utilizamos el flujo de **Enlaces Mágicos**:
+
+1. **Creación Instantánea:** El profesor, usando su cuenta individual de ColabEdu (Freemium o Prosumer), ensambla la actividad deseada (ej. *"Simulacro EXANI-II: Comprensión Lectora sobre Biotecnología"*). La plataforma compila las Capas C1 + C0 + C2 + C3.
+2. **Generación del Link:** ColabEdu genera una URL única y segura para esa tarea (ej. `app.colabedu.ai/take/mx-exani-9843`).
+3. **Publicación en el LMS Oficial (Modo Shadow):** El profesor va al Moodle de su escuela, a Google Classroom o incluso al grupo de WhatsApp de la clase, y simplemente pega este enlace como la instrucción de la tarea: *"Alumnos, hagan clic en este enlace para realizar su evaluación de diagnóstico"*.
+4. **Resolución Inmersiva:** Los alumnos hacen clic en el link. Si el colegio usa Google o Microsoft, inician sesión con un clic (SSO). Entran al entorno inmersivo de Flutter de ColabEdu, realizan el examen bajo las restricciones de tiempo y antifraude (bloqueo de copiar/pegar), y entregan.
+5. **Calificación en Masa y Retorno:** El *Grading V2 Agent* evalúa a los 50 alumnos en segundos. El profesor revisa el panel en ColabEdu, obtiene las métricas granulares y simplemente exporta las calificaciones en un archivo CSV o transfiere la nota final al libro de calificaciones (*Gradebook*) de Moodle.
+
+### C. La Transición a B2B y B2G (Ventas Institucionales)
+
+Esta estrategia de Enlaces Mágicos permite a la plataforma viralizarse aula por aula. Una vez establecida la presencia de la plataforma, el equipo de ventas entra en acción:
+
+1. **El Informe de Auditoría (Upselling):** Cuando ColabEdu detecta que hay 15 profesores de la "Preparatoria Estatal #5" utilizando y pagando cuentas individuales en *modo shadow*, el equipo de ventas aborda a la Dirección con datos empíricos: *"Sus docentes ya adoran nuestra herramienta y los alumnos están mejorando sus métricas en simulación de EXANI-II. Compremos una licencia institucional B2B para todo el centro"*.
+2. **Integración Total LTI 1.3:** Con la licencia institucional adquirida, la plataforma sale de las sombras. ColabEdu se integra formalmente vía LTI (Learning Tools Interoperability) dentro del propio Moodle de la escuela. Las calificaciones viajan automáticamente sin que el profesor deba exportar CSVs.
+3. **Ventas B2G (Licitaciones Estatales):** En México, la educación pública es masiva pero administrada por las Secretarías de Educación Estatales (ej. Secretaría de Educación de Nuevo León o Jalisco). Al vectorizar los "Procesos de Desarrollo de Aprendizaje" (PDA) de la SEP, ColabEdu le ofrece a los Secretarios de Educación un **Audit Dashboard** en vivo. El gobierno puede ver, en tiempo real, qué porcentaje de los alumnos del Estado está logrando los aprendizajes del campo formativo de "Lenguajes", evaluados objetivamente contra un estándar inmutable (Capa C0), logrando adjudicaciones de contratos a gran escala.

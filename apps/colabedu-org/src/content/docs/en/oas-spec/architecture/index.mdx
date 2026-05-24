@@ -1,0 +1,31 @@
+---
+title: Technical Architecture (Overview)
+description: Introduction to the technical architecture of OAS v1beta1 and its design principles.
+sidebar:
+  order: 1
+---
+
+**Architecture:** Open Assessment Standard (OAS v1beta1)
+
+**Purpose:** To explain the technical operation of the LLM orchestration engine, demonstrating how the separation of responsibilities (*Assessment as Code*) allows evaluating any Spanish-speaking educational paradigm without requiring additional model training (*Fine-Tuning*).
+
+## The Problem: The "Prompt Engineering" Monolith
+
+Historically, EdTech platforms attempted to use LLMs by sending them a "Mega-Prompt" in plain text. This prompt mixed the educational law, the text to be read, report design instructions (e.g., *"use bold"* or *"create a Markdown table"*), and the specific rules of the teacher.
+
+The language model was forced to act simultaneously as a pedagogical evaluator, legal analyst, and frontend designer. **The consequences of this approach were disastrous at production scale:**
+
+1.  **Prompt Drift and Hallucinations:** LLMs have a limited attention mechanism. By inundating them with contradictory instructions, the model suffered "amnesia," forgetting to apply critical grading rules by expending its capacity on formatting.
+2.  **Technical Fragility:** If the LLM omitted a format *tag*, the backend parser failed, causing a cascading error.
+3.  **Critical Dependence on Fine-Tuning:** Massive costs were incurred training specific models for each educational law, leading to rapid obsolescence with any curriculum change.
+
+## The Modular Solution
+
+To solve this chaos, the OAS architecture breaks down the problem into specialized components, analogous to how microservices architecture revolutionized traditional web development.
+
+Throughout the following sections of this documentation, we will explore in detail the technical pillars that support the ColabEdu ecosystem:
+
+1.  [**Assessment as Code (The 4 Layers):**](./capas/) How we fragment knowledge using the MVC pattern.
+2.  [**The Evaluation Engine (Late Binding and UI):**](./motor-evaluacion/) How we inject context in real-time and enforce structured JSON schemas.
+3.  [**Agent Ecosystem:**](./agentes/) The network of specialized intelligences operating on the Spec Manager.
+4.  [**GitOps Hierarchy:**](./gitops/) The repository inheritance model that enables global scalability.

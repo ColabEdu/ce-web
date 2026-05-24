@@ -1,0 +1,69 @@
+---
+title: "ExerciseSpec"
+description: "Documentación de referencia para el recurso ExerciseSpec en OAS."
+sidebar:
+  order: 5
+---
+
+El recurso `ExerciseSpec` (Especificación de Ejercicio) define la estructura pedagógica de un instrumento de evaluación (C1/C2). Combina un contexto (un texto, problema o estímulo general) con un conjunto de ejercicios específicos, enlazando cada pregunta a las competencias u objetivos de aprendizaje que evalúa.
+
+## Esquema (Schema)
+
+### Metadata (`metadata`)
+
+| Campo | Tipo | Requerido | Descripción |
+|---|---|---|---|
+| `id` | `string` | Sí | Identificador único de la especificación (ej. `us.tx.c2.aappl...`). |
+| `title` | `string` | Sí | Título descriptivo del bloque de ejercicios. |
+| `type` | `string` | No | Clasificación del ejercicio (ej. `external_assessment`, `formative`). |
+| `organization` | `string` | No | Entidad u organización autora (ej. `ACTFL`, `CDE`). |
+| `year` | `number` | No | Año de aplicación o publicación (ej. `2024`). |
+| `targetCourseRef` | `string` | No | Referencia al curso o conjunto de competencias C0 aplicable. |
+
+### Especificación (`spec`)
+
+| Campo | Tipo | Requerido | Descripción |
+|---|---|---|---|
+| `context` | `string` | Sí | Texto en formato Markdown que sirve como estímulo común (lectura, planteamiento de problema) para los ejercicios subsecuentes. |
+| `exercises` | `array` | Sí | Lista de ejercicios o preguntas asociadas a este contexto. |
+
+#### Estructura de `exercises`
+
+| Campo | Tipo | Requerido | Descripción |
+|---|---|---|---|
+| `id` | `string` | Sí | Identificador de la pregunta (ej. `q1`). |
+| `type` | `string` | Sí | Tipo de interacción o input requerido (ej. `audio_response`, `free_text`). |
+| `prompt` | `string` | Sí | El enunciado exacto de la pregunta. |
+| `expectedOutputFormat` | `string` | No | Formato esperado (ej. `audio`, `markdown`). |
+| `maxScore` | `number` | No | Puntuación máxima alcanzable en esta pregunta específica. |
+| `targetCompetencies` | `string[]` | Sí | Array con los IDs de las competencias o nodos C0 (`BLOCK_RUBRIC`) que evalúa esta pregunta. |
+
+## Ejemplo de Uso
+
+A continuación se muestra un ejemplo de un `ExerciseSpec` para una prueba oral AAPPL en Texas:
+
+```yaml
+apiVersion: colabedu.ai/v1beta1
+kind: ExerciseSpec
+metadata:
+  type: external_assessment
+  organization: ACTFL/Avant
+  year: 2024
+  id: us.tx.c2.aappl.lote.presentational.spanish3.v1
+  title: AAPPL Mock - LOTE Presentational Speaking (Spanish III)
+  targetCourseRef: us.tx.c0.teks.lote.spanish_3.v1
+spec:
+  context: |
+    # Presentación sobre Costumbres
+
+    Tu profesor quiere que hables sobre una tradición importante que se celebra en
+    Texas o en un país hispanohablante (como el Cinco de Mayo o el Rodeo).
+  exercises:
+  - id: q1
+    type: audio_response
+    prompt: Graba una presentación de 1 minuto describiendo la celebración, por qué es importante y qué actividades se realizan.
+    expectedOutputFormat: audio
+    maxScore: 4.0
+    targetCompetencies:
+    - lote-presentational
+```

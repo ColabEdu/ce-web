@@ -1,0 +1,9 @@
+/* Prevent aggressive word breaks in tables */
+.sl-markdown-content :is(th, td) {
+  word-break: normal !important;
+  overflow-wrap: normal !important;
+}
+
+.sl-markdown-content :is(th, td) code {
+  white-space: nowrap !important;
+}

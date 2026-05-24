@@ -1,0 +1,106 @@
+---
+title: "International Baccalaureate (IB)"
+description: "Master Compendium of Educational Regulations for the International Baccalaureate (IB)."
+sidebar:
+  order: 1
+---
+
+Unlike hyper-localized national curricula, the **International Baccalaureate (IB)** operates under a global, immutable, cross-border, and highly structured framework.
+
+Its fundamental pedagogical approach is based on *criterion-related assessment*. This means students are not evaluated by comparing them to each other (there is no bell curve), but rather their work is measured against fixed, public, and standardized level descriptors. This structural rigidity, combined with the complexity of its evaluation matrices, makes the IB the perfect (and simultaneously the most demanding) ecosystem for ColabEdu's **Assessment as Code** model.
+
+This document serves as the **Source of Truth** for the official IB guides and briefs. The ColabEdu *Curator Agent* will use these logical frameworks to understand the curriculum ontology and generate the master `RUBRIC_BLOCKS` in the system. Given its international nature, these blocks will always be registered with an `authority_scope: "GLOBAL"`.
+
+## 🌍 The IB Assessment Architecture
+
+The IB educational ecosystem relevant to secondary and pre-university education is divided into consecutive programs that map directly to middle and high school stages, but with a philosophy of continuous progression.
+
+1. **MYP (Middle Years Programme):** Ages 11-16. Its assessment encourages interdisciplinarity and is unswervingly based on **4 Criteria (A, B, C, D)** specific to each subject group. Each criterion is evaluated on a maximum scale of 8 points.
+2. **DP (Diploma Programme):** Ages 16-19. It uses a rigorous final grading system of 1 to 7 points per subject. The grade is the result of combining Internal Assessment (IA), which is graded by the teacher and moderated by the IB, and External Assessment (May/November exams), graded directly by international examiners.
+3. **The Core (DP):** Three mandatory, holistic, and transversal components (CAS, TOK, Extended Essay) that have their own evaluation matrices and award up to 3 additional points to the diploma, often being the key differentiator for admission to elite universities.
+
+## 🎓 1. Diploma Programme (DP) - High School Level
+
+Below are the links to the official public **Subject Briefs** from the IBO (International Baccalaureate Organization), which contain the macro assessment structures and rubric weightings.
+
+*ColabEdu Operational and Legal Note:* The complete teacher guides (over 100 pages long), which contain the exact band-by-band descriptors, are protected under strict *copyright* and *paywall* licenses on the MyIB platform. The ColabEdu architectural model assumes that the IB School (the *Tenant* or client) will upload the official licensed PDF of their subject so that the *Curator Agent* can ingest and process the exact level descriptors, using this document solely as an "ontological map" to assign semantic IDs correctly.
+
+### 🧠 The DP Core
+
+- **Theory of Knowledge (TOK):** [TOK Brief](https://www.ibo.org/globalassets/new-structure/programmes/dp/pdfs/tok-brief-en.pdf)
+  - *ColabEdu Context:* TOK is a subject about epistemology. The TOK Essay (1600 words) and the Exhibition require a global analytical rubric. The ColabEdu AI must be configured with a *System Prompt* that prioritizes detecting "Links to real-world objects", "Multiple perspectives", and "Implications of knowledge". The inherent subjectivity of TOK makes ColabEdu's *Human-in-the-Loop (HITL)* system indispensable here.
+
+- **Extended Essay (EE):** [Extended Essay Brief](https://www.ibo.org/globalassets/new-structure/programmes/dp/pdfs/extended-essay-brief-en.pdf)
+  - *ColabEdu Context:* This independent research paper of 4000 words uses a standardized 34-point evaluation matrix divided into Criteria A-E. The ColabEdu *Evaluator Agent* is exceptional for Criterion D (Presentation and academic format), freeing the teacher to focus on Criterion C (Critical thinking).
+
+### 📚 Group 1: Studies in Language and Literature
+
+- **Language A: Literature (SL/HL):** [Assessment Brief](https://www.ibo.org/globalassets/new-structure/programmes/dp/pdfs/language-a-literature-en.pdf)
+- **Language A: Language and Literature (SL/HL):** [Assessment Brief](https://www.ibo.org/globalassets/new-structure/programmes/dp/pdfs/language-a-language-and-literature-en.pdf)
+  - *ColabEdu Context:* Generates the `IB.DP.G1.LANGLIT.IA` block (Internal Assessment - 15-minute Individual Oral). The AI directives must focus heavily on the analysis of "Global Issues" and how authors use stylistic and formal resources to construct meaning, relying heavily on *Context Caching* of the literary works studied.
+
+### 🗣️ Group 2: Language Acquisition
+
+- **Language B (SL/HL):** [Assessment Brief](https://www.ibo.org/globalassets/new-structure/programmes/dp/pdfs/language-b-en.pdf)
+  - *ColabEdu Context:* Geared towards students with previous experience in the language. The rubric blocks for Language B are highly reusable and dependent on the target language. The ColabEdu Multilingual model applies brilliantly here: the `RUBRIC_BLOCK` is canonically stored in English, but the evaluation and feedback are generated in the delivery language (e.g., Spanish B, French B), adapting grammatical rigor to the expected level.
+
+- **Language ab initio (SL):** [Assessment Brief](https://www.ibo.org/globalassets/new-structure/programmes/dp/pdfs/language-ab-initio-en.pdf)
+  - *ColabEdu Context:* For absolute beginners. The AI directives must be instructed with extreme leniency on complex structural errors, focusing on "message communication" over "grammatical perfection".
+
+### 🏛️ Group 3: Individuals and Societies
+
+- **Business Management (SL/HL):** [Assessment Brief](https://www.ibo.org/globalassets/new-structure/programmes/dp/pdfs/business-management-en.pdf)
+  - *ColabEdu Context:* Requires deep integration with data analysis and charting tools. Case studies and internal assessment require the AI to validate the application of specific business tools (CUEGIS concepts, SWOT analysis, etc.).
+
+- **History (SL/HL):** [Assessment Brief](https://www.ibo.org/globalassets/new-structure/programmes/dp/pdfs/history-en.pdf)
+  - *ColabEdu Context:* IB History assessment is perhaps one of the most rigorous in academic terms. The AI must be mandatorily configured with `scoring_mode: DETERMINISTIC` to strictly validate the use and evaluation of primary sources (OPVL method: Origin, Purpose, Value, Limitation).
+
+### 🔬 Group 4: Sciences
+
+- **Biology, Chemistry, Physics, Sports Science (SL/HL):** [Science Assessment Briefs](https://www.ibo.org/programmes/diploma-programme/curriculum/sciences/)
+  - *ColabEdu Context:* The Group 4 Internal Assessment (IA) is a rigorous scientific research report. The *Curator Agent* will extract fixed and universal criteria: Personal Engagement, Exploration, Analysis, Evaluation, and Communication. The "Personal Engagement" criterion is highly subjective; the AI must be programmed to look for linguistic markers of initiative, curiosity, and method adaptation.
+
+### 📐 Group 5: Mathematics
+
+- **Analysis and Approaches (AA) & Applications and Interpretation (AI):** [Math Assessment Briefs](https://www.ibo.org/programmes/diploma-programme/curriculum/mathematics/)
+  - *ColabEdu Context:* The bifurcation between AA and AI requires different directives. The rubric for the Mathematical Exploration (IA) will be unified mapped with IDs like `IB.DP.G5.MATH.IA.CRIT.A` (Mathematical Communication), requiring the ColabEdu platform to support native LaTeX parsing to evaluate formulas within the student's text.
+
+### 🎨 Group 6: The Arts
+
+- **Visual Arts, Film, Theatre:** [Arts Assessment Briefs](https://www.ibo.org/programmes/diploma-programme/curriculum/the-arts/)
+  - *ColabEdu Context:* This group poses the greatest technical challenge and will extensively use ColabEdu's **Multimodal (Vision)** engine. The student will upload images of their "Process Portfolio" or "Comparative Study", and the AI will visually evaluate technical progression, use of media, curation of exhibitions, and the written theoretical justification accompanying the visual art.
+
+## 🏫 2. Middle Years Programme (MYP) - Middle School Level
+
+The MYP provides an extremely clean, coherent, and symmetrical assessment framework, ideal for algorithmic ingestion and standardization in databases. The MYP does not prescribe strict content, but rather prescribes skills and concepts.
+
+Regardless of the year the student is in (MYP 1 to MYP 5) or the discipline (from Mathematics to Design or Physical Education), summative assessment is **always** rigidly divided into four criteria (A, B, C, D).
+
+**Standardized Ontology in ColabEdu for the MYP:**
+
+The *Curator Agent* will create modular Master Recipes where each subject group has exactly 4 linked `RUBRIC_BLOCKS`, creating perfect symmetry in the `spec_definitions` database.
+
+- Ontological Example: Language Acquisition
+  - `IB.MYP.LANG.ACQ.CRIT.A`: Comprehending spoken and visual text.
+  - `IB.MYP.LANG.ACQ.CRIT.B`: Comprehending written and visual text.
+  - `IB.MYP.LANG.ACQ.CRIT.C`: Communicating in response to spoken, written and visual text.
+  - `IB.MYP.LANG.ACQ.CRIT.D`: Using language in spoken and written form.
+
+## ⚙️ Architectural, Legal, and Technical Implications for ColabEdu
+
+### 1. Authority Scope ("GLOBAL") and Scalability
+
+While a regional law in Spain or a state standard in the US has an `authority_scope: "REGIONAL"` or `"NATIONAL"`, an IB criterion is entered into the `spec_definitions` table with `authority_scope: "GLOBAL"`. This enables maximum architectural efficiency.
+
+### 2. Centralized Multilingual Support and Cross-Lingual RAG
+
+The International Baccalaureate is officially taught in English, Spanish, and French. The ColabEdu platform **must not create three duplicated rubrics in the database**.
+- **The SSOT:** The *Curator Agent* ingests the official rubric (generally the master version in English) as the only real rubric block.
+- **Cognitive Result:** The AI Agent reasons using the rigor of the English matrix, but emits the structured *feedback* in Spanish or French according to the student's instruction language, performing real-time *cross-lingual RAG*.
+
+### 3. "Bring Your Own Guide" (BYOG) Model and IP Protection
+
+This is the most critical legal pillar for ColabEdu. Since the IBO protects its Subject Guides under strict *copyright*, publishing them openly would violate copyrights. ColabEdu uses the BYOG flow:
+- The IB Coordinator of a client school uploads the official PDF guide to their private ColabEdu environment.
+- The *Curator Agent* analyzes that PDF locally, recognizing the IB structure based on this master ontological document, and creates the "Recipe".
+- This generated rubric is saved exclusively in the school's tenant schema (`authority_scope: "SCHOOL"`), ensuring impeccable copyright compliance.

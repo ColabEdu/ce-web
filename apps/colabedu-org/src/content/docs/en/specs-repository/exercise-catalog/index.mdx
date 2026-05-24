@@ -1,0 +1,71 @@
+---
+title: Master Catalog C1
+description: Exercise Types (Exercise Scaffolds) in the OAS architecture.
+sidebar:
+  order: 3
+---
+
+**Architecture:** Open Assessment Standard (OAS v1beta1)  
+**Layer:** C1 (Exercise Types / Structural Templates)
+
+**Objective:** To define agnostic logical containers that multiply raw content (C2) and evaluate it against the legal rubrics (C0) of ANY subject.
+
+In the ColabEdu architecture, an "Exercise Type" (C1 Layer) is an *empty skeleton, blind to the subject matter*. It contains no specific questions or laws. It contains the **User Interface (UI) logic** and the **base evaluation directive for the AI**.
+
+When the *Automated Ingestion Pipeline* runs, it cross-references downloaded texts, maps, or formulas with these templates to generate millions of transversal combinations.
+
+## 1. Domain: Written Production and Document Analysis
+*Interfaces for processing information and generating argumentative responses. Useful for Language, History, Philosophy, and Biology.*
+
+1. **Guided Split-Pane Essay (Standard Split-Pane):** 
+   - *Use in Language:* Commentary on a poem.
+   - *Use in History:* Read the Declaration of the Rights of Man (C2) and write an essay on its causes.
+   - *Use in Science:* Read a "Paper" on biotechnology and summarize the hypothesis.
+2. **Email Response / Specific Format:** The student assumes a role and responds.
+3. **Restricted Objective Summary:** Severely limits length (e.g., max. 100 words). Penalizes if the student includes personal opinions or "copy-pastes."
+4. **Analysis of Graphs and Infographics (Multimodal):** The C2 block contains an image/graph.
+   - *Use in Geography:* Analyze a population pyramid from INEGI.
+5. **Creative Writing / Hypothesis Continuation:** 
+   - *Use in Philosophy:* Resolve an ethical dilemma by arguing from Kant's perspective.
+
+## 2. Domain: Interactive Comprehension and Evaluation
+*Exercises for deterministic auto-grading and guided analysis.*
+
+6. **Advanced Multiple Choice Question (MCQ):** The AI generates *semantic distractors* based on the C2 text.
+7. **Short Answer Questions:** The student answers in 1-2 sentences. The AI evaluates semantic precision.
+8. **Fill in the Blanks (Cloze Text):** The system removes keywords from a C2 text.
+9. **Logical Ordering (Drag & Drop):** Order chronological events or steps of the scientific method.
+10. **Fake News Hunt (Fact-Checking):** A journalistic article (C2) is presented, and the student interacts with the bot to request data and verify the news.
+
+## 3. Domain: Oral and Multimodal Interaction
+*Uses Speech-to-Text (Whisper) models and image validation.*
+
+11. **Interactive Socratic Tutor (Oral/Text Chatbot):** The student debates with the AI. (e.g., Historical Roleplay with Abraham Lincoln).
+12. **Comparison Monologue / Oral Defense:** The student records an audio defending a thesis with a time limit.
+13. **Image Description (Visual Stimulus):** The student records a description of an image (e.g., a plant cell).
+14. **Listening Comprehension / Note-Taking:** Playback of a podcast or scientific lecture. The student answers questions.
+
+## 4. Domain: Mechanics, Identification, and Tagging
+*Exercises where the student marks, underlines, or associates elements within a canvas.*
+
+15. **Inline Tagging (Syntax & Fact Tagger):** Underline elements in the text (e.g., causes in red, consequences in blue).
+16. **Transformation / Indirect Editing:** A deficient text is presented, and the student must correct its errors (erroneous dates, grammatical flaws).
+17. **Lexical Expansion / Key Concepts:** Define a technical term highlighted in a C2 text within the context of that subject.
+
+## 5. The STEM "Delta": Future Required Molds
+To cover hard sciences (Mathematics, Physics, Programming), the system can be expanded with these 4 molds, maintaining the same RAG engine and C0/C3:
+
+18. **Equation Editor (Math/LaTeX Editor):** To solve calculus and physics step-by-step.
+19. **Interactive Graphs (Cartesian Canvas):** To draw functions, parabolas, or vectors.
+20. **Code Execution Environment (Code Sandbox):** Code editor with AI algorithmic evaluation.
+21. **Interactive Map (GIS Point-and-Click):** Blank maps for Geography or Anatomy.
+
+## The "Recipe Schema" (The Secret to Agnostic Evaluation)
+
+If the UI is the same (e.g., Split-Pane Essay), how does the AI know it's grading a History exam and not a Language one? **The injection of the Rubric (C0)**.
+
+- **Scenario A (Literature):** C1 (Essay) + C2 (Poem) + C0 (Rubric: Meter, Literary Figures).
+- **Scenario B (History):** C1 (Essay) + C2 (1812 Constitution) + C0 (Rubric: Causes, Anachronisms). **The AI will ignore poetic meter.**
+
+### Conclusion
+The power of the **Lego Architecture (OAS V2)** lies in its absolute agnosticism. If ColabEdu decides to launch a product for Medical or Law Schools, **not a single new screen needs to be programmed**. All effort focuses on adding new texts (C2) and laws (C0).

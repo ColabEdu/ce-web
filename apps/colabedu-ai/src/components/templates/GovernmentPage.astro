@@ -1,0 +1,232 @@
+---
+import CommercialLayout from "../../layouts/CommercialLayout.astro";
+import { ui, defaultLang } from "../../i18n/ui";
+import { government } from "../../i18n/government";
+
+const { lang = defaultLang } = Astro.props;
+const t = ui[lang] || ui[defaultLang];
+const c = government[lang] || government[defaultLang];
+---
+
+<CommercialLayout title={"ColabEdu - " + t["nav.government"]}>
+    <!-- 1. Hero -->
+    <section class="max-w-7xl mx-auto py-20 px-4 lg:px-8 mt-20">
+        <h2
+            class="text-5xl lg:text-7xl font-extrabold text-slate-900 tracking-tighter mb-8 leading-none"
+        >
+            {c["hero.title"]}
+            <br />
+            <span
+                class="bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-cyan-500"
+                >{c["hero.subtitle"]}</span
+            >
+        </h2>
+        <p class="text-xl text-slate-600 max-w-3xl leading-relaxed">
+            {c["hero.desc"]}
+        </p>
+    </section>
+
+    <!-- 2. Gov Dashboard Chart -->
+    <section class="py-20 bg-slate-900 text-white relative overflow-hidden">
+        <!-- Background pattern -->
+        <div
+            class="absolute inset-0 opacity-10"
+            style="background-image: radial-gradient(#6366f1 1px, transparent 1px); background-size: 32px 32px;"
+        >
+        </div>
+
+        <div
+            class="max-w-7xl mx-auto px-4 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-16 items-center relative z-10"
+        >
+            <div
+                class="lg:col-span-8 bg-slate-800 p-10 rounded-[3rem] border border-slate-700 shadow-2xl"
+            >
+                <h3
+                    class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-10 text-center"
+                >
+                    {c["dashboard.chart_title"]}
+                </h3>
+                <div class="relative w-full h-[350px]">
+                    <canvas id="govBarChart"></canvas>
+                </div>
+            </div>
+            <div class="lg:col-span-4 space-y-8">
+                <div>
+                    <h3 class="text-2xl font-bold mb-2 text-indigo-400">
+                        {c["dashboard.sovereignty.title"]}
+                    </h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        {c["dashboard.sovereignty.desc"]}
+                    </p>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-bold mb-2 text-cyan-400">
+                        {c["dashboard.macro.title"]}
+                    </h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        {c["dashboard.macro.desc"]}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. Compliance Pillars -->
+    <section class="py-24 max-w-7xl mx-auto px-4 lg:px-8 text-center">
+        <h3 class="text-3xl font-bold mb-16 text-slate-900">
+            {c["pillars.title"]}
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-left">
+            <div
+                class="p-8 bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-lg transition-all hover:-translate-y-1"
+            >
+                <div class="text-4xl mb-6">📜</div>
+                <h4 class="font-bold text-indigo-600 mb-2">
+                    {c["pillars.card1.title"]}
+                </h4>
+                <p class="text-xs text-slate-500 leading-relaxed">
+                    {c["pillars.card1.desc"]}
+                </p>
+            </div>
+            <div
+                class="p-8 bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-lg transition-all hover:-translate-y-1"
+            >
+                <div class="text-4xl mb-6">⚖️</div>
+                <h4 class="font-bold text-indigo-600 mb-2">
+                    {c["pillars.card2.title"]}
+                </h4>
+                <p class="text-xs text-slate-500 leading-relaxed">
+                    {c["pillars.card2.desc"]}
+                </p>
+            </div>
+            <div
+                class="p-8 bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-lg transition-all hover:-translate-y-1"
+            >
+                <div class="text-4xl mb-6">🚨</div>
+                <h4 class="font-bold text-indigo-600 mb-2">
+                    {c["pillars.card3.title"]}
+                </h4>
+                <p class="text-xs text-slate-500 leading-relaxed">
+                    {c["pillars.card3.desc"]}
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. UNESCO Stats -->
+    <section class="py-20 bg-indigo-50 border-y border-indigo-100">
+        <div class="max-w-7xl mx-auto px-4 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-3xl font-bold mb-6 text-slate-900">
+                        {c["stats.title"]}
+                    </h2>
+                    <p class="text-slate-600 text-lg leading-relaxed">
+                        {c["stats.desc1"]}
+                        <strong>{c["stats.desc_bold"]}</strong>
+                        {c["stats.desc2"]}
+                    </p>
+                </div>
+                <div
+                    class="bg-indigo-600 p-12 rounded-[2.5rem] text-white text-center shadow-xl transform rotate-1 hover:rotate-0 transition-transform"
+                >
+                    <div class="text-6xl font-black mb-2 tracking-tighter">
+                        -75%
+                    </div>
+                    <p
+                        class="text-sm uppercase font-bold tracking-[0.2em] opacity-80"
+                    >
+                        {c["stats.card.label"]}
+                    </p>
+                    <p class="text-xs mt-4 opacity-60 max-w-xs mx-auto">
+                        {c["stats.card.sub"]}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. Security & Sovereignty -->
+    <section class="py-20 bg-white text-center">
+        <h3 class="text-2xl font-bold mb-12 text-slate-900">
+            {c["security.title"]}
+        </h3>
+        <div
+            class="flex justify-center flex-wrap gap-12 opacity-30 grayscale hover:grayscale-0 transition-all duration-500"
+        >
+            <span class="font-black text-3xl">GDPR</span>
+            <span class="font-black text-3xl">FERPA</span>
+            <span class="font-black text-3xl">LOPD</span>
+            <span class="font-black text-3xl">ISO 27001</span>
+        </div>
+    </section>
+
+    <!-- 6. CTA -->
+    <section class="py-32 text-center bg-slate-900 text-white">
+        <h2 class="text-4xl font-bold mb-8 text-white">
+            {c["cta.title"]}
+        </h2>
+        <div class="flex flex-col sm:flex-row justify-center gap-4">
+            <button
+                class="px-12 py-5 bg-indigo-600 text-white rounded-full font-bold shadow-2xl hover:bg-indigo-500 transition-all"
+            >
+                {c["cta.button"]}
+            </button>
+        </div>
+    </section>
+
+    <script
+        define:vars={{ labels: c["chart.labels"], dataset: c["chart.dataset"] }}
+    >
+        import Chart from "chart.js/auto";
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const ctx = document.getElementById("govBarChart");
+            if (ctx) {
+                new Chart(ctx, {
+                    type: "bar",
+                    data: {
+                        labels: labels,
+                        datasets: [
+                            {
+                                label: dataset,
+                                data: [92, 74, 61, 85, 95],
+                                backgroundColor: [
+                                    "rgba(99, 102, 241, 0.8)", // Indigo
+                                    "rgba(99, 102, 241, 0.6)",
+                                    "rgba(99, 102, 241, 0.4)",
+                                    "rgba(99, 102, 241, 0.7)",
+                                    "rgba(99, 102, 241, 0.9)",
+                                ],
+                                borderRadius: 8,
+                                borderSkipped: false,
+                            },
+                        ],
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 100,
+                                grid: { color: "rgba(255,255,255,0.1)" },
+                                ticks: { color: "#94a3b8" },
+                            },
+                            x: {
+                                grid: { display: false },
+                                ticks: {
+                                    color: "#ffffff",
+                                    font: { weight: "bold" },
+                                },
+                            },
+                        },
+                    },
+                });
+            }
+        });
+    </script>
+</CommercialLayout>

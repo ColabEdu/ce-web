@@ -1,0 +1,30 @@
+---
+title: Assessment as Code (Layers)
+description: The MVC pattern applied to education, separating knowledge into immutable YAML layers.
+sidebar:
+  order: 2
+---
+
+## "Assessment as Code"
+
+ColabEdu resolved the technical crisis of monolithic LLMs by applying fundamental software engineering principles: the **MVC (Model-View-Controller)** pattern and **Dependency Injection**. We fragmented the assessment monolith into an atomic, versionable, and immutable "Layer Graph" (C0, C1, C2, C3).
+
+### The Layer Graph (YAML) Explained
+
+```mermaid
+graph TD
+    C0[C0: Standards / The Law] --> C1[C1: Recipe / The Pedagogical Recipe]
+    C2[C2: Context / Realia] --> C1
+    C3[C3: Directives / The Teacher] --> C1
+    
+    style C1 fill:#f9f,stroke:#333,stroke-width:2px
+    style C0 fill:#bbf,stroke:#333,stroke-width:1px
+    style C2 fill:#bfb,stroke:#333,stroke-width:1px
+    style C3 fill:#fbb,stroke:#333,stroke-width:1px
+```
+
+
+- **Layer C0 (Standards / The Law):** Vectorized dictionaries of pure rubrics (e.g., LOMLOE, AP, IB). They act as the immutable "Constitution" of the system.
+- **Layer C2 (Context / Realia):** The "Semantic Ground". Pre-processed news articles or literature for *Retrieval-Augmented Generation* (RAG).
+- **Layer C3 (Directives / The Teacher):** Override rules, pedagogical tone, and individual curricular adaptations.
+- **Layer C1 (Recipe / The Pedagogical Recipe):** The instance that parameterizes and orchestrates the other layers. It specifies the `ExerciseType` (UI/engineering contract) to use and injects the law (C0), context (C2), and directives (C3).

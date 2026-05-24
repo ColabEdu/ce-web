@@ -1,0 +1,28 @@
+{
+  "name": "colabedu-org",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev --port 4321",
+    "start": "astro dev --port 4321",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.6",
+    "@astrojs/react": "^4.4.2",
+    "@astrojs/starlight": "^0.32.0",
+    "@colabedu/ui-core": "workspace:*",
+    "@iconify-json/tabler": "^1.0.0",
+    "@tailwindcss/vite": "^4.1.17",
+    "astro": "^5.1.0",
+    "astro-icon": "^1.1.0",
+    "astro-mermaid": "^2.0.1",
+    "mermaid": "^11.15.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "tailwindcss": "^4.1.17",
+    "typescript": "^5.9.3"
+  }
+}

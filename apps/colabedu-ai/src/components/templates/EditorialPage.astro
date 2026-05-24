@@ -1,0 +1,614 @@
+---
+import CommercialLayout from "../../layouts/CommercialLayout.astro";
+import { ui, defaultLang } from "../../i18n/ui";
+import { editorial } from "../../i18n/editorial";
+
+const { lang = defaultLang } = Astro.props;
+const t = ui[lang] || ui[defaultLang];
+const c = editorial[lang] || editorial[defaultLang];
+---
+
+<CommercialLayout title={"ColabEdu - " + t["nav.editorial"]}>
+    <!-- 1. Strategic Hero -->
+    <section class="max-w-7xl mx-auto pt-40 pb-24 px-4 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div>
+                <span
+                    class="inline-flex items-center px-3 py-1 rounded-full bg-amber-100 text-amber-700 text-[10px] font-black uppercase tracking-[0.2em] mb-6 border border-amber-200"
+                >
+                    {c["hero.badge"]}
+                </span>
+                <h1
+                    class="text-6xl lg:text-8xl font-black text-slate-900 tracking-tighter mb-8 leading-[0.9]"
+                >
+                    {c["hero.title"]}
+                    <br />
+                    <span
+                        class="bg-clip-text text-transparent bg-gradient-to-br from-amber-500 to-orange-600 italic"
+                        >{c["hero.subtitle"]}</span
+                    >
+                </h1>
+                <p
+                    class="text-xl text-slate-600 max-w-xl leading-relaxed mb-10"
+                >
+                    {c["hero.desc"]}
+                    <strong>{c["hero.desc_bold"]}</strong>.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <button
+                        class="px-10 py-5 bg-amber-500 text-white font-bold rounded-full shadow-2xl hover:bg-amber-600 hover:scale-105 transition-all"
+                    >
+                        {c["hero.cta_primary"]}
+                    </button>
+                    <button
+                        class="px-10 py-5 bg-white text-slate-900 border border-slate-200 font-bold rounded-full hover:bg-slate-50 transition-all text-sm uppercase tracking-widest"
+                    >
+                        {c["hero.cta_secondary"]}
+                    </button>
+                </div>
+            </div>
+
+            <!-- Hero Visual (Interactive Book Metaphor) -->
+            <div class="relative">
+                <div
+                    class="absolute -top-10 -right-10 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl animate-pulse"
+                >
+                </div>
+                <div
+                    class="relative bg-white p-4 rounded-[4rem] shadow-2xl border border-slate-100 overflow-hidden group hover:shadow-amber-500/20 transition-all duration-500"
+                >
+                    <!-- Placeholder for Book/Tablet Image - Using a gradient placeholder for now -->
+                    <div
+                        class="rounded-[3.5rem] bg-gradient-to-br from-slate-800 to-slate-900 h-[500px] w-full relative overflow-hidden flex items-center justify-center"
+                    >
+                        <div
+                            class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200&auto=format&fit=crop')] bg-cover bg-center opacity-40 mix-blend-overlay"
+                        >
+                        </div>
+
+                        <!-- Overlay UI Element -->
+                        <div
+                            class="absolute bottom-10 left-10 right-10 p-6 bg-white/10 backdrop-blur-md rounded-3xl border border-white/20"
+                        >
+                            <div
+                                class="text-xs font-black text-amber-400 uppercase tracking-widest mb-2"
+                            >
+                                {c["hero.status"]}
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <div
+                                    class="flex-1 bg-white/20 h-1.5 rounded-full overflow-hidden"
+                                >
+                                    <div
+                                        class="bg-amber-500 w-[92%] h-full animate-pulse"
+                                    >
+                                    </div>
+                                </div>
+                                <span class="text-white text-xs font-bold"
+                                    >92%</span
+                                >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. Engagement Dashboard -->
+    <section
+        id="analytics"
+        class="py-24 bg-slate-900 text-white relative overflow-hidden"
+    >
+        <div
+            class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-amber-500 to-indigo-600"
+        >
+        </div>
+        <div class="max-w-7xl mx-auto px-4 lg:px-8">
+            <div
+                class="flex flex-col lg:flex-row justify-between items-end mb-20 gap-8"
+            >
+                <div class="max-w-2xl">
+                    <h2 class="text-4xl md:text-5xl font-black mb-6">
+                        {c["engagement.title"]}
+                    </h2>
+                    <p class="text-slate-400 leading-relaxed text-lg">
+                        {c["engagement.desc"]}
+                    </p>
+                </div>
+                <div class="flex space-x-12">
+                    <div class="text-center">
+                        <div class="text-5xl font-black text-amber-500">
+                            +60%
+                        </div>
+                        <div
+                            class="text-[10px] text-slate-500 uppercase font-bold mt-2 tracking-widest"
+                        >
+                            {c["engagement.stat_label"]}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div
+                class="bg-slate-800 p-10 rounded-[3rem] border border-slate-700 shadow-2xl relative"
+            >
+                <h3
+                    class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-10 text-center"
+                >
+                    {c["engagement.chart_title"]}
+                </h3>
+                <div class="relative w-full h-[400px]">
+                    <canvas id="engagementChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. Technical Factory -->
+    <section id="transformation" class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4 lg:px-8">
+            <div class="text-center mb-20">
+                <h2
+                    class="text-4xl font-black text-slate-900 tracking-tight mb-4 text-center"
+                >
+                    {c["factory.title"]}
+                </h2>
+                <p class="text-slate-500 max-w-2xl mx-auto text-lg">
+                    {c["factory.desc"]}
+                </p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                <div
+                    class="p-10 bg-slate-50 rounded-[2.5rem] border border-slate-100 hover:border-amber-200 transition-colors h-full"
+                >
+                    <div class="text-amber-500 text-4xl mb-6">📚</div>
+                    <h3 class="text-xl font-bold mb-4 text-slate-900">
+                        {c["factory.card1.title"]}
+                    </h3>
+                    <p
+                        class="text-slate-600 text-sm leading-relaxed"
+                        set:html={c["factory.card1.desc"]}
+                    />
+                </div>
+                <div
+                    class="p-10 bg-slate-50 rounded-[2.5rem] border border-slate-100 hover:border-indigo-200 transition-colors h-full"
+                >
+                    <div class="text-indigo-600 text-4xl mb-6">🧬</div>
+                    <h3 class="text-xl font-bold mb-4 text-slate-900">
+                        {c["factory.card2.title"]}
+                    </h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        {c["factory.card2.desc"]}
+                    </p>
+                </div>
+                <div
+                    class="p-10 bg-slate-50 rounded-[2.5rem] border border-slate-100 hover:border-emerald-200 transition-colors h-full"
+                >
+                    <div class="text-emerald-500 text-4xl mb-6">🏷️</div>
+                    <h3 class="text-xl font-bold mb-4 text-slate-900">
+                        {c["factory.card3.title"]}
+                    </h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        {c["factory.card3.desc"]}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. Curator Dashboard -->
+    <section id="curator" class="py-24 bg-slate-50 border-y border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+                <div class="order-2 lg:order-1">
+                    <div
+                        class="bg-white p-6 rounded-[3rem] shadow-2xl border border-slate-200"
+                    >
+                        <div
+                            class="flex items-center justify-between mb-6 px-4"
+                        >
+                            <h4
+                                class="text-xs font-black text-slate-400 uppercase"
+                            >
+                                {c["curator.console_title"]}
+                            </h4>
+                            <span
+                                class="w-2 h-2 rounded-full bg-green-500 animate-pulse"
+                            ></span>
+                        </div>
+
+                        <!-- Mockup Items -->
+                        <div class="grid grid-cols-1 gap-3 mb-6">
+                            <div
+                                class="bg-slate-50 p-4 rounded-2xl flex items-center justify-between border border-slate-100"
+                            >
+                                <div class="flex items-center">
+                                    <div
+                                        class="w-8 h-8 bg-amber-100 text-amber-600 rounded-lg mr-3 flex items-center justify-center font-bold text-xs"
+                                    >
+                                        PDF
+                                    </div>
+                                    <span
+                                        class="text-xs font-bold text-slate-700"
+                                        >Unidad 4: Bioquímica.pdf</span
+                                    >
+                                </div>
+                                <span
+                                    class="text-[10px] bg-emerald-100 text-emerald-700 px-2 py-1 rounded-full font-bold"
+                                    >PROCESADO</span
+                                >
+                            </div>
+                            <div
+                                class="bg-slate-50 p-4 rounded-2xl flex items-center justify-between border border-slate-100"
+                            >
+                                <div class="flex items-center">
+                                    <div
+                                        class="w-8 h-8 bg-indigo-100 text-indigo-600 rounded-lg mr-3 flex items-center justify-center font-bold text-xs"
+                                    >
+                                        PDF
+                                    </div>
+                                    <span
+                                        class="text-xs font-bold text-slate-700"
+                                        >Historia S.XX - Cap 1.pdf</span
+                                    >
+                                </div>
+                                <span
+                                    class="text-[10px] bg-blue-100 text-blue-700 px-2 py-1 rounded-full font-bold"
+                                    >VALIDANDO RÚBRICA</span
+                                >
+                            </div>
+                        </div>
+
+                        <!-- Mini Chart -->
+                        <div
+                            class="p-6 bg-slate-900 rounded-[2rem] text-center"
+                        >
+                            <h5 class="text-white text-xs mb-4">
+                                {c["curator.chart_title"]}
+                            </h5>
+                            <div class="relative w-full h-48">
+                                <canvas id="ingestionChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="order-1 lg:order-2">
+                    <h2
+                        class="text-4xl font-black text-slate-900 tracking-tight mb-6 leading-tight"
+                    >
+                        {c["curator.title"]}
+                    </h2>
+                    <p class="text-xl text-slate-600 mb-8 leading-relaxed">
+                        {c["curator.desc"]}
+                    </p>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div
+                            class="p-6 bg-white rounded-3xl border border-slate-200"
+                        >
+                            <h5 class="font-bold text-slate-900 mb-1">
+                                {c["curator.card1.title"]}
+                            </h5>
+                            <p
+                                class="text-[10px] text-slate-500 uppercase font-bold tracking-widest"
+                            >
+                                {c["curator.card1.subtitle"]}
+                            </p>
+                        </div>
+                        <div
+                            class="p-6 bg-white rounded-3xl border border-slate-200"
+                        >
+                            <h5 class="font-bold text-slate-900 mb-1">
+                                {c["curator.card2.title"]}
+                            </h5>
+                            <p
+                                class="text-[10px] text-slate-500 uppercase font-bold tracking-widest"
+                            >
+                                {c["curator.card2.subtitle"]}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. Global Scale (Multilingual) -->
+    <section id="global" class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4 lg:px-8 text-center">
+            <h2
+                class="text-4xl md:text-5xl font-black text-slate-900 mb-8 tracking-tighter italic"
+            >
+                {c["global.title"]}
+                <span class="text-amber-500">{c["global.subtitle"]}</span>
+            </h2>
+            <p
+                class="text-xl text-slate-600 max-w-3xl mx-auto mb-20 leading-relaxed"
+            >
+                {c["global.desc"]}
+            </p>
+
+            <div
+                class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center text-left"
+            >
+                <div
+                    class="bg-white p-10 rounded-[3rem] shadow-xl border border-slate-100"
+                >
+                    <div class="relative w-full h-[300px]">
+                        <canvas id="languageChart"></canvas>
+                    </div>
+                </div>
+                <div class="space-y-8">
+                    <div>
+                        <h4 class="text-2xl font-bold mb-2 text-slate-900">
+                            {c["global.card.title"]}
+                        </h4>
+                        <p class="text-slate-500 text-sm leading-relaxed">
+                            {c["global.card.desc"]}
+                        </p>
+                    </div>
+                    <div
+                        class="p-8 bg-indigo-50 rounded-3xl border border-indigo-100"
+                    >
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="font-bold text-indigo-700"
+                                >{c["global.coverage.title"]}</span
+                            >
+                            <span class="text-xs font-black text-indigo-400"
+                                >{c["global.coverage.subtitle"]}</span
+                            >
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            {
+                                c["global.chart.labels"].map((label) => (
+                                    <span class="px-3 py-1 bg-white rounded-full text-[10px] font-bold border border-indigo-200 text-indigo-600">
+                                        {label.toUpperCase()}
+                                    </span>
+                                ))
+                            }
+                            <span
+                                class="px-3 py-1 bg-indigo-200 text-indigo-800 rounded-full text-[10px] font-bold"
+                                >+55 MÁS</span
+                            >
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. IP Protection -->
+    <section
+        id="ip-protection"
+        class="py-24 bg-slate-900 text-white overflow-hidden relative"
+    >
+        <!-- Decoration -->
+        <div
+            class="absolute bottom-0 right-0 w-96 h-96 bg-amber-600/20 rounded-full blur-[100px]"
+        >
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <div>
+                    <h2 class="text-4xl font-black mb-8 leading-tight">
+                        {c["ip.title"]}
+                        <br /><span class="text-amber-500 italic"
+                            >{c["ip.subtitle"]}</span
+                        >
+                    </h2>
+                    <p class="text-slate-400 text-lg leading-relaxed mb-10">
+                        {c["ip.desc"]}
+                    </p>
+                    <div class="space-y-6">
+                        <div class="flex items-start">
+                            <div
+                                class="w-8 h-8 rounded-lg bg-amber-900/50 flex items-center justify-center text-amber-500 mr-4 mt-1"
+                            >
+                                ✓
+                            </div>
+                            <p class="text-sm text-slate-300 italic">
+                                {c["ip.check1"]}
+                            </p>
+                        </div>
+                        <div class="flex items-start">
+                            <div
+                                class="w-8 h-8 rounded-lg bg-amber-900/50 flex items-center justify-center text-amber-500 mr-4 mt-1"
+                            >
+                                ✓
+                            </div>
+                            <p class="text-sm text-slate-300 italic">
+                                {c["ip.check2"]}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div
+                    class="bg-slate-800 p-8 rounded-[3rem] border border-slate-700 shadow-2xl"
+                >
+                    <!-- Chat Bubble Simulation -->
+                    <div
+                        class="p-6 bg-slate-900 rounded-2xl border border-slate-800 mb-6 relative"
+                    >
+                        <!-- Tail -->
+                        <div
+                            class="absolute bottom-0 left-8 w-4 h-4 bg-slate-900 rotate-45 transform translate-y-2 border-r border-b border-slate-800"
+                        >
+                        </div>
+
+                        <div
+                            class="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-4"
+                        >
+                            {c["ip.example.title"]}
+                        </div>
+                        <p
+                            class="text-sm text-slate-300 italic leading-relaxed"
+                        >
+                            <span class="text-amber-500 font-bold">IA:</span>
+                            {c["ip.example.text"]}
+                        </p>
+                    </div>
+                    <div class="text-center pt-4">
+                        <span
+                            class="text-xs font-bold text-slate-500 uppercase tracking-widest"
+                            >{c["ip.example.note"]}</span
+                        >
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. Strategic Closing -->
+    <section class="py-32 bg-amber-50 text-center border-t border-amber-100">
+        <div class="max-w-4xl mx-auto px-4">
+            <h2
+                class="text-5xl font-black text-slate-900 mb-8 tracking-tighter leading-none"
+            >
+                {c["cta.title"]}
+                <br /><span class="text-amber-600 italic"
+                    >{c["cta.subtitle"]}</span
+                >
+            </h2>
+            <p class="text-xl text-slate-600 mb-12 max-w-2xl mx-auto">
+                {c["cta.desc"]}
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-6">
+                <button
+                    class="px-12 py-5 bg-slate-900 text-white font-bold rounded-full shadow-2xl hover:scale-105 transition-all text-sm uppercase tracking-widest"
+                >
+                    {c["cta.button"]}
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <script
+        define:vars={{
+            engagementDates: c["chart.engagement.dates"],
+            engagementStatic: c["chart.engagement.static"],
+            engagementActive: c["chart.engagement.active"],
+            ingestionLabels: c["chart.ingestion.labels"],
+            ingestionDataset: c["chart.ingestion.dataset"],
+            langLabels: c["global.chart.labels"],
+        }}
+    >
+        import Chart from "chart.js/auto";
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const ctx1 = document.getElementById("engagementChart");
+            // 1. Engagement Chart (Linear)
+            if (ctx1) {
+                new Chart(ctx1, {
+                    type: "line",
+                    data: {
+                        labels: engagementDates,
+                        datasets: [
+                            {
+                                label: engagementStatic,
+                                data: [100, 45, 20, 10, 5],
+                                borderColor: "#94A3B8",
+                                borderDash: [5, 5],
+                                tension: 0.4,
+                            },
+                            {
+                                label: engagementActive,
+                                data: [100, 92, 88, 85, 82],
+                                borderColor: "#F59E0B",
+                                backgroundColor: "rgba(245, 158, 11, 0.1)",
+                                fill: true,
+                                tension: 0.4,
+                            },
+                        ],
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: "bottom",
+                                labels: { color: "white" },
+                            },
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 100,
+                                ticks: {
+                                    callback: (v) => v + "%",
+                                    color: "#94a3b8",
+                                },
+                                grid: { color: "rgba(255,255,255,0.05)" },
+                            },
+                            x: {
+                                ticks: { color: "#94a3b8" },
+                                grid: { display: false },
+                            },
+                        },
+                    },
+                });
+            }
+
+            // 2. Ingestion Chart (Horizontal Bar)
+            const ctx2 = document.getElementById("ingestionChart");
+            if (ctx2) {
+                new Chart(ctx2, {
+                    type: "bar",
+                    indexAxis: "y",
+                    data: {
+                        labels: ingestionLabels,
+                        datasets: [
+                            {
+                                label: ingestionDataset,
+                                data: [180, 15],
+                                backgroundColor: ["#475569", "#F59E0B"],
+                                borderRadius: 6,
+                            },
+                        ],
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            x: { display: false },
+                            y: {
+                                ticks: { color: "white", font: { size: 10 } },
+                            },
+                        },
+                    },
+                });
+            }
+
+            // 3. Language Chart (Doughnut)
+            const ctx3 = document.getElementById("languageChart");
+            if (ctx3) {
+                new Chart(ctx3, {
+                    type: "doughnut",
+                    data: {
+                        labels: langLabels,
+                        datasets: [
+                            {
+                                data: [40, 25, 15, 10, 10],
+                                backgroundColor: [
+                                    "#F59E0B",
+                                    "#4F46E5",
+                                    "#10B981",
+                                    "#F43F5E",
+                                    "#94A3B8",
+                                ],
+                                borderWidth: 0,
+                                hoverOffset: 10,
+                            },
+                        ],
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        cutout: "70%",
+                        plugins: { legend: { position: "bottom" } },
+                    },
+                });
+            }
+        });
+    </script>
+</CommercialLayout>

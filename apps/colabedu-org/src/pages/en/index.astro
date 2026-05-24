@@ -1,0 +1,360 @@
+---
+import "@colabedu/ui-core/styles/global.css";
+---
+
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>ColabEdu.org - Open Assessment Specification</title>
+        <meta
+            name="description"
+            content="The open format for AI-powered educational assessment."
+        />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap"
+            rel="stylesheet"
+        />
+    </head>
+    <body class="bg-slate-50 text-slate-900 font-sans antialiased">
+        <!-- Promobar -->
+        <div class="bg-indigo-600 text-white text-sm font-semibold text-center py-2 px-4 shadow-inner">
+            <span class="opacity-90">🚀 Announcing version 1.0 of the</span>
+            <a href="/en/oas-spec/" class="underline hover:text-indigo-100 transition-colors">OAS Whitepaper</a>
+        </div>
+
+        <!-- Header -->
+        <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-lg border-b border-slate-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-16">
+                    <div class="flex items-center gap-2">
+                        <span class="text-2xl font-black text-slate-900 tracking-tighter">Colab<span class="text-indigo-600">Edu</span>.org</span>
+                    </div>
+                    <nav class="hidden md:flex space-x-8 items-center">
+                        <a href="/en/oas-spec/" class="text-sm font-medium text-slate-600 hover:text-indigo-600 transition-colors">The OAS Standard</a>
+                        <a href="/en/oas-spec/ecosystem-community/" class="text-sm font-medium text-slate-600 hover:text-indigo-600 transition-colors">Community</a>
+                        <a href="/en/news/" class="text-sm font-medium text-slate-600 hover:text-indigo-600 transition-colors">News</a>
+                        <a href="https://github.com/colabedu" class="text-sm font-medium text-slate-600 hover:text-indigo-600 transition-colors">GitHub</a>
+                        <div class="h-4 w-px bg-slate-300"></div>
+                        <a href="/" class="text-sm font-bold text-slate-400 hover:text-indigo-600 transition-colors" title="Cambiar a Español">ES</a>
+                    </nav>
+                    <div class="flex items-center space-x-4">
+                        <a href="/en/" class="bg-slate-900 text-white px-5 py-2 rounded-lg text-sm font-semibold hover:bg-slate-800 transition-all shadow-sm">
+                            Read Documentation
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <!-- Hero Section -->
+            <section class="relative pt-24 pb-32 overflow-hidden bg-white">
+                <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-indigo-50 via-white to-white opacity-70"></div>
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 text-sm font-semibold mb-6 border border-indigo-100">
+                        <span class="relative flex h-2 w-2">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
+                        </span>
+                        Open Assessment Specification
+                    </div>
+                    <h1 class="text-5xl md:text-7xl font-extrabold text-slate-900 tracking-tight leading-tight mb-8">
+                        Educational assessment <br class="hidden md:block"/>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600">should not be a black box.</span>
+                    </h1>
+                    <p class="text-xl text-slate-600 mb-10 max-w-2xl mx-auto leading-relaxed">
+                        ColabEdu is the open-source initiative that standardizes Artificial Intelligence-powered assessment. Write your criteria once, audit them always, and run them in any LMS.
+                    </p>
+                    <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                        <a href="/en/oas-spec/" class="w-full sm:w-auto px-8 py-3.5 bg-indigo-600 text-white rounded-xl text-lg font-semibold hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-200">
+                            Read the Manifesto
+                        </a>
+                        <a href="https://github.com/colabedu/open-assessment-specs" class="w-full sm:w-auto px-8 py-3.5 bg-white text-slate-700 rounded-xl text-lg font-semibold border border-slate-200 hover:border-slate-300 hover:bg-slate-50 transition-all">
+                            View Source Code
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Showcase: LOMLOE to Receta -->
+            <section class="py-24 bg-slate-900 text-white overflow-hidden relative">
+                <!-- Abstract Background -->
+                <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#4f46e5 1px, transparent 1px); background-size: 32px 32px;"></div>
+                
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                    <div class="text-center mb-16">
+                        <h2 class="text-3xl md:text-4xl font-bold mb-4">From Bureaucracy to Source Code</h2>
+                        <p class="text-slate-400 max-w-2xl mx-auto text-lg">
+                            The OAS standard transforms the complexity of official regulations (LOMLOE, NEM, TEKS) into structured "Recipes," human-readable and optimized for LLMs.
+                        </p>
+                    </div>
+
+                    <div class="grid lg:grid-cols-2 gap-8 items-stretch">
+                        <!-- Left Pane: LOMLOE Text -->
+                        <div class="bg-white rounded-2xl p-8 shadow-2xl flex flex-col justify-center transform transition-transform hover:-translate-y-1 duration-300">
+                            <div class="flex items-center gap-3 mb-6">
+                                <span class="bg-red-100 text-red-700 p-2 rounded-lg">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                                </span>
+                                <h3 class="text-slate-900 font-bold text-xl">1. Organic Law (LOMLOE)</h3>
+                            </div>
+                            <div class="border-l-4 border-slate-200 pl-4 space-y-4">
+                                <div>
+                                    <h4 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-1">Specific Competence 2</h4>
+                                    <p class="text-slate-700 font-serif leading-relaxed">
+                                        Understand and interpret oral and multimodal texts, grasping the general meaning and the most relevant information...
+                                    </p>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-lg border border-slate-100">
+                                    <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Operational Descriptor CCL2</h4>
+                                    <p class="text-slate-600 text-sm font-serif">
+                                        "The student understands, values, and analyzes complex information transmitted orally..."
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Pane: OAS Recipe -->
+                        <div class="bg-[#0f172a] rounded-2xl shadow-2xl overflow-hidden border border-slate-700/50 flex flex-col relative transform transition-transform hover:-translate-y-1 duration-300">
+                            <div class="bg-slate-800/80 px-4 py-3 border-b border-slate-700 flex items-center justify-between backdrop-blur-md">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                                    <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                                    <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                                </div>
+                                <span class="text-slate-400 text-xs font-mono">recipe-ccl2.yaml</span>
+                            </div>
+                            <div class="p-6 overflow-x-auto relative">
+                                <div class="absolute right-4 top-4 bg-indigo-500/20 text-indigo-300 text-xs px-2 py-1 rounded font-bold uppercase tracking-wider">OAS v1.0</div>
+                                <pre class="font-mono text-sm leading-relaxed text-slate-300"><code><span class="text-pink-400">apiVersion</span>: <span class="text-green-300">colabedu.ai/v1beta1</span>
+<span class="text-pink-400">kind</span>: <span class="text-green-300">Rubric</span>
+<span class="text-pink-400">metadata</span>:
+  <span class="text-indigo-300">name</span>: <span class="text-green-300">lomloe.ccl2.expresion-oral</span>
+
+<span class="text-pink-400">spec</span>:
+  <span class="text-indigo-300">criteria</span>:
+    - <span class="text-blue-300">id</span>: <span class="text-green-300">ccl2</span>
+      <span class="text-blue-300">weight</span>: <span class="text-orange-300">40</span>
+      <span class="text-blue-300">name</span>: <span class="text-green-300">Desarrollo Argumentativo</span>
+      <span class="text-blue-300">levels</span>:
+        - <span class="text-teal-300">level</span>: <span class="text-green-300">excellent</span>
+          <span class="text-slate-400">description: "Enlaza conceptos fluidamente"</span>
+        - <span class="text-teal-300">level</span>: <span class="text-green-300">needsWork</span>
+          <span class="text-slate-400">description: "Pausas constantes"</span></code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Ecosystem & Community -->
+            <section class="py-24 bg-slate-50">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-16">
+                        <span class="text-indigo-600 font-bold text-sm tracking-wider uppercase">An Open Ecosystem</span>
+                        <h2 class="text-3xl font-bold text-slate-900 mt-2 mb-4">Collaborating to Improve Education</h2>
+                        <p class="text-slate-600 max-w-2xl mx-auto text-lg">
+                            ColabEdu is not a walled garden. It is a community where educators, governments, publishers, and engineers join forces to ensure data sovereignty.
+                        </p>
+                    </div>
+                    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <!-- Educators -->
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:border-indigo-300 transition-colors group">
+                            <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-900 mb-2">For Educators</h3>
+                            <p class="text-slate-600 text-sm leading-relaxed">
+                                Daily support solutions like Teacher Copilots and Socratic Tutors that free up bureaucratic burden and accompany students without giving them direct answers.
+                            </p>
+                        </div>
+                        
+                        <!-- Governments -->
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:border-indigo-300 transition-colors group">
+                            <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-900 mb-2">For Governments</h3>
+                            <p class="text-slate-600 text-sm leading-relaxed">
+                                Federated governance to audit large-scale assessments, ensuring legal compliance and providing tools against pedagogical drift.
+                            </p>
+                        </div>
+
+                        <!-- EdTech -->
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:border-indigo-300 transition-colors group">
+                            <div class="w-12 h-12 bg-orange-100 text-orange-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"></path></svg>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-900 mb-2">For Publishers</h3>
+                            <p class="text-slate-600 text-sm leading-relaxed">
+                                Mass modernization tools. Transform PDFs, textbooks, and legacy repositories to the new AI-powered OAS structured standard.
+                            </p>
+                        </div>
+
+                        <!-- Engineers -->
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:border-indigo-300 transition-colors group">
+                            <div class="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-900 mb-2">For Engineers</h3>
+                            <p class="text-slate-600 text-sm leading-relaxed">
+                                We invite you to build on OAS. Create your own implementations, integrate the standard into your LMS, or design new Agents under the GitOps architecture.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-12 text-center">
+                        <a href="/en/oas-spec/ecosystem-community/" class="inline-flex items-center gap-2 px-6 py-3 bg-white text-indigo-600 rounded-lg font-bold border-2 border-indigo-600 hover:bg-indigo-50 transition-colors">
+                            Discover the Ecosystem and Join
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Global Spanish Section -->
+            <section class="py-24 bg-white border-y border-slate-200">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center max-w-3xl mx-auto mb-16">
+                        <span class="text-indigo-600 font-bold text-sm tracking-wider uppercase">Strategic Focus</span>
+                        <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mt-2 mb-6 tracking-tight">Global Commitment to Spanish</h2>
+                        <p class="text-lg text-slate-600">
+                            Our architecture is validated to resolve the hyper-fragmentation of educational standards in Spanish globally, adapting to the regulatory demands of each region without losing algorithmic precision.
+                        </p>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <!-- España -->
+                        <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                            <div class="w-10 h-10 rounded-full bg-red-100 text-red-600 flex items-center justify-center mb-4 font-bold text-xl">🇪🇸</div>
+                            <h3 class="text-lg font-bold text-slate-900 mb-2">Spain</h3>
+                            <p class="text-slate-600 text-sm">Constant transition of regulations. Deep mapping of competencies and basic knowledge for <span class="font-semibold">LOMLOE</span> and <span class="font-semibold">EBAU</span>.</p>
+                        </div>
+
+                        <!-- USA -->
+                        <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                            <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center mb-4 font-bold text-xl">🇺🇸</div>
+                            <h3 class="text-lg font-bold text-slate-900 mb-2">United States</h3>
+                            <p class="text-slate-600 text-sm">The fastest-growing Hispanic ecosystem. Support for <span class="font-semibold">Common Core</span>, <span class="font-semibold">TEKS</span>, <span class="font-semibold">California</span>, <span class="font-semibold">NY</span>, and <span class="font-semibold">FL</span>.</p>
+                        </div>
+
+                        <!-- Latam -->
+                        <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                            <div class="w-10 h-10 rounded-full bg-green-100 text-green-600 flex items-center justify-center mb-4 font-bold text-xl">🇲🇽</div>
+                            <h3 class="text-lg font-bold text-slate-900 mb-2">Latin America</h3>
+                            <p class="text-slate-600 text-sm">Massive curricular frameworks. Full alignment with <span class="font-semibold">NEM (Mexico)</span>, <span class="font-semibold">SEP</span>, and <span class="font-semibold">CENEVAL</span>.</p>
+                        </div>
+
+                        <!-- Global -->
+                        <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                            <div class="w-10 h-10 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center mb-4 font-bold text-xl">🌍</div>
+                            <h3 class="text-lg font-bold text-slate-900 mb-2">International</h3>
+                            <p class="text-slate-600 text-sm">Deterministic assessment for global certifications: <span class="font-semibold">AP Spanish</span>, <span class="font-semibold">IB Spanish</span>, <span class="font-semibold">DELE</span>, and <span class="font-semibold">SIELE</span>.</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-12 text-center">
+                        <a href="/en/focus-spanish/" class="inline-flex items-center text-indigo-600 font-bold hover:text-indigo-800 transition-colors">
+                            Read our strategy on the Spanish language 
+                            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Digital Sovereignty Section -->
+            <section class="py-24 bg-slate-900 text-white">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="grid lg:grid-cols-2 gap-12 items-center">
+                        <div>
+                            <span class="text-indigo-400 font-bold text-sm tracking-wider uppercase">Technological Sovereignty</span>
+                            <h2 class="text-3xl md:text-4xl font-bold mt-2 mb-6 tracking-tight">Agnostic Architecture and Public Models</h2>
+                            <p class="text-slate-300 text-lg mb-6 leading-relaxed">
+                                Education must absolutely guarantee student data privacy. We firmly believe that the future of AI assessment lies in the use of <span class="text-white font-bold">Open AI Models</span> and <span class="text-white font-bold">On-Premise</span> architectures.
+                            </p>
+                            <p class="text-slate-300 text-lg mb-8 leading-relaxed">
+                                We are looking for <span class="text-white font-bold">educator and institutional partners</span> for collaborative projects. We make our infrastructure available to public initiatives such as <span class="text-indigo-300 font-bold">ALIA</span> or <span class="text-indigo-300 font-bold">AINA</span> to research and build transparent and sovereign tools.
+                            </p>
+                            <a href="/en/digital-sovereignty/" class="inline-flex items-center gap-2 px-6 py-3 bg-indigo-600 text-white rounded-lg font-bold hover:bg-indigo-500 transition-colors">
+                                Read about our commitment
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                            </a>
+                        </div>
+                        <div class="relative">
+                            <div class="absolute -inset-4 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-3xl opacity-20 blur-xl"></div>
+                            <div class="relative bg-slate-800 p-8 rounded-3xl border border-slate-700 shadow-2xl">
+                                <div class="flex items-center gap-4 mb-8 pb-8 border-b border-slate-700">
+                                    <div class="w-12 h-12 bg-slate-900 rounded-lg flex items-center justify-center border border-slate-600">
+                                        <svg class="w-6 h-6 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"></path></svg>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-white text-lg">Data Protection</h4>
+                                        <p class="text-slate-400 text-sm">Privacy guaranteed by design</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-4">
+                                    <div class="w-12 h-12 bg-slate-900 rounded-lg flex items-center justify-center border border-slate-600">
+                                        <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-white text-lg">Collaboration Projects</h4>
+                                        <p class="text-slate-400 text-sm">Joint research on public models</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Call to Actions -->
+            <section class="border-t border-slate-200 py-20 bg-white">
+                <div class="max-w-4xl mx-auto px-4 text-center">
+                    <h2 class="text-3xl font-bold text-slate-900 mb-6">Help standardize the education of the future</h2>
+                    <p class="text-slate-600 mb-10 text-lg">
+                        We are looking for foundational educators to map the curricula of Mexico (NEM), USA (TEKS/Common Core), and Spain (LOMLOE) to the OAS format.
+                    </p>
+                    <div class="flex justify-center gap-4">
+                        <a href="https://discord.gg/colabedu" class="px-6 py-3 bg-[#5865F2] text-white rounded-lg font-bold hover:bg-[#4752C4] transition-colors flex items-center gap-2">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>
+                            Join on Discord
+                        </a>
+                        <a href="/en/" class="px-6 py-3 bg-slate-100 text-slate-700 rounded-lg font-bold hover:bg-slate-200 transition-colors">
+                            Create a Recipe
+                        </a>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="bg-slate-900 border-t border-slate-800 py-12 text-center text-slate-400">
+            <div class="max-w-7xl mx-auto px-4 flex flex-col items-center gap-4">
+                <div>
+                    <p class="text-sm font-semibold tracking-wider uppercase mb-2">ColabEdu.org</p>
+                    <p class="text-xs text-slate-500">Building the open standard for formative assessment. MIT License.</p>
+                </div>
+                <div class="flex gap-4 items-center flex-wrap justify-center">
+                    <a href="/en/about/" class="text-sm font-bold text-slate-300 hover:text-white transition-colors">
+                        Our Story
+                    </a>
+                    <span class="text-slate-600 hidden sm:inline">|</span>
+                    <a href="/en/focus-spanish/" class="text-sm font-bold text-slate-300 hover:text-white transition-colors">
+                        Spanish as a Strategic Pillar
+                    </a>
+                    <span class="text-slate-600 hidden sm:inline">|</span>
+                    <a href="https://colabedu.net" class="text-sm font-bold text-indigo-400 hover:text-indigo-300 transition-colors">
+                        Go to ColabEdu.net Platform &rarr;
+                    </a>
+                </div>
+                <div class="mt-8 pt-8 border-t border-slate-800 w-full text-center">
+                    <p class="text-slate-300 font-semibold text-sm">🌍 Built in California & Spain</p>
+                    <p class="text-slate-500 text-xs mt-1 tracking-wider">San Jose | Madrid | Mexico City</p>
+                </div>
+            </div>
+        </footer>
+    </body>
+</html>

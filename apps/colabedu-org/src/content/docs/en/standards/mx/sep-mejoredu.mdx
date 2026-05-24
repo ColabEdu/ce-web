@@ -1,0 +1,266 @@
+---
+title: "Practical Cases Catalog: Mexican Educational Ecosystem (EXANI-II and MEJOREDU) under OAS V2"
+description: "How ColabEdu uses Assessment as Code to implement the Mexican evaluation systems, from national exams to diagnostic tests."
+---
+
+**Architecture:** Open Assessment Standard (OAS v1beta1)
+
+**Educational Scope:** National Higher Education Entrance Examination (EXANI-II by CENEVAL), Upper Secondary Education Assignment Examination (COMIPEMS), and Basic Education Diagnostic Evaluations (MEJOREDU / SEP).
+
+The evaluation ecosystem in Mexico represents one of the largest, most complex, and competitive educational markets (Total Addressable Market) in the Spanish-speaking world. It is characterized by a deep duality: on one hand, a humanist, constructivist, and formative national curricular framework promoted by the State (La Nueva Escuela Mexicana - NEM); and on the other, a system of standardized, high-stakes admission filters with extreme psychometric rigor, operated by autonomous entities (CENEVAL).
+
+Unlike other countries where the "long essay" (direct writing on a blank canvas) prevails for university access, the Mexican system evaluates language mastery through **Advanced Reading Comprehension** and **Indirect Writing** (structural identification and correction of morphosyntactic errors, language vices, and textual coherence in third-party texts).
+
+This document exhaustively details the implementation in **Assessment as Code** of Mexican tests. We will demonstrate how the ColabEdu platform, through interactive A2UI (Agent-to-UI) components developed in Flutter and algorithmic dialectal protection directives in Layer C3, can perfectly emulate the technical experience and pressure of CENEVAL, mapping it to our mathematical matrix of levels and weights.
+
+## 1. EXANI-II: Indirect Writing (CENEVAL)
+
+"Indirect Writing" is a fascinating evaluation paradigm from an engineering perspective. It assesses the applicant's ability to act as a "professional editor": they must select textual fragments that improve the coherence, cohesion, and normative correctness of a pre-existing deficient text. The student does not write from scratch; they rewrite, reorder, or choose the best lexical option to fix a structural error (solecisms, anacoluthons, barbarisms, gender/number disagreements, or verb tenses).
+
+### A. The UI/UX Engine (ExerciseType) and the Interface Challenge
+
+The technical challenge here is to overcome the outdated "paper and pencil" format or static forms (Google Forms) currently used by academies. Showing a long text with numbers in brackets [1] and then asking questions below breaks the student's concentration (cognitive friction).
+
+To digitize this experience in a truly interactive way, ColabEdu's `ExerciseType` deploys an **Inline Error Correction Widget**. This Flutter component allows the student to click directly on the underlined word or phrase in the text, displaying a contextual menu (pop-over) with correction options, keeping the reading fluid.
+
+```yaml
+apiVersion: colabedu.ai/v1beta1
+kind: ExerciseType
+metadata:
+  id: "mx.etype.exani.redaccion_indirecta.v1"
+  title: "UI Engine: EXANI-II Interactive Indirect Writing"
+  description: "Real-time editing simulator for detecting language vices and textual improvement."
+spec:
+  # RESOLUTION PHASE (WHAT THE STUDENT SEES)
+  ui_components:
+    - type: "split_pane_widget"
+      left: "document_viewer_widget" # Renders the base text, inserting visual marks in problematic fragments.
+      right: "inline_error_correction_widget" # Dynamic questionnaire bi-directionally linked to text marks. Hovering on the right illuminates the text on the left.
+
+  # FEEDBACK PHASE (WHAT THE TEACHER AND STUDENT SEE AFTER GRADING)
+  report_components:
+    - type: "score_header_widget"
+      data_mapping: "overall_ceneval_index_score" # Automatic translation to the 700-1300 scale
+    - type: "grammar_rule_breakdown_widget" # Shows a granular analysis: "You master diacritic accentuation (90%), but fail in gerunds of posteriority (20%)".
+    - type: "markdown_viewer_widget"
+
+  configuration_schema:
+    - key: "timer_duration_minutes"
+      type: "integer"
+      default: 50
+    - key: "strict_mode"
+      type: "boolean"
+      default: true
+      description: "Blocks the use of dictionaries, external tabs, and the clipboard."
+```
+
+### B. Layer C0 (The CENEVAL Normative Rubric) and Layer C3 (Dialectal Defense)
+
+The EXANI-II evaluates Standard Mexican Spanish. There is an inherent danger here when using Artificial Intelligence: most foundational LLMs have been trained with large corpora from the Royal Spanish Academy (RAE) oriented towards Peninsular Spanish (Spain). If we do not configure architectural "guardrails", the AI could unfairly penalize a Mexican student for not using the pronoun "vosotros" or for using perfectly educated and accepted structures in Latin America.
+
+To resolve this, we mathematically calibrate the AI using a rubric structured by weights and levels (L0-L4) in Layer C0, and then we inject a "dialectal armor" in Layer C3.
+
+```yaml
+# LAYER C0 (Mathematical Standard Rubric)
+# Defines the immutability of the score.
+- id: "mx.rub.ceneval.exani2.redaccion.v1"
+  level: "C0"
+  type: "BLOCK_RUBRIC"
+  authority_scope: "NATIONAL"
+  content: |
+    Scale: 0-4 (The backend will perform internal equivalence to the CENEVAL Index 700-1300)
+    Criteria:
+    - Textual Coherence and Cohesion (35%):
+      L4: Impeccable logical connection between sentences. Adequate use of syntactic links and perfect grammatical agreement (subject-verb, gender-number). Ability to reorder paragraphs logically.
+      L2: Minor long-distance agreement errors or use of repetitive links that impoverish the text but do not completely break the meaning.
+      L0: Severe incoherence. Disconnected texts, contradictory use of adversative or causal links, and severe structural agreement errors.
+
+    - Language Conventions (35%):
+      L4: Absolute mastery of spelling, accentuation (diacritic, acute, plain, proparoxytone) and punctuation (use of incidental comma and semicolon). Correct use of prepositions.
+      L2: Presents sporadic errors in intermediate-level punctuation signs or accents that do not drastically alter the lexical meaning of the word.
+      L0: Multiplicity of serious spelling mistakes, confusion of spellings (s/c/z, b/v) and omission of basic punctuation that makes fluid reading impossible and changes the meaning of the sentence.
+
+    - Language Vices (30%):
+      L4: Total absence of vices. The resulting text is clean, direct, and of impeccable academic register.
+      L2: Occasional presence of minor pleonasms or filler words in the transition, but avoids the most serious normative errors of the language.
+      L0: Constant use and inability to correct barbarisms, dequeísmos ("me dijo de que"), queísmos, anacoluthons (break in the phrase) or the incorrect gerund of posteriority.
+
+# LAYER C3 (Mexican Dialectal Gatekeeper)
+# Defines in-flight orchestration rules for the LLM.
+- id: "mx.dir.ceneval.norma_mexicana.v1"
+  level: "C3"
+  type: "BLOCK_DIRECTIVE"
+  content: |
+    persona: "Psychometric evaluator from CENEVAL, purist expert in syntax and in the exclusive normative of educated Spanish from Mexico."
+    preprocessing_directives:
+    - rule: "Active Dialectal Protection: Accept as perfectly valid, educated, and academic the use of the pronoun 'ustedes' and its corresponding conjugations for the second person plural. Under NO circumstances require, suggest, or evaluate as correct the use of 'vosotros' or its verbal forms."
+    - rule: "Vigilance of Specific Vices: Automatically apply a direct drop to level L0 (0 points) in the 'Language Vices' criterion if you detect that the student has not successfully identified or corrected an explicit 'dequeísmo' (e.g., 'pienso de que'), an evident pleonasm ('subir arriba', 'entrar adentro'), or a gerund of posteriority ('salió de casa, llegando a Madrid horas después')."
+```
+
+### C. The Final Recipe (C1) and Procedural Generation
+
+What makes this system scalable for prep academies in Mexico is that **they do not need to create each question by hand**. By injecting a text into Layer C2, a LangGraph agent purposefully "dirties" or "breaks" the text, seeding grammatical errors based on the student's failure history, creating infinite mock exams.
+
+```yaml
+apiVersion: colabedu.ai/v1beta1
+kind: Recipe
+metadata:
+  id: "mx.recipe.template.exani2.redaccion.v1"
+  title: "EXANI-II Mock: Adaptive Indirect Writing"
+spec:
+  level: "C1"
+  exerciseTypeRef: "mx.etype.exani.redaccion_indirecta.v1"
+  rubric_refs: ["mx.rub.ceneval.exani2.redaccion.v1"]
+  directive_refs: ["mx.dir.ceneval.norma_mexicana.v1"]
+
+  context_refs: [] # LATE BINDING: Text is injected, and Curator Agent dynamically seeds errors before UI render.
+  requires_dynamic_context: true
+  variables:
+    timer_duration_minutes: 50
+```
+
+## 2. EXANI-II: Reading Comprehension (Continuous and Discontinuous Texts)
+
+The reading comprehension test evaluates deep cognitive processes: identifying hidden information, understanding the argumentative superstructure, and inferring the author's intentions and purposes. The exam uses both continuous texts (scientific articles, literary pieces, essays) and discontinuous texts (infographics, statistical graphs, conceptual maps).
+
+### A. The UI/UX Engine (ExerciseType) and Semantic Distractors
+
+To simulate the exam, we use a dynamic multiple-choice questionnaire (MCQ) engine. However, unlike traditional test creators, ColabEdu's AI in the backend (*Curator Agent*) is responsible for generating **complex semantic distractors (Plausible Incorrect Answers)** on the fly. The AI scans the text and creates false options that seem correct if the student did a superficial reading or did not understand an irony, just as CENEVAL psychometricians do.
+
+```yaml
+apiVersion: colabedu.ai/v1beta1
+kind: ExerciseType
+metadata:
+  id: "mx.etype.exani.comprension_lectora.v1"
+  title: "UI Engine: EXANI-II Reading Comprehension"
+spec:
+  ui_components:
+    - type: "split_pane_widget"
+      left: "rich_media_viewer_widget" # Capable of rendering both rich text and vector graphics (discontinuous texts).
+      right: "dynamic_mcq_forms_widget"
+
+  report_components:
+    - type: "score_header_widget"
+    - type: "reading_skills_radar_chart" # Spider chart visualizing competencies: Literal Extraction vs Critical Inference.
+    - type: "pedagogical_hints_widget" # Shows the justification of why the chosen answer was a "distractor".
+```
+
+### B. Layer C0 (Weighted Reading Comprehension Metrics)
+
+```yaml
+- id: "mx.rub.ceneval.exani2.lectura.v1"
+  level: "C0"
+  type: "BLOCK_RUBRIC"
+  authority_scope: "NATIONAL"
+  content: |
+    Scale: 0-4 (Scalable precision index)
+    Criteria:
+    - Extraction of Explicit Information (30%):
+      L4: Locates with surgical accuracy data, facts, and explicit details within complex and dense texts, discriminating them from complementary information.
+      L2: Locates main information but tends to get confused when minor details or distractors are presented in nearby text.
+      L0: Consistently fails to retrieve information that is directly written and explicit in the document.
+
+    - Understanding of Structure (30%):
+      L4: Perfectly identifies the author's central thesis, knows how to differentiate premises from conclusions, and recognizes the logical organization (cause-effect, problem-solution) of the text.
+      L2: Identifies the general topic, but struggles to distinguish the hierarchy between main arguments and supporting evidence or anecdotes.
+      L0: Fails to identify the main idea, thesis, or organizational superstructure of the analyzed document.
+
+    - Inference, Purpose and Tone (40%):
+      L4: Masterfully deduces the author's communicative intention, emotional or discursive tone (e.g., ironic, objective, sarcastic, persuasive) and extracts the exact meaning of neologisms or polysemic words by their context, without a dictionary.
+      L2: Makes basic logical inferences, but repeatedly fails to grasp subtle nuances, double meanings, ironies, or the underlying, undeclared purpose of the author.
+      L0: Unable to read "between the lines"; interprets all information purely literally, leading to completely erroneous conclusions.
+```
+
+## 3. Basic Education Diagnostic Tests (MEJOREDU / SEP)
+
+The National Commission for the Continuous Improvement of Education (MEJOREDU) and the Secretariat of Public Education (SEP) apply diagnostic tests (formerly known as PLANEA and ENLACE) at the beginning of the school year (e.g., 3rd year of Middle School or 1st year of High School) to know the real status of the **"Expected Learnings"** (now Learning Development Processes - PDA).
+
+Unlike CENEVAL, these tests are purely **formative and diagnostic**, not punitive. Their goal is not to exclude students, but to guide the teacher on what topics to review.
+
+### A. The UI/UX Engine (ExerciseType)
+
+The interface design is friendlier and guided, reducing evaluation anxiety. It combines reading, multiple choice, and brief written expression, encouraging structured critical thinking.
+
+```yaml
+apiVersion: colabedu.ai/v1beta1
+kind: ExerciseType
+metadata:
+  id: "mx.etype.mejoredu.diagnostico.v1"
+  title: "UI Engine: Basic Education Diagnostic (Language and Communication)"
+spec:
+  ui_components:
+    - type: "stepper_assessment_widget" # Guided step navigation (Step 1: Read, Step 2: Answer, Step 3: Reflect)
+      steps:
+        - "reading_dossier_viewer" # Infographic, traditional legend, short story, or current news.
+        - "reading_comprehension_mcq" # Basic reading comprehension validation.
+        - "short_answer_editor" # Brief open response to evaluate argumentation.
+
+  report_components:
+    - type: "score_header_widget"
+    - type: "aprendizajes_esperados_tracker_widget" # Maps obtained results directly to SEP curriculum codes (e.g., AE1, PDA-3).
+    - type: "pedagogical_hints_widget" # Generates review suggestions instead of penalties.
+```
+
+### B. Layer C0 (SEP Expected Learnings) and Layer C3 (Formative Focus)
+
+```yaml
+# LAYER C0 (Weighted Formative Evaluation)
+- id: "mx.rub.sep.secundaria.lenguaje.v1"
+  level: "C0"
+  type: "BLOCK_RUBRIC"
+  authority_scope: "NATIONAL"
+  content: |
+    Scale: 0-4 (SEP Achievement Levels: 0=Needs Support, 2=Developing, 4=Expected Level)
+    Criteria:
+    - AE1: Identification and Function of Texts (30%):
+      L4: Perfectly identifies the characteristics, superstructure, and social function of an opinion article or journalistic text.
+      L2: Recognizes the general type of text but omits or confuses parts of its functional structure.
+      L0: Totally confuses the text type (e.g., believes a subjective opinion article is an objective informative news piece).
+
+    - AE2: Argumentation and Critical Stance (40%):
+      L4: Argues their viewpoints on the topic logically, clearly, and solidly supported by evidence from the read text.
+      L2: Presents a valid personal opinion, but their argumentation is weak, circular, or unsupported by evidence from the base text.
+      L0: Expresses random opinions without any justification or merely copies literal fragments without assimilating them.
+
+    - AE3: Use of Articulating Links (30%):
+      L4: Uses varied and precise links to articulate their opinions (e.g., 'therefore', 'however', 'so that').
+      L2: Uses basic connectors ('and', 'but', 'because') highly repetitively and unsophisticatedly.
+      L0: Absence of connectors, resulting in a telegram-like text, with disconnected sentences difficult to follow.
+
+# LAYER C3 (Formative and Socratic Focus)
+- id: "mx.dir.mejoredu.formativo.v1"
+  level: "C3"
+  type: "BLOCK_DIRECTIVE"
+  content: |
+    persona: "Diagnostic tutor from SEP, deeply empathetic, friendly, and observant."
+    evaluation_directives:
+    - rule: "Constructive Evaluation: If the student obtains L0 or L2 in the open argumentative response, DO NOT use a punitive tone or focus exclusively on the error. Explain encouragingly and briefly why the response is not accurate, rescue what they did well, and generate a 'pedagogical_hint' recommending an interactive exercise to review the use of links or basic essay structure."
+```
+
+## 4. GTM Strategy in Mexico: From "Shadow IT" to Institutional Licenses (B2B/B2G)
+
+The Mexican market presents a gigantic adoption opportunity. However, direct sales to schools ("Top-Down") often face severe bureaucratic barriers: public schools (SEP) and autonomous universities (UNAM, state prep schools) are normatively required to use legacy systems like **Moodle**, causing initial rejection of new platforms.
+
+To overcome this, ColabEdu employs a **Bottom-Up** growth strategy leveraging teacher burnout and using the platform as a "Trojan Horse" through the technique of **Magic Links and Shadow IT**.
+
+### A. Bottom-Up Adoption: The Teacher's Problem
+
+A high school teacher in Mexico easily manages massive groups of 40 to 50 students per classroom. Grading 50 essays with the absolute rigor of EXANI-II takes all weekend, causing severe *burnout*. Teachers look for AI tools on their own (ChatGPT), but get frustrated because general AI doesn't know CENEVAL's rules and gives diffuse feedback. ColabEdu already has Layer C0 (Mexican Laws) preloaded, solving their problem instantly.
+
+### B. The "Delivery Link" Strategy (Magic Links)
+
+Instead of asking the school to install new software or pay for a complex integration (LTI 1.3), or forcing the teacher to "copy-paste" their students' texts one by one from Moodle to ColabEdu, we use the **Magic Links** flow:
+
+1. **Instant Creation:** The teacher, using their individual ColabEdu account (Freemium or Prosumer), assembles the desired activity (e.g., *"EXANI-II Mock: Reading Comprehension on Biotechnology"*). The platform compiles Layers C1 + C0 + C2 + C3.
+2. **Link Generation:** ColabEdu generates a unique and secure URL for that task (e.g., `app.colabedu.ai/take/mx-exani-9843`).
+3. **Publication in Official LMS (Shadow Mode):** The teacher goes to their school's Moodle, Google Classroom, or even the class WhatsApp group, and simply pastes this link as the task instruction: *"Students, click on this link to take your diagnostic evaluation"*.
+4. **Immersive Resolution:** Students click the link. If the school uses Google or Microsoft, they log in with one click (SSO). They enter ColabEdu's immersive Flutter environment, take the exam under time and anti-fraud restrictions (clipboard block), and submit.
+5. **Mass Grading and Return:** The *Grading V2 Agent* evaluates all 50 students in seconds. The teacher checks the dashboard in ColabEdu, gets granular metrics, and simply exports the grades in a CSV file or transfers the final grade to Moodle's *Gradebook*.
+
+### C. Transition to B2B and B2G (Institutional Sales)
+
+This Magic Links strategy allows the platform to go viral classroom by classroom. Once the platform's presence is established, the sales team steps in:
+
+1. **The Audit Report (Upselling):** When ColabEdu detects that there are 15 teachers from "State Prep #5" using and paying for individual accounts in *shadow mode*, the sales team approaches Management with empirical data: *"Your teachers already love our tool and students are improving their metrics in EXANI-II simulation. Let's buy a B2B institutional license for the entire center"*.
+2. **Total LTI 1.3 Integration:** With the acquired institutional license, the platform comes out of the shadows. ColabEdu formally integrates via LTI (Learning Tools Interoperability) within the school's own Moodle. Grades travel automatically without the teacher having to export CSVs.
+3. **B2G Sales (State Tenders):** In Mexico, public education is massive but administered by State Education Secretariats (e.g., Secretariat of Education of Nuevo León or Jalisco). By vectorizing the SEP's "Learning Development Processes" (PDA), ColabEdu offers Education Secretaries a live **Audit Dashboard**. The government can see, in real-time, what percentage of the State's students are achieving the learnings of the "Languages" formative field, objectively evaluated against an immutable standard (Layer C0), securing large-scale contract awards.

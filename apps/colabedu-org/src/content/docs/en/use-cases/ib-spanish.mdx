@@ -1,0 +1,380 @@
+---
+title: "IB Spanish Practical Cases (OAS V2)"
+description: "Implementation of the International Baccalaureate (IB) under the OAS specification."
+---
+
+# Use Cases Catalog: IB Spanish Ecosystem under OAS V2
+
+**Architecture:** Open Assessment Standard (OAS v1beta1)
+
+**Educational Scope:** International Baccalaureate (IB) - Spanish A (Literature) and Spanish B (Language Acquisition).
+
+The International Baccalaureate (IB) curriculum is distinguished by its holistic and conceptual approach. Unlike other systems that assess isolated knowledge, the IB evaluates "how the student thinks" through multiple modalities: written critical analysis, production of specific text formats (blogs, brochures), listening comprehension, and interactive oral defense.
+
+This document details the complete implementation in **Assessment as Code** of all IB assessment pillars (SL and HL), demonstrating how the UI engine (ExerciseType) and pedagogical layers (C0, C1, C2, and C3) intertwine.
+
+## 1. Paper 1 (Spanish A: Literature) - Guided Literary Analysis
+
+*Paper 1* requires the student to read an unseen literary text and write a guided analysis. The platform must offer a text viewer and an editor to write, evaluating the depth of the analysis, not just grammar.
+
+### A. The UI/UX Engine (ExerciseType)
+
+The engineer defines a classic split-screen interface.
+
+```yaml
+apiVersion: colabedu.ai/v1beta1  
+kind: ExerciseType  
+metadata:  
+  id: "int.etype.ib.split_pane_analysis.v1"  
+  title: "UI Engine: IB Guided Analysis (Split Screen)"  
+spec:  
+  # INPUT UI (Flutter)  
+  ui_components:  
+    - type: "split_pane_widget"  
+      left: "pdf_viewer" # For the literary text  
+      right: "rich_text_editor"  
+  
+  # REPORT UI  
+  report_components:  
+    - type: "score_header_widget"  
+    - type: "rubric_breakdown_table_widget"  
+    - type: "markdown_viewer_widget"  
+      data_mapping: "constructive_feedback"  
+  
+  configuration_schema:  
+    - key: "timer_duration_minutes"  
+      type: "integer"  
+      default: 135 # 2h 15m for HL  
+    - key: "disable_copy_paste"  
+      type: "boolean"  
+      default: true
+```
+
+### B. C0 Layer (The Official Rubric)
+
+The immutable IB standard for Literature.
+
+```yaml
+- id: "int.rub.ib.span_a.lit.paper1.v1"  
+  level: "C0"  
+  type: "BLOCK_RUBRIC"  
+  authority_scope: "GLOBAL"  
+  content: |  
+    Scale: 0-20  
+    Criteria:  
+    - Understanding and Interpretation (5 pts):  
+      L5: Persuasive interpretation and deep understanding of subtleties.  
+      L1: Superficial understanding with few references to the text.  
+    - Analysis and Evaluation (5 pts):  
+      L5: Insightful analysis of the author's stylistic choices.  
+    - Focus and Organization (5 pts):  
+      L5: Structured and cohesive argumentation.  
+    - Language (5 pts):  
+      L5: Precise, varied language and highly academic register.
+```
+
+### C. C2 (Context) and C3 (Directives) Layers
+
+The poem to analyze and the teacher's evaluation instructions.
+
+```yaml
+# C2 LAYER  
+- id: "int.ctx.ib.lorca.romance_sonambulo.v1"  
+  level: "C2"  
+  type: "BLOCK_CONTEXT"  
+  content: |  
+    Text: "Romance Sonámbulo" by Federico García Lorca.  
+    Guiding question: Analyze how the author uses the symbolism of the color green and elements of nature to build the dramatic tension of the poem.  
+  
+# C3 LAYER  
+- id: "int.dir.ib.examiner.spanish_a.v1"  
+  level: "C3"  
+  type: "BLOCK_DIRECTIVE"  
+  content: |  
+    persona: "Official Examiner for IB Spanish A Literature. Hyper-analytical focus."  
+    evaluation_directives:  
+    - rule: "Quote Requirement: If the student claims there is a literary device but DOES NOT insert a direct textual quote from the poem to justify it, the maximum score in 'Analysis and Evaluation' is L3."  
+    feedback_style: "Generate the feedback dividing it by areas of literary improvement, using a university academic tone."
+```
+
+### D. The Final Recipe (C1)
+
+```yaml
+apiVersion: colabedu.ai/v1beta1  
+kind: Recipe  
+metadata:  
+  id: "int.recipe.ib.span_a.paper1.lorca.v1"  
+spec:  
+  level: "C1"  
+  exerciseTypeRef: "int.etype.ib.split_pane_analysis.v1"  
+  rubric_refs: ["int.rub.ib.span_a.lit.paper1.v1"]  
+  context_refs: ["int.ctx.ib.lorca.romance_sonambulo.v1"]  
+  directive_refs: ["int.dir.ib.examiner.spanish_a.v1"]  
+  variables:  
+    timer_duration_minutes: 135  
+    disable_copy_paste: true
+```
+
+## 2. Paper 2 (Spanish A: Literature) - Comparative Essay (Closed Book)
+
+In *Paper 2*, the student must write an essay comparing two literary works studied during the course in response to a general question. **The technical difficulty here is that it's a Closed Book exam**. The student doesn't have the texts in front of them; they rely on their memory.
+
+### A. The UI/UX Engine (ExerciseType)
+
+The PDF viewer is removed to simulate real exam conditions. The student only sees the editor and the timer.
+
+```yaml
+apiVersion: colabedu.ai/v1beta1  
+kind: ExerciseType  
+metadata:  
+  id: "int.etype.ib.closed_book_essay.v1"  
+  title: "UI Engine: Closed Book Comparative Essay"  
+spec:  
+  ui_components:  
+    - type: "focused_markdown_editor_widget" # Centered editor with no side panel  
+      config_bindings:  
+        - "show_prompt_banner" # Shows the pinned question at the top  
+  
+  report_components:  
+    - type: "score_header_widget"  
+    - type: "rubric_breakdown_table_widget"  
+    - type: "markdown_viewer_widget"  
+  
+  configuration_schema:  
+    - key: "timer_duration_minutes"  
+      type: "integer"  
+      default: 105 # 1h 45m for HL  
+    - key: "lock_browser_tab"  
+      type: "boolean"  
+      default: true # Secure kiosk mode
+```
+
+### B. C0 Layer (The Official Paper 2 Rubric)
+
+```yaml
+- id: "int.rub.ib.span_a.lit.paper2.v1"  
+  level: "C0"  
+  type: "BLOCK_RUBRIC"  
+  authority_scope: "GLOBAL"  
+  content: |  
+    Scale: 0-30  
+    Criteria:  
+    - Criterion A: Knowledge and Understanding (10 pts): Compares and contrasts both works demonstrating detailed knowledge without having the text in front of them.  
+    - Criterion B: Analysis and Evaluation (10 pts): Analyzes the use of literary devices in relation to the question.  
+    - Criterion C: Focus and Organization (5 pts): Balanced essay between both works.  
+    - Criterion D: Language (5 pts): Literary academic register.
+```
+
+### C. The Final Recipe (C1)
+
+Since there is no C2 Layer (no reading text), the exam *prompt* is injected directly as a variable in the C1 manifest.
+
+```yaml
+apiVersion: colabedu.ai/v1beta1  
+kind: Recipe  
+metadata:  
+  id: "int.recipe.ib.span_a.paper2.poder_corrupcion.v1"  
+spec:  
+  level: "C1"  
+  exerciseTypeRef: "int.etype.ib.closed_book_essay.v1"  
+  rubric_refs: ["int.rub.ib.span_a.lit.paper2.v1"]  
+  directive_refs: ["int.dir.ib.examiner.spanish_a.v1"]  
+  variables:  
+    # The question is passed as a parameter to the UI  
+    prompt_banner_text: "Question: Discuss how the theme of power and corruption is represented in two works you have studied."  
+    timer_duration_minutes: 105  
+    lock_browser_tab: true
+```
+
+## 3. Paper 1 (Spanish B) - Multi-format Written Production
+
+In Language Acquisition (Spanish B), the student must write texts with specific formats (blog, letter to the editor). Here we use the "Chatbot Companion" to help.
+
+### A. The UI/UX Engine (ExerciseType)
+
+```yaml
+apiVersion: colabedu.ai/v1beta1  
+kind: ExerciseType  
+metadata:  
+  id: "int.etype.ib.format_writing_with_tutor.v1"  
+  title: "UI Engine: Written Production with Socratic Tutor"  
+spec:  
+  ui_components:  
+    - type: "markdown_editor"  
+    - type: "sidecar_overlay"  
+      widget: "debate_chatbot" # The Companion  
+  
+  report_components:  
+    - type: "score_header_widget"  
+    - type: "rubric_breakdown_table_widget"  
+    - type: "markdown_viewer_widget"  
+  
+  configuration_schema:  
+    - key: "enable_companion_chatbot"  
+      type: "boolean"  
+      required: true  
+    - key: "target_text_format"  
+      type: "string"  
+      required: true
+```
+
+### B. C0 Layer (The Official Rubric)
+
+```yaml
+- id: "int.rub.ib.span_b.hl.written_production.v2"  
+  level: "C0"  
+  type: "BLOCK_RUBRIC"  
+  authority_scope: "GLOBAL"  
+  content: |  
+    Scale: 0-30  
+    Criteria:  
+    - Language (0-12 points)  
+    - Message (0-12 points)  
+    - Conceptual Understanding (0-6 points): Demonstrates excellent understanding of the text type conventions (tone, format).
+```
+
+### C. The Final Recipe (C1)
+
+```yaml
+apiVersion: colabedu.ai/v1beta1  
+kind: Recipe  
+metadata:  
+  id: "int.recipe.ib.span_b.blog_plastico.v1"  
+spec:  
+  level: "C1"  
+  exerciseTypeRef: "int.etype.ib.format_writing_with_tutor.v1"  
+  rubric_refs: ["int.rub.ib.span_b.hl.written_production.v2"]  
+  context_refs: ["int.ctx.ib.span_b.medio_ambiente_blog.v1"]  
+  directive_refs: ["int.dir.ib.tutor.format_helper.v1"]  
+  variables:  
+    enable_companion_chatbot: true  
+    target_text_format: "Blog Entry"
+```
+
+## 4. Paper 2 (Spanish B) - Listening Comprehension
+
+Added in the recent curriculum, Paper 2 assesses Reading Comprehension and **Listening Comprehension**. The technical challenge is to limit the playback of the audio (simulating the exam) and evaluate short answers and multiple choice.
+
+### A. The UI/UX Engine (ExerciseType)
+
+```yaml
+apiVersion: colabedu.ai/v1beta1  
+kind: ExerciseType  
+metadata:  
+  id: "int.etype.ib.listening_comprehension.v1"  
+  title: "UI Engine: Restricted Listening Comprehension"  
+spec:  
+  ui_components:  
+    - type: "split_pane_widget"  
+      left: "audio_player_widget"  
+      right: "dynamic_forms_widget" # Interactive quizzes  
+  
+  report_components:  
+    - type: "score_header_widget"  
+    - type: "form_grading_diff_widget" # Shows correct/incorrect answers in green/red  
+  
+  configuration_schema:  
+    - key: "max_audio_plays"  
+      type: "integer"  
+      default: 3 # The IB usually plays audios a maximum of 3 times  
+    - key: "timer_duration_minutes"  
+      type: "integer"  
+      default: 60
+```
+
+### B. C2 (Multimedia Context) and C3 (Directives) Layers
+
+```yaml
+# C2 LAYER (Audio + Whisper Transcription for RAG)  
+- id: "int.ctx.ib.audio.entrevista_indigena.v1"  
+  level: "C2"  
+  type: "BLOCK_CONTEXT"  
+  metadata:  
+    media_url: "https://storage.colabedu.ai/audios/ib_mock_01.mp3"  
+  content: |  
+    [The AI uses the hidden transcription of the audio to evaluate if the student's short answers are semantically correct].  
+  
+# C3 LAYER  
+- id: "int.dir.ib.listening_grader.v1"  
+  level: "C3"  
+  type: "BLOCK_DIRECTIVE"  
+  content: |  
+    evaluation_directives:  
+    - rule: "For Short Answer questions, use semantic similarity. If the student uses valid synonyms regarding the official transcription, award the full point."
+```
+
+## 5. Internal Assessment Oral - SL vs HL (Spanish B)
+
+The IB oral exam (IA) requires an initial monologue followed by a debate. **There are two fundamental variants:**
+
+- **Standard Level (SL):** Based on a visual stimulus (a photograph).
+- **Higher Level (HL):** Based on a **literary extract of 300 words** taken from one of the works read.
+
+ColabEdu handles both variants by reusing the same voice engine, but injecting a different visual component on the left.
+
+### A. The UI/UX Engine (ExerciseType)
+
+```yaml
+apiVersion: colabedu.ai/v1beta1  
+kind: ExerciseType  
+metadata:  
+  id: "int.etype.ib.oral_assessment.v1"  
+  title: "UI Engine: IB Oral Internal Assessment (Adaptive)"  
+spec:  
+  ui_components:  
+    - type: "split_pane_widget"  
+      left: "dynamic_stimulus_viewer" # Renders Image (SL) or Text (HL) based on C2  
+      right: "voice_conversation_widget" # Records and transcribes audio (Whisper STT)  
+  
+  report_components:  
+    - type: "score_header_widget"  
+    - type: "rubric_breakdown_table_widget"  
+    - type: "audio_transcription_diff_widget"  
+    - type: "markdown_viewer_widget"  
+  
+  configuration_schema:  
+    - key: "preparation_time_minutes"  
+      type: "integer"  
+      default: 15  
+    - key: "stimulus_type"  
+      type: "string" # "image" or "text"
+```
+
+### B. C0 Layer (The Official Unified Oral Rubric)
+
+```yaml
+- id: "int.rub.ib.span_b.hl_sl.oral.v1"  
+  level: "C0"  
+  type: "BLOCK_RUBRIC"  
+  authority_scope: "GLOBAL"  
+  content: |  
+    Scale: 0-30  
+    Criteria:  
+    - Productive Skills (0-10)  
+    - Receptive and Interactive Skills (0-10)  
+    - Language (0-10)
+```
+
+### C. The Final Recipe HL (Literary Extract - C1)
+
+```yaml
+apiVersion: colabedu.ai/v1beta1  
+kind: Recipe  
+metadata:  
+  id: "int.recipe.ib.span_b_hl.oral_extracto_marquez.v1"  
+spec:  
+  level: "C1"  
+  exerciseTypeRef: "int.etype.ib.oral_assessment.v1"  
+  rubric_refs: ["int.rub.ib.span_b.hl_sl.oral.v1"]  
+  context_refs: ["int.ctx.ib.extracto.cronica_muerte.v1"] # Contains 300 words of the novel  
+  directive_refs: ["int.dir.ib.examiner.oral_literary.v1"]  
+  variables:  
+    preparation_time_minutes: 15  
+    stimulus_type: "text" # Configures the left side as a text reader
+```
+
+## 6. Conclusion
+
+This catalog demonstrates that the OAS V2 architecture has the necessary granularity to accurately simulate any component of the rigorous International Baccalaureate ecosystem.
+
+From disabling visual components for a **Closed Book Exam (Paper 2 Literature)**, to injecting limiting variables for **Listening Comprehension (Paper 2 Language B)**, or dynamically adapting a visual stimulus to a literary one for the **HL vs SL Oral**, the combination of modular ExerciseTypes in Flutter and directives in YAML allows recreating 100% of the IB ecosystem without developing custom software for each exam.

@@ -1,0 +1,56 @@
+---
+title: "AssessmentItem"
+description: "Reference documentation for the AssessmentItem resource in OAS."
+sidebar:
+  order: 3
+---
+
+The `AssessmentItem` resource represents an instantiated atomic assessment item or unit, ready to be consumed. It contains the direct context and instructions (prompts) that the student will see or that the system will execute, in addition to linking to the recipe that defines how it will be evaluated.
+
+## Schema
+
+### Metadata (`metadata`)
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `id` | `string` | Yes | Unique identifier for the item (e.g., `global.c2.ib...`). |
+| `title` | `string` | Yes | Descriptive title of the exercise. |
+| `version` | `string` | Yes | Semantic version of the resource. |
+
+### Specification (`spec`)
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `recipe_ref` | `string` | Yes | Reference to the ID of the `Recipe` resource that dictates how this unit will be evaluated. |
+| `exercise_type` | `string` | Yes | Identifier for the UI/UX or interaction format (e.g., `core.etype.socratic_debate.v1`). |
+| `context` | `object` | No | Free-form pedagogical metadata (e.g., `subject`, `topic`, `subtopic`) for classification. |
+| `prompt` | `string` | Yes | Markdown-formatted text with detailed exercise instructions or the main stimulus content. |
+
+## Usage Example
+
+Below is an example of an `AssessmentItem` for an IB Spanish B HL debate:
+
+```yaml
+apiVersion: colabedu.ai/v1beta1
+kind: AssessmentItem
+metadata:
+  id: global.c2.ib.spanish_b.hl.identities.debate.v1
+  title: 'Debate: The Impact of Social Media on Identity'
+  version: 1.0.0
+spec:
+  recipe_ref: global.c1.ib.spanish_b.hl.socratic_debate.v1
+  exercise_type: core.etype.socratic_debate.v1
+  context:
+    subject: IB Spanish B HL
+    topic: Identities
+    subtopic: Beliefs and values, language and identity
+  prompt: |
+    ### Debate Instructions
+
+    In the **Identities** unit, we have explored how various external factors shape who we are.
+    
+    For this exercise, you will participate in a Socratic debate with your virtual tutor on the following topic:
+    **"Social media has a predominantly negative impact on the formation of personal and cultural identity in young people."**
+
+    To begin, write an initial paragraph (at least 3 sentences) stating your position...
+```

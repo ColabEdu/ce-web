@@ -1,0 +1,82 @@
+---
+title: Architecture & UI Engine
+description: Global analysis of the OAS v1beta1 ecosystem, the A2UI protocol, and the report generation engines.
+---
+
+Within the ColabEdu ecosystem, the **Recipe Compiler** is the central engine responsible for translating a legal standard (such as LOMLOE in Spain or AP/IB guidelines) into an AI-executable assessment artifact. Under the **Open Assessment Standard (OAS)** architecture, we abandon monolithic "prompts" in favor of a "Layered Component Graph" model (*Assessment as Code*).
+
+This model relies on the **Separation of Concerns** and **Maximum Reusability through Late Binding**, guaranteeing both auditable legal rigor and teacher autonomy.
+
+## 1. The Starting Point: Legacy V1 Recipes and "Prompt Drift"
+
+In the traditional model (Legacy V1), a single monolithic Markdown file was sent to the LLM, mixing rubrics, task instructions, UI configuration, and pedagogical tone. This caused:
+
+1. **Impossibility of Auditing (Black Box):** The legal rubric was merged with system instructions.
+2. **"Spaghetti Prompts" and Prompt Drift:** LLMs suffered from context amnesia when reading such long texts, forgetting key rules.
+3. **Contamination of Concerns:** "Frontend" instructions (e.g., "Generate a table") were mixed with pedagogical ones.
+
+## 2. The Magic of "Late Binding" (Zero-Context Templates)
+
+The OAS architecture fragments the assessment into blocks (C0, C1, C2, C3). To avoid creating a massive database, we use **Late Binding**:
+
+1. **The Hollow Mold:** The recipe (C1) exists on the server entirely empty of context (`requires_dynamic_context: true`).
+2. **The Trigger:** The teacher selects the template and attaches a text or PDF (C2).
+3. **JIT Injection:** The *Spec Manager* dynamically injects C2 into the C1 template in milliseconds, assembling the exercise on the fly.
+
+## 3. Recipes (C1) vs Exercise Types (ExerciseType)
+
+By design, a C1 template points to a specific C0 Rubric (e.g., LOMLOE vs Common Core). However, they share the underlying engine: the **ExerciseType**.
+
+- **ExerciseType (The Software Engine):** Built by engineers. It defines the "interface contract" mapping to **Flutter** Widgets (A2UI).
+- **C1 Recipe (The Pedagogical Engine):** Built by curriculum experts, injecting the law (C0), context (C2), and tone (C3) into the ExerciseType.
+
+## 4. UI/UX Catalog and the A2UI Protocol
+
+The **A2UI (Agent-to-UI)** protocol sends a JSON Payload dictating which Flutter Widgets to build.
+
+- **Primitives and Components:** `pdf_viewer`, `markdown_editor`, `forms_mcq`, etc.
+- **The Chatbot Companion:** A "Sidecar" attachable to any widget to offer real-time Socratic tutoring.
+
+### Parameterization (Key-Value)
+The engineer declares the `configuration_schema` in the ExerciseType, and the pedagogue injects the variables into the C1 Recipe (e.g., `word_count_min: 250`, `enable_companion_chatbot: true`).
+
+## 5. The Reporting Engine: Convention over Configuration
+
+In OAS v1beta1, we apply the **Separation of Presentation and Data**: the LLM only generates JSON, and the backend orchestrates the visual format using Widgets.
+
+### Default Layouts (Zero-Config Report)
+Teachers do not program interfaces. The A2UI protocol has default templates. A creator simply points to the `exerciseTypeRef`, and the backend automatically assembles the report.
+
+The report catalog includes:
+- **Family A (Layout):** `document_header_widget` (protects PII), `section_title_widget`, `divider_widget`.
+- **Family B (Core Evaluation):** `score_header_widget`, `criteria_breakdown_list_widget`, `spelling_diff_table_widget`.
+- **Family C (Creative Feedback):** `markdown_viewer_widget` (the "Escape Hatch" for LLM creativity).
+
+## 6. Advanced Override (The Override Pattern)
+
+A school district can alter the default report by explicitly declaring the `report_components` block in its YAML, reordering widgets or adding new ones (e.g., `competency_radar_chart_widget`).
+
+## 7. The Compiled Payload (JSON Contract)
+
+The *Spec Manager* generates a strict JSON for the evaluating model, strictly validating the data output via `required_output_format`.
+
+**Advantages:**
+1. Hallucination Resistance (Schema Constrained).
+2. Guaranteed Structured Output (API Contract).
+3. Computational Efficiency and Massive Token Savings.
+
+## 8. Case Studies: Global Ecosystems
+
+The OAS architecture supports educational polymorphism:
+- **LOMLOE (Spain):** Analytical and punitive rigor.
+- **AP Spanish (USA):** Multimodal orchestration (texts, charts, audio).
+- **IB Spanish (Global):** Holistic and descriptive, rule overriding via C3.
+- **CCSS-S California:** Equity for *Heritage Speakers* (Translanguaging).
+- **EXANI-II (Mexico):** Strict Mexican dialectal validation and penalization of language vices.
+
+## 9. Final Benefits of Abstraction
+
+1. **Pristine UX:** Zero code for the teacher.
+2. **Token Savings:** The LLM returns pure JSON, not Markdown tables.
+3. **Data Privacy (PII/FERPA):** The LLM never sees the student's name; the backend injects it later into the `document_header_widget`.
+4. **Forensic Traceability:** Essential for B2G audits.

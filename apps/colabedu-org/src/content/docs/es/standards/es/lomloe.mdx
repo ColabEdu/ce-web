@@ -1,0 +1,64 @@
+---
+title: "Ley Educativa de España (LOMLOE)"
+description: "Compendio Maestro de Normativa Educativa (LOMLOE): ESO y Bachillerato en las 17 CCAA."
+sidebar:
+  order: 3
+---
+
+En el sistema educativo español, la arquitectura legal es inherentemente jerárquica y altamente descentralizada. Esta complejidad normativa es la principal causa de la "Deriva Pedagógica" en los colegios y, al mismo tiempo, encaja perfectamente con el modelo de **Grafo Jerárquico de Especificaciones (OAS)** de ColabEdu.
+
+Para que la inteligencia artificial (nuestro *Curator Agent*) pueda evaluar con precisión legal, no basta con un prompt genérico; necesita ingerir la letra exacta de la ley. Este documento sirve como el **Índice Maestro (Source of Truth)** de las URLs oficiales desde donde el sistema extraerá los bloques de competencias, saberes básicos y criterios de evaluación para convertirlos en `RUBRIC_BLOCKS` (Layer C0).
+
+## 🏛️ La Arquitectura Legal Española (Regla del 50% / 60%)
+
+El despliegue curricular en España sigue una cascada legislativa de tres niveles:
+
+1.  **La Ley Orgánica (El Marco):** La LOMLOE dicta los principios rectores.
+2.  **El Real Decreto (El 50/60%):** El Gobierno Central establece las "enseñanzas mínimas". Estas ocupan el **50% del horario escolar** en las Comunidades Autónomas con lengua cooficial (Cataluña, Galicia, País Vasco, Comunidad Valenciana, Baleares, Navarra) y el **60%** en aquellas que no la tienen.
+3.  **El Decreto Autonómico (El 50/40% restante):** Cada Comunidad Autónoma publica sus propios Decretos curriculares para expandir, localizar y completar el porcentaje restante en su territorio (el "Delta" autonómico).
+4.  **Las Órdenes de Desarrollo (El Detalle):** En muchas regiones (como Andalucía o Aragón), el Decreto solo da el marco, mientras que una "Orden" posterior contiene las tablas exactas de saberes básicos que ColabEdu necesita ingerir.
+
+## 🇪🇸 1. Normativa Nacional (Gobierno de España - MEFP)
+
+Esta es la base legal inmutable para todo el territorio nacional (Publicada en el BOE). En la arquitectura de ColabEdu, estos Reales Decretos conforman la receta maestra con `authority_scope: "NATIONAL"`.
+
+- **Ley Orgánica General (LOMLOE):** [Ley Orgánica 3/2020, de 29 de diciembre, por la que se modifica la LOE de 2006.](https://www.boe.es/buscar/act.php?id=BOE-A-2020-17264)
+- **Currículo Básico ESO:** [Real Decreto 217/2022, de 29 de marzo, por el que se establece la ordenación y las enseñanzas mínimas de la Educación Secundaria Obligatoria.](https://www.boe.es/buscar/act.php?id=BOE-A-2022-4975)
+- **Currículo Básico Bachillerato:** [Real Decreto 243/2022, de 5 de abril, por el que se establecen la ordenación y las enseñanzas mínimas del Bachillerato.](https://www.boe.es/buscar/act.php?id=BOE-A-2022-5521)
+
+## 🗺️ 2. Normativa Autonómica (El "Delta" Regional - Nivel C1)
+
+A continuación se listan los enlaces directos a los Decretos y Órdenes oficiales de las 17 Comunidades Autónomas. Estos documentos generan los `recipe_blocks` con `authority_scope: "REGIONAL"`, que heredan directamente del bloque nacional.
+
+*(Listado completo de normativas regionales en la documentación base)*
+
+- **Andalucía (BOJA):** Separa la ordenación general (Decretos) de los saberes básicos (Órdenes).
+- **Cataluña / Catalunya (DOGC):** La ESO se engloba dentro de la "Educación Básica" y se organiza por ámbitos de conocimiento transversales. Requiere un mapeo JSONB altamente especializado.
+- **Navarra (BON):** Enorme complejidad por sus modelos lingüísticos diferenciados (Modelo A, G, D). La IA de ColabEdu inyecta el parámetro `selectedLanguage`.
+- **País Vasco / Euskadi (BOPV):** Enfatiza fuertemente el **Perfil de Salida (Irteera-profila)**. Los *Recipes* deben vincularse directamente a estas competencias.
+
+## 🌍 3. Territorios MEFP (Ceuta, Melilla y Centros en el Exterior)
+
+Las Ciudades Autónomas de Ceuta y Melilla se rigen directamente por el currículo desarrollado por el **Ministerio de Educación y Formación Profesional (MEFP)**.
+
+- *Impacto en ColabEdu:* Los colegios de Ceuta, Melilla y los Institutos Españoles en el exterior heredan directamente de la Receta Maestra NATIONAL (`es.lomloe.v1`) sin requerir un delta regional intermedio.
+
+## 🧠 Implicaciones Arquitectónicas y Estratégicas para ColabEdu
+
+La recopilación y centralización de esta inmensa cantidad de literatura legal presenta un desafío técnico masivo que fundamenta el valor principal (el *Moat* defensivo) de ColabEdu.
+
+### 1. Ingesta Estructurada (La "Sopa de Tablas")
+
+Los PDFs de los boletines oficiales están diseñados para impresión humana.
+**Directiva de Ingeniería:** El pipeline de Python ETL (`colabedu_dataloader.py`) debe atacar las APIs del BOE o realizar scraping de las versiones **HTML/XML**. El texto plano o XML preserva la estructura bidimensional de las tablas, evitando "alucinaciones visuales".
+
+### 2. El Modelo "Seed-and-Bloom" de Gobernanza
+
+1.  **El Seed (Semilla Legal):** Extraemos el ID estandarizado del criterio (Ej. `CE.LCL.1.1`) y su descripción exacta. Se persiste con `authority_scope: "NATIONAL"` o `"REGIONAL"`.
+2.  **El Mapeo Contextual (Metadata):** En `metadata.tags`, los scripts inyectan las competencias clave transversales asociadas para habilitar el *Semantic Discovery*.
+
+### 3. Auditoría de Deriva Pedagógica (La Venta B2G a la Administración)
+
+Tener la ley perfectamente mapeada en la Capa C0 es el producto B2G principal: el **National Educational Audit Dashboard**.
+
+Al tener los Decretos Autonómicos separados lógicamente del Decreto Nacional en el grafo, ColabEdu puede ofrecer a una Consejería un mapa de calor instantáneo para comprobar si los profesores evalúan alineados con el decreto regional o se están desviando hacia métricas de años anteriores.

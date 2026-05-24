@@ -1,0 +1,31 @@
+---
+title: "Novedad: Arquitectura SEP y MCCEMS para México"
+description: "Mapeo a nivel nacional de los estándares educativos mexicanos y de las Evaluaciones Diagnósticas CENEVAL / MEJOREDU."
+author: "Director Pedagógico LATAM"
+date: "2026-04-20"
+tags: ["SEP", "MCCEMS", "México", "Lanzamiento", "LATAM"]
+---
+
+¡Cruza el charco con nosotros! Después de establecer un sólido ecosistema para España (LOMLOE, EBAU) y programas internacionales (AP, IB), hoy estamos entusiasmados de anunciar nuestra entrada integral en LATAM, comenzando por el marco educativo de **México**.
+
+## Unificando la Nueva Escuela Mexicana
+
+El sistema educativo en México atraviesa transformaciones importantes, destacando el Nuevo Marco Curricular Común de la Educación Media Superior (**MCCEMS**) avalado por la Secretaría de Educación Pública (**SEP**). Para los docentes e instituciones en el país, mapear progresiones de aprendizaje y gestionar las directrices de evaluaciones diagnósticas como **CENEVAL** o **MEJOREDU** representa un desafío titánico de logística y documentación.
+
+## Integración Profunda vía Open Assessment Specification (OAS)
+
+A través de la filosofía de *Pedagogía como Código*, hemos trasladado las mallas curriculares mexicanas a nuestro ecosistema:
+
+- **Estructura C0 Inmutable:** Hemos digitalizado las progresiones de aprendizaje, las Unidades de Aprendizaje Curricular (UAC) y los campos formativos del SEP/MCCEMS en nuestras taxonomías (`taxonomy.loc.mx.yaml`).
+- **Adaptación C1 (Ejercicios y Formatos):** Nuestro catálogo interactivo se adapta a las evaluaciones modulares que espera MEJOREDU, abarcando desde la lectoescritura (comprensión lectora) hasta la expresión escrita.
+- **Auditoría Gubernamental / Escolar (B2G/B2B):** Como se discutió en nuestra [Estrategia de Dominios](/es/gitops-operations/arquitectura-dominios), este lanzamiento abre la puerta para que distritos (`gov.colabedu.net`) auditen el impacto pedagógico agregado en las progresiones de aprendizaje del MCCEMS sin violar datos PII.
+
+## La "Piedra Rosetta" de la Educación Transfronteriza
+
+Gracias al `SpecManager` y la separación en capas `C0-C3`, un mismo "Ejercicio Argumentativo" puede ser instanciado y evaluado con la rúbrica de España (LOMLOE) o la rúbrica de México (SEP) en milisegundos, manteniendo el motor de calificación central (`Grading V2`) inalterado y agnóstico.
+
+Explora más sobre nuestra arquitectura transfronteriza:
+- [Documentación: Estándar SEP / MCCEMS](/es/standards/sep-mexico)
+- [Ejemplos en el Spec Repo](/es/specs-repository)
+
+Con esta inyección, la "Content Factory" de ColabEdu se consolida como la herramienta más potente para editoriales, colegios y secretarías de educación en Hispanoamérica. ¡Seguimos creciendo!

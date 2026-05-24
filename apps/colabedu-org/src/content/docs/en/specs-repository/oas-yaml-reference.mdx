@@ -1,0 +1,40 @@
+---
+title: "OAS YAML Reference"
+description: "Index of detailed technical reference documentation for all OAS (Open Assessment Specification) resources in ColabEdu."
+sidebar:
+  order: 2
+---
+
+ColabEdu's **OAS (Open Assessment Specification)** v1beta1 architecture is entirely configured through a structured YAML file schema. This *Assessment as Code* approach allows for versioning, auditing, and reproducing the entire pedagogical ecosystem.
+
+In this reference section, you will find detailed technical information about the structure, schemas, and configuration options for each of the *Kinds* (Resource Types) that make up the architecture.
+
+---
+
+## Available Specification Types
+
+Each YAML specification in ColabEdu requires certain mandatory fields in its base structure:
+- `apiVersion`: Schema API version (currently `colabedu.ai/v1beta1`).
+- `kind`: Resource type identifier.
+- `metadata`: Metadata such as `id`, `title`, `version`, which help index the resource in the SpecManager.
+- `spec`: Resource type-specific configuration.
+
+Below is the reference documentation for each resource type:
+
+### Core Engine Resources
+- [**Taxonomy**](../reference/taxonomy/): Defines geographical hierarchies, organizational levels, and competencies.
+- [**SubjectArea**](../reference/subject-area/): Specifies the classification of a subject at local and international levels.
+
+### Regulatory Resources (C0)
+- [**Rubric**](../reference/rubric/): Immutable learning standards, evaluation criteria, and descriptors by level.
+
+### Instruments and Exercises (C1 and C2)
+- [**Recipe**](../reference/recipe/): Assembler "recipe" that associates C0 competencies with exercise types and criteria to generate a C2 assessment.
+- [**ExerciseSpec**](../reference/exercise-spec/): Schema for a generated or manually defined assessment, ready to be solved.
+- [**ExerciseType**](../reference/exercise-type/): Technical definition of the interaction format (e.g., `free_text`, `multiple_choice`).
+- [**AssessmentItem**](../reference/assessment-item/): Atomic interactive assessment component, instantiated and packaged for the frontend.
+
+### Artificial Intelligence and Agents (C3)
+- [**Directive**](../reference/directive/): Immutable behavioral guidelines that limit or guide the LLM engine.
+- [**Persona**](../reference/persona/): System interaction profiles (e.g., Instructional Designer).
+- [**Gem**](../reference/gem/): Extended AI modules with embedded configuration and tools.

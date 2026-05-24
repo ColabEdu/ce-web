@@ -1,0 +1,64 @@
+---
+title: "Implementation and Federation"
+description: "How to implement the OAS standard: Universal naming rules and ColabEdu's reference architecture."
+sidebar:
+  order: 6
+---
+
+# Repository Implementation and Federation
+
+**Architecture:** Open Assessment Standard (OAS v1beta1)
+
+The OAS standard is designed to be agnostic of the underlying infrastructure. Any government, institution, or technology *partner* can implement the standard using the tools of their choice.
+
+To ensure interoperability and **Data Sovereignty**, the standard strictly separates the **universal format rules** from the **reference implementation** (how ColabEdu orchestrates it internally).
+
+---
+
+## 1. The OAS Standard (Universal Rules for Partners)
+
+Any entity wishing to build OAS-compatible tools, generate automated content, or create a private "Institutional Node" only needs to comply with two fundamental principles:
+
+### A. Git as the Single Source of Truth (GitOps)
+OAS standard YAML files must be stored in version control repositories (Git). This ensures forensic traceability, legal audits, and enables federation (inheritance between repositories).
+- **Absolute Sovereignty:** Ministries of education, regional governments, or institutions can host and manage their own *specs* repositories completely privately on their own servers and infrastructures.
+- You are free to use **GitHub, GitLab, Bitbucket, or Gitea** in the cloud or *On-Premise*.
+- You are free to use any programming language or database to read, index, or write these YAMLs.
+
+### B. Strict Naming Rules (Dot Notation)
+For files to be indexed, shared, or cross-referenced between different systems, the YAML file naming convention is strict. The `metadata.id` field within the YAML must be **identical** to the file name (without the `.yaml` extension).
+
+- **Taxonomy:** `taxonomy.[scope].[framework_name].v[version].yaml`
+  *Ex: taxonomy.es.lomloe_competencias_clave.v1.yaml*
+- **Layer C0 (Rubrics and Laws):** `[namespace_org].[country].c0.[law_or_institution].[exam_or_topic].v[version].yaml`
+  *Ex: core.es.c0.lomloe.ebau_madrid.lengua.v1.yaml*
+- **Layer C2 (Contexts and Texts):** `[namespace_org].[country].c2.[type].[source].[short_title].v[version].yaml`
+  *Ex: core.es.c2.text.cervantes.quijote.v1.yaml*
+- **Layer C3 (Directives):** `[namespace_org].[country].c3.directive.[behavior].v[version].yaml`
+
+---
+
+## 2. The Reference Implementation (ColabEdu Model)
+
+To illustrate how this system can be scaled in production, we share how **ColabEdu** has orchestrated its own internal infrastructure to securely handle thousands of Artificial Intelligence-driven automations.
+
+### The "Agentic GitOps" Flow
+
+On the ColabEdu platform, we use an event-driven continuous integration (CI/CD) flow to connect our AI Agents with the evaluation engine.
+
+1.  **AI Agents (Curators):** Python scripts powered by LLMs read legal PDFs or texts and extract structured content into YAML.
+2.  **Commits via API:** Instead of writing directly to a relational database, the Agent acts as a "Junior Developer". It performs a `POST` to the REST API of our internal Git server (**Gitea** hosted on MicroK8s) with the new YAML file.
+3.  **Webhooks:** Upon receiving a new *commit* on the main branch, Gitea triggers an automatic webhook.
+4.  **Spec Manager (Indexing):** Our Java backend receives the webhook, downloads the YAML, transforms it into entities, vectorizes it using *LangChain4j*, and stores it relationally in **PostgreSQL (pgvector)** for fast searches.
+
+> [!NOTE]
+> **Why Isolate AI from the Database?**
+> Allowing an LLM to directly insert data into production breaks the chain of custody. By forcing the Agent to go through Git, we ensure that every hallucination or change is versioned, can be reviewed by a human via a *Pull Request*, and can be instantly reverted via a *Rollback*.
+
+### Repository Structure (Core vs. Tenants)
+
+To implement "Federated Governance" (see previous section), ColabEdu physically separates repositories at the infrastructure level:
+- **"Core" Repository:** Managed by ColabEdu. Contains public laws (C0), common Taxonomies, and base Templates (C1).
+- **"Tenant" Repositories:** Autonomously managed and hosted by Schools, Districts, or Governments. They contain private institutional rubrics or confidential data. By being hosted on their own servers (or in dedicated private instances), regulatory compliance (GDPR, etc.) is guaranteed.
+
+ColabEdu's *Spec Manager* has read permissions on both repositories and dynamically merges the graphs in memory, ensuring that the "Tenant" can inherit from the "Core" without mixing its data with other clients.

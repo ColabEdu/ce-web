@@ -1,0 +1,193 @@
+---
+title: "Casos Prácticos EBAU (OAS V2)"
+description: "Implementación de la Prueba de Acceso a la Universidad (España) bajo la especificación OAS."
+---
+
+# Catálogo de Casos Prácticos: Ecosistema EBAU bajo OAS V2
+
+**Arquitectura:** Open Assessment Standard (OAS v1beta1)
+
+**Scope Educativo:** Bachillerato (LOMLOE) y Evaluación del Bachillerato para el Acceso a la Universidad (EBAU) - Lengua Castellana y Literatura II (España).
+
+El ecosistema **EBAU (Selectividad)** es el modelo paradigmático de evaluación "High-Stakes" punitiva. A diferencia del enfoque holístico del IB, la EBAU se centra en la precisión técnica, el análisis sintáctico riguroso y la penalización estricta por errores ortográficos y gramaticales (pudiendo restar hasta 3 puntos de la nota final).
+
+Este documento detalla la implementación en **Assessment as Code** de las preguntas clave del examen de Lengua Castellana y Literatura II, demostrando cómo OAS V2 maneja la corrección ortográfica implacable y el dibujo de árboles sintácticos.
+
+## 1. Pregunta 1: El Resumen y el Tema (Precisión y Concisión)
+
+El alumno debe leer un texto periodístico o literario y redactar un resumen (máx. 8 líneas) y enunciar el tema (una sola frase). Se penaliza severamente el "copia y pega" del texto original (parafraseo inverso).
+
+### A. El Motor UI/UX (ExerciseType)
+
+```yaml
+apiVersion: colabedu.ai/v1beta1  
+kind: ExerciseType  
+metadata:  
+  id: "es.etype.ebau.resumen_tema.v1"  
+  title: "Motor UI: Resumen y Tema EBAU"  
+spec:  
+  ui_components:  
+    - type: "split_pane_widget"  
+      left: "pdf_viewer" # Texto del examen  
+      right: "dynamic_forms_widget" # Formularios estrictos para el resumen y tema  
+      config:  
+        fields:  
+          - id: "tema"  
+            type: "text_input"  
+            max_words: 15 # Fuerza la concisión del tema  
+          - id: "resumen"  
+            type: "text_area"  
+            max_lines: 8 # Límite físico en la UI  
+  
+  report_components:  
+    - type: "score_header_widget"  
+    - type: "rubric_breakdown_table_widget"  
+    - type: "markdown_viewer_widget"  
+  
+  configuration_schema:  
+    - key: "timer_duration_minutes"  
+      type: "integer"  
+      default: 20
+```
+
+### B. Capa C0 (La Rúbrica Punitiva de Andalucía/Madrid)
+
+```yaml
+- id: "es.rub.ebau.lengua.resumen.v1"  
+  level: "C0"  
+  type: "BLOCK_RUBRIC"  
+  authority_scope: "REGIONAL_MADRID"  
+  content: |  
+    Scale: 0-1.5  
+    Criteria:  
+    - Tema (0.5 pts): Debe captar la intención del autor y el asunto central en un solo sintagma nominal o frase corta. Penalizar si es un título genérico o demasiado extenso.  
+    - Resumen (1.0 pts): L1.0 (Excelente): Breve, completo, objetivo, redacción propia. L0 (Cero): Es un corta-pega de oraciones del texto, o incluye opinión personal.
+```
+
+### C. Capa C3 (El Algoritmo de Detección de Plagio Interno)
+
+Aquí es donde brilla el *Server-Driven AI*. Le pedimos al LLM que actúe como un detector de parafraseo ineficiente.
+
+```yaml
+- id: "es.dir.ebau.anti_copypaste.v1"  
+  level: "C3"  
+  type: "BLOCK_DIRECTIVE"  
+  content: |  
+    preprocessing_directives:  
+    - rule: "Detección de Literalidad: Compara el 'Resumen' generado por el alumno con el texto original. Si más del 20% del resumen son cadenas de palabras exactas copiadas del texto original (salvo nombres propios), el score del Resumen DEBE SER CERO (0 puntos)."  
+    - rule: "Opinión Personal: Si el resumen contiene marcas de subjetividad (ej. 'Yo creo', 'El autor hace bien en', adjetivos valorativos no presentes en el original), restar 0.5 puntos."
+```
+
+### D. La Receta Final (C1)
+
+```yaml
+apiVersion: colabedu.ai/v1beta1  
+kind: Recipe  
+metadata:  
+  id: "es.recipe.ebau.resumen.perez_reverte.v1"  
+spec:  
+  level: "C1"  
+  exerciseTypeRef: "es.etype.ebau.resumen_tema.v1"  
+  rubric_refs: ["es.rub.ebau.lengua.resumen.v1"]  
+  context_refs: ["es.ctx.ebau.texto.perez_reverte.v1"]  
+  directive_refs: ["es.dir.ebau.anti_copypaste.v1", "es.dir.ebau.penalizacion_ortografica.v1"]
+```
+
+## 2. Pregunta 2: Análisis Sintáctico (El "Jefe Final" Técnico)
+
+El alumno debe analizar sintácticamente una oración compleja (ej. *"Los estudiantes que preparan la EBAU sufren mucho estrés, pero confían en sus posibilidades"*). Tradicionalmente esto se hace en papel dibujando "cajitas" o "árboles".
+
+### A. El Motor UI/UX (ExerciseType)
+
+ColabEdu ha desarrollado un `syntax_tree_builder_widget` específico en Flutter para que el alumno pueda segmentar y etiquetar oraciones visualmente.
+
+```yaml
+apiVersion: colabedu.ai/v1beta1  
+kind: ExerciseType  
+metadata:  
+  id: "es.etype.ebau.analisis_sintactico.v1"  
+  title: "Motor UI: Generador de Árboles Sintácticos EBAU"  
+spec:  
+  ui_components:  
+    - type: "prompt_banner_widget" # Muestra la oración  
+    - type: "syntax_tree_builder_widget" # El alumno arrastra y etiqueta (SN, SV, Nexo, CD, etc.)  
+  
+  report_components:  
+    - type: "score_header_widget"  
+    - type: "syntax_tree_diff_widget" # Compara el árbol del alumno con el "Golden Tree" de la IA  
+  
+  configuration_schema:  
+    - key: "terminology_standard"  
+      type: "string"  
+      default: "NGLE" # Nueva Gramática de la Lengua Española (RAE)
+```
+
+### B. Capa C2 (El Contexto y el "Golden Path")
+
+Para el análisis sintáctico, la IA no necesita evaluar creativamente. Compara el árbol JSON generado por el alumno en la UI con el árbol JSON perfecto guardado en la Capa C2.
+
+```yaml
+- id: "es.ctx.ebau.oracion.coordinada.v1"  
+  level: "C2"  
+  type: "BLOCK_CONTEXT"  
+  content: |  
+    Oración: "Me disgusta que los políticos mientan."  
+    Golden_Tree (JSON):  
+    {  
+      "type": "Oración Compleja",  
+      "components": [  
+        {"text": "Me", "function": "CI", "type": "SN"},  
+        {"text": "disgusta", "function": "Núcleo", "type": "SV"},  
+        {"text": "que los políticos mientan", "function": "Sujeto", "type": "Proposición Subordinada Sustantiva"}  
+      ]  
+    }
+```
+
+### C. La Receta Final (C1)
+
+```yaml
+apiVersion: colabedu.ai/v1beta1  
+kind: Recipe  
+metadata:  
+  id: "es.recipe.ebau.sintaxis.subordinada.v1"  
+spec:  
+  level: "C1"  
+  exerciseTypeRef: "es.etype.ebau.analisis_sintactico.v1"  
+  rubric_refs: ["es.rub.ebau.sintaxis.estricta.v1"]  
+  context_refs: ["es.ctx.ebau.oracion.coordinada.v1"]
+```
+
+## 3. Pregunta 3: Texto Argumentativo (El Filtro Ortográfico)
+
+El alumno debe redactar un texto argumentativo de unas 200-250 palabras sobre un tema relacionado con el texto de la Pregunta 1. **Aquí entra en juego la regla más temida de la EBAU: La Penalización Ortográfica Global.**
+
+### A. La Directiva de Penalización Ortográfica (C3 Global)
+
+En España, los errores ortográficos y gramaticales pueden bajar la nota del examen entero (no solo de la redacción). La regla general es:
+- Primer error ortográfico: No penaliza (a veces).
+- Siguientes errores ortográficos: -0.25 puntos cada uno.
+- Tildes: -0.10 puntos cada una.
+- Tope máximo de penalización: -3 puntos (o a veces suspenso directo).
+
+Se implementa como un `BLOCK_DIRECTIVE` inyectado en *todas* las recetas de la EBAU.
+
+```yaml
+- id: "es.dir.ebau.penalizacion_ortografica.v1"  
+  level: "C3"  
+  type: "BLOCK_DIRECTIVE"  
+  authority_scope: "NATIONAL_SPAIN"  
+  content: |  
+    postprocessing_directives:  
+    - rule: "Global Spelling Penalty: Al finalizar la evaluación del ejercicio, escanea el texto producido por el alumno."  
+    - condition: "Faltas de ortografía (b/v, h, g/j, etc.)"  
+      action: "Resta 0.25 puntos de la NOTA TOTAL FINAL por cada falta (la primera se perdona)."  
+    - condition: "Faltas de acentuación (tildes)"  
+      action: "Resta 0.10 puntos de la NOTA TOTAL FINAL por cada tilde omitida o mal puesta."  
+    - execution: "Genera un reporte final en el `rubric_breakdown_table_widget` llamado 'Deducciones Ortográficas' mostrando la palabra incorrecta, la corrección, y los puntos restados."
+```
+
+## 4. Conclusión
+
+El ecosistema EBAU obliga a la IA a comportarse de forma **hiper-determinista y punitiva**.
+
+Mientras que en el IB la IA actúa como un mentor que valora el "intento" y la "comprensión", en la EBAU la IA actúa como un **Auditor Sintáctico y Ortográfico**. Gracias a la separación de capas en OAS v1beta1, podemos usar el *mismo LLM base* (Gemini), pero alterando drásticamente su comportamiento mediante las `BLOCK_DIRECTIVE` de la Capa C3 y las rúbricas rígidas de la Capa C0.

@@ -1,0 +1,35 @@
+---
+title: "Novedad: Simulacros de Selectividad (EBAU/EvAU)"
+description: "Preparación para el acceso a la universidad en España con evaluación automatizada de comentarios de texto y redacciones."
+author: "Equipo de Arquitectura OAS"
+date: "2026-03-30"
+tags: ["EBAU", "España", "Selectividad", "Lanzamiento"]
+---
+
+¡Y seguimos con más novedades para España! Para complementar nuestro soporte a la LOMLOE, hoy anunciamos el lanzamiento de nuestro soporte para el sistema de acceso a la universidad en España: la **EBAU** (o EvAU, dependiendo de la Comunidad Autónoma).
+
+## El Cuello de Botella de 2º de Bachillerato
+
+El último curso de Bachillerato es una carrera de fondo. Los profesores de Lengua Castellana y Literatura, Historia y Lengua Extranjera enfrentan volúmenes enormes de simulacros de examen (comentarios de texto, ensayos de 250 palabras, síntesis). El tiempo de corrección manual limita drásticamente la cantidad de *feedback* que reciben los alumnos antes del examen real.
+
+## Criterios Regionales Estandarizados en ColabEdu
+
+La mayor dificultad de la EBAU es la fragmentación regional: las rúbricas cambian por Comunidad Autónoma. 
+
+1. **Taxonomías Regionales (C0):** 
+   Nuestra jerarquía de directorios en `ce-specs` soporta la anulación (*override*) de propiedades a nivel de país y región (`loc.es`, `loc.es-madrid`, `loc.es-andalucia`). Si un colegio está en Madrid, el sistema cargará automáticamente los Criterios de Corrección de la Universidad Autónoma de Madrid (por ejemplo, restando exactamente 0.25 puntos por falta de ortografía, según el baremo anual).
+   
+2. **Interactividad UI (C1):** 
+   El "Learning Gym" (`app.colabedu.net`) permite a los estudiantes introducir textos con límites de tiempo estrictos (cronómetro bloqueado), replicando la presión del examen real.
+
+3. **Inferencia Determinista (C3):**
+   A través del componente `SpecManager`, la IA actúa como el corrector de universidad más severo, generando reportes detallados que separan el plano estructural (coherencia, cohesión) del plano ortotipográfico (faltas de ortografía, tildes).
+
+## Referencias
+
+¿Te interesa aplicar nuestro modelo C0/C3 a las pruebas universitarias de tu región? 
+
+- [Revisa la especificación de Estándares](/es/standards/ebau)
+- [Repositorio de Specs y Taxonomías](/es/specs-repository)
+
+Con esta actualización, ColabEdu aspira a ser la herramienta definitiva para maximizar las notas de corte de los institutos que apuestan por la IA en sus aulas.

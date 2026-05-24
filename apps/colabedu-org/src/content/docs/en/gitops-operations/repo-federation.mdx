@@ -1,0 +1,75 @@
+---
+title: "GitOps and Repository Federation"
+description: "GitOps flow for AI Agents and federated repository structure and nomenclature in the OAS architecture."
+---
+
+# GitOps Flow and Federated Repository Structure
+
+**Architecture:** Open Assessment Standard (OAS v1beta1)
+**Area:** DevOps, MLOps, CI/CD, Spec Manager Indexing, and Taxonomy.
+
+This document establishes the optimal communication channel between the *Curator Agent* (the LLM generating content), Gitea (the MicroK8s storage), and the *Spec Manager* (the Java backend), as well as the strict directory and naming conventions for proper indexing across multiple decentralized repositories.
+
+---
+
+## 1. GitOps Flow: Orchestrating the Agent, Gitea, and Spec Manager
+
+When an AI Agent generates thousands of YAML files, the method of injecting these files into the database (PostgreSQL with pgvector) dictates the entire platform's stability.
+
+### Analysis of Architectural Options
+
+#### ❌ Option A: Modifying the hostpath in MicroK8s directly
+- **Mechanics:** The Python Agent writes YAML files directly to disk.
+- **Verdict:** **CRITICAL ANTI-PATTERN. PROHIBITED.**
+- **Why:** Modifying files directly on disk bypasses the git server. Gitea won't recognize the changes, commits won't be registered, history will corrupt, and **Webhooks will not trigger**.
+
+#### ⚠️ Option B: Sending YAMLs directly to the Spec Manager API
+- **Mechanics:** The Agent makes a POST request to the Java backend. Spec Manager saves to PostgreSQL and makes a commit.
+- **Verdict:** **Valid, but couples the system.**
+- **Why:** Turns the Spec Manager into a heavy CMS and loses traceability if the YAML fails before insertion. Breaks the GitOps principle.
+
+#### ✅ Option C: The Agent interacts with Gitea (The Winning Architecture)
+- **Mechanics:** The AI Agent acts like a "Junior Developer," using Gitea's REST API to create Commits and Pull Requests. Gitea notifies the Spec Manager via webhooks.
+- **Verdict:** **THE GOLD STANDARD (Pure GitOps).**
+- **Why:** Maintains separation of concerns. Git is the Single Source of Truth (SSOT) and allows for Human-in-the-Loop review.
+
+### The "Agentic GitOps" Pipeline (Step-by-Step)
+
+1. **Curator Agent generates content**: The LLM processes a PDF and generates a YAML block in memory.
+2. **Agent makes a Commit via API**: The script makes an API call to Gitea (`POST /api/v1/repos/{owner}/{repo}/contents/{filepath}`) with the base64 YAML.
+3. **CI Validation and Approval**: Gitea runs linters. A human approves the Merge to the main branch.
+4. **Gitea Webhook**: Gitea fires a Webhook to the **Spec Manager** indicating the changes.
+5. **Spec Manager steps in**: Downloads the Raw YAML, transforms it into Java entities, vectorizes using LangChain4j, and saves to PostgreSQL (pgvector).
+
+**Benefits:** Safe Reversibility, Clear Auditing, Architectural Decoupling.
+
+---
+
+## 2. GitOps Specification: Federated Repository Structure
+
+At ColabEdu, Git is the **Single Source of Truth (SSOT)**. To guarantee Data Sovereignty (B2G/B2B), the architecture evolves from a monorepo to a Federated GitOps model.
+
+### Deployment Strategy: From Monorepo to Federation
+
+- **PHASE 1: The Transitional Monorepo (Months 1-12)**
+  Everything lives in `colabedu-specs-repo`. To simulate federation, we use Namespaces in filenames and logical folders (`/core/` vs `/tenants/sandbox/`).
+- **PHASE 2: True Federation (B2B/B2G Scaling)**
+  Move the tenant's folder to their own private repository and connect the Webhook. Zero Java refactoring required.
+
+### Logical Federated Architecture (Core vs. Tenant)
+
+- **The "Core" (Managed by ColabEdu):** System skeleton and public domain knowledge (Public C0 Laws, Taxonomies, C1 Templates).
+- **The "Tenants" (Managed by Clients):** Private or customized information (Private C0 Rubrics, Sensitive C2 Texts, C1 Recipes).
+
+### Strict Naming Rules (Dot Notation)
+
+The `metadata.id` field inside the YAML must exactly match the filename (without the `.yaml` extension).
+
+- **Taxonomy:** `taxonomy.[scope].[framework_name].v[version].yaml`
+- **Layer C0 (Rubrics and Laws):** `[namespace_org].[country].c0.[law_or_institution].[exam_or_topic].v[version].yaml`
+- **Layer C2 (Contexts and Texts):** `[namespace_org].[country].c2.[type].[source].[short_title].v[version].yaml`
+- **Layer C3 (Directives):** `[namespace_org].[country].c3.directive.[behavior].v[version].yaml`
+
+### The Magic of the "Spec Manager" and Resolving Crosswalks
+
+The relational database acts as the ultimate "Linker" using **URNs** to connect public (Core) and private (Tenant) pieces. Furthermore, Tenants can map their internal rubrics to global standards using the `maps_to_taxonomy` block, allowing local sovereignty without losing general regulatory compliance.

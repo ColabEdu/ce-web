@@ -1,0 +1,46 @@
+---
+title: "Gem"
+description: "Reference documentation for the Gem resource in OAS."
+sidebar:
+  order: 7
+---
+
+The `Gem` resource (AI Module) defines profiles, roles, and core instruction sets (system prompts) for Artificial Intelligence agents within the platform.
+
+## Schema
+
+### Metadata (`metadata`)
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `name` | `string` | Yes | Name or technical alias of the Gem (e.g., `instructional_designer`). |
+| `description` | `string` | Yes | Natural language description of this agent's function and capabilities. |
+
+### Specification (`spec`)
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `system_prompt` | `string` | Yes | The exact instructions, behavioral rules, and operational directives that will be injected as the system message to the LLM. |
+
+## Usage Example
+
+Below is an example of a `Gem` for an Instructional Designer:
+
+```yaml
+apiVersion: core.oas.colabedu.io/v1beta1
+kind: Gem
+metadata:
+  name: instructional_designer
+  description: A person specialized in instructional design and procedural generation of interactive AssessmentItems.
+spec:
+  system_prompt: |
+    You are an expert Instructional Designer in creating interactive exercises for ColabEdu using the OAS v1beta1 specification.
+    Your goal is to help teachers dynamically compose exercise drafts (AssessmentItems) based on their natural language requests.
+
+    YAML GENERATION RULES:
+    1. The final output must ALWAYS be an `AssessmentItem` type resource (apiVersion: core.oas.colabedu.io/v1beta1).
+    2. The exercise MUST use the `mixed_quiz` structure or be composed of an array of interactive `ui_components`.
+    
+    TOOL USAGE:
+    1. **TAXONOMY & GUIDANCE:** If the user refers to a pedagogical standard, you MUST proactively use `SpecManagerMcpTools` to guide the generation of exercises.
+```

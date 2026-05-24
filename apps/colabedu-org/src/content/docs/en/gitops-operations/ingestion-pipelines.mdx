@@ -1,0 +1,74 @@
+---
+title: "Automated Ingestion Pipelines"
+description: "ColabEdu's global expansion: AP, IB, United States, and Mexico."
+---
+
+# Automated Ingestion Pipelines: Global Expansion
+
+**Architecture:** Open Assessment Standard (OAS v1beta1)
+
+To scale the platform beyond Spain, the "Content Flywheel" must be fed with the most demanded international standards and the regulations of key US states (California, Texas) and Mexico (NEM, CENEVAL). The ability to generate hyper-personalized curriculum from authentic materials (Realia) becomes an insurmountable competitive advantage.
+
+This document details the automation strategy (RPA + LLMs) to ingest regulations (Layer C0) and multimodal public domain content (Layer C2) oriented to these curricula.
+
+---
+
+## 1. Expansion: US and International (AP, IB, CA, TX)
+
+### A. Mapping Legal Objectives and Standards (Layer C0)
+
+Unlike the LOMLOE system in Spain, US and International curricula have a strong emphasis on Data-Driven Assessment.
+
+- **Advanced Placement (AP):** Ingestion of *Course and Exam Descriptions* and rubrics (1-5 points) for *Free Response* (FRQ) tasks. Global themes are mapped as `BLOCK_COMPETENCY`. The LLM must penalize cultural or register transition failures in the OAS architecture.
+- **International Baccalaureate (IB):** Ingestion of Spanish A and B guides. Evaluation matrices for *Paper 1* and *Paper 2* with their grading bands and qualitatively broken-down criteria.
+- **California (Common Core & World Languages):** Mapping CDE multidimensional proficiency levels and Common Core State Standards in Spanish (CCSS-S) as `BLOCK_GOAL`.
+- **Texas (TEKS - LOTE & SLAR):** The *Curator Agent* will extract exact alphanumeric TEKS codes (e.g., TEKS.SLAR.110.53.b.1.A). Strict alignment is legally mandatory in Texas.
+
+### B. Ingestion Catalog for Multimodal Realia (Layer C2)
+
+The raw material is **Realia** (authentic materials created by and for native speakers).
+- **AP:** UN News, CEPAL, NASA en Español, CDC en Español.
+- **TX and CA:** Texas Gateway (TEA OER), The Portal to Texas History (UNT), OER Commons.
+- **IB / Literature:** Project Gutenberg en Español, Biblioteca Virtual Miguel de Cervantes.
+- **Audio:** Radio Bilingüe (NPR), Radio Ambulante. OpenAI Whisper is integrated to generate complete text transcriptions.
+
+---
+
+## 2. Expansion: Mexico (SEP, CENEVAL, COMIPEMS)
+
+The expansion into Mexico represents the largest Total Addressable Market (TAM). The educational system has a duality: the formative curriculum of the SEP (NEM) and the competitive admission system (CENEVAL).
+
+### A. Mapping Legal Objectives and Standards (Layer C0)
+
+- **SEP - Nueva Escuela Mexicana (NEM):** The Agent transforms each Learning Development Process (PDA) into an immutable `BLOCK_GOAL` block. Articulating Axes (Critical Interculturality, etc.) are ingested as validation tags.
+- **CENEVAL (EXANI-II) and COMIPEMS:** The agent extracts exact syllabuses. For *Indirect Writing*, it parameterizes spelling and morphosyntax standards. For *Reading Comprehension*, inference and lexical sense.
+
+### B. Content Ingestion Catalog and Realia (Layer C2)
+
+Mexico possesses a massive infrastructure of free educational materials:
+- **CONALITEG (Free Textbooks):** The crawler extracts text with advanced OCR from the textbook viewers (Classroom, School, Community Projects).
+- **UNAM and National Libraries:** Descarga Cultura UNAM, Memórica.
+- **Informative Texts (CENEVAL):** INEGI (censuses, infographics for data literacy), CONAHCYT Information Agency.
+
+---
+
+## 3. Automation Script Architecture (RPA + Qwen/LLM)
+
+The ingestion pipeline operates from a robust local cluster (Workstations with GPUs running models like Qwen2.5) under a fully asynchronous pipeline.
+
+1. **The Resilient Crawler:** A Python script with Playwright renders dynamic websites and downloads HTML, PDF, and MP3.
+2. **The "Curator Agent" (Semantic Chunking):** Raw text or transcription is sent to the LLM. The agent applies *Semantic Chunking*, dividing the document into logical passages and aligning them with standards (AP, TEKS, NEM, CENEVAL).
+3. **YAML Generation:** The LLM returns the validated `BLOCK_CONTEXT` artifact, injecting crucial indexing metadata and pointers to the Layer C0 graph (tags).
+4. **Dynamic Combination (C1 Recipes):** The system takes a `BLOCK_CONTEXT` and generates multiple parallel exercises (e.g., Monologue for AP, Essay for TEKS, CENEVAL Questionnaire, NEM Panel).
+
+## Legal Guarantees and Rights-Aware Ingestion
+
+To satisfy strict B2G (Business-to-Government) legal and compliance requirements, ColabEdu implements a **Rights-Aware Content Ingestion** framework. We do not rely on generic "Transformative Fair Use" claims. 
+
+Each `ContextBlock` (C2) is strictly tagged with an explicit license schema:
+- `license_type`: [PUBLIC_DOMAIN, OER_CC_BY, OER_CC_BY_NC, LICENSED, PROPRIETARY]
+- `attribution_required`: boolean
+- `source_url`: URL
+- `expiration_date`: (for licensed content)
+
+The Spec Manager engine actively evaluates these tags during recipe compilation, ensuring that proprietary or incompatible materials are never mixed or exposed in ways that violate their terms of use. Privacy is natively assured as ingestion pipelines operate fully disconnected from student PII.

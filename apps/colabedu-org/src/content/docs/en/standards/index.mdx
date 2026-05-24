@@ -1,0 +1,94 @@
+---
+title: "Crosswalk Global: Educational Concept Mapping (OAS V2)"
+description: "The Rosetta Stone of the ColabEdu platform, translating educational frameworks into immutable architectural primitives."
+sidebar:
+  order: 2
+---
+
+**Architecture:** Open Assessment Standard (OAS v1beta1)
+
+**Purpose:** This document acts as the **Rosetta Stone** of the ColabEdu platform. It translates the bureaucratic, legal, and pedagogical jargon of the five main educational frameworks (Spain, Mexico, US, AP, and IB) into the immutable architectural primitives of our database.
+
+Understanding this mapping is crucial for the *Curator Agent* and the engineering team. The biggest failure of traditional EdTech platforms is the "silo effect": they build an entire database for one country and then have to rewrite the code from scratch to enter another market.
+
+At ColabEdu, we resolve the **Semantic Gap** through this standard. This allows us to extract regulations from a dense Mexican government PDF (SEP) and assign them exactly the same classes, metadata, and software entities as a Spanish Royal Decree or a College Board *Syllabus*. The orchestrating AI does not see "countries", it sees weights, nodes, and mathematical tensors.
+
+## 1. Legal Framework and Regulatory Hierarchy (C0 Layer)
+
+How does each country call the rules of the game? Each ministry of education invents its own terms to describe the hierarchy of knowledge. This table maps concepts from the macro law down to the microscopic criterion that the AI must evaluate at runtime.
+
+| **OAS Architecture (ColabEdu)** | **Spain (LOMLOE)** | **Mexico (NEM / MCCEMS)** | **US (Common Core / WL)** | **Advanced Placement (AP)** | **International Baccalaureate (IB)** |
+| --- | --- | --- | --- | --- | --- |
+| **Master Document (The Law)** | Royal Decree / Autonomous Decree | Synthetic Program / MCCEMS | State Standards / Framework | Course and Exam Description (CED) | Subject Guide |
+| **Macro Domain (category)** | Subject (e.g., Spanish Language and Literature) | Sociocognitive Resource (e.g., Language and Communication) | Strand / Domain (e.g., Reading) | Modality (e.g., Interpersonal Writing) | Component (e.g., Paper 1) |
+| **General Objective (BLOCK_GOAL)** | Specific Competency / Basic Knowledge | Learning Goal | Anchor Standard / Core Competency | Learning Objective / Skill | Assessment Objective / Aim |
+| **Evaluation Unit (BLOCK_RUBRIC)** | Evaluation Criterion | Learning Progression | Performance Expectation | Scoring Guideline / Rubric | Criterion (e.g., Criterion A) |
+| **Performance Levels (L0-L4)** | Insufficient, Good, Outstanding, Excellent | Needs Support, Developing, Expected Level | Novice, Intermediate, Advanced | Score 1 to 5 (Holistic Scale) | Markbands (e.g., 1-3, 4-6, 10-12) |
+
+### **Architectural and Database Implications**
+
+- **Tree Depth:** While the US system (Common Core) tends to be very flat and broad (hundreds of granular *Performance Expectations*), European and Ibero-American systems (LOMLOE, NEM) are deeply hierarchical. The `category` and `subcategories` fields (array of strings) in OAS absorb this variance without requiring SQL schema migrations in PostgreSQL.
+- **Score Mapping:** The L0-L4 levels do not always represent grades from 0 to 10. In AP, a holistic level 5 can equal 100%. In IB, a markband of "10-12" equals the maximum score of a criterion. The *Spec Manager* normalizes these floating values in the backend before presenting them on the interface.
+
+## 2. Transversal Axes and B2G Audits (Taxonomy Crosswalks)
+
+Almost all modern educational systems require a subject (e.g., Literature) to assess skills that transcend the classroom (e.g., Citizenship, Technology, Teamwork). In ColabEdu, this is resolved with the `taxonomy_crosswalks` array.
+
+This is our **biggest B2B/B2G selling point (Killer Feature)**: it allows a private school to assess its own way, but automatically report the results to government audit dashboards without double effort.
+
+| **OAS Architecture (ColabEdu)** | **Spain (LOMLOE)** | **Mexico (NEM / MCCEMS)** | **US (Common Core / WL)** | **Advanced Placement (AP)** | **International Baccalaureate (IB)** |
+| --- | --- | --- | --- | --- | --- |
+| **Transversal Skills (taxonomy_ref)** | Key Competencies (e.g., CCL, CD, CPSAA) | Articulating Axes (e.g., Critical Thinking) | Cross-Disciplinary Skills / 21st Century Skills | The 6 Themes (e.g., Global Challenges) | Concepts (e.g., Identity, Perspective) |
+| **Graduate Profile (taxonomy_ref)** | Student Exit Profile | Graduate Profile | College and Career Readiness | AP Scholar Profile | IB Learner Profile |
+| **Socio-emotional (SEL)** | Civic and Ethical Values Education | Fostering Identity and Culture of Peace | CASEL Framework (Self-Awareness) | N/A (Purely academically focused) | Approaches to Learning (ATL Skills) |
+
+### **Transversal Data Flow Example**
+
+1. A student in Mexico writes an essay on the Mexican Revolution (evaluated with a History *Progression*).
+2. The LLM engine grades the cohesion and historical analysis of the text.
+3. Silently, thanks to the `taxonomy_crosswalk`, the database injects those points into the transversal node of the "Articulating Axis: Critical Thinking".
+4. The School Principal can see a *Dashboard* that shows how the institution's Critical Thinking evolves, without ever having created a "Critical Thinking exam".
+
+## 3. Instruments and Exercise Types (C1 Layer)
+
+How does legal abstraction materialize on the screen of a student's device? This table aligns the bureaucratic names of tests with our native UI "Molds" (`ExerciseTypes`) built in Flutter / React.
+
+| **ColabEdu UI Mold (ExerciseType)** | **Spain (LOMLOE / EBAU)** | **Mexico (CENEVAL / SEP)** | **US (State Testing)** | **Advanced Placement (AP)** | **International Baccalaureate (IB)** |
+| --- | --- | --- | --- | --- | --- |
+| **Split-Pane Essay** | Text Commentary / Historical Dissertation | Indirect Writing (Adapted) | DBQ / Analytical Essay | Argumentative Essay (FRQ 2 with 3 sources) | Guided Analysis (Paper 1 with stimulus) |
+| **Strict Limit Editor** | Objective Summary and Theme Extraction | Text Synthesis | Short Constructed Response (SCR) | Email Reply (FRQ 1) | Text Formats (Blog, Short formal letter) |
+| **Multimodal MCQ** | Critical Reading Questionnaire | Reading Comprehension | SBAC / CAASPP Reading Comprehension | Multiple Choice Section (Texts and Graphs) | Listening Comprehension (Paper 2) |
+| **Voice Chatbot / Audio Recorder** | Individual Oral Presentation | Panel Participation (SEP) | ELPAC Speaking | Simulated Conversation / Cultural Comparison | Internal Oral Assessment (IA - 15 minutes) |
+| **Closed-Book Editor** | Literature Topic (Pure memory) | N/A | In-class timed essay | N/A | Comparative Essay (Paper 2) |
+
+### **UX Restrictions by System**
+
+- **AP (Advanced Placement):** The *Split-Pane Essay* mold is essential here because the AP argumentative essay requires the student to read an article, look at a graph, and listen to an audio **at the same time** before writing. The UI must accommodate multiple source tabs (C2) on the left side.
+- **IB (International Baccalaureate):** The *Voice Chatbot* mold for the Internal Assessment requires draconian time controls. The student has exactly 15 minutes to speak. The UI must irrevocably lock upon reaching second zero, simulating the stress of the real environment.
+
+## 4. Punitive vs. Formative Philosophy (C3 Layer - Directives)
+
+The biggest difference between these educational systems is not the exam format, but **how the AI must treat and penalize student errors**. This is controlled through injections in the C3 Layer (`preprocessing_directives`), which alter the "System Prompt" of the LangGraph orchestrator before calling the LLM.
+
+| **AI Parameter** | **Spain (EBAU)** | **Mexico (EXANI-II)** | **US (Common Core)** | **Advanced Placement (AP)** | **International Baccalaureate (IB)** |
+| --- | --- | --- | --- | --- | --- |
+| **Spelling Tolerance** | **Absolute Zero.** Exact mathematical deductions (-0.25 pt for each missing accent or error). | **Very Low.** Severe penalization for syntactic vices. | **Medium-High.** Communicative intent and "Translanguaging" are rewarded. | **High.** Minor errors ignored if they don't impede reader comprehension. | **Medium.** Adequate register and fluency valued over isolated mechanical perfection. |
+| **Dialectal Focus (Protection)** | Peninsular Standard. | Mexican Standard Spanish (formal use of "Ustedes" protected). | Heritage Spanish (Chicano/Bilingual academically validated). | Global / Inclusive. Accepts regionalisms (carro/coche, jugo/zumo). | Global / Inclusive. Requires consistency in the variant chosen by the student. |
+| **Factual Checking Policy** | Low (Assesses form more than substance). | Medium (Requires internal coherence). | High (Requires citing textual sources "Evidence-Based"). | High (Must reference the 3 sources provided in FRQ2). | Critical (Severely penalizes if the student invents data). |
+| **AI Feedback Style** | Analytical, Structural, and Punitive ("You failed in X"). | Normative and Direct. | Formative and Growth-oriented (Growth Mindset). | Holistic, oriented towards general success of the Task. | Reflective and Socratic (TOK Focus - "Why do you think the author used this word?"). |
+
+### **Practical Orchestration Scenario (Dialectal Directive)**
+
+If a student in Madrid writes "vosotros sabéis" and the system is configured in Mexico (SEP), the C3 directive intercepts the text and instructs the model: *"Mark 'vosotros' as a register error, the student must use 'ustedes'"*. Conversely, if a student in Texas uses "computadora", the Spanish system should not mark it as an error (ordenador) if the global tolerance directive is active.
+
+## 5. The Data Lifecycle (Engineering Summary)
+
+Regardless of the country we are processing or how exotic its rules are, the database architecture of ColabEdu remains immutable. This is the exact lifecycle of data through the platform:
+
+1. **Ingestion (The C0 Contract):** A legal document from any country is translated to the `goals` table (`BLOCK_GOAL`) and its evaluation matrix to `rubrics` (`BLOCK_RUBRIC`). This establishes the "Laws of Physics" of the system.
+2. **Assembly (The C1/C2 Instrument):** The teacher creates a task by selecting an `ExerciseType` (e.g., Split Pane), connecting it with a historical text from the `contexts` table (`BLOCK_CONTEXT`), and attaching the rubric from step 1. This generates a Recipe.
+3. **Execution (The Runtime Payload):** The student opens their iPad or Chromebook. The UI reads the recipe and draws the screen. The student writes their essay and clicks "Submit". The frontend packages a pure JSON payload.
+4. **Evaluation (LangGraph + C3):** The payload reaches the backend. LangGraph injects the behavioral modifications (`BLOCK_DIRECTIVE`), assembles the full context, and forces the LLM to return a structured schema (Structured Output).
+5. **Propagation (Crosswalks):** The grade is saved in the relational database and is triggered through the transversal nodes, updating the key competency *Dashboards* of the school or government in real time.
+
+*The architectural magic of ColabEdu is this: the main orchestrator (LangGraph) knows absolutely nothing about the Mexican, Spanish, or American educational system. It only knows how to obey weights, limits, and tensors that the Spec Manager dynamically assembled into the final JSON Payload. We have abstracted educational bureaucracy by turning it into mathematics.*

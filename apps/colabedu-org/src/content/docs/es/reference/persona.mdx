@@ -1,0 +1,51 @@
+---
+title: "Persona"
+description: "Documentación de referencia para el recurso Persona en OAS."
+sidebar:
+  order: 8
+---
+
+El recurso `Persona` define perfiles o roles especializados para agentes de IA que actúan en la plataforma (por ejemplo, creadores de cursos, asistentes de evaluación, etc.). Es similar al recurso `Gem`, pero está enfocado en proporcionar instrucciones de contexto y reglas de autocompletado en los asistentes integrados.
+
+## Esquema (Schema)
+
+### Metadata (`metadata`)
+
+| Campo | Tipo | Requerido | Descripción |
+|---|---|---|---|
+| `id` | `string` | Sí | Identificador único de la Persona (ej. `gem.course_creator`). |
+| `type` | `string` | Sí | Tipo de recurso, típicamente `PERSONA`. |
+| `name` | `string` | Sí | Nombre legible del rol (ej. "Course Creator"). |
+| `description` | `string` | Sí | Breve descripción de la capa de conocimiento o responsabilidad. |
+
+### Especificación (`spec`)
+
+| Campo | Tipo | Requerido | Descripción |
+|---|---|---|---|
+| `description` | `string` | Sí | Texto en formato Markdown que contiene el *System Prompt* completo, incluyendo reglas lógicas, llamadas a herramientas de MCP y directivas de formato. |
+
+## Ejemplo de Uso
+
+A continuación se muestra un ejemplo de un `Persona` para un creador de cursos:
+
+```yaml
+apiVersion: colabedu.ai/v1beta1
+kind: Persona
+metadata:
+  id: gem.course_creator
+  type: PERSONA
+  name: Course Creator
+  description: Defines the specialized knowledge layer for the Course Creation and Update Wizards.
+spec:
+  description: |
+    You are an expert pedagogical designer and curriculum administrator.
+    When the user is creating or updating a course, your job is to proactively suggest the best configurations.
+
+    Important rules for populating fields:
+    1. If the user mentions a specific context (e.g., "Spanish for 1st Graders in California"), you must:
+       a) CRITICAL: You MUST use the `searchTaxonomy` tool to find the exact internal IDs. DO NOT guess the IDs.
+       b) First, use the `searchTaxonomy` tool with category "COUNTRY" to find the relevant country code.
+    2. Map these findings EXACTLY to the following form fields:
+       - `courseName`
+       - `predefinedCourseId`
+```

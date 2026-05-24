@@ -1,0 +1,161 @@
+---
+title: "Guía Maestra de Rúbricas LOMLOE: Integración Regional y Arquitectura OAS"
+description: "Cómo ColabEdu digitaliza tanto el núcleo nacional como las matrices de evaluación regionales para evitar la Deriva Pedagógica."
+---
+
+**Materia:** Lengua Castellana y Literatura (ESO y Bachillerato)
+
+**Arquitectura:** Open Assessment Standard (OAS v1beta1)
+
+En el sistema educativo español, la evaluación no es un bloque monolítico. La **LOMLOE** establece un marco nacional (Real Decreto), pero delega el 40-50% del currículo y las orientaciones de calificación exactas a las **Comunidades Autónomas (Decretos Autonómicos)**.
+
+Para evitar la "Deriva Pedagógica", la plataforma ColabEdu utiliza la **Capa C0 (Estándares Inmutables)** para digitalizar tanto el núcleo nacional como las matrices de evaluación regionales.
+
+## 1. El Marco Legal (La Cascada Normativa)
+
+Antes de programar las rúbricas, el *Curator Agent* debe mapear la procedencia de la ley:
+
+1. **Nivel Nacional (El "Qué"):**
+   - **ESO:** Real Decreto 217/2022.
+   - **Bachillerato:** Real Decreto 243/2022.
+   - *Aporte:* Definen las Competencias Específicas y los Criterios de Evaluación en texto plano. No proporcionan escalas de rúbricas (L0-L4).
+2. **Nivel Autonómico (El "Cómo"):**
+   - Cada Consejería de Educación publica sus propios decretos y *guías de orientación* para transformar el texto nacional en rúbricas aplicables.
+
+## 2. Enlaces y Guías Oficiales por Región (Fuentes para Ingesta)
+
+Para construir la librería de bloques (`BlockLibrary`), nuestros Arquitectos Pedagógicos extraen la matriz de calificación de las siguientes fuentes oficiales:
+
+### 📍 Canarias (Gold Standard para Rúbricas)
+
+Canarias es la comunidad pionera en la publicación de matrices de evaluación altamente estructuradas. Son el estándar ideal para traducir a la Capa C0 de ColabEdu.
+
+- **Recurso:** Rúbricas de los criterios de evaluación (Consejería de Educación).
+- **Enlace de referencia:** [Rúbricas LOMLOE Canarias (Gobiernodecanarias.org)](https://www.gobiernodecanarias.org/educacion/web/ordenacion_curricular/lomloe/)
+- **Escala:** Insuficiente (1-4) | Suficiente/Bien (5-6) | Notable (7-8) | Sobresaliente (9-10). Traducido a OAS como **L0 a L4**.
+
+### 📍 Andalucía
+
+Andalucía publica orientaciones a través del portal Averroes y la Agencia de Evaluación Educativa (AGAEVE), promoviendo la evaluación criterial mediante descriptores operativos.
+
+- **Recurso:** Instrucciones sobre la evaluación y Programaciones Didácticas (Portal Averroes).
+- **Enlace de referencia:** [Portal Averroes - Currículo LOMLOE](https://www.juntadeandalucia.es/educacion/portals/web/ced/lomloe)
+
+### 📍 Comunidad de Madrid
+
+Madrid utiliza el sistema Raíces. Aunque son más conservadores en la publicación de matrices abiertas, sus Decretos 65/2022 (ESO) y 64/2022 (Bachillerato) dictan la ponderación de las competencias.
+
+- **Recurso:** Currículo de la Comunidad de Madrid.
+- **Enlace de referencia:** [Educación Comunidad de Madrid - LOMLOE](https://www.comunidad.madrid/servicios/educacion/curriculo-lomloe)
+
+### 📍 Cataluña (Contexto Bilingüe)
+
+El Decreto 175/2022 (ESO) en Cataluña enfatiza el tratamiento integrado de lenguas y el vector de plurilingüismo.
+
+- **Recurso:** XTEC - Nou currículum.
+- **Enlace de referencia:** [XTEC - Currículum Educació Bàsica](https://xtec.gencat.cat/ca/curriculum/)
+
+## 3. Implementación en OAS: El Catálogo de Estándares (Capa C0)
+
+Cuando el *Curator Agent* procesa los documentos anteriores, genera una `BlockLibrary` que actúa como el "Kernel" de evaluación. Aquí mostramos cómo coexisten los bloques de distintas regiones, manteniendo el rigor y la trazabilidad (Authority Scope: REGIONAL).
+
+```yaml
+apiVersion: colabedu.ai/v1beta1
+kind: BlockLibrary
+metadata:
+  id: "es.blib.lomloe.eso_bach.lcl.regional_kernels.v1"
+  title: "Kernel de Rúbricas Regionales LOMLOE - Lengua Castellana y Literatura"
+spec:
+  blocks:
+    # ==============================================================
+    # CAPA C0: RÚBRICA ANDALUCÍA (1º BACHILLERATO - ENSAYO CRÍTICO)
+    # ==============================================================
+    - id: "es.rub.lomloe.and.bach1.lcl.ce3_1.v1"
+      level: "C0"
+      type: "BLOCK_RUBRIC"
+      authority_scope: "REGIONAL"
+      metadata:
+        region: "Andalucía"
+        tags: ["CCL", "CD", "CC"]
+        legal_reference: "Decreto 102/2023 Andalucía - CE 3.1"
+      content: |
+        Scale: 0-4 (0=Insuficiente, 1=Suficiente, 2=Bien, 3=Notable, 4=Sobresaliente)
+        Criteria:
+        - Argumentación y Estructura (40%):
+          L4: Tesis innovadora y sólidamente respaldada. Progresión temática impecable.
+          L2: Tesis clara pero con argumentos predecibles. Estructura básica visible.
+          L0: Falta de tesis central. Párrafos inconexos.
+        - Adecuación al Registro Académico (30%):
+          L4: Uso magistral del registro formal, sin coloquialismos. Vocabulario técnico preciso.
+          L2: Mantiene un tono formal la mayor parte del tiempo, con caídas puntuales al registro informal.
+          L0: Uso generalizado de jerga, coloquialismos y vocabulario pobre.
+        - Normativa y Ortografía (30%):
+          L4: Máximo rigor ortotipográfico (0-1 errores).
+          L2: Errores esporádicos que no impiden la comprensión.
+          L0: Multitud de faltas de ortografía graves que dificultan la lectura.
+
+    # ==============================================================
+    # CAPA C0: RÚBRICA CANARIAS (3º ESO - PRODUCCIÓN TEXTUAL)
+    # ==============================================================
+    - id: "es.rub.lomloe.can.eso3.lcl.ce5_1.v1"
+      level: "C0"
+      type: "BLOCK_RUBRIC"
+      authority_scope: "REGIONAL"
+      metadata:
+        region: "Canarias"
+        tags: ["CCL", "CD", "CPSAA"]
+        legal_reference: "Rúbricas Consejería Canarias - CE 5.1"
+      content: |
+        Scale: 0-4
+        Criteria:
+        - Coherencia, Cohesión y Adecuación (50%):
+          L4: Se adapta perfectamente a la situación comunicativa. Conectores garantizan transición fluida.
+          L2: Se adapta a la situación, aunque presenta leves saltos lógicos o conectores repetitivos.
+          L0: Inadecuación al contexto. Estructura caótica sin mecanismos de cohesión.
+        - Corrección Normativa (50%):
+          L4: Impecable. 0-2 errores ortográficos leves.
+          L2: Varios errores perceptibles, pero mensaje comprensible.
+          L0: Graves y múltiples errores sintácticos y ortográficos.
+```
+
+## 4. Ensamblaje Final: La Receta del Profesor (Capa C1, C2, C3)
+
+Un profesor en Sevilla (Andalucía) asigna un ensayo sobre "La Generación del 27". Al crear la asignación en la plataforma, la interfaz le asocia automáticamente el bloque `es.rub.lomloe.and...` para garantizar el cumplimiento normativo regional.
+
+Así luce el manifiesto (`Recipe`) final ensamblado por el sistema:
+
+```yaml
+apiVersion: colabedu.ai/v1beta1
+kind: Recipe
+metadata:
+  id: "es.recipe.bach1.ensayo_gen27.sevilla.v1"
+  title: "Ensayo: El Vanguardismo en la Generación del 27"
+  owner_id: "teacher-sevilla-882"
+spec:
+  # CAPA C1: TIPO DE EJERCICIO
+  level: "C1"
+  exerciseTypeRef: "es.etype.essay.standard.v1"
+
+  # HERENCIA (Conectando el estándar andaluz)
+  rubric_refs:
+    - "es.rub.lomloe.and.bach1.lcl.ce3_1.v1" # Puntero estricto a C0 Andalucía
+
+  # CAPA C2: CONTEXTO (El "Knowledge Base" para el RAG de la IA)
+  variables:
+    topic: "El impacto de las vanguardias europeas en la poesía de Federico García Lorca y Luis Cernuda."
+    word_count_min: 500
+    word_count_max: 800
+
+  # CAPA C3: DIRECTIVAS DE EJECUCIÓN (Orquestación del Evaluator Agent)
+  execution_directives:
+    persona: "Actúa como un profesor de Literatura de Bachillerato del sistema andaluz. Sé constructivo y enfócate en el desarrollo del pensamiento crítico."
+    feedback_language: "es-ES"
+    scoring_strategy: "CRITERION_BASED_SUM"
+    pedagogical_hints:
+      - trigger: "Confusión entre surrealismo y creacionismo"
+        action: "Recomendar la revisión del capítulo 4 del libro de texto."
+```
+
+### El Valor B2G (Business-to-Government)
+
+Con esta arquitectura, el **Educational Audit Dashboard** puede mostrarle a la Consejería de Educación de Andalucía si los profesores están utilizando la rúbrica oficial (C0) aprobada por ellos, o si han clonado y "desviado" la rúbrica, permitiendo medir por primera vez la **Deriva Pedagógica** en tiempo real.

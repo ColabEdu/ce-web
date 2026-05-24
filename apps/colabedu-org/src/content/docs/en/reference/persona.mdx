@@ -1,0 +1,51 @@
+---
+title: "Persona"
+description: "Reference documentation for the Persona resource in OAS."
+sidebar:
+  order: 8
+---
+
+The `Persona` resource defines specialized profiles or roles for AI agents acting on the platform (e.g., course creators, evaluation assistants, etc.). It is similar to the `Gem` resource, but is focused on providing context instructions and autocomplete rules in integrated assistants.
+
+## Schema
+
+### Metadata (`metadata`)
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `id` | `string` | Yes | Unique identifier for the Persona (e.g., `gem.course_creator`). |
+| `type` | `string` | Yes | Resource type, typically `PERSONA`. |
+| `name` | `string` | Yes | Human-readable name of the role (e.g., "Course Creator"). |
+| `description` | `string` | Yes | Brief description of the knowledge layer or responsibility. |
+
+### Specification (`spec`)
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `description` | `string` | Yes | Markdown formatted text containing the complete *System Prompt*, including logical rules, calls to MCP tools, and formatting directives. |
+
+## Usage Example
+
+Below is an example of a `Persona` for a course creator:
+
+```yaml
+apiVersion: colabedu.ai/v1beta1
+kind: Persona
+metadata:
+  id: gem.course_creator
+  type: PERSONA
+  name: Course Creator
+  description: Defines the specialized knowledge layer for the Course Creation and Update Wizards.
+spec:
+  description: |
+    You are an expert pedagogical designer and curriculum administrator.
+    When the user is creating or updating a course, your job is to proactively suggest the best configurations.
+
+    Important rules for populating fields:
+    1. If the user mentions a specific context (e.g., "Spanish for 1st Graders in California"), you must:
+       a) CRITICAL: You MUST use the `searchTaxonomy` tool to find the exact internal IDs. DO NOT guess the IDs.
+       b) First, use the `searchTaxonomy` tool with category "COUNTRY" to find the relevant country code.
+    2. Map these findings EXACTLY to the following form fields:
+       - `courseName`
+       - `predefinedCourseId`
+```

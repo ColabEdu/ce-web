@@ -1,0 +1,194 @@
+@import url("./fonts.css");
+
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/* tailwind plugins */
+@plugin "@tailwindcss/forms";
+
+/* dark mode */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* theme definition import */
+@import "./tailwind-theme.css";
+
+/* other imports into specific layers */
+@import "./mos.css" layer(utilities);
+@import "./markdown-content.css" layer(components);
+@import "./buttons.css" layer(components);
+
+/* https://tailwindcss.com/docs/adding-custom-styles#using-css-and-layer */
+@layer base {
+  :root {
+    /* default color of <body> background and text */
+    --background: var(--color-base-50);
+    --foreground: var(--color-base-950);
+
+    /* Background and text color for <Card> */
+    --card: var(--color-base-50);
+    --card-foreground: var(--color-base-950);
+
+    /* Colors for popovers like <SelectContent> and <TooltipContent> */
+    --popover: var(--color-base-50);
+    --popover-foreground: var(--color-base-950);
+
+    /* Primary colors for <Button>, etc. when variant="primary" */
+    --primary: var(--color-blue-600);
+    --primary-foreground: var(--color-base-50);
+
+    /* Primary color used for text and other accents on top of the background color */
+    --primary-accent: var(--color-primary-600);
+
+    /* Secondary colors for <Button>, etc. when variant="secondary" */
+    --secondary: var(--color-base-950);
+    --secondary-foreground: var(--color-base-50);
+
+    /* Secondary color used for text and other accents on top of the background color */
+    --secondary-accent: var(--color-base-950);
+
+    /* Muted colors used for <TabsList>, <Avatar>, etc. */
+    --muted: var(--color-base-100);
+    --muted-foreground: var(--color-base-600);
+
+    /* Accents used throughout the site */
+    --accent: var(--color-base-100);
+    --accent-foreground: var(--color-base-900);
+
+    /* Various component colors for variant="info" */
+    --info: var(--color-sky-300);
+    --info-foreground: var(--color-sky-950);
+
+    /* Various component colors for variant="success" */
+    --success: var(--color-green-300);
+    --success-foreground: var(--color-green-950);
+
+    /* Various component colors for variant="warning" */
+    --warning: var(--color-amber-300);
+    --warning-foreground: var(--color-amber-950);
+
+    /* Various component colors for variant="error" */
+    --error: var(--color-red-700);
+    --error-foreground: var(--color-base-50);
+
+    /* Default border color */
+    --border: var(--color-base-200);
+
+    /* Border colors for inputs like <Input>, <Textarea>, <SelectTrigger>  */
+    --input: var(--color-base-200);
+
+    /* Outline color for focus states */
+    --outline: var(--color-primary-600);
+
+    /* Default transition duration */
+    --default-transition-duration: 0.2s;
+
+    /* Radius for rounded corners */
+    --radius: 0.65rem;
+
+    /* Spacing for padding and margin */
+    --spacing: 0.25rem;
+
+    /* custom shiki styling for markdown code blocks. These are the variables Astro uses
+		Shiki Themes: https://shiki.style/themes   https://shiki.matsu.io/guide/theme-colors#css-variables-theme */
+    --astro-code-foreground: var(--color-base-100);
+    --astro-code-background: var(--color-base-900);
+    --astro-code-token-constant: var(--color-primary-300);
+    --astro-code-token-string: var(--color-primary-700);
+    --astro-code-token-comment: var(--color-base-400);
+    --astro-code-token-keyword: var(--color-base-300);
+    --astro-code-token-parameter: var(--color-sky-400);
+    --astro-code-token-function: var(--color-base-100);
+    --astro-code-token-string-expression: var(--color-primary-300);
+    --astro-code-token-punctuation: var(--color-base-400);
+    --astro-code-token-link: var(--color-base-200);
+  }
+
+  /* overriding above variables when a parent has the class "dark" */
+  .dark {
+    --background: var(--color-base-950);
+    --foreground: var(--color-base-50);
+    --card: var(--color-base-900);
+    --card-foreground: var(--color-base-50);
+    --popover: var(--color-base-900);
+    --popover-foreground: var(--color-base-50);
+    --primary: var(--color-blue-700);
+    --primary-foreground: var(--color-base-50);
+    --primary-accent: var(--color-blue-400);
+    --secondary: var(--color-base-50);
+    --secondary-foreground: var(--color-base-950);
+    --secondary-accent: var(--color-base-200);
+    --muted: var(--color-base-900);
+    --muted-foreground: var(--color-base-400);
+    --accent: var(--color-base-700);
+    --accent-foreground: var(--color-base-100);
+    --info: var(--color-sky-300);
+    --info-foreground: var(--color-sky-950);
+    --success: var(--color-green-300);
+    --success-foreground: var(--color-green-950);
+    --warning: var(--color-amber-300);
+    --warning-foreground: var(--color-amber-950);
+    --error: var(--color-red-800);
+    --error-foreground: var(--color-base-50);
+    --border: --alpha(var(--color-base-50) / 10%);
+    --input: --alpha(var(--color-base-50) / 15%);
+    --outline: var(--color-primary-400);
+  }
+
+  /* starwind preflight merged with Cosmic Themes */
+  * {
+    @apply border-border outline-outline/50;
+  }
+  html {
+    @apply bg-background text-foreground leading-[1.6rem] scheme-light dark:scheme-dark;
+    scroll-behavior: smooth;
+    -moz-text-size-adjust: none;
+    -webkit-text-size-adjust: none;
+    text-size-adjust: none;
+  }
+  button {
+    @apply cursor-pointer;
+  }
+}
+
+@layer components {
+  .site-container {
+    @apply mx-auto max-w-[86rem] px-4;
+  }
+
+  /* styles navbar links */
+  .nav__link--base {
+    @apply text-muted-foreground hover:text-foreground leading-tight transition;
+  }
+
+  /* various H1 styling used throughout the components */
+  .h1 {
+    @apply font-heading text-4xl leading-tight font-semibold lg:text-5xl;
+  }
+
+  /* various H2 styling used throughout the components */
+  .h2 {
+    @apply font-heading text-2xl leading-tight font-semibold md:text-3xl lg:text-4xl;
+  }
+
+  /* various H3 styling used throughout the components */
+  .h3 {
+    @apply font-heading text-lg leading-tight font-semibold md:text-xl lg:text-2xl;
+  }
+
+  /* text details immediately below a number of section headings */
+  .description {
+    @apply text-muted-foreground text-pretty md:text-lg;
+  }
+}
+
+@layer utilities {
+  /* focus utility class (for when user is tabbing through items on page) */
+  .primary-focus {
+    @apply focus-visible:outline-outline focus-visible:outline-2;
+  }
+
+  /* use with "animate-pause" to pause a CSS animation */
+  .pause {
+    animation-play-state: paused !important;
+  }
+}

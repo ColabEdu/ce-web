@@ -1,0 +1,71 @@
+---
+title: Catálogo Maestro C1
+description: Tipos de Ejercicios (Exercise Scaffolds) en la arquitectura OAS.
+sidebar:
+  order: 3
+---
+
+**Arquitectura:** Open Assessment Standard (OAS v1beta1)  
+**Capa:** C1 (Exercise Types / Plantillas Estructurales)
+
+**Objetivo:** Definir los contenedores lógicos agnósticos que multiplican el contenido bruto (C2) y lo evalúan contra las rúbricas legales (C0) de CUALQUIER asignatura.
+
+En la arquitectura de ColabEdu, un "Tipo de Ejercicio" (Capa C1) es un *esqueleto vacío y ciego a la materia*. No contiene preguntas específicas ni leyes. Contiene la **lógica de la interfaz de usuario (UI)** y la **directiva de evaluación base para la IA**.
+
+Cuando el *Automated Ingestion Pipeline* funciona, cruza los textos, mapas o fórmulas descargadas con estas plantillas para generar millones de combinaciones transversales.
+
+## 1. Dominio: Producción Escrita y Análisis Documental
+*Interfaces para procesar información y generar respuestas argumentativas. Útiles para Lengua, Historia, Filosofía y Biología.*
+
+1. **Ensayo Guiado a Pantalla Dividida (Standard Split-Pane):** 
+   - *Uso en Lengua:* Comentario de un poema.
+   - *Uso en Historia:* Leer la Declaración de los Derechos del Hombre (C2) y redactar un ensayo sobre sus causas.
+   - *Uso en Ciencias:* Leer un "Paper" sobre biotecnología y resumir la hipótesis.
+2. **Respuesta a Correo Electrónico / Formato Específico:** El alumno asume un rol y responde.
+3. **Resumen Objetivo Restringido:** Limita severamente la longitud (ej. máx. 100 palabras). Penaliza si el alumno incluye opiniones personales o hace "copy-paste".
+4. **Análisis de Gráficos e Infografías (Multimodal):** El bloque C2 contiene una imagen/gráfico.
+   - *Uso en Geografía:* Analizar una pirámide poblacional del INEGI.
+5. **Escritura Creativa / Continuación de Hipótesis:** 
+   - *Uso en Filosofía:* Resolver un dilema ético argumentando desde la perspectiva de Kant.
+
+## 2. Dominio: Comprensión y Evaluación Interactiva
+*Ejercicios de corrección automática determinista (auto-grading) y análisis guiado.*
+
+6. **Cuestionario de Opción Múltiple Avanzado (MCQ):** La IA genera *distractores semánticos* basados en el texto C2.
+7. **Preguntas de Respuesta Corta (Short Answer):** El alumno responde en 1-2 frases. La IA evalúa la precisión semántica.
+8. **Rellenar Huecos (Cloze Text):** El sistema elimina palabras clave de un texto C2.
+9. **Ordenación Lógica (Drag & Drop):** Ordenar eventos cronológicos o pasos del método científico.
+10. **Caza de Fake News (Fact-Checking):** Se presenta un artículo periodístico (C2) y el alumno interactúa con el bot para pedirle datos y verificar la noticia.
+
+## 3. Dominio: Interacción Oral y Multimodal
+*Utiliza modelos de Speech-to-Text (Whisper) y validación de imágenes.*
+
+11. **Tutor Socrático Interactivo (Chatbot Oral/Texto):** El alumno debate con la IA. (Ej. Historical Roleplay con Abraham Lincoln).
+12. **Monólogo de Comparación / Defensa Oral:** El alumno graba un audio defendiendo una tesis con tiempo límite.
+13. **Descripción de Imagen (Visual Stimulus):** El alumno graba una descripción de una imagen (ej. una célula vegetal).
+14. **Comprensión Auditiva / Toma de Apuntes:** Reproducción de un podcast o conferencia científica. El alumno responde preguntas.
+
+## 4. Dominio: Mecánica, Identificación y Etiquetado
+*Ejercicios donde el alumno marca, subraya o asocia elementos dentro de un lienzo.*
+
+15. **Etiquetado Inline (Syntax & Fact Tagger):** Subrayar elementos en el texto (ej. causas en rojo, consecuencias en azul).
+16. **Transformación / Edición Indirecta:** Se presenta un texto deficiente y el alumno debe corregir sus errores (fechas erróneas, fallos gramaticales).
+17. **Expansión Léxica / Conceptos Clave:** Definir un término técnico resaltado en un texto C2 dentro del contexto de esa asignatura.
+
+## 5. El "Delta" STEM: Futuros Moldes Requeridos
+Para abarcar ciencias duras (Matemáticas, Física, Programación), el sistema puede ampliarse con estos 4 moldes, manteniendo el mismo motor RAG y C0/C3:
+
+18. **Editor de Ecuaciones (Math/LaTex Editor):** Para resolver cálculo y física paso a paso.
+19. **Gráficos Interactivos (Cartesian Canvas):** Para dibujar funciones, parábolas o vectores.
+20. **Entorno de Ejecución de Código (Code Sandbox):** Editor de código con evaluación algorítmica de IA.
+21. **Mapa Interactivo (GIS Point-and-Click):** Mapas mudos para Geografía o Anatomía.
+
+## El "Recipe Schema" (El secreto de la evaluación agnóstica)
+
+Si la UI es la misma (Ej. Ensayo a Pantalla Dividida), ¿cómo sabe la IA que está corrigiendo un examen de Historia y no de Lengua? **La inyección de la Rúbrica (C0)**.
+
+- **Escenario A (Literatura):** C1 (Ensayo) + C2 (Poema) + C0 (Rúbrica: Métrica, Figuras Literarias).
+- **Escenario B (Historia):** C1 (Ensayo) + C2 (Constitución 1812) + C0 (Rúbrica: Causas, Anacronismos). **La IA ignorará la métrica poética.**
+
+### Conclusión
+El poder de la **Arquitectura Lego (OAS V2)** radica en su agnosticidad absoluta. Si ColabEdu decide lanzar un producto para Facultades de Medicina o Derecho, **no se requiere programar ni una sola pantalla nueva**. Todo el esfuerzo se centra en añadir nuevos textos (C2) y leyes (C0).

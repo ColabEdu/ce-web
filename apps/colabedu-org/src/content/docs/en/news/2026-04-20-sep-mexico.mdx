@@ -1,0 +1,31 @@
+---
+title: "New: SEP and MCCEMS Architecture for Mexico"
+description: "Nationwide mapping of Mexican educational standards and CENEVAL / MEJOREDU Diagnostic Assessments."
+author: "LATAM Pedagogical Director"
+date: "2026-04-20"
+tags: ["SEP", "MCCEMS", "Mexico", "Launch", "LATAM"]
+---
+
+Cross the pond with us! After establishing a robust ecosystem for Spain (LOMLOE, EBAU) and international programs (AP, IB), today we are excited to announce our comprehensive entry into LATAM, starting with the educational framework of **Mexico**.
+
+## Unifying the New Mexican School
+
+The educational system in Mexico is undergoing significant transformations, notably the New Common Curricular Framework for Upper Secondary Education (**MCCEMS**) endorsed by the Ministry of Public Education (**SEP**). For teachers and institutions in the country, mapping learning progressions and managing the guidelines for diagnostic assessments like **CENEVAL** or **MEJOREDU** represents a titanic challenge in terms of logistics and documentation.
+
+## Deep Integration via Open Assessment Specification (OAS)
+
+Through the philosophy of *Pedagogy as Code*, we have integrated the Mexican curricula into our ecosystem:
+
+- **Immutable C0 Structure:** We have digitized the learning progressions, Curricular Learning Units (UAC), and formative fields of SEP/MCCEMS into our taxonomies (`taxonomy.loc.mx.yaml`).
+- **C1 Adaptation (Exercises and Formats):** Our interactive catalog adapts to the modular assessments expected by MEJOREDU, covering everything from literacy (reading comprehension) to written expression.
+- **Governmental / School Audit (B2G/B2B):** As discussed in our [Domain Strategy](/en/gitops-operations/arquitectura-dominios), this launch opens the door for districts (`gov.colabedu.net`) to audit the aggregated pedagogical impact on MCCEMS learning progressions without violating PII data.
+
+## The "Rosetta Stone" of Cross-Border Education
+
+Thanks to `SpecManager` and the `C0-C3` layered separation, the same "Argumentative Exercise" can be instantiated and evaluated with the rubric from Spain (LOMLOE) or the rubric from Mexico (SEP) in milliseconds, keeping the core grading engine (`Grading V2`) unaltered and agnostic.
+
+Explore more about our cross-border architecture:
+- [Documentation: SEP / MCCEMS Standard](/en/standards/sep-mexico)
+- [Examples in the Spec Repo](/en/specs-repository)
+
+With this injection, ColabEdu's "Content Factory" solidifies its position as the most powerful tool for publishers, schools, and education ministries in Hispanic America. We continue to grow!

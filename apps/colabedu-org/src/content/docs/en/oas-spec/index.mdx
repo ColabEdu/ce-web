@@ -1,0 +1,67 @@
+---
+title: Introduction to OAS
+description: Whitepaper on the Open Assessment Standard (OAS v1beta1) and its underlying LLM orchestration architecture.
+sidebar:
+  order: 1
+---
+
+**Architecture:** Open Assessment Standard (OAS v1beta1)
+
+**Purpose:** To explain the technical workings of the LLM orchestration engine, demonstrating how the separation of concerns (Assessment as Code) allows evaluating any educational paradigm without requiring additional model fine-tuning.
+
+## 1. The Problem: The "Prompt Engineering" Monolith
+
+Historically, EdTech platforms attempted to use LLMs by sending them a "Mega-Prompt" in plain text. This prompt mixed educational laws, the text to be read, report design instructions (e.g., *"use bold text"* or *"create a Markdown table"*), and the teacher's specific rules.
+
+The language model was forced to simultaneously act as a pedagogical evaluator, legal analyst, and frontend designer. **The consequences of this approach were disastrous at production scale:**
+
+1. **Prompt Drift and Hallucinations:** LLMs have limited attention mechanisms. Flooding them with contradictory or disparate instructions caused "amnesia," making them forget critical grading rules while trying to format a Markdown table.
+2. **Technical Fragility:** If the LLM forgot to close a formatting tag, the backend parser failed, causing cascading errors and wasted API credits.
+3. **Critical Dependence on Fine-Tuning:** ML engineering teams believed training specific models (e.g., one for Spain's EBAU, another for US AP) was the only solution. This incurred massive costs and rapid obsolescence whenever national curricula changed.
+
+## 2. The Solution: "Assessment as Code"
+
+ColabEdu solved this technical crisis by applying traditional software engineering principles to LLMs: the **MVC (Model-View-Controller)** pattern and **Dependency Injection**. We shattered the evaluation monolith into an atomic, versionable, and immutable "Layer Graph" (C0, C1, C2, C3).
+
+### The Layer Graph (YAML) Explained:
+
+- **Layer C0 (Standards / The Law):** Vectorized dictionaries of pure rubrics (e.g., AP, IB). They act as the immutable "Constitution" of the system.
+- **Layer C2 (Context / Realia):** The "Semantic Ground." News articles, literature, images, or audio preprocessed for *Retrieval-Augmented Generation* (RAG).
+- **Layer C3 (Directives / The Teacher):** Override rules, pedagogical tone, individual curriculum adaptations, and Gatekeepers.
+- **Layer C1 (ExerciseType / The Contract):** The master skeleton orchestrating the other layers. It defines the input UI for the student and the output report widgets for the teacher.
+
+## 3. The Architectural Magic: Late Binding
+
+One invisible problem of scaling EdTech platforms is combinatorial explosion. OAS v1beta1 solves this with **Late Binding**:
+
+1. A C1 template (e.g., "Argumentative Essay") is saved in the Git repository **completely empty of content**.
+2. When a teacher assigns the task, they select the context (Layer C2).
+3. **Just-in-Time Compilation:** No new exercise is created in the DB. Only in the exact millisecond the student opens the app does our *Spec Manager* dynamically "bind" C2 inside the hollow C1 mold.
+
+## 4. Why We Don't Need Fine-Tuning
+
+Our platform allows Off-the-Shelf foundational models to evaluate an ultra-strict critical commentary in Spain instantly, and an empathetic holistic IB dissertation the next. This is achieved through two algorithmic pillars:
+
+### A. Deterministic Fusion (The Pre-Compiler Node)
+
+The *Spec Manager* delegates the complex task of semantic mediation to a **Compiler Node** (a micro-agent). If the Law (C0) says *"Penalize spelling errors"* but the Teacher (C3) says *"Ignore spelling errors for this dyslexic student,"* the pre-compiler node reads both YAMLs, executes a *Logical Merge*, overrides the punitive instruction, and outputs a clean evaluation JSON. 
+
+**The main Evaluator LLM never receives contradictory instructions.**
+
+### B. Schema Validation and Rule Constraints (Structured Outputs)
+
+We forbid the main model from behaving like a word processor. Using **Guided Decoding** and **Structured Outputs**, the inference engine strictly constrains the LLM to generate tokens that conform to the exact API schema. By forcing the neural network to fill strict "boxes", it focuses entirely on *text evaluation*, not formatting.
+
+### C. "Needle In A Haystack" (NIAH) and RAG
+
+Modern models boast context windows ranging from 128K to 2M tokens with >99% recall. When Layer C2 injects a full scientific article, the LLM maintains it perfectly mapped in its *KV Cache* without suffering cognitive overload, successfully comparing the student's submission against the established rubric and context.
+
+## 5. Separation of UI and Data (Server-Driven UI)
+
+OAS frees the AI from "Frontend" design work, strictly applying the *Server-Driven UI* design pattern via the **A2UI** protocol. The AI strictly returns JSON data, and the backend maps those variables into Flutter Widgets.
+
+If the teacher wants to provide creative qualitative feedback, the "Escape Hatch" allows saving elaborate prose within a simple string field (e.g., `constructive_feedback`), which is later safely rendered by a `markdown_viewer_widget`.
+
+## 6. Conclusion: The Moat
+
+Creating an LLM that evaluates a text "well" is easy today. What is difficult is creating a **Governance Architecture**. By separating the agnostic standard (YAML/JSON) from the backend engineering implementation, we have created a future-proof system that mitigates hallucinations by design and automates the educational ecosystem at a global scale.

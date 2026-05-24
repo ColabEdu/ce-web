@@ -1,0 +1,64 @@
+---
+title: "Directive"
+description: "Documentación de referencia para el recurso Directive en OAS."
+sidebar:
+  order: 4
+---
+
+El recurso `Directive` (Directiva) de la Capa 3 (C3) de OAS, define reglas de comportamiento inmutables o condiciones "duras" para el motor de evaluación de la IA.
+
+A diferencia de las rúbricas (que definen niveles cualitativos de competencia), las directivas imponen penalizaciones cuantitativas sistemáticas o reglas globales (ej. descuentos por faltas de ortografía) que el LLM debe ejecutar inexorablemente durante el proceso de corrección.
+
+## Esquema (Schema)
+
+### Metadata (`metadata`)
+
+| Campo | Tipo | Requerido | Descripción |
+|---|---|---|---|
+| `id` | `string` | Sí | Identificador único de la directiva (ej. `directive.es.c3.lomloe...`). |
+| `title` | `string` | Sí | Título descriptivo de la directiva. |
+| `country` | `string` | No | Código del país al que aplica la normativa (ej. `ES`). |
+| `layer` | `string` | Sí | Capa arquitectónica (usualmente `C3`). |
+
+### Especificación (`spec`)
+
+| Campo | Tipo | Requerido | Descripción |
+|---|---|---|---|
+| `target_subjects` | `string[]` | No | Lista de materias a las que aplica por defecto. |
+| `rules` | `array` | Sí | Lista de reglas o directivas a aplicar en la evaluación. |
+
+#### Estructura de `rules`
+
+Cada regla dentro de `rules` tiene los siguientes campos:
+
+| Campo | Tipo | Requerido | Descripción |
+|---|---|---|---|
+| `id` | `string` | Sí | Identificador de la regla. |
+| `type` | `string` | Sí | Tipo de regla (ej. `penalization`). |
+| `description` | `string` | Sí | La instrucción exacta (prompt duro) que el agente LLM procesará para evaluar. |
+| `max_deduction` | `number` | No | Puntuación máxima que se puede deducir por la infracción de esta regla. |
+
+## Ejemplo de Uso
+
+A continuación se muestra un ejemplo de una directiva de ortografía para el currículo español LOMLOE:
+
+```yaml
+apiVersion: colabedu.ai/v1beta1
+kind: Directive
+metadata:
+  id: "directive.es.c3.lomloe.ortografia.v1"
+  title: "Directiva Global de Corrección Ortográfica"
+  country: "ES"
+  layer: "C3"
+spec:
+  target_subjects: ["Lengua Castellana y Literatura", "Historia", "Filosofía"]
+  rules:
+    - id: "ortografia-01"
+      type: "penalization"
+      description: "Por cada falta de ortografía se deducirán 0.25 puntos de la nota final del ejercicio."
+      max_deduction: 2.0
+    - id: "tildes-01"
+      type: "penalization"
+      description: "Por cada error de acentuación (tildes) se deducirán 0.10 puntos."
+      max_deduction: 1.0
+```

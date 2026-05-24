@@ -1,0 +1,49 @@
+---
+title: "Determinism in AI Evaluation with OAS"
+description: "How ColabEdu's architecture and the OAS specification guarantee objective, mathematical, and hallucination-free pedagogical evaluations."
+sidebar:
+  order: 1
+---
+
+## The Challenge of Artificial Intelligence in Education
+
+One of the primary issues in adopting Large Language Models (LLMs) in the educational sector is their probabilistic nature. By default, an AI model "guesses" the next word based on statistical probabilities, which can lead to:
+
+- **Hallucinations:** Inventing criteria, metrics, or justifications that do not exist.
+- **Inconsistency:** The same exam graded twice might receive different scores.
+- **Positive Bias (Sycophancy):** The AI's tendency to be overly lenient to "please" the user, avoiding giving a "Zero" even when the answer is entirely incorrect.
+- **Opacity:** The inability to trace exactly why a specific score was awarded based on legal educational regulations.
+
+## The Solution: Assessment as Code
+
+**ColabEdu transforms probabilistic evaluation into a deterministic and mathematical process.**
+
+To achieve this, we have designed the **OAS (Open Assessment Specification)**, which forces the AI to behave as a strict execution engine rather than a creative conversationalist.
+
+### 1. Mathematical Rubrics and the "Mathematical Zero"
+
+Our architecture utilizes a standardized leveling system (typically **L0 to L4** or similar).
+
+The key to success lies in the explicit definition of **L0 (Level 0)**. Artificial intelligences, by design, avoid penalizing harshly. To counteract this bias, in OAS we **mathematically model ignorance, absence, or critical error** as an explicit state. If the student's response meets the conditions of the L0 state, the AI is algorithmically forced to assign that value, guaranteeing that an absolute zero is a valid and predictable output.
+
+### 2. The OAS Layered Architecture
+
+OAS ensures determinism by separating logic into strict layers:
+
+*   **Layer C0 (Immutable Normative):** This is the "Rosetta Stone". It converts legal PDFs (like BOE, SEP, IB) into immutable YAML files. Rubrics and evaluation criteria reside here. The AI cannot modify, invent, or ignore this layer; it can only read and apply it.
+*   **Layer C1 (Recipes and Exercises):** Defines the container of the exercise (e.g., a literature exam). It connects the student's text with the blocks from Layer C0 that must be applied.
+*   **Layer C3 (Algorithmic Directives and Defenses):** Injects hard behavioral rules, such as dialectal protection (e.g., "Do not penalize Canary Island *seseo*" or "Do not penalize Rio de la Plata *voseo*") and severity routing.
+
+### 3. Execution and Traceability (Chain of Thought)
+
+During grading, ColabEdu employs structured reasoning workflows (such as the *Chain of Thought* pattern). The AI must:
+1. Cite the exact evidence in the student's text.
+2. Reference the exact node from Layer C0 (e.g., `es.c0.lomloe.lcl.eso.1.v1`).
+3. Mathematically justify why the evidence matches level L1, L2, L3, etc.
+4. Emit a validated JSON under a strict schema, which our backend services (`ce-svc-ai-services`) parse and verify.
+
+If the AI fails to comply with the JSON schema or attempts to output a conversational format, the system rejects the output and retries the execution, ensuring that only deterministic data reaches the database and the student's report.
+
+## Summary
+
+Through the OAS specification, ColabEdu's engine successfully isolates the LLM's creativity and exploits its semantic reading comprehension capabilities, subjecting it to an algorithmic and mathematical harness. This enables institutional-level grading that is fair, auditable, traceable down to the millimeter to educational law, and above all, **deterministic**.

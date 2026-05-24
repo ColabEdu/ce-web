@@ -1,0 +1,39 @@
+---
+import Default from '@astrojs/starlight/components/Footer.astro';
+import type { Props } from '@astrojs/starlight/props';
+---
+
+<Default {...Astro.props} />
+
+<div class="colabedu-custom-footer">
+  <div class="footer-primary">
+    🌍 Built in California & Spain
+  </div>
+  <div class="footer-secondary">
+    San Jose | Madrid | Ciudad de México
+  </div>
+</div>
+
+<style>
+  .colabedu-custom-footer {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--sl-color-gray-6);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .footer-primary {
+    font-size: var(--sl-text-sm);
+    font-weight: 600;
+    color: var(--sl-color-gray-2);
+  }
+  
+  .footer-secondary {
+    font-size: var(--sl-text-xs);
+    color: var(--sl-color-gray-4);
+    letter-spacing: 0.05em;
+  }
+</style>

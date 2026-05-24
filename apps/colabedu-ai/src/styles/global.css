@@ -1,0 +1,19 @@
+@import "tailwindcss";
+
+@plugin "@tailwindcss/typography";
+@plugin "@tailwindcss/forms";
+
+@theme {
+  --font-family-sans: 'Inter', sans-serif;
+  
+  --color-primary: #4F46E5;
+  --color-secondary: #10B981;
+  --color-dark: #0F172A;
+  --color-neutral: #F8FAFC;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}

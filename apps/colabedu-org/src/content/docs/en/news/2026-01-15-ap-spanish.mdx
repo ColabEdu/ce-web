@@ -1,0 +1,35 @@
+---
+title: "New: Official Support for AP Spanish Language and Culture"
+description: "ColabEdu announces the full integration of AP Spanish standards for the College Board ecosystem."
+author: "Pedagogical Team"
+date: "2026-01-15"
+tags: ["AP", "Standards", "College Board", "Launch"]
+---
+
+We kick off 2026 with great news for high school teachers in the United States and international institutes! As of today, ColabEdu officially supports the **AP Spanish Language and Culture** standard from the College Board.
+
+## The Challenge of AP Assessment
+
+Preparing students for the AP exam requires meticulous attention to very strict rubrics that evaluate listening comprehension, reading comprehension, interpersonal writing, presentational writing, and oral expression. Until now, grading argumentative essays and oral presentations under the College Board's 5-point standard consumed countless hours for teachers.
+
+## How We've Mapped It in ColabEdu
+
+Our approach is based on the **OAS (Open Assessment Specification)**, structuring support across our base layers:
+
+1.  **Layer C0 (Taxonomy and Rubrics):**
+    We have integrated the official AP analytical rubrics into our unified `taxonomy.loc.us-ap.yaml` format. The system is now aware of dimensions such as *Task Completion*, *Topic Development*, and *Language Use*.
+
+2.  **Layer C1 (Interface Contract):**
+    Exercises now include metadata such as "Cultural Context" and "Audio Requirements" necessary for recording *Simulated Conversations* and *Cultural Presentations*.
+
+3.  **Layer C3 (AI Inference Engine):**
+    The `SpecManager` automatically injects prompts for the LLM, ensuring that the *feedback* students receive and the suggested grade for the teacher strictly adhere to the rigorous 1-to-5 scoring scale.
+
+## Documentation and Resources
+
+Want to see how it works under the hood? Visit our official documentation page on standard integration:
+
+-   [AP Spanish Standard in ColabEdu](/en/standards/ap-spanish)
+-   [Specification Examples (OAS)](/en/oas-spec)
+
+We continue working to democratize high-rigor assessment. See you in the next update!

@@ -1,0 +1,40 @@
+---
+title: "Referencia YAML OAS"
+description: "Índice de la documentación de referencia técnica detallada para todos los recursos OAS (Open Assessment Specification) en ColabEdu."
+sidebar:
+  order: 2
+---
+
+La arquitectura **OAS (Open Assessment Specification)** v1beta1 de ColabEdu se configura enteramente a través de un esquema estructurado de archivos YAML. Esta aproximación *Assessment as Code* permite versionar, auditar y reproducir todo el ecosistema pedagógico.
+
+En esta sección de referencia encontrarás información técnica detallada sobre la estructura, los esquemas y las opciones de configuración de cada uno de los *Kinds* (Tipos de Recursos) que componen la arquitectura.
+
+---
+
+## Tipos de Especificaciones Disponibles
+
+Cada especificación YAML en ColabEdu requiere ciertos campos obligatorios en su estructura base:
+- `apiVersion`: Versión de la API del esquema (actualmente `colabedu.ai/v1beta1`).
+- `kind`: Identificador del tipo de recurso.
+- `metadata`: Metadatos como `id`, `title`, `version`, que ayudan a indexar el recurso en el SpecManager.
+- `spec`: Configuración específica del tipo de recurso.
+
+A continuación, la documentación de referencia para cada tipo de recurso:
+
+### Recursos del Motor Core
+- [**Taxonomy**](../reference/taxonomy/): Define jerarquías geográficas, niveles organizativos y competencias.
+- [**SubjectArea**](../reference/subject-area/): Especifica la clasificación de una materia a nivel local e internacional.
+
+### Recursos de Normativa (C0)
+- [**Rubric**](../reference/rubric/): Estándares inmutables de aprendizaje, criterios de evaluación y descriptores por nivel.
+
+### Instrumentos y Ejercicios (C1 y C2)
+- [**Recipe**](../reference/recipe/): "Receta" ensambladora que asocia competencias C0 con tipos de ejercicio y criterios para generar una evaluación C2.
+- [**ExerciseSpec**](../reference/exercise-spec/): Esquema de una evaluación generada o definida manualmente, lista para resolver.
+- [**ExerciseType**](../reference/exercise-type/): Definición técnica del formato de interacción (ej. `free_text`, `multiple_choice`).
+- [**AssessmentItem**](../reference/assessment-item/): Componente atómico de evaluación interactiva, instanciado y empaquetado para el frontend.
+
+### Inteligencia Artificial y Agentes (C3)
+- [**Directive**](../reference/directive/): Directrices de comportamiento inmutables que limitan o guían al motor LLM.
+- [**Persona**](../reference/persona/): Perfiles de interacción del sistema (ej. Instructional Designer).
+- [**Gem**](../reference/gem/): Módulos extendidos de IA con configuración y herramientas embebidas.

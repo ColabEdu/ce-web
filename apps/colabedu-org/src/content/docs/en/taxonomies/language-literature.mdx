@@ -1,0 +1,343 @@
+---
+title: "Rubric (Layer C0): Compulsory Secondary Education (ESO) Spanish Language and Literature"
+description: "Detailed evaluation matrix for ESO Language and Literature based on the LOMLOE framework."
+---
+
+**Architecture:** Open Assessment Standard (OAS v1beta1)
+
+**Scope:** LOMLOE Compulsory Secondary Education (ESO) - Spain (Baseline Canary Islands)
+
+**🔗 Official Sources (National Gold Standard)**
+
+This catalog uses as a baseline the detailed evaluation matrices published by the Department of Education of the Government of the Canary Islands, considered the standard of greatest rigor and structuring at the national level:
+
+- [<u>Official Rubrics of Compulsory Secondary Education (ESO)</u>](https://www.gobiernodecanarias.org/educacion/web/secundaria/informacion/rubricas/rubricas-de-educacion-secundaria-obligatoria/)
+
+- [<u>Official Rubrics of Baccalaureate</u>](https://www.gobiernodecanarias.org/educacion/web/bachillerato/informacion/rubricas/)
+
+## 1. Algorithmic Logic: Points or Probabilities?
+
+In the OAS architecture, the AI **does not evaluate using probabilities**, but acts as a deterministic mathematical engine. To achieve this, the rubric imposes strict rules on how final points are calculated.
+
+### Weights and the Point Scale
+
+The percentages that accompany each criterion (e.g. 50%) are **multiplier weights**, not probabilities. Levels L0 to L4 act as a base scale (an index from 0% to 100%) that the backend translates to the student's final grade (e.g., out of 10 points).
+
+The standard mathematical translation is as follows:
+
+- **L4 (Outstanding):** 100% of the points assigned to that criterion.
+
+- **L3 (Notable):** 75% of the points.
+
+- **L2 (Sufficient/Good):** 50% of the points.
+
+- **L1 (Insufficient):** 25% of the points.
+
+- **L0 (Absence):** 0% of the points.
+
+*Practical example:* If "Written Production" is worth **50%** of an essay (5 points out of 10), and the AI classifies the text at level **L3**, the calculation is: 75% of 5 points = 3.75 points added to the overall grade.
+
+## 2. The 5-Level Architecture: Why not eliminate L0?
+
+Although the official Canary Islands PDF shows only 4 columns (*Insufficient, Sufficient/Good, Notable, Outstanding*), the OAS standard unfolds them into 5 levels (L0-L4). **It is algorithmically vital not to eliminate L0.**
+
+1.  **The Mathematical Zero (Absence of Evidence):** If a student turns in a blank exam, or answers on a completely unrelated topic, the AI needs a level that represents absolute zero (0%). That is L0.
+
+2.  **The Trap of the Spanish "Insufficient":** In the Spanish educational system, "Insufficient" covers a very wide range (from 1 to 4.9 out of 10).
+
+    - **L1** (25%) covers the failed attempt: the student tried, but the quality is very poor.
+
+    - **L0** (0%) covers inaction or total disconnection.
+
+If we eliminated L0, the AI would be forced to use L1 as the minimum base, "giving away" 25% of the points to a student who has not demonstrated any competence.
+
+## 3. Mapping Guide: From the Canary Islands PDF to Layer C0 (OAS)
+
+| **Element in Canary Islands PDF**           | **Mapping in Layer C0 (YAML)**                               | **Extraction Example**                     |
+|---------------------------------------------|--------------------------------------------------------------|--------------------------------------------|
+| **Specific Competence and Course**          | Defines the logical group of the block.                      | 1st ESO - Specific Competence 4            |
+| **Evaluation Criterion (Subcompetence)**    | Defines the main id of the block and the legal_reference.    | id: "es.rub.lomloe.nat.eso1.lcl.ce4_1.v1"  |
+| **Operational Descriptors**                 | Injected as metadata in tags for cross-searches.             | tags: \["CCL2", "CD1", "CPSAA4"\]          |
+| **"INSUFFICIENT" Column**                   | Unfolded into **L1** (Failed attempt) and **L0** (Absence).  | L1: Poor attempt... L0: No evidence.       |
+| **"SUFFICIENT / GOOD" Column**              | Mapped to level L2 (Basic/expected level).                   | L2: Understands in a guided way...         |
+| **"NOTABLE" Column**                        | Mapped to level L3 (High performance).                       | L3: Understands the overall meaning...     |
+| **"OUTSTANDING" Column**                    | Mapped to level L4 (Excellence/Mastery).                     | L4: Understands with autonomy and rigor... |
+
+## 4. YAML Block Kernel (Layer C0) - 1st ESO
+
+```yaml
+apiVersion: colabedu.ai/v1beta1  
+kind: BlockLibrary  
+metadata:  
+  id: "es.blib.lomloe.eso1.lcl.national_baseline.v1"  
+  title: "National Kernel LOMLOE - 1st ESO Spanish Language and Literature"  
+  description: "National Baseline built from the Canary Islands standard of excellence."  
+spec:  
+  blocks:  
+  
+    # =====================================================================  
+    # SPECIFIC COMPETENCE 1: PLURILINGUALISM AND LINGUISTIC DIVERSITY  
+    # =====================================================================  
+    
+    # Subcompetence / Criterion 1.1: Diversity of Spain  
+    - id: "es.rub.lomloe.nat.eso1.lcl.ce1_1.v1"  
+      level: "C0"  
+      type: "BLOCK_RUBRIC"  
+      authority_scope: "NATIONAL"  
+      metadata:  
+        tags: ["CCL1", "CP2", "CP3", "CD1", "CCEC1"]  
+        legal_reference: "LOMLOE - 1st ESO CE 1.1 (Scale Based on Canary Islands)"  
+      content: |  
+        Scale: 0-4  
+        Criteria:  
+        - Recognition of Diversity (100%):  
+          L4: excellently recognizes and values the linguistic diversity of Spain and its varieties, always demonstrating respect and a constructive spirit.  
+          L3: Recognizes linguistic diversity and its varieties, usually showing an attitude of respect.  
+          L2: Recognizes in a guided way some basic notions of languages and dialectal varieties.  
+          L1: Struggles to identify linguistic diversity and sometimes shows a lack of sensitivity or respect.  
+          L0: Fails to identify linguistic diversity nor demonstrates respect for the different varieties. Total absence of understanding.  
+    
+    # =====================================================================  
+    # SPECIFIC COMPETENCE 2: ORAL AND MULTIMODAL COMPREHENSION  
+    # =====================================================================  
+    
+    # Subcompetence / Criterion 2.1: Comprehension of overall meaning in audio/video  
+    - id: "es.rub.lomloe.nat.eso1.lcl.ce2_1.v1"  
+      level: "C0"  
+      type: "BLOCK_RUBRIC"  
+      authority_scope: "NATIONAL"  
+      metadata:  
+        tags: ["CCL2", "CP2", "CD2", "CD3", "CPSAA4", "CC3"]  
+        legal_reference: "LOMLOE - 1st ESO CE 2.1"  
+      content: |  
+        Scale: 0-4  
+        Criteria:  
+        - Oral Comprehension and Identification of Intention (100%):  
+          L4: Understands with excellent autonomy the overall meaning, relevant information, and the sender's intention in complex oral and multimodal texts.  
+          L3: Understands the overall meaning and relevant information, autonomously identifying the sender's intention in oral texts.  
+          L2: Understands in a guided way the overall meaning and the most relevant information of simple oral texts.  
+          L1: Has significant difficulties extracting the main idea or understanding the intention of the oral text, even with guidance.  
+          L0: Does not understand the oral or multimodal text at all; fails to extract any valid information.  
+    
+    # =====================================================================  
+    # SPECIFIC COMPETENCE 3: ORAL AND MULTIMODAL PRODUCTION  
+    # =====================================================================  
+    
+    # Subcompetence / Criterion 3.1: Production of oral texts  
+    - id: "es.rub.lomloe.nat.eso1.lcl.ce3_1.v1"  
+      level: "C0"  
+      type: "BLOCK_RUBRIC"  
+      authority_scope: "NATIONAL"  
+      metadata:  
+        tags: ["CCL1", "CCL3", "CD2", "CD3", "CPSAA4", "CC2", "CCEC3"]  
+        legal_reference: "LOMLOE - 1st ESO CE 3.1"  
+      content: |  
+        Scale: 0-4  
+        Criteria:  
+        - Fluency, Coherence, and Non-Verbal Resources (100%):  
+          L4: Produces oral and multimodal texts with excellent fluency, coherence, and cohesion, optimally adapting the register and masterfully using non-verbal resources.  
+          L3: Produces fluent and coherent oral texts, adapting to the context and effectively relying on non-verbal resources.  
+          L2: Produces in a guided way oral texts with acceptable fluency and coherence, making basic use of non-verbal resources.  
+          L1: Attempts to produce oral texts, but lacks fluency, their discourse is disjointed, and barely uses or misuses non-verbal resources.  
+          L0: Inability to produce the required oral text. Absence of discourse or total block.  
+    
+    # =====================================================================  
+    # SPECIFIC COMPETENCE 4: READING AND MULTIMODAL COMPREHENSION  
+    # =====================================================================  
+    
+    # Subcompetence / Criterion 4.1: Overall meaning and main ideas (Reading)  
+    - id: "es.rub.lomloe.nat.eso1.lcl.ce4_1.v1"  
+      level: "C0"  
+      type: "BLOCK_RUBRIC"  
+      authority_scope: "NATIONAL"  
+      metadata:  
+        tags: ["CCL2", "CD1", "CPSAA4", "CC3"]  
+        legal_reference: "LOMLOE - 1st ESO CE 4.1"  
+      content: |  
+        Scale: 0-4  
+        Criteria:  
+        - Literal and Inferential Comprehension (100%):  
+          L4: Understands and interprets with excellent autonomy the overall meaning, integrating explicit and implicit information from complex texts.  
+          L3: Understands the overall meaning and relevant information, regularly making logical inferences.  
+          L2: Understands in a guided way the explicit information and overall meaning of simple texts.  
+          L1: Reads mechanically, retaining only fragmented information without understanding the overall meaning.  
+          L0: Fails to identify the overall meaning or basic information of the text; ineffective reading.  
+    
+    # =====================================================================  
+    # SPECIFIC COMPETENCE 5: WRITTEN AND MULTIMODAL PRODUCTION  
+    # =====================================================================  
+    
+    # Subcompetence / Criterion 5.1: Planning and writing  
+    - id: "es.rub.lomloe.nat.eso1.lcl.ce5_1.v1"  
+      level: "C0"  
+      type: "BLOCK_RUBRIC"  
+      authority_scope: "NATIONAL"  
+      metadata:  
+        tags: ["CCL1", "CCL5", "CD2", "CPSAA4", "CC2"]  
+        legal_reference: "LOMLOE - 1st ESO CE 5.1"  
+      content: |  
+        Scale: 0-4  
+        Criteria:  
+        - Adequacy, Coherence, and Cohesion (100%):  
+          L4: Plans and writes excellently structured texts, optimally adapting to the communicative situation and using varied cohesion mechanisms.  
+          L3: Writes clear and well-structured texts, adapting to the context and using appropriate connectors.  
+          L2: Writes in a guided way texts with basic structure and acceptable coherence.  
+          L1: Produces a text, but its structure is confusing, ideas jump around without order, and cohesion is poor.  
+          L0: Writes texts without a clear structure, lacking coherence, and totally disconnected from the required register.
+```
+
+## 5. The "Fallback" Pattern: Canary Islands as National Gold Standard
+
+At the product and architecture level, a challenge arises: the Ministry of Education of Spain does not publish detailed rubrics (L0-L4), only plain text criteria. If we wait for each of the 17 Autonomous Communities to publish their own, the platform would suffer a "Cold Start" (lack of content).
+
+**The Commercial and Technical Strategy:**
+
+The level of precision and rigor of the rubrics published by the Government of the Canary Islands makes them the perfect **Gold Standard** for the country. We transform them into the national standard through the Spec Manager's **Inheritance and Fallback Pattern**.
+
+1.  **The Baseline (National Layer):** We ingest the Canary Islands rubrics, modify the region acronym to `nat` (National), and give them `authority_scope: NATIONAL`. As seen in the YAML above (`es.rub.lomloe.nat...`), they become the official default standard for every teacher in Spain.
+
+2.  **The Override (Regional Layer):** If later the Community of Madrid publishes its own official rubrics (perhaps slightly different), the *Curator Agent* will create them with the ID `es.rub.lomloe.mad...` and `authority_scope: REGIONAL`.
+
+3.  **In-Flight Resolution:** When a school in Madrid launches an assessment, the Spec Manager will first look for the `mad` block. If found, it applies it. If the school is in Valencia (where there is no `val` block yet), the Spec Manager makes a safe "fallback" and automatically uses the `nat` block (based on Canary Islands). This guarantees 100% coverage from day one.
+
+## 6. The Competency Dictionary: GitOps and the `goals` Table
+
+For the ecosystem to be a true **Assessment as Code** model, Git must be the single source of truth. We cannot allow competencies (like CCL1 or CD1) to be created manually in the database or exist only as free text in the rubric.
+
+### The "Curator Agent" Flow
+
+1.  The **Curator Agent** ingests the BOE (Official State Gazette) or the Regional Decree.
+
+2.  It identifies the *Operational Descriptors* of the Key Competences.
+
+3.  It generates and commits a YAML file with `BLOCK_GOAL` type blocks in the repository managed by the Spec Manager.
+
+This is an example of the YAML stored in Git (the Master Dictionary):
+
+```yaml
+apiVersion: colabedu.ai/v1beta1  
+kind: BlockLibrary  
+metadata:  
+  id: "es.blib.lomloe.competencias_clave.v1"  
+  title: "Global Dictionary of Key Competences and Operational Descriptors (LOMLOE)"  
+spec:  
+  blocks:  
+  
+    # =====================================================================  
+    # LINGUISTIC COMMUNICATION COMPETENCE (CCL)  
+    # =====================================================================  
+    - id: "es.goal.lomloe.ccl1.v1"  
+      level: "C0"  
+      type: "BLOCK_GOAL"  
+      authority_scope: "NATIONAL"  
+      metadata:  
+        category: "Linguistic Communication"  
+        short_tag: "CCL1"  
+      content: |  
+        Operational Descriptor CCL1:  
+        Expresses facts, concepts, thoughts, opinions or feelings orally,  
+        in writing, signed or multimodally, with clarity, precision and adequacy to different  
+        social and cultural contexts, participating in communicative interactions with a  
+        cooperative and respectful attitude both to exchange information, create  
+        knowledge and transmit opinions, and to build personal bonds.  
+    
+    # =====================================================================  
+    # DIGITAL COMPETENCE (CD)  
+    # =====================================================================  
+    - id: "es.goal.lomloe.cd1.v1"  
+      level: "C0"  
+      type: "BLOCK_GOAL"  
+      authority_scope: "NATIONAL"  
+      metadata:  
+        category: "Digital Competence"  
+        short_tag: "CD1"  
+      content: |  
+        Operational Descriptor CD1:  
+        Conducts internet searches taking into account criteria of validity, quality, timeliness  
+        and reliability, critically selecting the results and archiving them, to  
+        retrieve, reference and reuse them respecting intellectual property.
+```
+
+### Compilation and Execution (From YAML to Database)
+
+Once the YAML is in Gitea, the **Spec Manager** orchestrates the rest of the value chain:
+
+1.  **Upsert in the `goals` Table:** The Spec Manager compiler parses the `BLOCK_GOAL`s and inserts/updates them in the `goals` relational table in PostgreSQL (described in *Data Model D3*). This enables structured metrics in the *Audit Dashboard*.
+
+2.  **Embeddings Generation (pgvector):** The content of the competence ("Expresses facts, concepts...") is sent to the embeddings model. The resulting vector is saved in the table to enable *Semantic Discovery*.
+
+3.  **RAG Injection at Evaluation Time:** When the LLM is about to grade Criterion 5.1 (which has the `CCL1` tag), the system uses the ID relationship to extract the exact text of the Goal from the database and inject it into the prompt. The LLM evaluates based on the exact legal definition, reducing the risk of semantic hallucination to zero.
+
+## 7. From YAML to Dashboard: Traceability and Global Analytics (OAS Analytics)
+
+The main reason we structure the rubric and tags so rigorously is to enable **analytical intelligence**. The goal is that a grade does not simply end up as a static "7/10" on a report card, but becomes actionable data for Dashboards at different scales.
+
+### The Data Pipeline
+
+When a student submits an essay and the AI evaluates it using a C1 recipe that points to the C0 rubric `es.rub.lomloe.nat.eso1.lcl.ce4_1.v1`, the following happens in the ColabEdu backend:
+
+1.  **AI Evaluation:** The LLM evaluates the rubric and returns a structured JSON determining that the student reached level **L3** (Notable).
+
+2.  **Metadata Expansion:** The backend saves the result in the `student_exercise_evaluations` table and **reads the C0 block tags** (CCL2, CD1, CPSAA4, CC3).
+
+3.  **Granular Recording:** The system "credits" that L3 performance (and its proportional points) to the student's profile under *each* of those global competencies in the analytical metrics table.
+
+### The 3 Levels of Actionable Dashboards
+
+Thanks to this pipeline, we can generate instant visualizations for three key actors:
+
+#### A. Student Level (Micro Dashboard)
+
+- **The View:** A "spider web" chart (Radar Chart) showing the student's progress in Key Competences (CCL, CD, CPSAA).
+
+- **The Value:** Since tags like `CD1` (Digital Competence) are transversal, the student not only sees their "Language" grade. The dashboard adds up the points the student has earned in `CD1` by doing an essay in Language, presenting a project in Science, and programming in Robotics. It offers a real, omnidirectional competency profile.
+
+#### B. Teacher and Subject Level (Meso Dashboard)
+
+- **The View:** A Heatmap of the class against official Evaluation Criteria (e.g. CE 4.1, CE 5.1).
+
+- **The Value:** The teacher can open the dashboard and see that 80% of the class got L3 or L4 in "Written Production" (CE 5.1), but 60% is stuck at L1 in "Critical Assessment" (CE 4.2). This allows the teacher to intervene the following week by designing a class specifically focused on critical thinking, using empirical data instead of intuition.
+
+#### C. School, District, or Government Level (Macro / Audit Dashboard)
+
+- **The View:** The *National Educational Audit Dashboard* (described in B2G specs), showing "Pedagogical Drift" and Law Compliance metrics.
+
+- **The Value:** The Principal or Department of Education can visualize:
+
+  1.  *Compliance:* Are schools in this district evaluating against locked official C0 blocks (`authority_scope: REGIONAL` or `NATIONAL`), or are they cloning rubrics and lowering standards?
+
+  2.  *Equity:* Is an L3 ("Notable") in a southern high school equivalent to the same L3 in a northern high school for the same `ce4_1` block?
+
+  3.  *Systemic Progress:* Are global averages for Plurilingual Competence (CP2) going up or down at the autonomous community level year after year?
+
+## 8. The 48-Hour Playbook: Massive Curriculum Scaling (Massive Inbound)
+
+The strict YAML structuring is not just a technical advantage for analytics; it is the platform's biggest commercial **"Moat"**. While traditional publishers take months and require dozens of instructional designers to digitize a curriculum, ColabEdu's architecture allows for a "Massive Inbound" of an entire country's curriculum in a matter of days.
+
+This is the operational strategy to solve the national-level "Cold Start" problem:
+
+### Phase 1: Data Collection (Hours 1-4)
+
+Mass download of all official rubric PDFs (ESO and Baccalaureate) directly from the repositories of the most advanced Departments of Education (e.g., Government of the Canary Islands). This includes all subjects: Math, History, Biology, English, etc.
+
+### Phase 2: Curator Agent Configuration (Hours 5-8)
+
+The current document (`catalogo_c0_eso_lcl.md`) is injected into the **Curator Agent** (powered by massive context window models like Gemini 1.5 Pro) as its **"System Prompt" and "Few-Shot Example"**.
+
+- **Directive to Agent:** *"Take this official Biology PDF. Apply exactly the same YAML structure (`apiVersion`, `BLOCK_RUBRIC`, `BLOCK_GOAL`). Unfold the 'Insufficient' column into L0 and L1. Extract the operational descriptors to the tags list."*
+
+### Phase 3: Multimodal Batch Processing (Hours 8-24)
+
+The Curator Agent batch processes the entirety of the PDFs. Leveraging its multimodal capabilities (it can "read" complex tables in images), the agent extracts and maps the information, generating hundreds of YAML files.
+
+- Automatically, the agent applies the **Fallback Pattern**: it replaces the region acronym with `nat` (National) and elevates the `authority_scope` to `NATIONAL`, turning the autonomous community work into the Gold Standard for all of Spain.
+
+### Phase 4: GitOps Validation and Deployment (Day 2)
+
+1.  **Human-In-The-Loop (HITL) Review:** "Pedagogical Architects" don't write content from scratch; they act as Code Reviewers. They supervise the Pull Requests (PRs) generated by AI in Gitea, verifying there are no hallucinations and that YAML syntax is perfect.
+
+2.  **Merge to Main:** PRs are approved and merged into the main branch of the specs repository.
+
+3.  **Upsert and Vectorization (Hour 48):** The **Spec Manager** detects the new commits in Git, performs a massive upsert into the PostgreSQL tables (`spec_definitions`, `goals`), and orders the generation of vector embeddings via pgvector.
+
+**The Result:** In 48 hours, ColabEdu goes from being an empty infrastructure to being the **only platform in the market with 100% of Spain's official curriculum preloaded, vectorized, and ready to mathematically evaluate** any subject and course, granting an immediate competitive advantage.

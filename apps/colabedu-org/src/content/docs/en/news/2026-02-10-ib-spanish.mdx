@@ -1,0 +1,35 @@
+---
+title: "New Feature: International Baccalaureate (IB Spanish B) Mapping"
+description: "Official support for grading oral and written interactions under the IB framework."
+author: "OAS Architecture Team"
+date: "2026-02-10"
+tags: ["IB", "International Baccalaureate", "Launch", "Standards"]
+---
+
+Continuing with our Q1 2026 roadmap, we are proud to announce the integration of the **International Baccalaureate (IB) - Spanish B (Language B)** into ColabEdu's `Grading V2` assessment engine.
+
+## Assessing under IB Criteria
+
+The International Baccalaureate is characterized by a holistic assessment, structured through different Criteria (e.g., Criterion A: Language, Criterion B: Message, Criterion C: Conceptual Understanding). Especially in the Individual Oral exam, the workload for teachers during the *Internal Assessment* is enormous.
+
+## Architectural Integration
+
+To provide native IB support on our platform, we have extended our YAML specifications:
+
+1. **C0 (IB Rubrics):** 
+   Our global taxonomy (`taxonomy.loc.int-ib.yaml`) now encapsulates IB band descriptors. You no longer have to transcribe the guide document; the platform automatically selects it when configuring the course as "IB Diploma Programme".
+   
+2. **C1 and C2 (UI Interactivity):** 
+   We have implemented new `Widgets` in the Flutter App to support visual stimuli (photographs) associated with the IB's transversal themes (Identities, Experiences, Human Ingenuity, Social Organization, Sharing the Planet).
+
+3. **C3 (Deterministic Grading):** 
+   The `SpecManager` restricts Artificial Intelligence models to evaluate argumentative essays and oral presentations exactly as an IBO examiner would, justifying the band score (e.g., 10-12 points) with direct references to the transcript.
+
+## Useful Links
+
+Explore how ColabEdu's architecture addresses the IB in the following resources:
+
+- [IB Spanish Standard Documentation](/en/standards/ib-spanish)
+- [Exercise Examples in our Specifications Repository](/en/specs-repository)
+
+With this update, ColabEdu takes a giant leap in the international market for bilingual institutes. More news on national education systems coming soon!

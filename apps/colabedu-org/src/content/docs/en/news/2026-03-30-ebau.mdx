@@ -1,0 +1,35 @@
+---
+title: "New Feature: University Entrance Exams Mock Tests (EBAU/EvAU)"
+description: "Preparation for university access in Spain with automated evaluation of text commentaries and essays."
+author: "OAS Architecture Team"
+date: "2026-03-30"
+tags: ["EBAU", "Spain", "University Entrance Exam", "Launch"]
+---
+
+And we're back with more updates for Spain! To complement our LOMLOE support, today we announce the launch of our support for the university access system in Spain: the **EBAU** (or EvAU, depending on the Autonomous Community).
+
+## The 2nd Year of Bachillerato Bottleneck
+
+The final year of Bachillerato is a long-distance race. Teachers of Spanish Language and Literature, History, and Foreign Language face enormous volumes of mock exams (text commentaries, 250-word essays, summaries). Manual grading time drastically limits the amount of *feedback* students receive before the actual exam.
+
+## Standardized Regional Criteria in ColabEdu
+
+The greatest difficulty of the EBAU is regional fragmentation: rubrics change by Autonomous Community.
+
+1.  **Regional Taxonomies (C0):**
+    Our directory hierarchy in `ce-specs` supports the *override* of properties at country and regional level (`loc.es`, `loc.es-madrid`, `loc.es-andalucia`). If a school is in Madrid, the system will automatically load the Grading Criteria of the Autonomous University of Madrid (for example, deducting exactly 0.25 points for a spelling mistake, according to the annual scale).
+
+2.  **UI Interactivity (C1):**
+    The "Learning Gym" (`app.colabedu.net`) allows students to input texts with strict time limits (locked timer), replicating the pressure of the actual exam.
+
+3.  **Deterministic Inference (C3):**
+    Through the `SpecManager` component, the AI acts as the most stringent university grader, generating detailed reports that separate the structural plane (coherence, cohesion) from the orthotypographical plane (spelling mistakes, accent marks).
+
+## References
+
+Are you interested in applying our C0/C3 model to your region's university entrance exams?
+
+-   [Review the Standards specification](/en/standards/ebau)
+-   [Specs and Taxonomies Repository](/en/specs-repository)
+
+With this update, ColabEdu aims to be the definitive tool to maximize the cut-off scores of schools that embrace AI in their classrooms.

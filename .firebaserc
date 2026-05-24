@@ -1,0 +1,57 @@
+{
+  "projects": {
+    "dev": "colabedu-dev",
+    "demo": "colabedu-demo",
+    "stage": "colabedu-stage",
+    "prod": "colabedu-prod"
+  },
+  "targets": {
+    "colabedu-demo": {
+      "hosting": {
+        "colabedu-org": [
+          "colabedu-org-demo"
+        ],
+        "colabedu-ai": [
+          "colabedu-ai-demo"
+        ],
+        "colabedu-net": [
+          "colabedu-net-demo"
+        ],
+        "colabedu-support": [
+          "colabedu-support-demo"
+        ]
+      }
+    },
+    "colabedu-prod": {
+      "hosting": {
+        "colabedu-net": [
+          "colabedu-net-prod"
+        ],
+        "colabedu-support": [
+          "colabedu-support-prod"
+        ],
+        "colabedu-ai": [
+          "colabedu-ai-prod"
+        ],
+        "colabedu-org": [
+          "colabedu-org-prod"
+        ]
+      }
+    },
+    "colabedu-stage": {
+      "hosting": {
+        "colabedu-org": [
+          "colabedu-org-stage"
+        ]
+      }
+    },
+    "colabedu-dev": {
+      "hosting": {
+        "colabedu-org": [
+          "colabedu-org-dev"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}

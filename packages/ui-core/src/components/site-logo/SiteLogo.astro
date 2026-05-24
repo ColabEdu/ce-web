@@ -1,0 +1,19 @@
+---
+import { Image } from "astro:assets";
+import { Icon } from "astro-icon/components";
+
+import { getLocaleFromUrl } from "@/js/localeUtils";
+import { getLocalizedRoute } from "@/js/translationUtils";
+import { getTranslatedData } from "@/js/translationUtils";
+
+const currLocale = getLocaleFromUrl(Astro.url);
+const siteData = getTranslatedData("siteData", currLocale);
+---
+
+<a
+  class="primary-focus text-foreground flex items-center text-xl"
+  href={getLocalizedRoute(currLocale, "/")}
+>
+  <Icon name="tabler/north-star" class="text-primary-accent size-10 p-2" aria-hidden="true" />
+  <p class="">{siteData.name}</p>
+</a>

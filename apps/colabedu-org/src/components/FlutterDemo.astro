@@ -1,0 +1,79 @@
+---
+// src/components/FlutterDemo.astro
+export interface Props {
+  route: string; // The specific route in the Flutter app (e.g. /demo/grading-v2)
+  height?: string; // Default '600px'
+  authMode?: 'static' | 'none'; // Defines if we pass a static demo token
+  appBaseUrl?: string; // Base URL of the flutter app
+}
+
+const {
+  route,
+  height = '600px',
+  authMode = 'none',
+  appBaseUrl = 'https://app.colabedu.net' // or localhost for dev
+} = Astro.props;
+
+// Generate token based on auth mode
+const tokenParam = authMode === 'static' ? '?token=demo_auth_readonly_123' : '';
+const iframeUrl = `${appBaseUrl}${route}${tokenParam}`;
+---
+
+<div class="flutter-demo-container">
+  <div class="flutter-demo-header">
+    <span class="demo-badge">Interactive Demo</span>
+    <span class="demo-url">{route}</span>
+  </div>
+  <iframe
+    src={iframeUrl}
+    class="flutter-iframe"
+    style={`height: ${height};`}
+    loading="lazy"
+    allow="clipboard-read; clipboard-write"
+    allowfullscreen
+  ></iframe>
+</div>
+
+<style>
+  .flutter-demo-container {
+    margin: 2rem 0;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: var(--sl-color-bg);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+
+  .flutter-demo-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem 1rem;
+    background-color: var(--sl-color-gray-6);
+    border-bottom: 1px solid var(--sl-color-gray-5);
+  }
+
+  .demo-badge {
+    background-color: var(--sl-color-accent);
+    color: var(--sl-color-text-invert);
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.25rem 0.5rem;
+    border-radius: 9999px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .demo-url {
+    font-family: var(--sl-font-mono);
+    font-size: 0.875rem;
+    color: var(--sl-color-gray-3);
+  }
+
+  .flutter-iframe {
+    width: 100%;
+    border: none;
+    display: block;
+    background-color: #ffffff; /* Typically flutter apps expect white background initially */
+  }
+</style>

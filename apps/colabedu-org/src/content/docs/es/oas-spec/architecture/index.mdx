@@ -1,0 +1,31 @@
+---
+title: Arquitectura Técnica (Overview)
+description: Introducción a la arquitectura técnica de OAS v1beta1 y sus principios de diseño.
+sidebar:
+  order: 1
+---
+
+**Arquitectura:** Open Assessment Standard (OAS v1beta1)
+
+**Propósito:** Explicar el funcionamiento técnico del motor de orquestación de LLMs, demostrando cómo la separación de responsabilidades (*Assessment as Code*) permite evaluar cualquier paradigma educativo hispanohablante sin requerir entrenamiento adicional de modelos (*Fine-Tuning*).
+
+## El Problema: El Monolito de "Prompt Engineering"
+
+Históricamente, las plataformas EdTech intentaron usar LLMs enviándoles un "Mega-Prompt" en texto plano. Este prompt contenía mezcladas la ley educativa, el texto a leer, las instrucciones de diseño del reporte (ej. *"usa negritas"* o *"crea una tabla en Markdown"*) y las reglas particulares del profesor.
+
+El modelo de lenguaje era forzado a actuar simultáneamente como evaluador pedagógico, analista legal y diseñador de frontend. **Las consecuencias de este enfoque eran desastrosas a escala de producción:**
+
+1. **Prompt Drift y Alucinaciones:** Los LLMs tienen un mecanismo de atención limitado. Al inundarlos con instrucciones contradictorias, el modelo sufría "amnesia", olvidando aplicar reglas críticas de calificación por gastar su capacidad en cuadrar el formato.
+2. **Fragilidad Técnica:** Si el LLM omitía un *tag* de formato, el parser del backend fallaba, provocando un error en cascada.
+3. **Dependencia Crítica del Fine-Tuning:** Se incurría en costes masivos entrenando modelos específicos por cada ley educativa, generando una obsolescencia rápida ante cualquier cambio curricular.
+
+## La Solución Modular
+
+Para solucionar este caos, la arquitectura de OAS descompone el problema en componentes especializados, de forma análoga a como la arquitectura de microservicios revolucionó el desarrollo web tradicional.
+
+A lo largo de las siguientes secciones de esta documentación, exploraremos en detalle los pilares técnicos que sostienen el ecosistema ColabEdu:
+
+1. [**Assessment as Code (Las 4 Capas):**](./capas/) Cómo fragmentamos el conocimiento usando el patrón MVC.
+2. [**El Motor de Evaluación (Late Binding y UI):**](./motor-evaluacion/) Cómo inyectamos el contexto en tiempo real e imponemos esquemas JSON estructurados.
+3. [**Ecosistema de Agentes:**](./agentes/) La red de inteligencias especializadas operando sobre el Spec Manager.
+4. [**Jerarquía GitOps:**](./gitops/) El modelo de herencia de repositorios que permite escalabilidad mundial.

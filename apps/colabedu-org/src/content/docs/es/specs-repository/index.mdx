@@ -1,0 +1,139 @@
+---
+title: "Repositorio de Especificaciones (OAS YAML)"
+description: "Ejemplos base de los archivos YAML públicos que definen la arquitectura OAS en ColabEdu."
+sidebar:
+  order: 1
+---
+
+## Introducción al Repositorio
+
+La arquitectura **OAS (Open Assessment Specification)** v1beta1 de ColabEdu se basa en archivos YAML fuertemente tipados. Estos archivos actúan como el código fuente legal y pedagógico de la plataforma, convirtiendo normativas abstractas en estructuras de datos ejecutables por la Inteligencia Artificial.
+
+El ecosistema se divide en múltiples "Kinds" (Tipos) de recursos de Kubernetes-style:
+
+1. **Taxonomy:** Define jerarquías geográficas, niveles organizativos y habilidades transversales.
+2. **BlockLibrary (C0):** Contiene la normativa inmutable (rúbricas y objetivos).
+3. **ExerciseSpec (C1/C2):** Define la estructura de un examen o instrumento de evaluación.
+4. **AgentDirective (C3):** Define las reglas de comportamiento duro para el motor LLM.
+
+A continuación, exploramos ejemplos reales de estos archivos extraídos de nuestro repositorio `ce-specs`.
+
+---
+
+## 1. Taxonomías (Taxonomy)
+
+Las taxonomías organizan el mundo. En lugar de crear bases de datos separadas para cada país, OAS define la geografía y los niveles educativos como código.
+
+**Ejemplo: Taxonomía Geográfica de España (`taxonomy.loc.es.yaml`)**
+
+```yaml
+apiVersion: colabedu.ai/v1beta1
+kind: Taxonomy
+metadata:
+  id: loc.es
+  type: location_country
+  active: true
+  name: España
+  flag: 🇪🇸
+  languages: [es-ES]
+spec:
+  regions:
+    - id: loc.es.mad
+      name: Comunidad de Madrid
+      active: true
+      flagAsset: assets/flags/es/mad.svg
+    - id: loc.es.cat
+      name: Catalunya
+      active: true
+      languages: [ca-ES]
+      flagAsset: assets/flags/es/cat.svg
+    - id: loc.es.and
+      name: Andalucía
+      active: true
+      flagAsset: assets/flags/es/and.svg
+  orgLevels:
+    - id: org.lvl.es.infantil
+      name: Infantil
+    - id: org.lvl.es.primaria
+      name: Primaria
+    - id: org.lvl.es.eso
+      name: ESO
+    - id: org.lvl.es.bachillerato
+      name: Bachillerato
+```
+
+---
+
+## 2. Especificación de Ejercicios (ExerciseSpec)
+
+Un `ExerciseSpec` combina un contexto (el estímulo o lectura) con preguntas específicas y apunta a las competencias (objetivos de aprendizaje) que deben evaluarse.
+
+**Ejemplo: Ejercicio Narrativo ELPAC - California (`us.ca.c2.elpac.ccss.narrative.v1.yaml`)**
+
+```yaml
+apiVersion: colabedu.ai/v1beta1
+kind: ExerciseSpec
+metadata:
+  type: external_assessment
+  organization: CDE
+  year: 2024
+  targetCourseRef: us.ca.c0.ccss.writing.v1
+  id: us.ca.c2.elpac.ccss.narrative.v1
+  title: 'ELPAC Mock - CCSS Narrative: A Change of Mind'
+spec:
+  context: '# Narrativo
+
+    Todos tenemos momentos en la vida que cambian nuestra forma de ver el mundo.'
+  exercises:
+  - id: q1
+    type: free_text
+    prompt: Narra una experiencia personal que haya cambiado tu forma de pensar sobre
+      algo importante.
+    expectedOutputFormat: markdown
+    maxScore: 5.0
+    targetCompetencies:
+    - w.9-10.1
+    - w.9-10.1.a
+    - w.9-10.1.b
+    - w.9-10.1.c
+    - w.9-10.1.d
+    - w.9-10.1.e
+```
+
+En este ejemplo, la IA recibe la instrucción de que esta pregunta de texto libre (`free_text`) evalúa el subconjunto de competencias `w.9-10.1` a `w.9-10.1.e` del Common Core (CCSS). 
+
+---
+
+## 3. Bibliotecas de Bloques y Rúbricas (BlockLibrary - C0)
+
+*Nota: Para ver ejemplos completos de la Capa C0 (Rúbricas), visita la sección de [Taxonomías](/docs/es/taxonomies/language-literature) o la documentación específica por país en la sección de [Estándares](/docs/es/standards/index).*
+
+La estructura YAML de la Capa C0 mapea las leyes educativas en nodos evaluables (`BLOCK_RUBRIC`). El motor `SpecManager` lee estos archivos y los ingresa en una base de datos PostgreSQL vectorizada para realizar evaluaciones RAG (Retrieval-Augmented Generation).
+
+```yaml
+# Estructura conceptual de un BLOCK_RUBRIC
+type: BLOCK_RUBRIC
+id: es.c0.lomloe.lcl.eso.1.v1.ce.2.1
+content: Comprender el sentido global...
+metadata:
+  levels:
+    l0: "No comprende..."
+    l1: "Comprende parcialmente..."
+    l2: "Comprende..."
+    l3: "Comprende con detalle..."
+    l4: "Comprende de forma excepcional..."
+```
+
+## Conclusión
+
+Al tratar el marco pedagógico como código (`Assessment as Code`), ColabEdu elimina la ambigüedad en el proceso de calificación de la IA. El uso de YAML garantiza que los currículos sean versionables (GitOps), auditables por humanos y directamente consumibles por los sistemas de inferencia.
+
+---
+
+## 📚 Referencia Técnica Detallada
+
+Para consultar todos los esquemas, campos obligatorios y ejemplos estructurados de los *Kinds* de OAS, consulta nuestra **[Referencia YAML Detallada](/es/specs-repository/oas-yaml-reference/)**. AllÍ encontrarás páginas especializadas para:
+
+- **Taxonomy**, **SubjectArea** y **Rubric** (C0)
+- **Recipe**, **ExerciseSpec**, **ExerciseType** y **AssessmentItem** (C1/C2)
+- **Directive**, **Persona** y **Gem** (C3)

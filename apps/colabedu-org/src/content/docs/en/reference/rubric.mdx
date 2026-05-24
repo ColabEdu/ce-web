@@ -1,0 +1,72 @@
+---
+title: "Rubric"
+description: "Reference documentation for the Rubric resource in OAS."
+sidebar:
+  order: 9
+---
+
+The `Rubric` resource is part of Layer 0 (C0) of OAS, acting as the immutable or "normative" source of truth for exercise grading.
+
+Rubrics map the grading criteria of official exams (such as AP or IB) or evaluation blocks defined in educational laws (such as LOMLOE or TEKS) to a quantifiable structure for AI.
+
+## Schema
+
+### Metadata (`metadata`)
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `name` | `string` | Yes | Unique identifier for the rubric (e.g., `global.c0.ap...`). |
+| `displayName` | `string` | Yes | Human-readable name in the UI. |
+| `description` | `string` | Yes | Detailed description of the rubric and its normative context. |
+| `tags` | `string[]` | No | Keywords to facilitate catalog search. |
+| `version` | `string` | Yes | Semantic version of the resource. |
+
+### Specification (`spec`)
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `taxonomyRef` | `string` | No | Reference to the ID of the curriculum or standard it belongs to (e.g., `global.ap_collegeboard_standards.v1`). |
+| `subject` | `string` | No | Human-readable name of the subject. |
+| `educationLevel` | `string` | No | Educational level. |
+| `criteria` | `array` | Yes | List of criteria or dimensions to evaluate. |
+
+#### `criteria` Structure
+
+Each criterion represents an evaluation dimension (for example, "Content" or "Language Use").
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `id` | `string` | Yes | Criterion ID (e.g., `content`). |
+| `name` | `string` | Yes | Human-readable name of the criterion. |
+| `description` | `string` | Yes | Detailed explanation of what is evaluated in this dimension. |
+| `levels` | `object` | Yes | Mapping of performance levels to their respective textual descriptors. The keys of this object represent grades or levels (e.g., `sobresaliente`, `insuficiente`). |
+
+## Usage Example
+
+Below is an example of an official AP Spanish Literature rubric for comparing texts:
+
+```yaml
+apiVersion: colabedu.ai/v1beta1
+kind: Rubric
+metadata:
+  name: global.c0.ap.spanish_literature.essay.text_comparison.v1.v1.6a4ae1
+  displayName: Essay - Text Comparison
+  description: Scoring guidelines for AP Spanish Literature based on a 0-5 scale.
+  tags:
+  - AP
+  - Spanish Literature
+  version: 1.0.0
+spec:
+  taxonomyRef: global.ap_collegeboard_standards.v1
+  subject: AP Spanish Literature and Culture
+  educationLevel: Advanced Placement
+  criteria:
+  - id: content
+    name: Content
+    description: The extent to which the essay compares themes...
+    levels:
+      sobresaliente: The essay compares the theme in both texts using relevant evidence...
+      notable: The essay compares the theme in both texts; evidence is appropriate but uneven...
+      suficiente_bien: The essay discusses the theme in both texts; examples are descriptive...
+      insuficiente: The essay may attempt to address one or both texts but does not discuss the theme...
+```

@@ -1,0 +1,64 @@
+---
+title: "Spanish Educational Law (LOMLOE)"
+description: "Master Compendium of Educational Regulations (LOMLOE): ESO and Bachillerato in the 17 Autonomous Communities."
+sidebar:
+  order: 3
+---
+
+In the Spanish educational system, the legal architecture is inherently hierarchical and highly decentralized. This normative complexity is the main cause of "Pedagogical Drift" in schools and, at the same time, fits perfectly with ColabEdu's **Hierarchical Specification Graph (OAS)** model.
+
+For artificial intelligence (our *Curator Agent*) to evaluate with legal precision, a generic prompt is not enough; it needs to ingest the exact letter of the law. This document serves as the **Source of Truth** of the official URLs from which the system will extract the competence blocks, basic knowledge, and evaluation criteria to convert them into `RUBRIC_BLOCKS` (Layer C0).
+
+## 🏛️ The Spanish Legal Architecture (The 50% / 60% Rule)
+
+Curriculum deployment in Spain follows a three-level legislative cascade:
+
+1. **The Organic Law (The Framework):** The LOMLOE dictates the guiding principles.
+2. **The Royal Decree (The 50/60%):** The Central Government establishes the "minimum teachings". These occupy **50% of school time** in Autonomous Communities with a co-official language (Catalonia, Galicia, Basque Country, Valencia, Balearic Islands, Navarre) and **60%** in those without one.
+3. **The Autonomous Decree (The remaining 50/40%):** Each Autonomous Community publishes its own curricular Decrees to expand, localize, and complete the remaining percentage in its territory (the regional "Delta").
+4. **Development Orders (The Detail):** In many regions (like Andalusia or Aragon), the Decree only gives the framework, while a subsequent "Order" contains the exact basic knowledge tables that ColabEdu needs to ingest.
+
+## 🇪🇸 1. National Regulations (Government of Spain - MEFP)
+
+This is the immutable legal basis for the entire national territory (Published in the BOE). In ColabEdu's architecture, these Royal Decrees make up the master recipe with `authority_scope: "NATIONAL"`.
+
+- **General Organic Law (LOMLOE):** [Organic Law 3/2020, of December 29](https://www.boe.es/buscar/act.php?id=BOE-A-2020-17264)
+- **Basic ESO Curriculum:** [Royal Decree 217/2022, of March 29](https://www.boe.es/buscar/act.php?id=BOE-A-2022-4975)
+- **Basic Bachillerato Curriculum:** [Royal Decree 243/2022, of April 5](https://www.boe.es/buscar/act.php?id=BOE-A-2022-5521)
+
+## 🗺️ 2. Autonomous Regulations (The Regional "Delta" - Level C1)
+
+Below are the direct links to the official Decrees and Orders of the 17 Autonomous Communities. These documents generate the `recipe_blocks` with `authority_scope: "REGIONAL"`, which inherit directly from the national block.
+
+*(List of regions included in the Spanish source)*
+
+- **Andalusia (BOJA):** Uses Decrees for general order and Orders for detailed knowledge and criteria.
+- **Catalonia (DOGC):** ESO is encompassed within the concept of "Basic Education" and organized by transversal knowledge areas. Requires highly specialized JSONB mapping in ColabEdu's Spec Manager.
+- **Navarre (BON):** Enormous logistical complexity due to differentiated linguistic models. ColabEdu's AI engine must inject the `selectedLanguage` parameter based on the student's enrollment model.
+- **Basque Country (BOPV):** The Basque curriculum strongly emphasizes the **Exit Profile**. ColabEdu Recipes must link directly to these transversal exit competences.
+
+## 🌍 3. MEFP Territories (Ceuta, Melilla, and Centers Abroad)
+
+The Autonomous Cities of Ceuta and Melilla are governed directly by the curriculum developed by the Ministry of Education (MEFP).
+- *ColabEdu Impact:* Schools in Ceuta, Melilla, and Spanish Institutes abroad inherit directly from the NATIONAL Master Recipe (`es.lomloe.v1`) complemented with the specific blocks of these orders, without requiring a complex intermediate regional delta.
+
+## 🧠 Architectural and Strategic Implications for ColabEdu
+
+The collection and centralization of this immense amount of legal literature presents a massive technical challenge that forms the main value (the defensive *Moat*) of ColabEdu.
+
+### 1. Structured Ingestion (The "Table Soup")
+
+Official bulletin PDFs are designed for human printing, frequently splitting critical evaluation tables across pages.
+**Engineering Directive:** The Python ETL pipeline (`colabedu_dataloader.py`) must attack the BOE APIs or scrape the **HTML/XML** versions whenever possible. Plain text or XML preserves the two-dimensional structure of the tables, preventing the LLM from suffering "visual hallucinations" when trying to reconstruct the relationship between a descriptor and its score.
+
+### 2. The "Seed-and-Bloom" Governance Model
+
+We must not ingest and copy legal text blindly.
+1. **The Seed:** We extract the standardized ID of the criterion (e.g., `CE.LCL.1.1`) and its exact unaltered description. This is persisted immutably with `authority_scope: "NATIONAL"` or `"REGIONAL"`.
+2. **Contextual Mapping (Metadata):** In the `metadata.tags` JSONB field, ingestion scripts must inject the associated transversal key competences (e.g., *CCL* - Linguistic Communication Competence) to enable faceted *Semantic Discovery*.
+
+### 3. Pedagogical Drift Audit (The B2G Sale to the Administration)
+
+Having the law perfectly mapped and hierarchical in Layer C0 is not just a technical requirement to evaluate well; it is the main B2G product: the **National Educational Audit Dashboard**.
+
+By having Autonomous Decrees logically separated from the National Decree in the relational graph, ColabEdu can offer a regional Department of Education a dashboard with an instant heat map: *"Are teachers in Seville evaluating essays aligned with the criteria of Andalusia's Decree 102/2023, or are they deviating?"*.

@@ -1,0 +1,45 @@
+---
+title: "ExerciseType"
+description: "Documentación de referencia para el recurso ExerciseType en OAS."
+sidebar:
+  order: 6
+---
+
+El recurso `ExerciseType` define componentes modulares de Interfaz de Usuario (UI) y de Evaluación. Este YAML le indica al frontend qué widgets (Flutter/React) debe renderizar, y al backend de reportes cómo debe visualizarse o estructurarse el informe de corrección (ej. tabla, gráfico, texto enriquecido).
+
+## Esquema (Schema)
+
+### Metadata (`metadata`)
+
+| Campo | Tipo | Requerido | Descripción |
+|---|---|---|---|
+| `id` | `string` | Sí | Identificador único del tipo de ejercicio (ej. `global.exercise_type.free_text.v1`). |
+| `title` | `string` | Sí | Nombre legible del formato (ej. "Texto Libre / Ensayo"). |
+| `version` | `string` | Sí | Versión semántica del recurso. |
+
+### Especificación (`spec`)
+
+| Campo | Tipo | Requerido | Descripción |
+|---|---|---|---|
+| `type` | `string` | Sí | El alias principal usado por el sistema (ej. `free_text`, `audio_response`, `multiple_choice`). |
+| `ui_components` | `string[]` | Sí | Lista de identificadores de componentes UI a inyectar dinámicamente en el frontend (ej. `markdown_editor_widget`). |
+| `report_components` | `string[]` | No | Lista de componentes a usar en la generación de reportes evaluativos (ej. `free_text_rubric_evaluation`). |
+
+## Ejemplo de Uso
+
+A continuación se muestra un ejemplo para el tipo de ejercicio de "Texto Libre":
+
+```yaml
+apiVersion: colabedu.ai/v1beta1
+kind: ExerciseType
+metadata:
+  id: global.exercise_type.free_text.v1
+  title: "Texto Libre / Ensayo"
+  version: "1.0.0"
+spec:
+  type: "free_text"
+  ui_components:
+    - "markdown_editor_widget"
+  report_components:
+    - "free_text_rubric_evaluation"
+```

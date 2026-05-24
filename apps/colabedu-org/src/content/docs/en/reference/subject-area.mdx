@@ -1,0 +1,43 @@
+---
+title: "SubjectArea"
+description: "Reference documentation for the SubjectArea resource in OAS."
+sidebar:
+  order: 10
+---
+
+The `SubjectArea` resource (Subject Area) of OAS Layer 0 (C0) is used to catalog and identify specific subjects within the standards database. It allows grouping rubrics and exercises under the same discipline.
+
+## Schema
+
+Unlike more complex resources, `SubjectArea` primarily uses the `metadata` block to define its properties.
+
+### Metadata (`metadata`)
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `name` | `string` | Yes | Unique identifier for the subject area (e.g. `global.c0.subject_area.ap_spanish...`). |
+| `displayName` | `string` | Yes | Human-readable name of the subject in the UI. |
+| `description` | `string` | Yes | Description or context of this area. |
+| `tags` | `string[]` | No | Keywords for indexing (e.g. `[global, ap_spanish_language_and_culture]`). |
+| `version` | `string` | Yes | Semantic version. |
+
+### Specification (`spec`)
+
+In most base implementations of ColabEdu, the `spec` block of a `SubjectArea` is optional, as the meta-information is sufficient to index and link resources.
+
+## Usage Example
+
+Below is an example of a `SubjectArea` for AP Spanish:
+
+```yaml
+apiVersion: colabedu.ai/v1beta1
+kind: SubjectArea
+metadata:
+  name: global.c0.subject_area.ap_spanish_language_and_culture.v1
+  displayName: AP Spanish Language and Culture
+  description: 'Subject Area: AP Spanish Language and Culture'
+  tags:
+  - global
+  - ap_spanish_language_and_culture
+  version: 1.0.0
+```

@@ -1,0 +1,14 @@
+---
+import EditorialPage from "../../components/templates/EditorialPage.astro";
+import { languages } from "../../i18n/ui";
+
+export function getStaticPaths() {
+    return Object.keys(languages).map((lang) => {
+        return { params: { lang } };
+    });
+}
+
+const { lang } = Astro.params;
+---
+
+<EditorialPage lang={lang} />

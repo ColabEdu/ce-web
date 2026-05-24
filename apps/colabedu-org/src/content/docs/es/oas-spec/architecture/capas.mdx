@@ -1,0 +1,30 @@
+---
+title: Assessment as Code (Capas)
+description: El patrón MVC aplicado a la educación, separando el conocimiento en capas YAML inmutables.
+sidebar:
+  order: 2
+---
+
+## "Assessment as Code"
+
+ColabEdu resolvió la crisis técnica de los LLMs monolíticos aplicando principios fundamentales de ingeniería de software: el patrón **MVC (Model-View-Controller)** y la **Inyección de Dependencias**. Fragmentamos el monolito de evaluación en un "Grafo de Capas" atómicas, versionables e inmutables (C0, C1, C2, C3).
+
+### El Grafo de Capas (YAML) Explicado
+
+```mermaid
+graph TD
+    C0[C0: Estándares / La Ley] --> C1[C1: Recipe / La Receta Pedagógica]
+    C2[C2: Contexto / Realia] --> C1
+    C3[C3: Directives / El Profesor] --> C1
+    
+    style C1 fill:#f9f,stroke:#333,stroke-width:2px
+    style C0 fill:#bbf,stroke:#333,stroke-width:1px
+    style C2 fill:#bfb,stroke:#333,stroke-width:1px
+    style C3 fill:#fbb,stroke:#333,stroke-width:1px
+```
+
+
+- **Capa C0 (Estándares / La Ley):** Diccionarios vectorizados de rúbricas puras (ej. LOMLOE, AP, IB). Actúan como la "Constitución" inmutable del sistema.
+- **Capa C2 (Contexto / Realia):** El "Suelo Semántico". Artículos de noticias o literatura preprocesados para *Retrieval-Augmented Generation* (RAG).
+- **Capa C3 (Directives / El Profesor):** Reglas de sobrescritura, tono pedagógico y adaptaciones curriculares individuales.
+- **Capa C1 (Recipe / La Receta Pedagógica):** La instancia que parametriza y orquesta a las demás capas. Especifica el `ExerciseType` (contrato UI/ingeniería) a utilizar e inyecta la ley (C0), el contexto (C2) y las directrices (C3).

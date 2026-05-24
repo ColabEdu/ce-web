@@ -1,0 +1,56 @@
+---
+title: "AssessmentItem"
+description: "Documentación de referencia para el recurso AssessmentItem en OAS."
+sidebar:
+  order: 3
+---
+
+El recurso `AssessmentItem` representa un ítem o unidad atómica de evaluación ya instanciada y lista para ser consumida. Contiene el contexto y las instrucciones (prompts) directos que verá el estudiante o que ejecutará el sistema, además de enlazar con la receta que define cómo se evaluará.
+
+## Esquema (Schema)
+
+### Metadata (`metadata`)
+
+| Campo | Tipo | Requerido | Descripción |
+|---|---|---|---|
+| `id` | `string` | Sí | Identificador único del ítem (ej. `global.c2.ib...`). |
+| `title` | `string` | Sí | Título descriptivo del ejercicio. |
+| `version` | `string` | Sí | Versión semántica del recurso. |
+
+### Especificación (`spec`)
+
+| Campo | Tipo | Requerido | Descripción |
+|---|---|---|---|
+| `recipe_ref` | `string` | Sí | Referencia al ID del recurso `Recipe` que dictamina cómo evaluar esta unidad. |
+| `exercise_type` | `string` | Sí | Identificador del formato de UI/UX o de interacción (ej. `core.etype.socratic_debate.v1`). |
+| `context` | `object` | No | Metadatos pedagógicos libres (ej. `subject`, `topic`, `subtopic`) para clasificación. |
+| `prompt` | `string` | Sí | Texto en formato Markdown con las instrucciones detalladas del ejercicio o el contenido del estímulo principal. |
+
+## Ejemplo de Uso
+
+A continuación se muestra un ejemplo de un `AssessmentItem` para un debate de Español B HL:
+
+```yaml
+apiVersion: colabedu.ai/v1beta1
+kind: AssessmentItem
+metadata:
+  id: global.c2.ib.spanish_b.hl.identities.debate.v1
+  title: 'Debate: El impacto de las redes sociales en la identidad'
+  version: 1.0.0
+spec:
+  recipe_ref: global.c1.ib.spanish_b.hl.socratic_debate.v1
+  exercise_type: core.etype.socratic_debate.v1
+  context:
+    subject: IB Spanish B HL
+    topic: Identidades
+    subtopic: Creencias y valores, lengua e identidad
+  prompt: |
+    ### Instrucciones del Debate
+
+    En la unidad de **Identidades**, hemos explorado cómo diversos factores externos moldean quiénes somos.
+    
+    Para este ejercicio, vas a participar en un debate socrático con tu tutor virtual sobre el siguiente tema:
+    **"Las redes sociales tienen un impacto mayormente negativo en la formación de la identidad personal y cultural de los jóvenes."**
+
+    Para comenzar, escribe un párrafo inicial (al menos 3 oraciones) estableciendo tu postura...
+```

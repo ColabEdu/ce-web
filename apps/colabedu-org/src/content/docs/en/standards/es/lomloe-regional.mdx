@@ -1,0 +1,161 @@
+---
+title: "LOMLOE Master Rubric Guide: Regional Integration and OAS Architecture"
+description: "How ColabEdu digitizes both the national core and regional evaluation matrices to prevent Pedagogical Drift."
+---
+
+**Subject:** Spanish Language and Literature (ESO and Bachillerato)
+
+**Architecture:** Open Assessment Standard (OAS v1beta1)
+
+In the Spanish educational system, assessment is not a monolithic block. **LOMLOE** establishes a national framework (Royal Decree), but delegates 40-50% of the curriculum and exact grading guidelines to the **Autonomous Communities (Autonomous Decrees)**.
+
+To avoid "Pedagogical Drift", the ColabEdu platform uses the **C0 Layer (Immutable Standards)** to digitize both the national core and the regional evaluation matrices.
+
+## 1. The Legal Framework (The Regulatory Cascade)
+
+Before programming the rubrics, the *Curator Agent* must map the origin of the law:
+
+1. **National Level (The "What"):**
+   - **ESO:** Royal Decree 217/2022.
+   - **Bachillerato:** Royal Decree 243/2022.
+   - *Contribution:* Defines Specific Competencies and Evaluation Criteria in plain text. It does not provide rubric scales (L0-L4).
+2. **Autonomous Level (The "How"):**
+   - Each Department of Education publishes its own decrees and *guidance documents* to transform the national text into applicable rubrics.
+
+## 2. Official Regional Links and Guides (Sources for Ingestion)
+
+To build the block library (`BlockLibrary`), our Pedagogical Architects extract the grading matrix from the following official sources:
+
+### 📍 Canary Islands (Gold Standard for Rubrics)
+
+The Canary Islands is the pioneer community in publishing highly structured evaluation matrices. They are the ideal standard to translate into ColabEdu's C0 Layer.
+
+- **Resource:** Evaluation criteria rubrics (Department of Education).
+- **Reference link:** [Rubrics LOMLOE Canary Islands (Gobiernodecanarias.org)](https://www.gobiernodecanarias.org/educacion/web/ordenacion_curricular/lomloe/)
+- **Scale:** Insufficient (1-4) | Sufficient/Good (5-6) | Notable (7-8) | Outstanding (9-10). Translated to OAS as **L0 to L4**.
+
+### 📍 Andalusia
+
+Andalusia publishes guidelines through the Averroes portal and the Educational Evaluation Agency (AGAEVE), promoting criteria-based evaluation through operational descriptors.
+
+- **Resource:** Instructions on evaluation and Didactic Programming (Averroes Portal).
+- **Reference link:** [Averroes Portal - LOMLOE Curriculum](https://www.juntadeandalucia.es/educacion/portals/web/ced/lomloe)
+
+### 📍 Community of Madrid
+
+Madrid uses the Raíces system. Although they are more conservative in publishing open matrices, their Decrees 65/2022 (ESO) and 64/2022 (Bachillerato) dictate the weighting of competencies.
+
+- **Resource:** Curriculum of the Community of Madrid.
+- **Reference link:** [Education Community of Madrid - LOMLOE](https://www.comunidad.madrid/servicios/educacion/curriculo-lomloe)
+
+### 📍 Catalonia (Bilingual Context)
+
+Decree 175/2022 (ESO) in Catalonia emphasizes the integrated treatment of languages and the plurilingualism vector.
+
+- **Resource:** XTEC - New curriculum.
+- **Reference link:** [XTEC - Basic Education Curriculum](https://xtec.gencat.cat/ca/curriculum/)
+
+## 3. Implementation in OAS: The Standards Catalog (C0 Layer)
+
+When the *Curator Agent* processes the above documents, it generates a `BlockLibrary` that acts as the evaluation "Kernel". Here we show how blocks from different regions coexist, maintaining rigor and traceability (Authority Scope: REGIONAL).
+
+```yaml
+apiVersion: colabedu.ai/v1beta1
+kind: BlockLibrary
+metadata:
+  id: "es.blib.lomloe.eso_bach.lcl.regional_kernels.v1"
+  title: "LOMLOE Regional Rubrics Kernel - Spanish Language and Literature"
+spec:
+  blocks:
+    # ==============================================================
+    # C0 LAYER: ANDALUSIA RUBRIC (1st BACHILLERATO - CRITICAL ESSAY)
+    # ==============================================================
+    - id: "es.rub.lomloe.and.bach1.lcl.ce3_1.v1"
+      level: "C0"
+      type: "BLOCK_RUBRIC"
+      authority_scope: "REGIONAL"
+      metadata:
+        region: "Andalucía"
+        tags: ["CCL", "CD", "CC"]
+        legal_reference: "Decreto 102/2023 Andalucía - CE 3.1"
+      content: |
+        Scale: 0-4 (0=Insufficient, 1=Sufficient, 2=Good, 3=Notable, 4=Outstanding)
+        Criteria:
+        - Argumentation and Structure (40%):
+          L4: Innovative and solidly backed thesis. Impeccable thematic progression.
+          L2: Clear thesis but with predictable arguments. Visible basic structure.
+          L0: Lack of central thesis. Disconnected paragraphs.
+        - Adequacy to Academic Register (30%):
+          L4: Masterful use of formal register, no colloquialisms. Precise technical vocabulary.
+          L2: Maintains a formal tone most of the time, with occasional drops to informal register.
+          L0: Widespread use of slang, colloquialisms, and poor vocabulary.
+        - Normative and Spelling (30%):
+          L4: Maximum orthotypographical rigor (0-1 errors).
+          L2: Sporadic errors that do not impede comprehension.
+          L0: Multitude of serious spelling mistakes that hinder reading.
+
+    # ==============================================================
+    # C0 LAYER: CANARY ISLANDS RUBRIC (3rd ESO - TEXTUAL PRODUCTION)
+    # ==============================================================
+    - id: "es.rub.lomloe.can.eso3.lcl.ce5_1.v1"
+      level: "C0"
+      type: "BLOCK_RUBRIC"
+      authority_scope: "REGIONAL"
+      metadata:
+        region: "Canarias"
+        tags: ["CCL", "CD", "CPSAA"]
+        legal_reference: "Rúbricas Consejería Canarias - CE 5.1"
+      content: |
+        Scale: 0-4
+        Criteria:
+        - Coherence, Cohesion and Adequacy (50%):
+          L4: Adapts perfectly to the communicative situation. Connectors guarantee fluid transition.
+          L2: Adapts to the situation, although presents slight logical jumps or repetitive connectors.
+          L0: Inadequacy to context. Chaotic structure without cohesion mechanisms.
+        - Normative Correction (50%):
+          L4: Impeccable. 0-2 slight spelling errors.
+          L2: Several noticeable errors, but understandable message.
+          L0: Serious and multiple syntactic and spelling errors.
+```
+
+## 4. Final Assembly: The Teacher's Recipe (C1, C2, C3 Layer)
+
+A teacher in Seville (Andalusia) assigns an essay on "The Generation of '27". When creating the assignment on the platform, the interface automatically associates the block `es.rub.lomloe.and...` to guarantee regional regulatory compliance.
+
+This is how the final manifest (`Recipe`) assembled by the system looks:
+
+```yaml
+apiVersion: colabedu.ai/v1beta1
+kind: Recipe
+metadata:
+  id: "es.recipe.bach1.ensayo_gen27.sevilla.v1"
+  title: "Essay: Vanguardism in the Generation of '27"
+  owner_id: "teacher-sevilla-882"
+spec:
+  # C1 LAYER: EXERCISE TYPE
+  level: "C1"
+  exerciseTypeRef: "es.etype.essay.standard.v1"
+
+  # INHERITANCE (Connecting the Andalusian standard)
+  rubric_refs:
+    - "es.rub.lomloe.and.bach1.lcl.ce3_1.v1" # Strict pointer to C0 Andalusia
+
+  # C2 LAYER: CONTEXT (The Knowledge Base for AI RAG)
+  variables:
+    topic: "The impact of European vanguards on the poetry of Federico García Lorca and Luis Cernuda."
+    word_count_min: 500
+    word_count_max: 800
+
+  # C3 LAYER: EXECUTION DIRECTIVES (Evaluator Agent Orchestration)
+  execution_directives:
+    persona: "Act as a High School Literature teacher from the Andalusian system. Be constructive and focus on the development of critical thinking."
+    feedback_language: "es-ES"
+    scoring_strategy: "CRITERION_BASED_SUM"
+    pedagogical_hints:
+      - trigger: "Confusion between surrealism and creationism"
+        action: "Recommend reviewing chapter 4 of the textbook."
+```
+
+### The B2G Value (Business-to-Government)
+
+With this architecture, the **Educational Audit Dashboard** can show the Department of Education of Andalusia if teachers are using the official rubric (C0) approved by them, or if they have cloned and "deviated" the rubric, allowing the measurement of **Pedagogical Drift** in real time for the first time.

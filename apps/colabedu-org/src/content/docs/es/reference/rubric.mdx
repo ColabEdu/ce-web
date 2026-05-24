@@ -1,0 +1,72 @@
+---
+title: "Rubric"
+description: "Documentación de referencia para el recurso Rubric en OAS."
+sidebar:
+  order: 9
+---
+
+El recurso `Rubric` (Rúbrica) forma parte de la Capa 0 (C0) de OAS, actuando como la fuente de verdad inmutable o "normativa" para la corrección de ejercicios.
+
+Las rúbricas mapean los criterios de calificación de exámenes oficiales (como AP o IB) o los bloques de evaluación definidos en leyes educativas (como LOMLOE o TEKS) a una estructura cuantificable para la IA.
+
+## Esquema (Schema)
+
+### Metadata (`metadata`)
+
+| Campo | Tipo | Requerido | Descripción |
+|---|---|---|---|
+| `name` | `string` | Sí | Identificador único de la rúbrica (ej. `global.c0.ap...`). |
+| `displayName` | `string` | Sí | Nombre legible en la UI. |
+| `description` | `string` | Sí | Descripción detallada de la rúbrica y su contexto normativo. |
+| `tags` | `string[]` | No | Palabras clave para facilitar la búsqueda en el catálogo. |
+| `version` | `string` | Sí | Versión semántica del recurso. |
+
+### Especificación (`spec`)
+
+| Campo | Tipo | Requerido | Descripción |
+|---|---|---|---|
+| `taxonomyRef` | `string` | No | Referencia al ID del currículo o estándar al que pertenece (ej. `global.ap_collegeboard_standards.v1`). |
+| `subject` | `string` | No | Nombre legible de la asignatura. |
+| `educationLevel` | `string` | No | Nivel educativo. |
+| `criteria` | `array` | Sí | Lista de criterios o dimensiones a evaluar. |
+
+#### Estructura de `criteria`
+
+Cada criterio representa una dimensión de evaluación (por ejemplo, "Contenido" o "Uso del Lenguaje").
+
+| Campo | Tipo | Requerido | Descripción |
+|---|---|---|---|
+| `id` | `string` | Sí | ID del criterio (ej. `content`). |
+| `name` | `string` | Sí | Nombre legible del criterio. |
+| `description` | `string` | Sí | Explicación detallada de qué se evalúa en esta dimensión. |
+| `levels` | `object` | Sí | Mapeo de niveles de desempeño a sus respectivos descriptores textuales. Las claves de este objeto representan las notas o niveles (ej. `sobresaliente`, `insuficiente`). |
+
+## Ejemplo de Uso
+
+A continuación se muestra un ejemplo de una rúbrica oficial de AP Spanish Literature para comparar textos:
+
+```yaml
+apiVersion: colabedu.ai/v1beta1
+kind: Rubric
+metadata:
+  name: global.c0.ap.spanish_literature.essay.text_comparison.v1.v1.6a4ae1
+  displayName: Essay - Text Comparison
+  description: Scoring guidelines for AP Spanish Literature based on a 0-5 scale.
+  tags:
+  - AP
+  - Spanish Literature
+  version: 1.0.0
+spec:
+  taxonomyRef: global.ap_collegeboard_standards.v1
+  subject: AP Spanish Literature and Culture
+  educationLevel: Advanced Placement
+  criteria:
+  - id: content
+    name: Contenido
+    description: The extent to which the essay compares themes...
+    levels:
+      sobresaliente: The essay compares the theme in both texts using relevant evidence...
+      notable: The essay compares the theme in both texts; evidence is appropriate but uneven...
+      suficiente_bien: The essay discusses the theme in both texts; examples are descriptive...
+      insuficiente: The essay may attempt to address one or both texts but does not discuss the theme...
+```

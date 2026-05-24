@@ -1,0 +1,73 @@
+---
+title: "Recipe"
+description: "Documentación de referencia para el recurso Recipe en OAS."
+sidebar:
+  order: 2
+---
+
+El recurso `Recipe` funciona como un enlazador o "receta de ensamblaje" pedagógico. Vincula configuraciones del motor de flujos de trabajo (como si se debe calcular una puntuación o emitir un reporte) con los componentes pedagógicos de la Capa 0 (rúbricas y objetivos) y los tipos de ejercicios.
+
+Un `Recipe` indica al sistema *qué elementos* combinar para generar o evaluar un examen.
+
+## Esquema (Schema)
+
+### Metadata (`metadata`)
+
+| Campo | Tipo | Requerido | Descripción |
+|---|---|---|---|
+| `id` | `string` | Sí | Identificador único de la receta (ej. `global.c1.ib...`). |
+| `title` | `string` | Sí | Título descriptivo de la receta de evaluación. |
+| `version` | `string` | Sí | Versión semántica del recurso (ej. `1.0.0`). |
+
+### Configuración del Flujo (`workflow_parameters`)
+
+| Campo | Tipo | Requerido | Descripción |
+|---|---|---|---|
+| `scoring` | `boolean` | No | Indica si el motor debe asignar una puntuación cuantitativa a la evaluación. |
+| `report_format` | `string` | No | Formato esperado para el informe final (ej. `PDF`). |
+
+### Ensamblaje Pedagógico (`pedagogical_assembly`)
+
+| Campo | Tipo | Requerido | Descripción |
+|---|---|---|---|
+| `rubric` | `object` | No | Contiene las capas de rúbricas (C0) a aplicar. |
+| `rubric.layers` | `array` | No | Lista de capas de rúbrica. Cada capa incluye `level` (ej. `C0`), `block_id` (referencia a la rúbrica) y `status` (ej. `ACTIVE`). |
+
+### Especificación de Ensamblaje (`spec.assembly`)
+
+El bloque principal donde se consolidan las referencias a inyectar en el prompt del LLM.
+
+| Campo | Tipo | Descripción |
+|---|---|---|
+| `param_refs` | `string[]` | Lista de IDs de `ExerciseType` (parámetros base del formato del ejercicio). |
+| `rubric_refs` | `string[]` | Lista de IDs de recursos `Rubric` para aplicar criterios evaluativos. |
+| `directive_refs` | `string[]` | Lista de IDs de recursos `Directive` (instrucciones duras para la IA). |
+
+## Ejemplo de Uso
+
+A continuación se muestra un ejemplo de un `Recipe` para una evaluación de IB Literature:
+
+```yaml
+apiVersion: colabedu.ai/v1beta1
+kind: Recipe
+metadata:
+  id: global.c1.ib.spanish_a.literature.hl.2026.v1.v1.cf8880
+  title: Recipe for IB 2026 - Spanish A Literature HL - Assessment Outline
+  version: 1.0.0
+workflow_parameters:
+  scoring: true
+  report_format: PDF
+pedagogical_assembly:
+  rubric:
+    layers:
+    - level: C0
+      block_id: global.c0.ap.spanish_literature.essay.text_comparison.v1.v1.6a4ae1
+      status: ACTIVE
+spec:
+  assembly:
+    param_refs:
+    - global.exercise_type.free_text.v1
+    rubric_refs:
+    - global.c0.ap.spanish_literature.essay.text_comparison.v1.v1.6a4ae1
+    directive_refs: []
+```

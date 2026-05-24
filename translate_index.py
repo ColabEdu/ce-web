@@ -1,0 +1,98 @@
+import os
+
+filepath = '/home/jmolmo/git/colabedu/ce-web/apps/colabedu-net/src/pages/en/index.astro'
+
+with open(filepath, 'r', encoding='utf-8') as f:
+    content = f.read()
+
+replacements = {
+    'Recupera tu tiempo': 'Reclaim your time',
+    'Automatización de evaluación multimodal para docentes e instituciones.': 'Multimodal assessment automation for teachers and institutions.',
+    'Nuevo: Soporte oficial para Rúbricas LOMLOE y AP': 'New: Official support for LOMLOE and AP Rubrics',
+    'Recupera tus fines de semana. <br/>': 'Reclaim your weekends. <br/>',
+    'Deja que la IA califique por ti.': 'Let AI grade for you.',
+    'Los docentes pierden un promedio de 15 horas semanales en tareas administrativas. ColabEdu reduce ese tiempo a minutos. Evalúa audios, manuscritos y ensayos con precisión oficial del 99% sin salir de tu LMS.': 'Teachers lose an average of 15 hours a week on administrative tasks. ColabEdu reduces that time to minutes. Grade audio, handwritten assignments, and essays with 99% official precision without leaving your LMS.',
+    'Empezar a ahorrar tiempo hoy (Gratis)': 'Start saving time today (Free)',
+    'Ver soluciones para Instituciones': 'View solutions for Institutions',
+    'Pendientes': 'Pending',
+    'Ensayos Historia': 'History Essays',
+    'Orales Español': 'Spanish Orals',
+    'Calificado por IA': 'AI Graded',
+    'Ensayo: La Revolución Industrial': 'Essay: The Industrial Revolution',
+    'Estudiante: Ana García': 'Student: Ana Garcia',
+    '...impacto social fue debastador...': '...social impact was devestating...',
+    'Feedback IA: Error ortográfico ("devastador"). Además, profundiza en las consecuencias específicas para la clase trabajadora urbana.': 'AI Feedback: Spelling error ("devastating"). Additionally, dive deeper into the specific consequences for the urban working class.',
+    'Puntuación sugerida:': 'Suggested score:',
+    'La crisis invisible del aula': 'The invisible classroom crisis',
+    'Por qué los mejores profesores están dejando la profesión.': 'Why the best teachers are leaving the profession.',
+    'Agotamiento Real': 'Real Burnout',
+    '44 millones de docentes adicionales se necesitan para 2030. El 6.5% abandona la profesión cada año, principalmente por la carga de trabajo administrativa insostenible.': 'An additional 44 million teachers are needed by 2030. 6.5% leave the profession every year, mainly due to unsustainable administrative workloads.',
+    'Burocracia Paralizante': 'Paralyzing Bureaucracy',
+    'Diseñar rúbricas complejas y alinear evaluaciones manualmente con LOMLOE, TEKS o IB no debería ser tu trabajo de domingo por la tarde.': 'Designing complex rubrics and manually aligning assessments with LOMLOE, TEKS, or IB shouldn\'t be your Sunday afternoon job.',
+    'La Caja Negra de la IA': 'The AI Black Box',
+    'Los estudiantes usan IA para atajar. No luches contra el fraude con detectores fallidos; usa la IA como tu aliado para medir la maestría real.': 'Students use AI to take shortcuts. Don\'t fight fraud with flawed detectors; use AI as your ally to measure real mastery.',
+    'La Matemática del Ahorro': 'The Math of Time Saving',
+    'Datos basados en uso real en aulas piloto.': 'Data based on real use in pilot classrooms.',
+    'Carga Administrativa': 'Administrative Load',
+    'Reducción drástica en tiempos de corrección de escritura y orales.': 'Drastic reduction in grading times for writing and orals.',
+    'Ganados por Alumno': 'Saved per Student',
+    'Tiempo ahorrado en pre-análisis de cada ensayo o presentación.': 'Time saved on pre-analysis of each essay or presentation.',
+    'Sincronización Total': 'Total Synchronization',
+    'Feedback y notas fluyen directo a Canvas, Moodle o Classroom.': 'Feedback and grades flow directly to Canvas, Moodle, or Classroom.',
+    'Tiempo semanal dedicado a evaluación (Horas)': 'Weekly time spent on grading (Hours)',
+    'Funcionalidades "Anti-Tedio"': '"Anti-Toil" Features',
+    'Herramientas diseñadas específicamente para devolverte el tiempo.': 'Tools specifically designed to give you your time back.',
+    'De Manuscrito a Nota': 'From Handwriting to Grade',
+    'Nuestro OCR inteligente lee la caligrafía de tus alumnos (incluso la más difícil) y la evalúa contra tu rúbrica. Se acabó el descifrar papel por la noche.': 'Our intelligent OCR reads your students\' handwriting (even the toughest ones) and evaluates it against your rubric. No more deciphering paper at night.',
+    'Evaluación Oral "One-Shot"': 'One-Shot Oral Assessment',
+    'No más grabaciones infinitas. La IA transcribe, mide la fluidez y detecta errores conceptuales en una sola pasada. Tú solo revisas y firmas.': 'No more endless recordings. The AI transcribes, measures fluency, and detects conceptual errors in a single pass. You just review and sign off.',
+    'Generador de Rúbricas': 'Rubric Generator',
+    'Sube tu programa o guía docente. La IA extrae los criterios y redacta descriptores SBG profesionales. Lo que antes tomaba una tarde, ahora toma 30 segundos.': 'Upload your syllabus or teaching guide. The AI extracts criteria and drafts professional SBG descriptors. What used to take an afternoon now takes 30 seconds.',
+    'Ecosistema Educativo': 'Educational Ecosystem',
+    'Caminos Personalizados': 'Custom Pathways',
+    'Para Departamentos': 'For Departments',
+    'Estandarización sin reuniones. Asegura que todo el equipo evalúe con el mismo rigor usando Recetas Maestras compartidas, eliminando la discrepancia en las calificaciones.': 'Standardization without meetings. Ensure the whole team grades with the same rigor using shared Master Recipes, eliminating grading discrepancies.',
+    'Para Gobiernos y Ministerios': 'For Governments and Ministries',
+    'Cumplimiento LOMLOE/TEKS invisible. Analítica de brechas de aprendizaje a escala nacional sin pedirle informes extra al docente.': 'Invisible LOMLOE/TEKS compliance. National-scale learning gap analytics without asking teachers for extra reports.',
+    'Revitaliza tu catálogo. Convierte libros estáticos en Tutores Socráticos interactivos.': 'Revitalize your catalog. Turn static books into interactive Socratic Tutors.',
+    'Feedback en minutos. El "Gimnasio del Aprendizaje" 24/7 para fallar y aprender antes del examen.': 'Feedback in minutes. The 24/7 "Learning Gym" to fail and learn before the exam.',
+    'Integración nativa con tus herramientas': 'Native integration with your tools',
+    'Sincronización bidireccional: Notas, tareas y anuncios fluyen sin copiar un solo dato.': 'Two-way sync: Grades, assignments, and announcements flow without copying a single piece of data.',
+    'La Metodología de 3 Fases': 'The 3-Phase Methodology',
+    'Seguridad pedagógica e integridad académica.': 'Pedagogical security and academic integrity.',
+    'The Gym (Práctica)': 'The Gym (Practice)',
+    'El alumno entrena con una IA socrática que guía, no resuelve. Cero esfuerzo de corrección para ti, máximo aprendizaje para ellos.': 'Students train with a Socratic AI that guides, but doesn\'t solve. Zero grading effort for you, maximum learning for them.',
+    'Game Day (Prueba)': 'Game Day (Test)',
+    'Evaluación proctoreada y blindada en el aula. Sin asistencia de IA, garantizando la integridad total de la prueba.': 'Proctored and shielded assessment in the classroom. No AI assistance, ensuring total test integrity.',
+    'The Audition (Desempeño)': 'The Audition (Performance)',
+    'Tú revisas la pre-evaluación multimodal generada por la IA. Validas, añades tu toque personal y firmas. Ahorro de tiempo masivo.': 'You review the multimodal pre-assessment generated by AI. Validate, add your personal touch, and sign off. Massive time savings.',
+    'Vuelve a ser maestro. Deja de ser un administrativo.': 'Go back to being a teacher. Stop being an administrator.',
+    'Únete a los docentes que ya han recuperado sus fines de semana con ColabEdu.': 'Join the teachers who have already reclaimed their weekends with ColabEdu.',
+    'Probar ColabEdu Pro Gratis': 'Try ColabEdu Pro for Free',
+    'Sin tarjeta de crédito requerida para empezar.': 'No credit card required to start.',
+    'Tu copiloto de inteligencia pedagógica.': 'Your pedagogical intelligence copilot.',
+    'Producto': 'Product',
+    'Características': 'Features',
+    'Integraciones': 'Integrations',
+    'Precios': 'Pricing',
+    'Recursos': 'Resources',
+    'Guías para Docentes': 'Teacher Guides',
+    'Casos de Éxito': 'Success Stories',
+    'Contacto': 'Contact',
+    'Soporte': 'Support',
+    'Ventas': 'Sales',
+    'Privacidad': 'Privacy',
+    'Todos los derechos reservados.': 'All rights reserved.',
+    "'Antes de ColabEdu'": "'Before ColabEdu'",
+    "'Con ColabEdu'": "'With ColabEdu'",
+    "'Horas Semanales de Corrección'": "'Weekly Grading Hours'",
+    " + ' Horas'": " + ' Hours'"
+}
+
+for es_text, en_text in replacements.items():
+    content = content.replace(es_text, en_text)
+
+with open(filepath, 'w', encoding='utf-8') as f:
+    f.write(content)
+
+print(f"Translated {filepath}")

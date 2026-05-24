@@ -1,0 +1,75 @@
+---
+title: "Taxonomy"
+description: "Documentación de referencia para el recurso Taxonomy en OAS."
+sidebar:
+  order: 1
+---
+
+El recurso `Taxonomy` permite definir y estructurar conceptos jerárquicos como ubicaciones geográficas (países, regiones), niveles organizativos del sistema educativo, o estándares curriculares agrupados por materia y nivel.
+
+Esta estructura es fundamental para organizar y filtrar otros recursos dentro del sistema (como rúbricas y ejercicios).
+
+## Esquema (Schema)
+
+### Metadata (`metadata`)
+
+| Campo | Tipo | Requerido | Descripción |
+|---|---|---|---|
+| `id` | `string` | Sí | Identificador único de la taxonomía (ej. `loc.es` o `std.intl`). |
+| `type` | `string` | Sí | El tipo de taxonomía. Valores comunes: `location_country`, `standard`. |
+| `active` | `boolean` | Sí | Indica si la taxonomía está activa. |
+| `name` | `string` | Sí | Nombre legible de la taxonomía (ej. "España" o "International Standards"). |
+| `flag` | `string` | No | (Solo para ubicaciones) Emoji de la bandera del país. |
+| `languages` | `string[]` | No | Lista de idiomas soportados (ej. `[es-ES]`). |
+| `countryRef` | `string` | No | Referencia a qué país aplica (ej. `global`). |
+
+### Especificación (`spec`) - Variante `location_country`
+
+Cuando `type: location_country`, el bloque `spec` define regiones y niveles organizativos:
+
+| Campo | Tipo | Descripción |
+|---|---|---|
+| `regions` | `array` | Lista de regiones/estados del país. Cada región contiene `id`, `name`, `active`, `languages` y `flagAsset`. |
+| `orgLevels` | `array` | Lista de niveles organizativos (ej. Primaria, Secundaria). Cada uno contiene `id` y `name`. |
+
+### Especificación (`spec`) - Variante `standard`
+
+Cuando `type: standard`, el bloque `spec` define estándares, niveles y materias:
+
+| Campo | Tipo | Descripción |
+|---|---|---|
+| `standards` | `array` | Lista de estándares (ej. IB, AP). Cada uno contiene `id`, `name`, `active`, además de `levels` y `subjects`. |
+| `levels` | `array` | (Dentro de un estándar) Niveles educativos que cubre (ej. DP, MYP). Contiene `id`, `name`, `active`. |
+| `subjects` | `array` | (Dentro de un estándar) Materias. Contiene `id`, `name`, `active` y `applicableLevels` (lista de `id`s de niveles). |
+
+## Ejemplo de Uso
+
+A continuación se muestra un ejemplo de un `Taxonomy` de tipo `location_country`:
+
+```yaml
+apiVersion: colabedu.ai/v1beta1
+kind: Taxonomy
+metadata:
+  id: loc.es
+  type: location_country
+  active: true
+  name: España
+  flag: 🇪🇸
+  languages: [es-ES]
+spec:
+  regions:
+    - id: loc.es.mad
+      name: Comunidad de Madrid
+      active: true
+      flagAsset: assets/flags/es/mad.svg
+    - id: loc.es.cat
+      name: Catalunya
+      active: true
+      languages: [ca-ES]
+      flagAsset: assets/flags/es/cat.svg
+  orgLevels:
+    - id: org.lvl.es.infantil
+      name: Infantil
+    - id: org.lvl.es.primaria
+      name: Primaria
+```

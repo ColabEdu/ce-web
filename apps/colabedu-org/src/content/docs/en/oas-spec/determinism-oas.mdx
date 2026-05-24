@@ -1,0 +1,59 @@
+---
+title: "Rubric-bound Assessment with OAS"
+description: "How ColabEdu's architecture and the OAS specification ensure rigorous, structured, and hallucination-resistant pedagogical assessments."
+sidebar:
+  order: 4
+---
+
+## The Challenge of Artificial Intelligence in Education
+
+One of the main problems in adopting Large Language Models (LLMs) in the educational field is their probabilistic nature. By default, an AI model "guesses" the next word based on statistical probabilities, which can lead to:
+
+-   **Hallucinations:** Invention of criteria, metrics, or justifications.
+-   **Inconsistency:** The same exam graded twice may receive different scores.
+-   **Positive Bias (Sycophancy):** The AI's tendency to be excessively lenient to "please" the user, avoiding giving a "Zero" even if the answer is completely incorrect.
+-   **Opacity:** Inability to trace why a specific score was awarded based on legal regulations.
+
+## The Solution: Assessment as Code
+
+From a mathematical engineering purist perspective, LLMs are inherently stochastic (probabilistic), not deterministic. Promising "absolute mathematical determinism" in the text generation of a neural network is inaccurate.
+
+However, **ColabEdu manages to transform this stochastic behavior into a process of "Pedagogical Determinism" through software engineering**.
+
+To achieve this, the **OAS (Open Assessment Specification)** specification builds a "code exoskeleton" that encloses the probabilistic model in a very narrow algorithmic corridor, forcing it to behave as a strict execution engine under two fundamental principles:
+
+### Structural Determinism (The Data Contract)
+The OAS architecture mandates that all assessment output must strictly comply with JSON schemas (Structured Outputs) validated by our YAML files. This mathematically guarantees that the assessment will always have the same form: an array of criteria, an exact numerical score, and feedback per criterion. If the AI attempts to generate free-form or conversational text, the validation layer rejects the response.
+
+### Criterion Determinism (The Immutable Rubrics)
+When a generic model evaluates text, it can be creative and invent criteria on the fly. OAS blocks the LLM's "possibility space" through the mandatory injection of the `Rubric` entity (C0 layer). The model cannot invent what to evaluate; it is algorithmically forced to measure the text solely and exclusively against the immutable matrix of the official rubric (LOMLOE, IB, etc.).
+
+---
+
+### 1. Strict Rubrics and the "Explicit Zero"
+
+Our architecture uses a system of standardized levels (typically **L0 to L4** or similar).
+
+The key to success lies in the explicit definition of **L0 (Level 0)**. Artificial intelligences, by design, avoid harsh penalties. To counteract this bias, in OAS, we **algorithmically model ignorance, absence, or critical error** as an explicit state. If the student's answer meets the conditions of the L0 state, the AI is algorithmically forced to assign that value, ensuring that an absolute zero is a valid and predictable output.
+
+### 2. The Layered Architecture of OAS
+
+OAS ensures determinism by separating logic into strict layers:
+
+*   **C0 Layer (Immutable Regulations):** This is the "Rosetta Stone." It converts legal PDFs (BOE, SEP, IB) into immutable YAML files. Rubrics and evaluation criteria reside here. The AI cannot modify, invent, or ignore this layer; it can only read and apply it.
+*   **C1 Layer (Recipes and Exercises):** Defines the exercise container (e.g., a literature exam). It connects the student's text with the C0 Layer blocks that must be applied.
+*   **C3 Layer (Algorithmic Guidelines and Defenses):** Injects hard behavioral rules, such as dialectal protection (e.g., "Do not penalize Canarian seseo" or "Do not penalize Rioplatense voseo") and severity routing.
+
+### 3. Execution and Traceability (Structured Evidence Trace)
+
+During grading, ColabEdu employs structured reasoning workflows (such as the *Structured Evidence Trace* pattern). The AI must:
+1.  Cite the exact evidence in the student's text.
+2.  Reference the exact C0 Layer node (e.g., `es.c0.lomloe.lcl.eso.1.v1`).
+3.  Explicitly justify why the evidence matches level L1, L2, L3, etc.
+4.  Output a validated JSON under a strict schema, which our backend services (`ce-svc-ai-services`) parse and verify.
+
+If the AI does not comply with the JSON schema or attempts to output a conversational format, the system rejects the output and retries the execution, ensuring that only deterministic data reaches the database and the student's report.
+
+## Summary
+
+Through the OAS specification, the ColabEdu engine manages to isolate the LLM's creativity and leverage its semantic reading comprehension capabilities, subjecting it to an algorithmic and structural harness. This enables institutional-level grading that is fair, auditable, traceable down to the educational law, and above all, **robust**.

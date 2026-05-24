@@ -1,0 +1,35 @@
+---
+title: "Novedad: Mapeo del Bachillerato Internacional (IB Spanish B)"
+description: "Soporte oficial para la corrección de orales e interacciones escritas bajo el marco del IB."
+author: "Equipo de Arquitectura OAS"
+date: "2026-02-10"
+tags: ["IB", "International Baccalaureate", "Lanzamiento", "Estándares"]
+---
+
+Continuando con nuestra hoja de ruta del primer trimestre de 2026, nos enorgullece anunciar la incorporación del **Bachillerato Internacional (IB) - Spanish B (Language B)** al motor de evaluación `Grading V2` de ColabEdu.
+
+## Evaluando bajo criterios IB
+
+El Bachillerato Internacional se caracteriza por una evaluación holística, estructurada a través de diferentes Criterios (Ej. Criterio A: Lengua, Criterio B: Mensaje, Criterio C: Comprensión conceptual). Especialmente en el examen Oral Individual, la carga de trabajo para los docentes durante el *Internal Assessment* es enorme.
+
+## Integración Arquitectónica
+
+Para dar soporte nativo al IB en nuestra plataforma, hemos extendido nuestras especificaciones en YAML:
+
+1. **C0 (Rúbricas IB):** 
+   Nuestra taxonomía global (`taxonomy.loc.int-ib.yaml`) ahora encapsula los descriptores de banda del IB. Ya no tienes que transcribir el documento de la guía; la plataforma lo selecciona automáticamente al configurar el curso como "IB Diploma Programme".
+   
+2. **C1 y C2 (Interactividad UI):** 
+   Hemos implementado nuevos `Widgets` en la App de Flutter para soportar estímulos visuales (fotografías) asociados a los temas transversales del IB (Identidades, Experiencias, Ingenio Humano, Organización Social, Compartiendo el Planeta).
+
+3. **C3 (Grading determinista):** 
+   El `SpecManager` restringe a los modelos de Inteligencia Artificial para que evalúen los ensayos argumentativos y las presentaciones orales exactamente como lo haría un examinador de la IBO, justificando la banda salarial (Ej. 10-12 puntos) con referencias directas a la transcripción.
+
+## Enlaces de interés
+
+Explora cómo la arquitectura del ColabEdu aborda el IB en los siguientes recursos:
+
+- [Documentación del Estándar IB Spanish](/es/standards/ib-spanish)
+- [Ejemplos de ejercicios en nuestro Repositorio de Especificaciones](/es/specs-repository)
+
+Con esta actualización, ColabEdu da un paso de gigante en el mercado internacional de institutos bilingües. ¡Pronto más novedades sobre sistemas educativos nacionales!

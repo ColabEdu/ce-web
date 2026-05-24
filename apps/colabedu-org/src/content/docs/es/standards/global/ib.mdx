@@ -1,0 +1,117 @@
+---
+title: "Bachillerato Internacional (IB)"
+description: "Compendio Maestro de Normativa Educativa para el Bachillerato Internacional (IB)."
+sidebar:
+  order: 1
+---
+
+A diferencia de los currículos nacionales hiper-localizados, el **Bachillerato Internacional (IB)** opera bajo un marco global, inmutable, transfronterizo y altamente estructurado.
+
+Su enfoque pedagógico fundamental se basa en la *evaluación criterial* (Criterion-related assessment). Esto significa que los estudiantes no son evaluados comparándolos entre sí (no existe una curva de campana), sino que sus trabajos son medidos contra descriptores de nivel de logro fijos, públicos y estandarizados. Esta rigidez estructural, combinada con la complejidad de sus matrices de evaluación, convierte al IB en el ecosistema perfecto (y a la vez el más exigente) para el modelo de **Assessment as Code (Evaluación como Código)** de la plataforma ColabEdu.
+
+Este documento sirve como el **Índice Maestro (Source of Truth)** de las guías y resúmenes oficiales del IB. El *Curator Agent* de ColabEdu utilizará estos marcos lógicos para comprender la ontología de los currículos y generar los `RUBRIC_BLOCKS` maestros en el sistema. Dado su carácter internacional, estos bloques se registrarán siempre con un `authority_scope: "GLOBAL"`.
+
+## 🌍 La Arquitectura de Evaluación del IB
+
+El ecosistema educativo del IB relevante para la educación secundaria y preuniversitaria se divide en programas consecutivos que mapean directamente con las etapas de ESO y Bachillerato, pero con una filosofía de progresión continua.
+
+1.  **MYP (Middle Years Programme / PAI):** Edades 11-16 (Equivalente a la Educación Secundaria Obligatoria - ESO). Su evaluación fomenta la interdisciplinariedad y se basa, de manera inquebrantable, en **4 Criterios (A, B, C, D)** específicos para cada grupo de asignaturas. Cada criterio se evalúa sobre una escala máxima de 8 puntos.
+2.  **DP (Diploma Programme):** Edades 16-19 (Equivalente al Bachillerato). Utiliza un riguroso sistema de calificación final de 1 a 7 puntos por asignatura. La nota es el resultado de combinar la Evaluación Interna (Internal Assessment - IA), que es calificada por el profesor y moderada por el IB, y la Evaluación Externa (Exámenes de mayo/noviembre), calificada directamente por examinadores internacionales.
+3.  **El Núcleo (The Core - DP):** Tres componentes obligatorios, holísticos y transversales (CAS, TdC/TOK, Monografía/EE) que poseen sus propias matrices de evaluación y otorgan hasta 3 puntos adicionales al diploma, siendo a menudo el diferenciador clave para la admisión en universidades de élite.
+
+## 🎓 1. Programa del Diploma (DP) - Nivel Bachillerato
+
+A continuación se listan los enlaces a los **Subject Briefs (Resúmenes de Asignaturas)** públicos y oficiales de la IBO (International Baccalaureate Organization), que contienen las estructuras de evaluación macro y las ponderaciones de las rúbricas.
+
+*Nota Operativa y Legal de ColabEdu:* Las guías completas para docentes (de más de 100 páginas), que contienen los descriptores exactos banda por banda, están protegidas bajo estrictas licencias de *copyright* y *paywall* en la plataforma MyIB. El modelo de arquitectura de ColabEdu asume que el Colegio IB (el *Tenant* o cliente) subirá el PDF oficial licenciado de su asignatura para que el *Curator Agent* ingiera y procese los descriptores exactos de nivel (las bandas 1-12, etc.), utilizando el presente documento únicamente como un "mapa ontológico" para asignar los IDs semánticos de forma correcta.
+
+### 🧠 El Núcleo del DP (The Core)
+
+- **Teoría del Conocimiento (TdC / TOK):** [Guía y Evaluación TdC](https://www.ibo.org/globalassets/new-structure/programmes/dp/pdfs/tok-brief-es.pdf)
+  - *Contexto ColabEdu:* TOK es una asignatura sobre epistemología. El Ensayo de TdC (1600 palabras) y la Exposición requieren una rúbrica analítica global basada en "instrumentos de evaluación". La IA evaluadora de ColabEdu debe configurarse con un *System Prompt* que priorice la detección de "Vínculos con objetos del mundo real", "Perspectivas múltiples" e "Implicaciones del conocimiento". La subjetividad inherente a TOK hace que el sistema de *Human-in-the-Loop (HITL)* de ColabEdu sea indispensable aquí.
+
+- **Monografía (Extended Essay / EE):** [Guía de la Monografía](https://www.ibo.org/globalassets/new-structure/programmes/dp/pdfs/extended-essay-brief-es.pdf)
+  - *Contexto ColabEdu:* Este trabajo de investigación independiente de 4000 palabras usa una matriz de evaluación estandarizada de 34 puntos dividida en Criterios A-E (Enfoque y método, Conocimiento y comprensión, Pensamiento crítico, Presentación, y Compromiso). El *Evaluator Agent* de ColabEdu es excepcional para el Criterio D (Presentación y formato académico), liberando al profesor para concentrarse en el Criterio C (Pensamiento crítico).
+
+### 📚 Grupo 1: Estudios de Lengua y Literatura
+
+- **Lengua A: Literatura (SL/HL):** [Resumen de Evaluación](https://www.ibo.org/globalassets/new-structure/programmes/dp/pdfs/language-a-literature-es.pdf)
+- **Lengua A: Lengua y Literatura (SL/HL):** [Resumen de Evaluación](https://www.ibo.org/globalassets/new-structure/programmes/dp/pdfs/language-a-language-and-literature-es.pdf)
+  - *Contexto ColabEdu:* Genera el bloque `IB.DP.G1.LANGLIT.IA` (Evaluación Interna - Oral Individual de 15 minutos). Las directivas de la IA deben centrarse fuertemente en el análisis de las "Cuestiones Globales" (Global Issues) y en cómo los autores utilizan recursos estilísticos y formales para construir significado, apoyándose fuertemente en el *Context Caching* de las obras literarias estudiadas.
+
+### 🗣️ Grupo 2: Adquisición de Lenguas
+
+- **Lengua B (SL/HL):** [Resumen de Evaluación](https://www.ibo.org/globalassets/new-structure/programmes/dp/pdfs/language-b-es.pdf)
+  - *Contexto ColabEdu:* Orientado a alumnos con experiencia previa en el idioma. Los bloques de rúbrica para Lengua B son altamente reutilizables y dependientes del idioma de destino. Aquí se aplica de manera brillante el modelo Multilingüe de ColabEdu: el `RUBRIC_BLOCK` se almacena de forma canónica en inglés, pero la evaluación y el feedback se generan sobre el idioma de entrega (ej. Español B, Francés B, Mandarín B), adaptando el rigor gramatical al nivel esperado.
+
+- **Lengua ab initio (SL):** [Resumen de Evaluación](https://www.ibo.org/globalassets/new-structure/programmes/dp/pdfs/language-ab-initio-es.pdf)
+  - *Contexto ColabEdu:* Para principiantes absolutos. Las directivas de la IA deben ser instruidas con extrema clemencia (leniency) en errores estructurales complejos, enfocándose en la "comunicación del mensaje" sobre la "perfección gramatical".
+
+### 🏛️ Grupo 3: Individuos y Sociedades
+
+- **Gestión Empresarial (SL/HL):** [Resumen de Evaluación](https://www.ibo.org/globalassets/new-structure/programmes/dp/pdfs/business-management-es.pdf)
+  - *Contexto ColabEdu:* Requiere integración profunda con herramientas de análisis de datos y gráficos. Los estudios de caso y la evaluación interna exigen que la IA valide la aplicación de herramientas empresariales específicas (CUEGIS concepts, análisis FODA, etc.).
+
+- **Historia (SL/HL):** [Resumen de Evaluación](https://www.ibo.org/globalassets/new-structure/programmes/dp/pdfs/history-es.pdf)
+  - *Contexto ColabEdu:* La evaluación de Historia en el IB es quizás una de las más rigurosas en términos académicos. La IA debe configurarse obligatoriamente con `scoring_mode: DETERMINISTIC` para validar estrictamente el uso y evaluación de fuentes primarias (método OPVL: Origen, Propósito, Valor, Limitación).
+
+### 🔬 Grupo 4: Ciencias
+
+- **Biología, Química, Física, Ciencias del Deporte (SL/HL):** [Resúmenes de Evaluación Ciencias](https://www.ibo.org/es/programmes/diploma-programme/curriculum/sciences/)
+  - *Contexto ColabEdu:* La Evaluación Interna (IA) del Grupo 4 es un reporte de investigación científica riguroso. El *Curator Agent* extraerá criterios fijos y universales: Compromiso Personal, Exploración (metodología), Análisis (tratamiento de datos y propagación de errores), Evaluación, y Comunicación. El criterio de "Compromiso Personal" es altamente subjetivo; la IA debe ser programada para buscar marcadores lingüísticos de iniciativa, curiosidad y adaptación de métodos.
+
+### 📐 Grupo 5: Matemáticas
+
+- **Análisis y Enfoques (AA) & Aplicaciones e Interpretación (AI):** [Resúmenes de Evaluación Matemáticas](https://www.ibo.org/es/programmes/diploma-programme/curriculum/mathematics/)
+  - *Contexto ColabEdu:* La bifurcación entre AA (matemáticas puras/analíticas) y AI (matemáticas aplicadas/estadística) requiere directivas distintas. La rúbrica para la Exploración Matemática (IA) se mapeará unificadamente con IDs como `IB.DP.G5.MATH.IA.CRIT.A` (Comunicación Matemática) y `CRIT.E` (Uso de las Matemáticas), requiriendo que la plataforma ColabEdu soporte parseo nativo de LaTeX para evaluar fórmulas dentro del texto del estudiante.
+
+### 🎨 Grupo 6: Artes
+
+- **Artes Visuales, Cine, Teatro:** [Resúmenes de Evaluación Artes](https://www.ibo.org/es/programmes/diploma-programme/curriculum/the-arts/)
+  - *Contexto ColabEdu:* Este grupo supone el mayor desafío técnico y utilizará extensivamente el motor **Multimodal (Vision)** de ColabEdu (Gemini 1.5 Pro/Flash). El alumno subirá imágenes de su "Carpeta de Proceso" o su "Estudio Comparativo", y la IA evaluará visualmente la progresión técnica, el uso de medios, la curaduría de las exposiciones y la justificación teórica escrita que acompaña al arte visual.
+
+## 🏫 2. Programa de los Años Intermedios (MYP / PAI) - Nivel ESO
+
+El PAI (Programa de los Años Intermedios) proporciona un framework de evaluación extremadamente limpio, coherente y simétrico, ideal para la ingesta algorítmica y la estandarización en bases de datos. El PAI no prescribe un contenido estricto (no dicta *qué* libro leer), sino que prescribe habilidades y conceptos.
+
+Independientemente del año en el que se encuentre el alumno (MYP 1 a MYP 5) o de la disciplina (desde Matemáticas hasta Diseño o Educación Física), la evaluación sumativa **siempre** se divide rígidamente en cuatro criterios (A, B, C, D).
+
+**Ontología Estandarizada en ColabEdu para el MYP:**
+
+El *Curator Agent* creará Recetas Maestras modulares donde cada grupo de asignaturas tiene exactamente 4 `RUBRIC_BLOCKS` vinculados, creando una simetría perfecta en la base de datos `spec_definitions`.
+
+- Ejemplo Ontológico: Adquisición de Lenguas (Language Acquisition)
+  - `IB.MYP.LANG.ACQ.CRIT.A`: Comprensión de textos orales y visuales (Listening & Viewing).
+  - `IB.MYP.LANG.ACQ.CRIT.B`: Comprensión de textos escritos y visuales (Reading).
+  - `IB.MYP.LANG.ACQ.CRIT.C`: Comunicación en respuesta a textos (Speaking).
+  - `IB.MYP.LANG.ACQ.CRIT.D`: Uso del lenguaje de forma oral y escrita (Writing).
+
+El salto del MYP al DP supone un cambio radical en la evaluación para el alumno. ColabEdu permite a los colegios utilizar el *Dashboard de Auditoría* para rastrear el progreso longitudinal de un estudiante desde los criterios A-D del MYP hasta las exigencias de la Evaluación Interna del DP.
+
+## ⚙️ Implicaciones Arquitectónicas, Legales y Técnicas para ColabEdu
+
+La integración a gran escala de los estándares del IB en ColabEdu no es una simple tarea de "copiar y pegar" rúbricas. Requiere configuraciones arquitectónicas específicas en la base de datos, en los motores de *parsing* y, sobre todo, en la gobernanza de los datos.
+
+### 1. El Scope de Autoridad ("GLOBAL") y la Escalabilidad
+
+Mientras que una ley autonómica en España o un estándar estatal en EE.UU. tiene un `authority_scope: "REGIONAL"` o `"NATIONAL"`, un criterio del IB (ej. la rúbrica del Ensayo de Teoría del Conocimiento) se ingresa en la tabla `spec_definitions` con `authority_scope: "GLOBAL"`.
+
+- **Implicación de Negocio B2B:** La eficiencia arquitectónica es máxima. Un colegio internacional en Madrid (ES-MAD), un colegio concertado en Texas (US-TX) y un campus privado en Ciudad de México (MX-CDMX) heredarán **exactamente el mismo bloque maestro de rúbrica** de la librería global de ColabEdu. Si el IBO actualiza la ponderación de un criterio para el curso 2026, ColabEdu actualiza el bloque GLOBAL, y la corrección se propaga en cascada instantáneamente a miles de aulas en tres continentes.
+
+### 2. Soporte Multilingüe Centralizado y RAG Translingüe
+
+El Bachillerato Internacional se imparte oficialmente en inglés, español y francés. La plataforma ColabEdu **no debe crear tres rúbricas duplicadas en la base de datos**. Esto generaría deuda técnica y riesgo de desincronización.
+
+- **El SSOT (Single Source of Truth):** El *Curator Agent* ingiere la rúbrica oficial (generalmente la versión matriz en inglés) como el único bloque de rúbrica real.
+- **Inyección de Contexto:** En el `workflow_config` de la receta que el profesor instancia en su colegio, se inyectan las variables `requiredLanguage` o `selectedLanguage` (ej. es-ES).
+- **Resultado Cognitivo:** El Agente de IA (Gemini/ALIA) razona utilizando la rigurosidad, los matices y la exactitud de la matriz en inglés, pero emite el *feedback* estructurado (y traduce las etiquetas de la UI como "Criterio A") al español o francés según el idioma de instrucción del alumno, realizando un *RAG translingüe* en tiempo real.
+
+### 3. Modelo "Bring Your Own Guide" (BYOG) y Defensa Férrea de la IP (Propiedad Intelectual)
+
+Este es el pilar legal más crítico para ColabEdu. Dado que el IBO (International Baccalaureate Organization) protege sus Guías de Asignatura bajo un estricto *copyright*, publicarlas abiertamente violaría derechos de autor.
+
+- **Política de Cero Exposición:** ColabEdu **no** precarga los descriptores detallados de las bandas de puntuación exactas (ej. el texto preciso de la banda 7-8) de las guías privativas en el catálogo público global (colabedu.org) sin autorización explícita o licencia editorial.
+- **El Flujo BYOG (Bring Your Own Guide):** El Coordinador IB de un colegio cliente (Tenant) sube la guía PDF oficial, adquirida legalmente por su institución, a su entorno privado de ColabEdu.
+- **Extracción Soberana (Curator Agent):** El Agente de Ingesta analiza ese PDF localmente, reconoce la estructura IB apoyándose en este documento ontológico maestro, y crea la "Receta" con la rúbrica exacta.
+- **Aislamiento de Datos:** Esta rúbrica generada se guarda exclusivamente en el esquema del inquilino del colegio (`authority_scope: "SCHOOL"` o `"DISTRICT"`), con linaje hacia el esqueleto "GLOBAL".
+- **Conclusión Legal:** Esto asegura un cumplimiento impecable de los derechos de autor (IP Protection), protegiendo legalmente a ColabEdu, mientras se ofrece un servicio de automatización total, de "guante blanco", al colegio cliente.

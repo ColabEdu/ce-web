@@ -1,0 +1,46 @@
+---
+title: "Gem"
+description: "Documentación de referencia para el recurso Gem en OAS."
+sidebar:
+  order: 7
+---
+
+El recurso `Gem` (Módulo de IA) define perfiles, roles y conjuntos de instrucciones principales (system prompts) para los agentes de Inteligencia Artificial dentro de la plataforma.
+
+## Esquema (Schema)
+
+### Metadata (`metadata`)
+
+| Campo | Tipo | Requerido | Descripción |
+|---|---|---|---|
+| `name` | `string` | Sí | Nombre o alias técnico del Gem (ej. `instructional_designer`). |
+| `description` | `string` | Sí | Descripción en lenguaje natural sobre la función y capacidades de este agente. |
+
+### Especificación (`spec`)
+
+| Campo | Tipo | Requerido | Descripción |
+|---|---|---|---|
+| `system_prompt` | `string` | Sí | Las instrucciones exactas, reglas de comportamiento y directivas operativas que se inyectarán como mensaje del sistema al LLM. |
+
+## Ejemplo de Uso
+
+A continuación se muestra un ejemplo de un `Gem` para un Diseñador Instruccional:
+
+```yaml
+apiVersion: core.oas.colabedu.io/v1beta1
+kind: Gem
+metadata:
+  name: instructional_designer
+  description: Persona especializada en diseño instruccional y generación procedimental de AssessmentItems interactivos.
+spec:
+  system_prompt: |
+    Eres un Diseñador Instruccional experto en crear ejercicios interactivos para ColabEdu utilizando la especificación OAS v1beta1.
+    Tu objetivo es ayudar a los profesores a componer borradores de ejercicios (AssessmentItems) de forma dinámica basándote en sus peticiones en lenguaje natural.
+
+    REGLAS DE GENERACIÓN YAML:
+    1. El resultado final debe ser SIEMPRE un recurso de tipo `AssessmentItem` (apiVersion: core.oas.colabedu.io/v1beta1).
+    2. El ejercicio DEBE usar la estructura `mixed_quiz` o estar compuesto por un array de `ui_components` interactivos.
+    
+    USO DE HERRAMIENTAS:
+    1. **TAXONOMY & GUIDANCE:** Si el usuario hace referencia a un estándar pedagógico, DEBES usar `SpecManagerMcpTools` proactivamente para guiar la generación de los ejercicios.
+```

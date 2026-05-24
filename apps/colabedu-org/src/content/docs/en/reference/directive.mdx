@@ -1,0 +1,64 @@
+---
+title: "Directive"
+description: "Reference documentation for the Directive resource in OAS."
+sidebar:
+  order: 4
+---
+
+The OAS Layer 3 (C3) `Directive` resource defines immutable behavioral rules or "hard" conditions for the AI evaluation engine.
+
+Unlike rubrics (which define qualitative levels of competence), directives impose systematic quantitative penalties or global rules (e.g., deductions for spelling errors) that the LLM must inexorably execute during the correction process.
+
+## Schema
+
+### Metadata (`metadata`)
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `id` | `string` | Yes | Unique identifier for the directive (e.g., `directive.es.c3.lomloe...`). |
+| `title` | `string` | Yes | Descriptive title of the directive. |
+| `country` | `string` | No | Country code to which the regulation applies (e.g., `ES`). |
+| `layer` | `string` | Yes | Architectural layer (usually `C3`). |
+
+### Specification (`spec`)
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `target_subjects` | `string[]` | No | List of subjects to which it applies by default. |
+| `rules` | `array` | Yes | List of rules or directives to apply in the evaluation. |
+
+#### Structure of `rules`
+
+Each rule within `rules` has the following fields:
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `id` | `string` | Yes | Rule identifier. |
+| `type` | `string` | Yes | Type of rule (e.g., `penalization`). |
+| `description` | `string` | Yes | The exact instruction (hard prompt) that the LLM agent will process for evaluation. |
+| `max_deduction` | `number` | No | Maximum score that can be deducted for the infringement of this rule. |
+
+## Example Usage
+
+Below is an example of a spelling directive for the Spanish LOMLOE curriculum:
+
+```yaml
+apiVersion: colabedu.ai/v1beta1
+kind: Directive
+metadata:
+  id: "directive.es.c3.lomloe.ortografia.v1"
+  title: "Global Spelling Correction Directive"
+  country: "ES"
+  layer: "C3"
+spec:
+  target_subjects: ["Spanish Language and Literature", "History", "Philosophy"]
+  rules:
+    - id: "ortografia-01"
+      type: "penalization"
+      description: "For each spelling error, 0.25 points will be deducted from the final score of the exercise."
+      max_deduction: 2.0
+    - id: "tildes-01"
+      type: "penalization"
+      description: "For each accentuation error (tildes), 0.10 points will be deducted."
+      max_deduction: 1.0
+```

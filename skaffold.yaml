@@ -1,0 +1,73 @@
+apiVersion: skaffold/v4beta13
+kind: Config
+metadata:
+  name: colabedu-web
+
+profiles:
+  # ==========================================
+  # LOCAL DEVELOPMENT (NATIVE, NO K8S)
+  # ==========================================
+  - name: local-all
+    deploy:
+      kubectl:
+        hooks:
+          before:
+            - host:
+                command: ["pnpm", "run", "dev:all"]
+
+  - name: local-org
+    deploy:
+      kubectl:
+        hooks:
+          before:
+            - host:
+                command: ["pnpm", "run", "dev:org"]
+
+  - name: local-net
+    deploy:
+      kubectl:
+        hooks:
+          before:
+            - host:
+                command: ["pnpm", "run", "dev:net"]
+
+  - name: local-support
+    deploy:
+      kubectl:
+        hooks:
+          before:
+            - host:
+                command: ["pnpm", "run", "dev:support"]
+
+  # ==========================================
+  # FIREBASE DEPLOYMENT (CLOUD)
+  # ==========================================
+  - name: firebase-demo
+    deploy:
+      kubectl:
+        hooks:
+          before:
+            - host:
+                command: ["pnpm", "run", "build"]
+            - host:
+                command: ["firebase", "deploy", "--only", "hosting", "-P", "demo"]
+
+  - name: firebase-stage
+    deploy:
+      kubectl:
+        hooks:
+          before:
+            - host:
+                command: ["pnpm", "run", "build"]
+            - host:
+                command: ["firebase", "deploy", "--only", "hosting", "-P", "stage"]
+
+  - name: firebase-prod
+    deploy:
+      kubectl:
+        hooks:
+          before:
+            - host:
+                command: ["pnpm", "run", "build"]
+            - host:
+                command: ["firebase", "deploy", "--only", "hosting", "-P", "prod"]

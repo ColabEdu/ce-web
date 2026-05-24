@@ -1,0 +1,68 @@
+---
+title: "Content Factory Strategy"
+description: "The 'Content Flywheel': Mass Generation of Exercises in ColabEdu."
+---
+
+# The "Content Flywheel": Mass Generation of Exercises (Inbound C0 x C2)
+
+**Architecture:** Open Assessment Standard (OAS v1beta1)  
+**Strategy:** Go-To-Market (GTM) / Solving the "Cold Start"
+
+The biggest bottleneck for any EdTech or LMS platform is content creation. Publishers take years to draft exercises that comply with the law.
+
+With the OAS architecture and the **Curator Agent**, ColabEdu transforms this linear problem into an **exponential multiplier matrix**. By decoupling the Law (C0), Structure (C1), and Content (C2), we can generate the largest database of exercises almost on autopilot.
+
+## The Semantic Compatibility Graph
+
+Instead of a naive Cartesian product, the Spec Manager engine uses a **Semantic Compatibility Graph** (`compatibility: requires/forbids`) to combine the different layers the Curator Agent has digitized.
+
+### 1. Ingestion of the Law (Layer C0)
+The Curator Agent ingests the regulatory PDFs and extracts the immutable rubrics.
+- *Example:* Essay Rubric (CE 5.1), Critical Analysis Rubric (CE 4.2), Oral Debate Rubric (CE 3.1).
+
+### 2. Rights-Aware Contexts (Layer C2)
+The Curator Agent connects to context sources and saves them as `ContextBlock`.
+- *Examples:* A chapter from "Don Quixote," a poem by Lorca, an article on Climate Change.
+
+### 3. Exercise Types (Layer C1 - Structures)
+The ColabEdu platform provides standardized UI templates.
+- *Examples:* Essay Writing, Socratic Tutor (Chatbot), Multiple Choice.
+
+## The Result: Constrained Combinatorial Generation
+
+If you ask the **Spec Manager** to compile recipes, it combines these elements subject to strict compatibility rules:
+
+```yaml
+compatibility:
+  requires:
+    modality: written
+    stimulus_types: [article, literary_excerpt]
+    target_skill: argumentative_writing
+  forbids:
+    - oral_only_rubric
+    - image_only_context
+```
+
+### Practical Generation Example:
+
+**Valid Cross:**
+- **C2 (Text):** Article on the Civil War.
+- **C1 (Type):** Argumentative Essay.
+- **C0 (Rubric):** CE 5.1 (Planning and Writing).
+- *Result:* The system creates the recipe: *"Read this article on the Civil War and write a 500-word essay defending a position..."*.
+
+**Invalid Cross (Blocked by Graph):**
+- **C2 (Image):** A photograph of the Civil War.
+- **C1 (Type):** Argumentative Essay.
+- **C0 (Rubric):** CE 3.2 (Oral Interaction).
+- *Result:* Blocked. A visual stimulus without text cannot be mapped to an oral interaction rubric using an essay writing template.
+
+## Commercial Conclusion (The Competitive Moat)
+
+This architecture allows for **combinatorial generation constrained by a semantic compatibility graph**. 
+All generated exercises:
+1. Are traceable to approved curricular sources (Inherit immutable C0).
+2. Are pedagogically coherent (Filtered by the Compatibility Graph).
+3. Are ready for the *Educational Audit Dashboard* (Tags injected).
+
+ColabEdu's architecture enables safe, rigorous, and scalable generation of learning materials.

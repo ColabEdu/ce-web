@@ -1,0 +1,40 @@
+{
+  "hosting": [
+    {
+      "target": "colabedu-org",
+      "public": "apps/colabedu-org/dist",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ]
+    },
+    {
+      "target": "colabedu-ai",
+      "public": "apps/colabedu-ai/dist",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ]
+    },
+    {
+      "target": "colabedu-net",
+      "public": "apps/colabedu-net/dist",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ]
+    },
+    {
+      "target": "colabedu-support",
+      "public": "apps/colabedu-support/dist",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ]
+    }
+  ]
+}

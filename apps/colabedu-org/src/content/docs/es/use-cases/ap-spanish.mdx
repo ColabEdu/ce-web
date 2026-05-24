@@ -1,0 +1,382 @@
+---
+title: "Casos Prácticos AP Spanish (OAS V2)"
+description: "Implementación del ecosistema Advanced Placement (AP) bajo la especificación OAS."
+---
+
+# Catálogo de Casos Prácticos: Ecosistema AP Spanish bajo OAS V2
+
+**Arquitectura:** Open Assessment Standard (OAS v1beta1)
+
+**Scope Educativo:** Advanced Placement (AP) - College Board. Spanish Language and Culture (L2) & Spanish Literature and Culture (L1).
+
+El ecosistema **Advanced Placement (AP)** se caracteriza por ser una evaluación estandarizada de alto impacto (*High-Stakes Testing*). A diferencia del currículo del IB (que es más conceptual y abierto), el examen AP está diseñado en formatos de **Free Response Questions (FRQs)** con limitaciones de tiempo exactas, tareas hiper-específicas (responder a un email, hablar 5 turnos de 20 segundos) y rúbricas altamente deterministas.
+
+Este documento detalla la implementación en **Assessment as Code** de los 5 pilares de evaluación de respuesta libre del AP, demostrando la potencia de los ExerciseTypes modulares en Flutter y las directivas de preprocesamiento (C3).
+
+## 1. AP Language FRQ 1: Respuesta a Correo Electrónico (Interpersonal Writing)
+
+El alumno tiene 15 minutos para leer un correo electrónico y responderlo. Debe mantener un registro formal (usted), responder a dos preguntas específicas del texto original y pedir más información sobre algo mencionado.
+
+### A. El Motor UI/UX (ExerciseType)
+
+Requiere simular la experiencia de una bandeja de entrada (Inbox).
+
+```yaml
+apiVersion: colabedu.ai/v1beta1  
+kind: ExerciseType  
+metadata:  
+  id: "us.etype.ap.email_reply.v1"  
+  title: "Motor UI: AP Email Reply (Interpersonal Writing)"  
+spec:  
+  ui_components:  
+    - type: "email_inbox_widget" # Renderiza un falso cliente de correo  
+      config:  
+        show_headers: true # De:, Para:, Asunto:, Fecha:  
+    - type: "markdown_editor_widget"  
+  report_components:  
+    - type: "score_header_widget"  
+    - type: "rubric_breakdown_table_widget"  
+    - type: "markdown_viewer_widget"  
+  configuration_schema:  
+    - key: "timer_duration_minutes"  
+      type: "integer"  
+      default: 15  
+    - key: "require_greeting_closing"  
+      type: "boolean"  
+      default: true
+```
+
+### B. Capa C0 (La Rúbrica Oficial de Interpersonal Writing)
+
+```yaml
+- id: "us.rub.ap.lang.email_reply.v1"  
+  level: "C0"  
+  type: "BLOCK_RUBRIC"  
+  authority_scope: "GLOBAL"  
+  content: |  
+    Scale: 1-5 (AP Scoring)  
+    Criteria:  
+    - Task Completion (50%):  
+      L5: Maintains formal register. Responds fully to all questions. Asks for details.  
+      L3: Partially maintains formal register. Answers questions but lacks detail, or forgets to ask a question.  
+      L1: Inappropriate register. Fails to respond to the prompt.  
+    - Language Control (50%):  
+      L5: Excellent control of grammar and rich vocabulary.  
+      L1: Severe grammatical errors that impede communication.
+```
+
+### C. Capas C2 (Contexto) y C3 (Directivas de Preprocesamiento)
+
+```yaml
+# CAPA C2  
+- id: "us.ctx.ap.email.voluntariado.v1"  
+  level: "C2"  
+  type: "BLOCK_CONTEXT"  
+  content: |  
+    De: Directora del Programa de Voluntariado en Perú  
+    Asunto: Su solicitud de participación  
+    Texto: Estimado/a estudiante, hemos recibido su solicitud. Para continuar, por favor responda: 1) ¿Qué experiencia previa tiene con niños? y 2) ¿Qué fechas tiene disponibles este verano?  
+  
+# CAPA C3 (El "Gatekeeper" Técnico)  
+- id: "us.dir.ap.email_gatekeeper.v1"  
+  level: "C3"  
+  type: "BLOCK_DIRECTIVE"  
+  content: |  
+    preprocessing_directives:  
+    - rule: "Formalidad: Si el alumno usa 'tú' en lugar de 'usted', el Task Completion NO puede superar el L3."  
+    - rule: "Estructura: Si falta un saludo inicial formal (ej. 'Estimada') o una despedida formal (ej. 'Atentamente'), penalizar en Task Completion."
+```
+
+### D. La Receta Final (C1)
+
+```yaml
+apiVersion: colabedu.ai/v1beta1  
+kind: Recipe  
+metadata:  
+  id: "us.recipe.ap.lang.email_voluntariado.v1"  
+spec:  
+  level: "C1"  
+  exerciseTypeRef: "us.etype.ap.email_reply.v1"  
+  rubric_refs: ["us.rub.ap.lang.email_reply.v1"]  
+  context_refs: ["us.ctx.ap.email.voluntariado.v1"]  
+  directive_refs: ["us.dir.ap.email_gatekeeper.v1"]  
+  variables:  
+    timer_duration_minutes: 15
+```
+
+## 2. AP Language FRQ 2: Ensayo Argumentativo Multimodal (Presentational Writing)
+
+El "Crown Jewel" del AP Language. Requiere que el alumno lea un artículo, lea una gráfica y escuche un audio (reproducido solo 2 veces), y luego integre las tres fuentes en un ensayo persuasivo en 55 minutos.
+
+### A. El Motor UI/UX (ExerciseType)
+
+La interfaz debe alojar múltiples estímulos simultáneamente mediante pestañas.
+
+```yaml
+apiVersion: colabedu.ai/v1beta1  
+kind: ExerciseType  
+metadata:  
+  id: "us.etype.ap.multimodal_essay.v1"  
+  title: "Motor UI: Ensayo Multimodal AP (3 Fuentes)"  
+spec:  
+  ui_components:  
+    - type: "tabbed_stimulus_viewer" # Pestañas para cambiar entre fuentes  
+      tabs:  
+        - "pdf_viewer"  
+        - "data_table_viewer"  
+        - "audio_player_widget"  
+      config:  
+        audio_max_plays: 2  
+    - type: "markdown_editor_widget"  
+  report_components:  
+    - type: "score_header_widget"  
+    - type: "rubric_breakdown_table_widget"  
+    - type: "markdown_viewer_widget"  
+  configuration_schema:  
+    - key: "timer_duration_minutes"  
+      type: "integer"  
+      default: 55
+```
+
+### B. Capas C0 y C3 (Rúbrica y Regla Estricta)
+
+```yaml
+# CAPA C0  
+- id: "us.rub.ap.lang.argumentative_essay.v1"  
+  level: "C0"  
+  type: "BLOCK_RUBRIC"  
+  authority_scope: "GLOBAL"  
+  content: |  
+    Scale: 1-5  
+    Criteria:  
+    - Task Completion & Synthesis (50%):  
+      L5: Effective treatment. Synthesizes information from all THREE sources elegantly.  
+      L3: Summarizes sources rather than integrating them. May omit one source.  
+  
+# CAPA C3  
+- id: "us.dir.ap.essay_rules.v1"  
+  level: "C3"  
+  type: "BLOCK_DIRECTIVE"  
+  content: |  
+    preprocessing_directives:  
+    - rule: "Source Check: Si el alumno no cita ni menciona explícitamente información de las TRES fuentes (Artículo, Gráfico y Audio), el score de Task Completion debe ser máximo L3."
+```
+
+### C. La Receta Final (C1)
+
+*Nota:* Utiliza el patrón *Late Binding*, inyectando 3 `context_refs` separados.
+
+```yaml
+apiVersion: colabedu.ai/v1beta1  
+kind: Recipe  
+metadata:  
+  id: "us.recipe.ap.lang.essay_redes_sociales.v1"  
+spec:  
+  level: "C1"  
+  exerciseTypeRef: "us.etype.ap.multimodal_essay.v1"  
+  rubric_refs: ["us.rub.ap.lang.argumentative_essay.v1"]  
+  context_refs: [  
+    "us.ctx.ap.fuente1.art_redes_sociales.v1", # Texto  
+    "us.ctx.ap.fuente2.grafico_ansiedad.v1", # Gráfico  
+    "us.ctx.ap.fuente3.audio_psicologo.v1" # Audio (con transcripción Whisper oculta)  
+  ]  
+  directive_refs: ["us.dir.ap.essay_rules.v1"]  
+  variables:  
+    timer_duration_minutes: 55
+```
+
+## 3. AP Language FRQ 3: Conversación Simulada (Interpersonal Speaking)
+
+El alumno mantiene una conversación con la máquina. Escucha a su interlocutor, tiene un "tono de aviso" (beep) y exactamente 20 segundos para grabar su respuesta. Esto se repite 5 veces.
+
+### A. El Motor UI/UX (ExerciseType)
+
+Totalmente guiado por A2UI para manejar latencia y control de hardware de audio.
+
+```yaml
+apiVersion: colabedu.ai/v1beta1  
+kind: ExerciseType  
+metadata:  
+  id: "us.etype.ap.simulated_conversation.v1"  
+  title: "Motor UI: Conversación Simulada AP (Turnos Estrictos)"  
+spec:  
+  ui_components:  
+    - type: "conversation_outline_viewer" # Muestra al alumno el esquema  
+    - type: "voice_chatbot_strict_turn_widget"  
+  config:  
+    student_recording_time_seconds: 20  
+    total_turns: 5  
+  report_components:  
+    - type: "score_header_widget"  
+    - type: "rubric_breakdown_table_widget"  
+    - type: "audio_transcription_diff_widget" # Muestra todo el log del chat
+```
+
+### B. Capas C0 y C2 (Esquema de Conversación)
+
+```yaml
+# CAPA C0 (Rúbrica Oral)  
+- id: "us.rub.ap.lang.interpersonal_speaking.v1"  
+  level: "C0"  
+  type: "BLOCK_RUBRIC"  
+  authority_scope: "GLOBAL"  
+  content: |  
+    Scale: 1-5  
+    Criteria:  
+    - Task Completion (50%): L5 Maintains exchange with series of responses. L3 Responds appropriately but hesitates.  
+    - Language (50%): L5 Excellent pronunciation, pacing, and vocabulary.  
+  
+# CAPA C2 (El Guion de la IA)  
+- id: "us.ctx.ap.conversacion.viaje_estudios.v1"  
+  level: "C2"  
+  type: "BLOCK_CONTEXT"  
+  content: |  
+    Tema: Planeando un viaje de estudios a Madrid.  
+    Esquema para la IA (Tus turnos):  
+    Turno 1: Saluda e invita al estudiante a organizar el viaje.  
+    Turno 2: Propón visitar el Museo del Prado y pregunta su opinión.  
+    Turno 3: Pregunta qué otro lugar histórico le gustaría ver y por qué.  
+    Turno 4: Pregunta sobre el presupuesto para la comida.  
+    Turno 5: Despídete cordialmente y propón una próxima reunión.
+```
+
+### C. La Receta Final (C1)
+
+```yaml
+apiVersion: colabedu.ai/v1beta1  
+kind: Recipe  
+metadata:  
+  id: "us.recipe.ap.lang.conversation_madrid.v1"  
+spec:  
+  level: "C1"  
+  exerciseTypeRef: "us.etype.ap.simulated_conversation.v1"  
+  rubric_refs: ["us.rub.ap.lang.interpersonal_speaking.v1"]  
+  context_refs: ["us.ctx.ap.conversacion.viaje_estudios.v1"]
+```
+
+## 4. AP Language FRQ 4: Comparación Cultural (Presentational Speaking)
+
+El alumno recibe un tema (ej. El impacto de las redes sociales). Tiene 4 minutos para planificar y exactamente 2 minutos para grabar una presentación oral donde **debe comparar** su propia comunidad con una región hispanohablante.
+
+### A. El Motor UI/UX (ExerciseType)
+
+```yaml
+apiVersion: colabedu.ai/v1beta1  
+kind: ExerciseType  
+metadata:  
+  id: "us.etype.ap.cultural_comparison.v1"  
+  title: "Motor UI: Comparación Cultural AP"  
+spec:  
+  ui_components:  
+    - type: "prompt_banner_widget" # Muestra la pregunta estática  
+    - type: "dual_timer_audio_recorder"  
+  config:  
+    prep_time_minutes: 4  
+    record_time_minutes: 2
+```
+
+### B. Capas C3 (Directiva Crítica del College Board)
+
+El error más común en este examen es que el alumno habla del tema, pero olvida hacer la comparación explícita.
+
+```yaml
+- id: "us.dir.ap.cultural_gatekeeper.v1"  
+  level: "C3"  
+  type: "BLOCK_DIRECTIVE"  
+  content: |  
+    preprocessing_directives:  
+    - rule: "Verificación Comparativa: Escanea la transcripción del monólogo. Si el alumno NO compara explícitamente su comunidad con una región hispanohablante (ej. 'En EE. UU. hacemos X, pero en México hacen Y'), su nota máxima en Task Completion debe estar limitada a L2."
+```
+
+### C. La Receta Final (C1)
+
+```yaml
+apiVersion: colabedu.ai/v1beta1  
+kind: Recipe  
+metadata:  
+  id: "us.recipe.ap.lang.cultural_comp_redes.v1"  
+spec:  
+  level: "C1"  
+  exerciseTypeRef: "us.etype.ap.cultural_comparison.v1"  
+  rubric_refs: ["us.rub.ap.lang.presentational_speaking.v1"]  
+  directive_refs: ["us.dir.ap.cultural_gatekeeper.v1"]  
+  variables:  
+    prompt_banner_text: "Compara el papel que juegan las redes sociales en la formación de la identidad de los jóvenes en tu comunidad con el de una región del mundo hispanohablante."
+```
+
+## 5. AP Literature FRQ 2: Comparación de Texto y Arte
+
+En el currículo de **AP Spanish Literature**, el alumno debe analizar obras clásicas. El FRQ 2 le exige leer una obra literaria y conectarla temáticamente con una obra de arte visual provista en el examen (multimodalidad de imagen y texto).
+
+### A. El Motor UI/UX (ExerciseType)
+
+Requiere un visor dual que muestre texto literario e imagen de alta resolución.
+
+```yaml
+apiVersion: colabedu.ai/v1beta1  
+kind: ExerciseType  
+metadata:  
+  id: "us.etype.ap.lit_text_art.v1"  
+  title: "Motor UI: Comparación Texto y Arte (AP Lit)"  
+spec:  
+  ui_components:  
+    - type: "split_pane_widget"  
+      left: "dual_stimulus_viewer" # Muestra el Poema y la Pintura apilados verticalmente  
+      right: "rich_text_editor"  
+  report_components:  
+    - type: "score_header_widget"  
+    - type: "rubric_breakdown_table_widget"  
+    - type: "markdown_viewer_widget"  
+  configuration_schema:  
+    - key: "timer_duration_minutes"  
+      type: "integer"  
+      default: 15 # Tiempo sugerido para FRQ 2
+```
+
+### B. Capa C0 (La Rúbrica Analítica Corta)
+
+```yaml
+- id: "us.rub.ap.lit.text_art_comparison.v1"  
+  level: "C0"  
+  type: "BLOCK_RUBRIC"  
+  authority_scope: "GLOBAL"  
+  content: |  
+    Scale: 0-3 (AP Lit Short Answer Rubric)  
+    Criteria:  
+    - Thematic Comparison (0-3 points):  
+      L3: Identifies the theme clearly. Analyzes effectively how BOTH the text and the artwork represent the theme using specific examples from both.  
+      L1: Attempts to compare but lacks specific evidence from one or both stimuli. Merely describes the art without analytical connection.
+```
+
+### C. Capas C2 (Contexto Visual y Literario)
+
+```yaml
+- id: "us.ctx.ap.lit.burlador_diego_rivera.v1"  
+  level: "C2"  
+  type: "BLOCK_CONTEXT"  
+  content: |  
+    Estímulo 1 (Texto): Fragmento de "El Burlador de Sevilla" de Tirso de Molina.  
+    Estímulo 2 (Imagen): [URL_MURAL_DIEGO_RIVERA] (La imagen muestra una escena de desigualdad social en la época colonial).  
+    Consigna: Lee el fragmento y observa la imagen. Explica cómo ambas obras representan el tema de las sociedades en contacto (el sistema patriarcal y el abuso de poder).
+```
+
+### D. La Receta Final (C1)
+
+```yaml
+apiVersion: colabedu.ai/v1beta1  
+kind: Recipe  
+metadata:  
+  id: "us.recipe.ap.lit.frq2_burlador_rivera.v1"  
+spec:  
+  level: "C1"  
+  exerciseTypeRef: "us.etype.ap.lit_text_art.v1"  
+  rubric_refs: ["us.rub.ap.lit.text_art_comparison.v1"]  
+  context_refs: ["us.ctx.ap.lit.burlador_diego_rivera.v1"]  
+  directive_refs: ["us.dir.ib.examiner.spanish_a.v1"] # Reutiliza directivas de exigencia de citas literarias
+```
+
+## 6. Conclusión Estratégica
+
+La implementación del ecosistema **AP** demuestra que la arquitectura OAS y el modelo de *Server-Driven UI* no solo sirven para calificar textos.
+
+Al parametrizar los ExerciseTypes con lógica estricta (límites de reproducciones de audio, cronómetros de preparación vs. grabación, y pre-evaluadores algorítmicos para fuentes faltantes), ColabEdu logra emular el entorno restrictivo y de alta presión del examen AP real. Esto proporciona a los colegios en Estados Unidos la única herramienta integral para practicar y diagnosticar con precisión el nivel de sus alumnos antes del examen del College Board de mayo.

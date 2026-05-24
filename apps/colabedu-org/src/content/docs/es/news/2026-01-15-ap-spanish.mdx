@@ -1,0 +1,35 @@
+---
+title: "Novedad: Soporte oficial para AP Spanish Language and Culture"
+description: "ColabEdu anuncia la integración completa de los estándares de AP Spanish para el ecosistema College Board."
+author: "Equipo Pedagógico"
+date: "2026-01-15"
+tags: ["AP", "Estándares", "College Board", "Lanzamiento"]
+---
+
+¡Arrancamos el año 2026 con grandes noticias para los docentes de secundaria en Estados Unidos e institutos internacionales! A partir de hoy, ColabEdu soporta oficialmente el estándar **AP Spanish Language and Culture** del College Board.
+
+## El Reto de la Evaluación AP
+
+Preparar a los estudiantes para el examen AP requiere una atención minuciosa a rúbricas muy estrictas que evalúan la comprensión auditiva, lectora, la escritura interpersonal, presentacional y la expresión oral. Hasta ahora, corregir ensayos argumentativos y presentaciones orales bajo el estándar de 5 puntos del College Board consumía horas incontables a los docentes.
+
+## ¿Cómo lo hemos mapeado en ColabEdu?
+
+Nuestra aproximación se basa en la especificación **OAS (Open Assessment Specification)**, estructurando el soporte en nuestras capas base:
+
+1. **Capa C0 (Taxonomía y Rúbricas):**
+   Hemos integrado las rúbricas analíticas oficiales de AP en nuestro formato unificado `taxonomy.loc.us-ap.yaml`. Ahora el sistema es consciente de dimensiones como *Task Completion*, *Topic Development* y *Language Use*.
+
+2. **Capa C1 (Contrato de Interfaz):**
+   Los ejercicios ahora incluyen metadatos como el "Contexto Cultural" y los "Requisitos de Audio" necesarios para la grabación de las *Simulated Conversations* (Conversaciones Simuladas) y *Cultural Presentations*.
+
+3. **Capa C3 (Motor de Inferencia AI):**
+   El `SpecManager` inyecta automáticamente los prompts para el LLM, asegurando que el *feedback* que recibe el alumno y la nota sugerida al profesor se adhieran estrictamente a la rigurosa escala de puntuación de 1 a 5.
+
+## Documentación y Recursos
+
+¿Quieres ver cómo funciona por debajo? Visita nuestra página oficial de documentación sobre la integración del estándar:
+
+- [Estándar AP Spanish en ColabEdu](/es/standards/ap-spanish)
+- [Ejemplos de Especificaciones (OAS)](/es/oas-spec)
+
+Seguimos trabajando para democratizar la corrección de alto rigor. ¡Nos vemos en la próxima actualización!

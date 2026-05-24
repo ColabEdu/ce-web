@@ -1,0 +1,98 @@
+import os
+
+filepath = '/home/jmolmo/git/colabedu/ce-web/apps/colabedu-net/src/pages/en/student.astro'
+
+with open(filepath, 'r', encoding='utf-8') as f:
+    content = f.read()
+
+replacements = {
+    'Aprende a tu ritmo': 'Learn at your own pace',
+    'Automatización de evaluación multimodal para docentes e instituciones.': 'Multimodal assessment automation for teachers and institutions.',
+    'Nuevo: Simulador Oral y Escrito para AP Spanish e IB': 'New: Oral and Written Simulator for AP Spanish and IB',
+    'Asegura tu nota en español. <br/>': 'Secure your Spanish grade. <br/>',
+    'El gimnasio interactivo 24/7.': 'The 24/7 interactive gym.',
+    'Practica conversación, oratoria y ensayos a tu propio ritmo. Recibe feedback detallado e instantáneo antes del examen oficial. Prepárate para AP, IB, EBAU y DELE con confianza.': 'Practice conversation, speaking, and essays at your own pace. Receive detailed and instant feedback before the official exam. Prepare for AP, IB, EBAU, and DELE with confidence.',
+    'Comenzar Prueba Gratuita': 'Start Free Trial',
+    'Explorar Prácticas': 'Explore Practices',
+    'Mi Progreso': 'My Progress',
+    'Ensayos IB: Nivel C1': 'IB Essays: C1 Level',
+    'Cultural Comparison AP': 'Cultural Comparison AP',
+    'Feedback Instantáneo': 'Instant Feedback',
+    'Simulacro AP: Simulated Conversation': 'AP Mock Exam: Simulated Conversation',
+    'Práctica oral con examinador virtual': 'Oral practice with virtual examiner',
+    'Excelente fluidez.': 'Excellent fluency.',
+    'Lograste mantener la conversación natural. Sin embargo, recuerda usar el subjuntivo cuando expreses duda:': 'You managed to keep the conversation natural. However, remember to use the subjunctive when expressing doubt:',
+    'Pronóstico AP:': 'AP Forecast:',
+    '¿Por qué es tan difícil mejorar en idiomas?': 'Why is it so hard to improve in languages?',
+    'La frustración de estudiar sin saber si lo haces bien.': 'The frustration of studying without knowing if you\'re doing it right.',
+    'Semanas sin feedback': 'Weeks without feedback',
+    'Entregas una redacción y recibes la corrección tres semanas después. Para entonces, ya ni siquiera recuerdas qué querías expresar ni por qué te equivocaste.': 'You turn in an essay and receive the corrections three weeks later. By then, you don\'t even remember what you wanted to express or why you made a mistake.',
+    'Miedo a hablar': 'Fear of speaking',
+    'En una clase de 30 personas, tienes menos de 2 minutos reales para practicar conversación en inglés o español. El día del examen oral, el estrés te paraliza.': 'In a class of 30 people, you have less than 2 real minutes to practice conversation in English or Spanish. On the day of the oral exam, stress paralyzes you.',
+    'Estudiar a ciegas': 'Studying blindly',
+    'Haces test y lees apuntes, pero no sabes si tu ensayo cumple realmente con la exigente rúbrica de AP Spanish o si te pondrán un 4 o un 5.': 'You take tests and read notes, but you don\'t know if your essay actually meets the demanding AP Spanish rubric or if you\'ll get a 4 or a 5.',
+    'Los números del éxito': 'The numbers of success',
+    'Lo que ganan los estudiantes que entrenan con nuestro simulador.': 'What students who train with our simulator gain.',
+    'Mejora en Notas': 'Grade Improvement',
+    'Incremento promedio tras 4 semanas de práctica constante con feedback de IA.': 'Average increase after 4 weeks of constant practice with AI feedback.',
+    'Feedback Inmediato': 'Immediate Feedback',
+    'Recibe correcciones gramaticales, ortográficas y de contenido casi al instante.': 'Receive grammatical, spelling, and content corrections almost instantly.',
+    'Tutor Disponible': 'Tutor Available',
+    'Tu profesor virtual no duerme. Prepárate la noche antes del examen sin límites.': 'Your virtual teacher doesn\'t sleep. Prepare the night before the exam without limits.',
+    'Confianza al hablar en público (Autoevaluación 1-10)': 'Confidence in public speaking (Self-assessment 1-10)',
+    'El Gimnasio del Aprendizaje': 'The Learning Gym',
+    'Herramientas diseñadas para acelerar tu fluidez en español.': 'Tools designed to accelerate your fluency in Spanish.',
+    'Simulador de Entrevistas Orales': 'Oral Interview Simulator',
+    'Habla con nuestro avatar de IA entrenado como examinador nativo. Practica la sección oral de IB, AP o DELE sin estrés, recibe feedback de pronunciación y conjugación en tiempo real.': 'Speak with our AI avatar trained as a native examiner. Practice the oral section of IB, AP, or DELE without stress, receive real-time pronunciation and conjugation feedback.',
+    'Corrección Quirúrgica de Ensayos': 'Surgical Essay Correction',
+    'Sube una foto de tu redacción manuscrita o pégala. La IA detecta errores gramaticales, mejora tu vocabulario y evalúa si cumples con la rúbrica oficial antes de entregar a tu profesor.': 'Upload a photo of your handwritten essay or paste it. The AI detects grammatical errors, improves your vocabulary, and evaluates if you meet the official rubric before handing it in to your teacher.',
+    'Dashboard de Maestría': 'Mastery Dashboard',
+    'Sigue tu progreso visualmente. Descubre exactamente en qué fallas (por ejemplo: El Subjuntivo, o los Pasados) para que enfoques tu estudio donde más importa.': 'Track your progress visually. Discover exactly where you fail (for example: The Subjunctive, or Past Tenses) so you can focus your study where it matters most.',
+    'Ecosistema Educativo': 'Educational Ecosystem',
+    'Caminos Personalizados': 'Custom Pathways',
+    'Para Departamentos': 'For Departments',
+    'Estandarización sin reuniones. Asegura que todo el equipo evalúe con el mismo rigor usando Recetas Maestras compartidas, eliminando la discrepancia en las calificaciones.': 'Standardization without meetings. Ensure the whole team grades with the same rigor using shared Master Recipes, eliminating grading discrepancies.',
+    'Para Gobiernos y Ministerios': 'For Governments and Ministries',
+    'Cumplimiento LOMLOE/TEKS invisible. Analítica de brechas de aprendizaje a escala nacional sin pedirle informes extra al docente.': 'Invisible LOMLOE/TEKS compliance. National-scale learning gap analytics without asking teachers for extra reports.',
+    'Revitaliza tu catálogo. Convierte libros estáticos en Tutores Socráticos interactivos.': 'Revitalize your catalog. Turn static books into interactive Socratic Tutors.',
+    'Feedback en minutos. El "Gimnasio del Aprendizaje" 24/7 para fallar y aprender antes del examen.': 'Feedback in minutes. The 24/7 "Learning Gym" to fail and learn before the exam.',
+    'Integración nativa con tus herramientas': 'Native integration with your tools',
+    'Sincronización bidireccional: Notas, tareas y anuncios fluyen sin copiar un solo dato.': 'Two-way sync: Grades, assignments, and announcements flow without copying a single piece of data.',
+    'La Metodología de 3 Fases': 'The 3-Phase Methodology',
+    'Seguridad pedagógica e integridad académica.': 'Pedagogical security and academic integrity.',
+    'The Gym (Práctica)': 'The Gym (Practice)',
+    'El alumno entrena con una IA socrática que guía, no resuelve. Cero esfuerzo de corrección para ti, máximo aprendizaje para ellos.': 'Students train with a Socratic AI that guides, but doesn\'t solve. Zero grading effort for you, maximum learning for them.',
+    'Game Day (Prueba)': 'Game Day (Test)',
+    'Evaluación proctoreada y blindada en el aula. Sin asistencia de IA, garantizando la integridad total de la prueba.': 'Proctored and shielded assessment in the classroom. No AI assistance, ensuring total test integrity.',
+    'The Audition (Desempeño)': 'The Audition (Performance)',
+    'Tú revisas la pre-evaluación multimodal generada por la IA. Validas, añades tu toque personal y firmas. Ahorro de tiempo masivo.': 'You review the multimodal pre-assessment generated by AI. Validate, add your personal touch, and sign off. Massive time savings.',
+    'Asegura tu mejor nota en el examen oficial.': 'Secure your best grade on the official exam.',
+    'No llegues con dudas. Conviértete en experto a base de práctica, feedback y repetición con tu tutor personal de IA.': 'Don\'t arrive with doubts. Become an expert through practice, feedback, and repetition with your personal AI tutor.',
+    'Empezar a Practicar Gratis': 'Start Practicing for Free',
+    'Planes mensuales accesibles con o sin tarjeta de crédito.': 'Accessible monthly plans with or without a credit card.',
+    'Tu copiloto de inteligencia pedagógica.': 'Your pedagogical intelligence copilot.',
+    'Producto': 'Product',
+    'Características': 'Features',
+    'Integraciones': 'Integrations',
+    'Precios': 'Pricing',
+    'Recursos': 'Resources',
+    'Guías para Docentes': 'Teacher Guides',
+    'Casos de Éxito': 'Success Stories',
+    'Contacto': 'Contact',
+    'Soporte': 'Support',
+    'Ventas': 'Sales',
+    'Privacidad': 'Privacy',
+    'Todos los derechos reservados.': 'All rights reserved.',
+    "'Antes de Práctica con IA'": "'Before AI Practice'",
+    "'Después de 4 semanas'": "'After 4 weeks'",
+    "'Confianza y Fluidez (0-10)'": "'Confidence and Fluency (0-10)'",
+    " + ' / 10 Puntos'": " + ' / 10 Points'"
+}
+
+for es_text, en_text in replacements.items():
+    content = content.replace(es_text, en_text)
+
+with open(filepath, 'w', encoding='utf-8') as f:
+    f.write(content)
+
+print(f"Translated {filepath}")
