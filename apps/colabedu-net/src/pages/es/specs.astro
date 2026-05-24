@@ -1,0 +1,525 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+<BaseLayout lang="es">
+
+
+    <!-- Hero Section -->
+    <section id="hero" class="pt-20 pb-16 bg-gradient-to-br from-slate-100 to-white text-center">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h1 class="text-4xl md:text-6xl font-extrabold text-blue-900 mb-6">
+                Assessment as Code
+            </h1>
+            <p class="text-xl md:text-2xl text-slate-600 mb-10 max-w-2xl mx-auto">
+                Transformando la educación desde documentos estáticos a un ecosistema de especificaciones ejecutables, orquestado por IA.
+            </p>
+            <div class="flex justify-center gap-4">
+                <button onclick="scrollToSection('problem-solution')" class="bg-blue-900 text-white px-8 py-3 rounded-full font-semibold shadow-lg hover:bg-blue-800 transition transform hover:-translate-y-1">
+                    Explorar la Arquitectura
+                </button>
+            </div>
+            <!-- Visualization & Content Choices: 
+                 Hero Stat -> Goal: Inform -> Viz: Simple Metric Cards -> Interaction: None -> Justification: Immediate impact of the platform's core promises.
+            -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16 text-left">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+                    <div class="text-blue-600 font-bold text-lg mb-2">Integridad Técnica</div>
+                    <p class="text-slate-500 text-sm">Contratos de datos inmutables y auditables legalmente por 5+ años.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+                    <div class="text-emerald-600 font-bold text-lg mb-2">Escalabilidad Masiva</div>
+                    <p class="text-slate-500 text-sm">Orquestación de miles de estándares y rúbricas sin duplicidad.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+                    <div class="text-indigo-600 font-bold text-lg mb-2">Pedagogía Activa</div>
+                    <p class="text-slate-500 text-sm">De la calificación pasiva a tutores socráticos inteligentes.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 2: The Problem vs. Solution (Philosophy) -->
+    <section id="problem-solution" class="py-20 bg-white">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-12 text-center md:text-left">
+                <h2 class="text-3xl font-bold text-slate-900 mb-4">El Cambio de Paradigma</h2>
+                <p class="text-lg text-slate-600 max-w-3xl">
+                    La educación actual sufre de una desconexión entre el "Estándar Oficial" y la "Realidad del Aula", creando una deriva pedagógica. ColabEdu resuelve esto tratando el contenido educativo como grafos de componentes reutilizables.
+                </p>
+            </div>
+
+            <!-- Visualization & Content Choices: 
+                 Comparison -> Goal: Compare -> Viz: Toggle Switch / Side-by-Side Cards -> Interaction: Click to toggle view -> Justification: Highlights the stark contrast between the old "Document" model and the new "Recipe" model.
+            -->
+            <div class="bg-slate-50 rounded-2xl p-2 border border-slate-200 inline-flex mb-8">
+                <button onclick="toggleParadigm('legacy')" id="btn-legacy" class="nav-btn active px-6 py-2 rounded-xl text-sm font-semibold transition-all">Modelo Tradicional (Legacy)</button>
+                <button onclick="toggleParadigm('colabedu')" id="btn-colabedu" class="nav-btn px-6 py-2 rounded-xl text-sm font-semibold text-slate-600 hover:bg-slate-100 transition-all">Modelo ColabEdu (v4.0)</button>
+            </div>
+
+            <div id="view-legacy" class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div class="space-y-6">
+                    <div class="flex items-start">
+                        <div class="bg-red-100 text-red-600 p-3 rounded-lg mr-4 text-xl">📄</div>
+                        <div>
+                            <h3 class="font-bold text-slate-900">Documentos Estáticos</h3>
+                            <p class="text-slate-600 text-sm">PDFs y XMLs aislados. Difíciles de actualizar y analizar.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="bg-red-100 text-red-600 p-3 rounded-lg mr-4 text-xl">📉</div>
+                        <div>
+                            <h3 class="font-bold text-slate-900">Deriva Pedagógica</h3>
+                            <p class="text-slate-600 text-sm">La evaluación varía enormemente entre profesores. Datos no confiables.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="bg-red-100 text-red-600 p-3 rounded-lg mr-4 text-xl">🔒</div>
+                        <div>
+                            <h3 class="font-bold text-slate-900">Silos de Datos</h3>
+                            <p class="text-slate-600 text-sm">La información vive atrapada en LMS cerrados o Excel.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-slate-100 rounded-xl p-8 flex items-center justify-center h-64 border border-slate-200 border-dashed">
+                    <div class="text-center text-slate-400">
+                        <div class="text-6xl mb-2">📁</div>
+                        <div>Archivos Desconectados</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="view-colabedu" class="hidden grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div class="space-y-6">
+                    <div class="flex items-start">
+                        <div class="bg-emerald-100 text-emerald-600 p-3 rounded-lg mr-4 text-xl">🧩</div>
+                        <div>
+                            <h3 class="font-bold text-slate-900">Recetas Modulares</h3>
+                            <p class="text-slate-600 text-sm">Estructuras YAML ejecutables. Herencia y reutilización masiva.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="bg-emerald-100 text-emerald-600 p-3 rounded-lg mr-4 text-xl">🤖</div>
+                        <div>
+                            <h3 class="font-bold text-slate-900">Orquestación Agéntica</h3>
+                            <p class="text-slate-600 text-sm">Agentes (Curator, Tutor) ejecutan la intención pedagógica automáticamente.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="bg-emerald-100 text-emerald-600 p-3 rounded-lg mr-4 text-xl">🔍</div>
+                        <div>
+                            <h3 class="font-bold text-slate-900">Trazabilidad Total</h3>
+                            <p class="text-slate-600 text-sm">Cada calificación es auditable y está vinculada a un estándar C0.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Chart Container for Interactive Element -->
+                <div class="bg-white rounded-xl p-4 border border-slate-200 shadow-sm h-64 flex flex-col">
+                    <div class="text-xs font-bold text-slate-400 uppercase mb-2 tracking-wider text-center">Eficiencia de Creación de Contenido</div>
+                    <div class="chart-container flex-grow">
+                        <canvas id="efficiencyChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 3: Architecture Layers (The "Docker" Concept) -->
+    <section id="layered-architecture" class="py-20 bg-slate-50">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-12">
+                <h2 class="text-3xl font-bold text-slate-900 mb-4">Jerarquía de Gobernanza (C0 - C3)</h2>
+                <p class="text-lg text-slate-600 max-w-3xl">
+                    ColabEdu utiliza un modelo de herencia estricto para garantizar la calidad. Los estándares oficiales (C0) fluyen hacia abajo, mientras que la personalización ocurre en el borde (C3).
+                </p>
+            </div>
+
+            <!-- Visualization & Content Choices: 
+                 Hierarchy -> Goal: Organize -> Viz: Interactive Layered Pyramid/Stack -> Interaction: Click layer to see details -> Justification: Explains the inheritance model clearly.
+            -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Interactive Layers -->
+                <div class="space-y-3">
+                    <div onclick="showLayerDetails('c0')" class="cursor-pointer bg-slate-800 text-white p-5 rounded-lg hover:bg-slate-700 transition shadow-md border-l-4 border-emerald-400">
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold text-lg">Capa C0: Autoridad (Estándar)</span>
+                            <span class="text-xs bg-slate-600 px-2 py-1 rounded">Read-Only</span>
+                        </div>
+                        <p class="text-slate-300 text-sm mt-1">Ministerio / IB / Distrito. Inmutable.</p>
+                    </div>
+                    <div onclick="showLayerDetails('c1')" class="cursor-pointer bg-blue-900 text-white p-5 rounded-lg hover:bg-blue-800 transition shadow-md border-l-4 border-blue-400 opacity-90">
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold text-lg">Capa C1: Institución (Escuela)</span>
+                            <span class="text-xs bg-blue-700 px-2 py-1 rounded">Configurable</span>
+                        </div>
+                        <p class="text-blue-100 text-sm mt-1">Marca, tono institucional, políticas de centro.</p>
+                    </div>
+                    <div onclick="showLayerDetails('c2')" class="cursor-pointer bg-blue-700 text-white p-5 rounded-lg hover:bg-blue-600 transition shadow-md border-l-4 border-blue-300 opacity-90">
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold text-lg">Capa C2: Departamento (Materia)</span>
+                            <span class="text-xs bg-blue-500 px-2 py-1 rounded">Adaptable</span>
+                        </div>
+                        <p class="text-blue-100 text-sm mt-1">Coordinación de área, recursos comunes.</p>
+                    </div>
+                    <div onclick="showLayerDetails('c3')" class="cursor-pointer bg-white text-slate-800 p-5 rounded-lg hover:bg-slate-50 transition shadow-md border-l-4 border-slate-300 border border-slate-200">
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold text-lg">Capa C3: Aula (Profesor)</span>
+                            <span class="text-xs bg-slate-200 px-2 py-1 rounded text-slate-600">Editable</span>
+                        </div>
+                        <p class="text-slate-500 text-sm mt-1">Última milla. Contexto específico, plazos, personalización.</p>
+                    </div>
+                </div>
+
+                <!-- Dynamic Details Panel -->
+                <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-lg flex flex-col justify-center">
+                    <div id="layer-details-content">
+                        <div class="text-center text-slate-400">
+                            <svg class="w-16 h-16 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <p>Selecciona una capa para ver su función en el grafo.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 4: Agent Orchestration (The Workflow) -->
+    <section id="agent-workflow" class="py-20 bg-white">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-12">
+                <h2 class="text-3xl font-bold text-slate-900 mb-4">El Motor de Agentes</h2>
+                <p class="text-lg text-slate-600 max-w-3xl">
+                    ColabEdu despliega agentes especializados que actúan como "trabajadores" en una línea de montaje digital, orquestados por un controlador central.
+                </p>
+            </div>
+
+            <!-- Visualization & Content Choices: 
+                 Process Flow -> Goal: Explain Workflow -> Viz: Steps with descriptions -> Interaction: None (Linear reading) -> Justification: Clarifies the lifecycle of a document from ingestion to feedback.
+            -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Agent 1: Curator -->
+                <div class="relative bg-slate-50 p-6 rounded-xl border border-slate-200 hover:shadow-md transition">
+                    <div class="absolute -top-4 left-6 bg-indigo-600 text-white px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide">Ingesta</div>
+                    <h3 class="mt-2 text-xl font-bold text-slate-900">Curator Agent</h3>
+                    <p class="text-sm text-slate-500 mb-4">El Bibliotecario</p>
+                    <ul class="space-y-2 text-sm text-slate-600">
+                        <li class="flex items-center"><span class="w-2 h-2 bg-indigo-400 rounded-full mr-2"></span>Ingesta PDFs masivos.</li>
+                        <li class="flex items-center"><span class="w-2 h-2 bg-indigo-400 rounded-full mr-2"></span>Detecta regiones (Pregunta vs Contexto).</li>
+                        <li class="flex items-center"><span class="w-2 h-2 bg-indigo-400 rounded-full mr-2"></span>Genera bloques "RecipeBlocks".</li>
+                    </ul>
+                </div>
+
+                <!-- Agent 2: Evaluator -->
+                <div class="relative bg-slate-50 p-6 rounded-xl border border-slate-200 hover:shadow-md transition">
+                    <div class="absolute -top-4 left-6 bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide">Proceso</div>
+                    <h3 class="mt-2 text-xl font-bold text-slate-900">Evaluator Agent</h3>
+                    <p class="text-sm text-slate-500 mb-4">El Juez Determinista</p>
+                    <ul class="space-y-2 text-sm text-slate-600">
+                        <li class="flex items-center"><span class="w-2 h-2 bg-blue-400 rounded-full mr-2"></span>Aplica rúbricas estrictas (Temp 0.0).</li>
+                        <li class="flex items-center"><span class="w-2 h-2 bg-blue-400 rounded-full mr-2"></span>Genera JSON estructurado.</li>
+                        <li class="flex items-center"><span class="w-2 h-2 bg-blue-400 rounded-full mr-2"></span>Produce feedback en PDF.</li>
+                    </ul>
+                </div>
+
+                <!-- Agent 3: Tutor -->
+                <div class="relative bg-slate-50 p-6 rounded-xl border border-slate-200 hover:shadow-md transition">
+                    <div class="absolute -top-4 left-6 bg-emerald-600 text-white px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide">Interacción</div>
+                    <h3 class="mt-2 text-xl font-bold text-slate-900">Tutor Agent</h3>
+                    <p class="text-sm text-slate-500 mb-4">El Coach Socrático</p>
+                    <ul class="space-y-2 text-sm text-slate-600">
+                        <li class="flex items-center"><span class="w-2 h-2 bg-emerald-400 rounded-full mr-2"></span>Personalidad adaptable (Temp 1.0).</li>
+                        <li class="flex items-center"><span class="w-2 h-2 bg-emerald-400 rounded-full mr-2"></span>Guía sin dar respuestas.</li>
+                        <li class="flex items-center"><span class="w-2 h-2 bg-emerald-400 rounded-full mr-2"></span>Conecta con recursos de remediación.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 5: Data & Analytics (Actionable Intelligence) -->
+    <section id="analytics" class="py-20 bg-slate-900 text-white">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-12 flex flex-col md:flex-row justify-between items-end">
+                <div class="max-w-2xl">
+                    <h2 class="text-3xl font-bold mb-4">Visibilidad Científica: Gap Analysis</h2>
+                    <p class="text-slate-400">
+                        No solo calificamos; detectamos patrones sistémicos. El motor de dashboards agrupa errores semánticamente para mostrar la "Deriva Pedagógica" y permitir intervenciones precisas.
+                    </p>
+                </div>
+                <div class="mt-4 md:mt-0">
+                    <button onclick="updateDashboard()" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition flex items-center">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                        Simular Nuevos Datos
+                    </button>
+                </div>
+            </div>
+
+            <!-- Visualization & Content Choices: 
+                 Dashboard -> Goal: Relationships/Trends -> Viz: Interactive Charts (Line + Radar) -> Interaction: Update Data -> Justification: Demonstrates the "Actionable Dashboard" concept from the report.
+            -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Gap Analysis Chart -->
+                <div class="bg-slate-800 p-6 rounded-xl border border-slate-700">
+                    <h3 class="text-lg font-bold mb-4 flex items-center">
+                        <span class="w-2 h-6 bg-blue-500 mr-2 rounded-sm"></span>
+                        Análisis de Brecha (Estándar vs. Realidad)
+                    </h3>
+                    <div class="chart-container">
+                        <canvas id="gapChart"></canvas>
+                    </div>
+                    <p class="text-xs text-slate-500 mt-4 text-center">Diferencia promedio entre el rendimiento esperado (C0) y el desempeño real.</p>
+                </div>
+
+                <!-- Common Issues Cluster -->
+                <div class="bg-slate-800 p-6 rounded-xl border border-slate-700">
+                    <h3 class="text-lg font-bold mb-4 flex items-center">
+                        <span class="w-2 h-6 bg-red-500 mr-2 rounded-sm"></span>
+                        Top Problemas Sistémicos (Clase A)
+                    </h3>
+                    <!-- HTML-based visual for "Issues" to avoid overcrowding canvases -->
+                    <div class="space-y-4" id="issues-list">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+
+    <!-- Interactive Scripts -->
+    <script is:inline>
+        // --- 1. Data Definitions (Source Report Content) ---
+        const layerContent = {
+            'c0': {
+                title: "Capa C0: Autoridad (Estándar)",
+                desc: "La unidad atómica de competencia legal. Define QUÉ se debe enseñar.",
+                role: "Inmutable. Establecida por Ministerios o IB.",
+                example: "Ejemplo: 'Estándar IB: Análisis Literario Avanzado'."
+            },
+            'c1': {
+                title: "Capa C1: Institución (Escuela)",
+                desc: "Adaptación del estándar a la realidad del centro.",
+                role: "Configuración de marca, escalas de calificación institucionales.",
+                example: "Ejemplo: 'Plantilla de Reporte del Colegio San Agustín'."
+            },
+            'c2': {
+                title: "Capa C2: Departamento",
+                desc: "Coordinación entre profesores de la misma materia.",
+                role: "Recursos compartidos, rúbricas departamentales.",
+                example: "Ejemplo: 'Rúbrica de Ensayos de Historia - Dpto Humanidades'."
+            },
+            'c3': {
+                title: "Capa C3: Aula (Profesor)",
+                desc: "La instancia final de ejecución.",
+                role: "Personalización de fechas, instrucciones específicas, adaptaciones.",
+                example: "Ejemplo: 'Ensayo sobre la Revolución Francesa - Grupo A'."
+            }
+        };
+
+        // --- 2. Interaction Handlers ---
+
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function toggleParadigm(mode) {
+            document.getElementById('btn-legacy').classList.remove('active', 'text-white', 'bg-blue-900');
+            document.getElementById('btn-colabedu').classList.remove('active', 'text-white', 'bg-blue-900');
+            
+            // Reset styles for inactive buttons
+            document.getElementById('btn-legacy').classList.add('text-slate-600');
+            document.getElementById('btn-colabedu').classList.add('text-slate-600');
+
+            if(mode === 'legacy') {
+                document.getElementById('btn-legacy').classList.add('active');
+                document.getElementById('view-legacy').style.display = 'grid';
+                document.getElementById('view-colabedu').style.display = 'none';
+            } else {
+                document.getElementById('btn-colabedu').classList.add('active');
+                document.getElementById('view-legacy').style.display = 'none';
+                document.getElementById('view-colabedu').style.display = 'grid';
+                
+                // Re-render chart to ensure size fits
+                renderEfficiencyChart();
+            }
+        }
+
+        function showLayerDetails(layerId) {
+            const content = layerContent[layerId];
+            const container = document.getElementById('layer-details-content');
+            
+            // Simple animation effect
+            container.style.opacity = 0;
+            setTimeout(() => {
+                container.innerHTML = `
+                    <div class="text-left animate-fade-in">
+                        <h3 class="text-2xl font-bold text-blue-900 mb-2">${content.title}</h3>
+                        <div class="h-1 w-20 bg-emerald-500 mb-4 rounded"></div>
+                        <p class="text-lg text-slate-700 mb-4 font-medium">${content.desc}</p>
+                        <div class="bg-slate-50 p-4 rounded-lg border border-slate-100 mb-3">
+                            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Rol</span>
+                            <p class="text-slate-600">${content.role}</p>
+                        </div>
+                        <div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
+                            <span class="text-xs font-bold text-blue-400 uppercase tracking-wider">Ejemplo Real</span>
+                            <p class="text-blue-800 font-mono text-sm">${content.example}</p>
+                        </div>
+                    </div>
+                `;
+                container.style.opacity = 1;
+            }, 200);
+        }
+
+        // --- 3. Chart Implementations (Chart.js) ---
+
+        // Chart 1: Efficiency (Bar)
+        let effChartInstance = null;
+        function renderEfficiencyChart() {
+            const ctx = document.getElementById('efficiencyChart').getContext('2d');
+            if (effChartInstance) effChartInstance.destroy();
+
+            effChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Creación de Contenido', 'Corrección', 'Análisis de Datos'],
+                    datasets: [
+                        {
+                            label: 'Tradicional (Horas)',
+                            data: [10, 25, 5], // Mock data based on efficiency claims
+                            backgroundColor: '#cbd5e1', // slate-300
+                            borderRadius: 4
+                        },
+                        {
+                            label: 'ColabEdu (Horas)',
+                            data: [1, 2, 0.5], // Demonstrating massive reduction
+                            backgroundColor: '#10b981', // emerald-500
+                            borderRadius: 4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true, grid: { color: '#f1f5f9' } },
+                        x: { grid: { display: false } }
+                    },
+                    plugins: {
+                        legend: { position: 'top', align: 'end', labels: { boxWidth: 10 } }
+                    }
+                }
+            });
+        }
+
+        // Chart 2: Gap Analysis (Radar/Line)
+        let gapChartInstance = null;
+        function renderGapChart(dataOverrides) {
+            const ctx = document.getElementById('gapChart').getContext('2d');
+            if (gapChartInstance) gapChartInstance.destroy();
+
+            // Default data representing "Pedagogical Drift"
+            const standardData = [9, 9, 9, 9, 9]; // The official expectation (C0)
+            const classroomData = dataOverrides || [6, 7, 5, 8, 4]; // Reality
+
+            gapChartInstance = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['Gramática', 'Vocabulario', 'Coherencia', 'Argumentación', 'Formato'],
+                    datasets: [{
+                        label: 'Estándar Oficial (C0)',
+                        data: standardData,
+                        fill: true,
+                        backgroundColor: 'rgba(59, 130, 246, 0.2)', // blue-500 low opacity
+                        borderColor: 'rgb(59, 130, 246)',
+                        pointBackgroundColor: 'rgb(59, 130, 246)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgb(59, 130, 246)'
+                    }, {
+                        label: 'Rendimiento Aula Real',
+                        data: classroomData,
+                        fill: true,
+                        backgroundColor: 'rgba(239, 68, 68, 0.2)', // red-500 low opacity
+                        borderColor: 'rgb(239, 68, 68)',
+                        pointBackgroundColor: 'rgb(239, 68, 68)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgb(239, 68, 68)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    elements: { line: { tension: 0.3 } },
+                    scales: {
+                        r: {
+                            angleLines: { color: 'rgba(255, 255, 255, 0.1)' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            pointLabels: { color: '#94a3b8', font: { size: 12 } },
+                            ticks: { display: false, max: 10 }
+                        }
+                    },
+                    plugins: {
+                        legend: { labels: { color: '#e2e8f0' } }
+                    }
+                }
+            });
+        }
+
+        // --- 4. Logic: Dashboard Simulation ---
+
+        const mockIssues = [
+            { name: "Concordancia de Género", impact: "70%", desc: "Confusión sistemática entre 'el/la' en sustantivos abstractos." },
+            { name: "Uso de Subjuntivo", impact: "45%", desc: "Fallo al expresar duda o deseo." },
+            { name: "Estructura de Párrafo", impact: "30%", desc: "Falta de oraciones temáticas claras." }
+        ];
+
+        const mockIssuesAlt = [
+            { name: "Citas Bibliográficas", impact: "85%", desc: "Formato APA incorrecto en la mayoría de ensayos." },
+            { name: "Vocabulario Académico", impact: "60%", desc: "Uso excesivo de lenguaje coloquial." },
+            { name: "Tesis Débil", impact: "40%", desc: "Argumentos centrales poco definidos." }
+        ];
+
+        function renderIssues(issueSet) {
+            const container = document.getElementById('issues-list');
+            container.innerHTML = issueSet.map(issue => `
+                <div class="bg-slate-700/50 p-3 rounded-lg flex items-center justify-between group hover:bg-slate-700 transition cursor-default">
+                    <div>
+                        <div class="text-white font-medium text-sm">${issue.name}</div>
+                        <div class="text-slate-400 text-xs">${issue.desc}</div>
+                    </div>
+                    <div class="text-red-400 font-bold text-lg">${issue.impact}</div>
+                </div>
+            `).join('');
+        }
+
+        function updateDashboard() {
+            // Simulate changing class data
+            const randomData = Array.from({length: 5}, () => Math.floor(Math.random() * 5) + 4); // Random scores 4-9
+            renderGapChart(randomData);
+            
+            // Toggle issues list
+            const currentIssues = document.getElementById('issues-list').innerHTML.includes("Género") ? mockIssuesAlt : mockIssues;
+            renderIssues(currentIssues);
+        }
+
+        // --- 5. Initialization ---
+        window.addEventListener('load', () => {
+            // Initialize Default Views
+            renderGapChart();
+            renderIssues(mockIssues);
+            
+            // Set initial state for layer details
+            showLayerDetails('c0');
+            
+            // CSS transition helper
+            const style = document.createElement('style');
+            style.innerHTML = `
+                .animate-fade-in { animation: fadeIn 0.3s ease-in-out; }
+                @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+            `;
+            document.head.appendChild(style);
+        });
+
+    </script>
+</BaseLayout>

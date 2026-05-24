@@ -1,0 +1,417 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+<BaseLayout lang="es">
+
+
+    <!-- 1. Hero Section: The Paradigm Shift -->
+    <section id="hero" class="pt-20 pb-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h1 class="text-5xl md:text-7xl font-extrabold text-blue-900 mb-6">
+                    Del Documento Estático<br>al <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-500">Ecosistema Vivo</span>
+                </h1>
+                <p class="text-xl text-slate-600 max-w-3xl mx-auto">
+                    ColabEdu transforma la educación: de archivos PDF aislados a una red de **Recetas Modulares** ejecutables por IA. "Assessment as Code" para el mercado Pan-Hispánico.
+                </p>
+            </div>
+
+            <!-- Visualization & Content Choices: 
+                 Key Stats -> Goal: Inform -> Viz: Big Number Cards with Icons -> Interaction: Hover effect -> Justification: Quick, high-impact summary of the value proposition.
+            -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-blue-50 p-8 rounded-2xl border-l-4 border-blue-500 interactive-card">
+                    <div class="text-4xl mb-2">🚀</div>
+                    <h3 class="text-2xl font-bold text-blue-900">Zero Redundancia</h3>
+                    <p class="text-blue-700 mt-2">Un "Estándar" se define una vez (C0) y se hereda automáticamente en miles de aulas.</p>
+                </div>
+                <div class="bg-orange-50 p-8 rounded-2xl border-l-4 border-orange-500 interactive-card">
+                    <div class="text-4xl mb-2">⚖️</div>
+                    <h3 class="text-2xl font-bold text-orange-900">Integridad Técnica</h3>
+                    <p class="text-orange-700 mt-2">Auditoría forense de calificaciones válida por 5+ años gracias a contratos de datos inmutables.</p>
+                </div>
+                <div class="bg-cyan-50 p-8 rounded-2xl border-l-4 border-cyan-500 interactive-card">
+                    <div class="text-4xl mb-2">🔬</div>
+                    <h3 class="text-2xl font-bold text-cyan-900">Visibilidad Científica</h3>
+                    <p class="text-cyan-700 mt-2">Métricas exactas de "Deriva Pedagógica" para decisiones basadas en datos reales.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. The Core Engine: Recipe Architecture (Interactive Layered Graph) -->
+    <section id="architecture" class="py-20 bg-slate-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row gap-12 items-center">
+                <div class="w-full md:w-1/2">
+                    <h2 class="text-3xl font-bold text-slate-900 mb-6 flex items-center">
+                        <span class="bg-blue-900 text-white rounded-full w-10 h-10 flex items-center justify-center mr-3 text-lg">1</span>
+                        La Jerarquía de Gobernanza
+                    </h2>
+                    <p class="text-slate-600 mb-8">
+                        El sistema utiliza un modelo de herencia estricto (C0-C3). Selecciona una capa para ver su función en el ecosistema.
+                    </p>
+                    
+                    <!-- Visualization & Content Choices: 
+                         Hierarchy -> Goal: Organize -> Viz: Interactive Accordion/List -> Interaction: Click to update detail view -> Justification: Cleanly explains the complex inheritance model. NO SVG.
+                    -->
+                    <div class="space-y-4">
+                        <button onclick="updateLayerInfo('c0')" class="w-full text-left p-4 bg-white rounded-xl shadow-sm hover:bg-blue-50 transition border border-slate-200 flex items-center justify-between group">
+                            <span class="font-bold text-blue-900">Capa C0: Autoridad (Estándar)</span>
+                            <span class="text-xs bg-slate-200 text-slate-600 px-2 py-1 rounded group-hover:bg-blue-200">Read-Only</span>
+                        </button>
+                        <button onclick="updateLayerInfo('c1')" class="w-full text-left p-4 bg-white rounded-xl shadow-sm hover:bg-blue-50 transition border border-slate-200 flex items-center justify-between group">
+                            <span class="font-bold text-blue-800">Capa C1: Institución (Escuela)</span>
+                            <span class="text-xs bg-slate-200 text-slate-600 px-2 py-1 rounded group-hover:bg-blue-200">Configurable</span>
+                        </button>
+                        <button onclick="updateLayerInfo('c2')" class="w-full text-left p-4 bg-white rounded-xl shadow-sm hover:bg-blue-50 transition border border-slate-200 flex items-center justify-between group">
+                            <span class="font-bold text-blue-700">Capa C2: Departamento</span>
+                            <span class="text-xs bg-slate-200 text-slate-600 px-2 py-1 rounded group-hover:bg-blue-200">Adaptable</span>
+                        </button>
+                        <button onclick="updateLayerInfo('c3')" class="w-full text-left p-4 bg-white rounded-xl shadow-sm hover:bg-blue-50 transition border border-slate-200 flex items-center justify-between group">
+                            <span class="font-bold text-blue-600">Capa C3: Aula (Profesor)</span>
+                            <span class="text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded group-hover:bg-orange-200">Editable</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="w-full md:w-1/2">
+                    <div id="layer-detail-card" class="bg-blue-900 text-white p-8 rounded-3xl shadow-xl h-full min-h-[300px] flex flex-col justify-center relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-4 opacity-10 text-9xl">🏗️</div>
+                        <h3 id="layer-title" class="text-2xl font-bold mb-4 text-orange-400">Selecciona una Capa</h3>
+                        <p id="layer-desc" class="text-lg text-blue-100 mb-6">Explora cómo fluye la autoridad pedagógica desde el ministerio hasta el estudiante.</p>
+                        <div id="layer-example" class="bg-white/10 p-4 rounded-lg backdrop-blur-sm border border-white/20 hidden">
+                            <span class="text-xs font-bold text-blue-300 uppercase tracking-wider">Ejemplo Real</span>
+                            <p class="text-white font-mono text-sm mt-1" id="layer-example-text"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. Agent Workflow: The Digital Assembly Line -->
+    <section id="workflow" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-slate-900 mb-12 text-center flex items-center justify-center">
+                <span class="bg-orange-500 text-white rounded-full w-10 h-10 flex items-center justify-center mr-3 text-lg">2</span>
+                La Línea de Montaje Digital
+            </h2>
+
+            <!-- Visualization & Content Choices: 
+                 Process -> Goal: Change/Flow -> Viz: Horizontal Process Cards connected by CSS lines -> Interaction: None -> Justification: Shows the transformation of data from chaos (PDF) to value (Feedback).
+            -->
+            <div class="relative">
+                <!-- Connector Line -->
+                <div class="hidden md:block absolute top-1/2 left-0 w-full h-1 bg-slate-200 -z-10 transform -translate-y-1/2"></div>
+
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                    <!-- Step 1 -->
+                    <div class="bg-white p-6 rounded-xl border-2 border-slate-200 shadow-lg text-center relative">
+                        <div class="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl border-2 border-slate-300">📄</div>
+                        <h4 class="font-bold text-slate-800">1. Ingesta</h4>
+                        <p class="text-xs text-slate-500 mt-2">PDFs, XMLs Legacy, Canvas CSV</p>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="bg-white p-6 rounded-xl border-2 border-indigo-200 shadow-lg text-center relative">
+                        <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-indigo-600 text-white text-xs px-2 py-1 rounded-full">Curator Agent</div>
+                        <div class="w-12 h-12 bg-indigo-50 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl border-2 border-indigo-300">🤖</div>
+                        <h4 class="font-bold text-indigo-900">2. Normalización</h4>
+                        <p class="text-xs text-slate-500 mt-2">Convierte el caos en "RecipeBlocks" estructurados (JSON).</p>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="bg-white p-6 rounded-xl border-2 border-blue-200 shadow-lg text-center relative">
+                        <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white text-xs px-2 py-1 rounded-full">Evaluator Agent</div>
+                        <div class="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl border-2 border-blue-300">🧠</div>
+                        <h4 class="font-bold text-blue-900">3. Evaluación</h4>
+                        <p class="text-xs text-slate-500 mt-2">Aplica rúbricas deterministas (Temp 0.0) para consistencia.</p>
+                    </div>
+
+                    <!-- Step 4 -->
+                    <div class="bg-white p-6 rounded-xl border-2 border-emerald-200 shadow-lg text-center relative">
+                        <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-emerald-600 text-white text-xs px-2 py-1 rounded-full">Tutor Agent</div>
+                        <div class="w-12 h-12 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl border-2 border-emerald-300">🎓</div>
+                        <h4 class="font-bold text-emerald-900">4. Acción</h4>
+                        <p class="text-xs text-slate-500 mt-2">Feedback formativo, remediación automática y reportes.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. Impact Dashboard: Actionable Intelligence -->
+    <section id="impact" class="py-20 bg-slate-900 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-12">
+                <div>
+                    <h2 class="text-3xl font-bold mb-4 flex items-center">
+                        <span class="bg-orange-500 text-white rounded-full w-10 h-10 flex items-center justify-center mr-3 text-lg">3</span>
+                        Inteligencia Accionable: Gap Analysis
+                    </h2>
+                    <p class="text-slate-400 max-w-2xl">
+                        Transformamos la "caja negra" de la evaluación en datos claros. Visualiza la "Deriva Pedagógica": la distancia exacta entre lo que se espera (Estándar C0) y lo que ocurre en el aula.
+                    </p>
+                </div>
+                <div class="mt-6 md:mt-0">
+                    <div class="inline-flex rounded-md shadow-sm" role="group">
+                        <button onclick="updateChartData('humanities')" id="btn-humanities" class="active-tab px-4 py-2 text-sm font-medium rounded-l-lg border border-orange-600">Humanidades</button>
+                        <button onclick="updateChartData('stem')" id="btn-stem" class="inactive-tab px-4 py-2 text-sm font-medium bg-slate-800 text-slate-300 border-t border-b border-r border-slate-700 hover:bg-slate-700">Ciencias</button>
+                        <button onclick="updateChartData('languages')" id="btn-languages" class="inactive-tab px-4 py-2 text-sm font-medium rounded-r-lg bg-slate-800 text-slate-300 border-t border-b border-r border-slate-700 hover:bg-slate-700">Idiomas</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Main Chart -->
+                <div class="lg:col-span-2 bg-slate-800 p-6 rounded-2xl border border-slate-700">
+                    <h3 class="text-lg font-bold mb-6 text-blue-400">Rendimiento Real vs. Estándar Oficial (C0)</h3>
+                    <div class="chart-container">
+                        <canvas id="gapChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Metrics & Insights -->
+                <div class="space-y-6">
+                    <!-- Metric 1 -->
+                    <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700">
+                        <div class="text-slate-400 text-xs uppercase font-bold tracking-wider mb-2">Deriva Pedagógica Promedio</div>
+                        <div class="flex items-end">
+                            <span class="text-4xl font-bold text-red-400" id="drift-metric">-15%</span>
+                            <span class="text-slate-500 text-sm ml-2 mb-1">vs. Semestre Anterior</span>
+                        </div>
+                        <div class="w-full bg-slate-700 rounded-full h-1.5 mt-4">
+                            <div class="bg-red-500 h-1.5 rounded-full" style="width: 15%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Metric 2 -->
+                    <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700">
+                        <div class="text-slate-400 text-xs uppercase font-bold tracking-wider mb-2">Consistencia de Evaluación</div>
+                        <div class="flex items-end">
+                            <span class="text-4xl font-bold text-emerald-400" id="consistency-metric">98%</span>
+                            <span class="text-slate-500 text-sm ml-2 mb-1">Score Agéntico</span>
+                        </div>
+                        <p class="text-xs text-slate-500 mt-2">La IA elimina la subjetividad humana en la calificación técnica.</p>
+                    </div>
+
+                    <!-- Key Insight -->
+                    <div class="bg-blue-900/50 p-6 rounded-2xl border border-blue-800">
+                        <h4 class="font-bold text-blue-300 mb-2">💡 Insight Automático</h4>
+                        <p class="text-sm text-blue-100" id="insight-text">
+                            Se detecta una brecha sistémica en "Argumentación Crítica" en el 70% de los alumnos de 4º grado. Se recomienda activar el módulo de remediación "Lógica Básica".
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. Ecosystem (Table & Integration) -->
+    <section class="py-20 bg-white">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl font-bold text-slate-900 mb-8">Interoperabilidad Total</h2>
+            <p class="text-slate-600 mb-12">
+                ColabEdu no es una isla. Se integra profundamente con los sistemas que ya usas.
+            </p>
+
+            <!-- Visualization & Content Choices: 
+                 Integration Table -> Goal: Organize -> Viz: Styled HTML Table -> Interaction: None -> Justification: Clear comparison of capabilities across different integration points. NO SVG.
+            -->
+            <div class="overflow-x-auto shadow-lg rounded-xl border border-slate-200">
+                <table class="min-w-full bg-white">
+                    <thead class="bg-slate-50">
+                        <tr>
+                            <th class="py-4 px-6 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Sistema Externo</th>
+                            <th class="py-4 px-6 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Tipo de Integración</th>
+                            <th class="py-4 px-6 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Beneficio</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                        <tr>
+                            <td class="py-4 px-6 text-left font-bold text-blue-900">Canvas LMS</td>
+                            <td class="py-4 px-6 text-left text-sm text-slate-600"><span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full font-bold">Bidireccional</span></td>
+                            <td class="py-4 px-6 text-left text-sm text-slate-600">Sincronización automática de asignaciones y notas.</td>
+                        </tr>
+                        <tr>
+                            <td class="py-4 px-6 text-left font-bold text-blue-900">Google Docs</td>
+                            <td class="py-4 px-6 text-left text-sm text-slate-600"><span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full font-bold">Output</span></td>
+                            <td class="py-4 px-6 text-left text-sm text-slate-600">Generación de reportes de feedback nativos.</td>
+                        </tr>
+                        <tr>
+                            <td class="py-4 px-6 text-left font-bold text-blue-900">Sistemas SIS (Banner)</td>
+                            <td class="py-4 px-6 text-left text-sm text-slate-600"><span class="bg-orange-100 text-orange-800 text-xs px-2 py-1 rounded-full font-bold">Archivado</span></td>
+                            <td class="py-4 px-6 text-left text-sm text-slate-600">Registro legal inmutable de calificaciones.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    
+
+    <!-- Interactive Scripts -->
+    <script is:inline>
+        // --- 1. Data Definitions ---
+        const layerData = {
+            'c0': {
+                title: "Capa C0: Autoridad (Estándar)",
+                desc: "La unidad atómica de competencia legal. Define QUÉ se debe enseñar.",
+                example: "Ejemplo: 'Estándar IB: Análisis Literario Avanzado (Criterio A)'."
+            },
+            'c1': {
+                title: "Capa C1: Institución (Escuela)",
+                desc: "Adaptación del estándar a la realidad del centro. Marca y políticas.",
+                example: "Ejemplo: 'Plantilla de Reporte Oficial - Colegio San Agustín'."
+            },
+            'c2': {
+                title: "Capa C2: Departamento",
+                desc: "Coordinación entre profesores. Recursos compartidos.",
+                example: "Ejemplo: 'Rúbrica de Ensayos de Historia - Dpto Humanidades'."
+            },
+            'c3': {
+                title: "Capa C3: Aula (Profesor)",
+                desc: "La instancia final. Personalización de contexto y plazos.",
+                example: "Ejemplo: 'Ensayo sobre la Revolución Francesa - Grupo A - Fecha Límite Viernes'."
+            }
+        };
+
+        const chartDatasets = {
+            'humanities': {
+                data: [9, 8, 6, 9, 5],
+                drift: "-15%",
+                insight: "Se detecta una brecha sistémica en 'Argumentación Crítica' en el 70% de los alumnos."
+            },
+            'stem': {
+                data: [9, 5, 8, 7, 9],
+                drift: "-8%",
+                insight: "Los alumnos dominan el cálculo (9/10) pero fallan en la explicación teórica (5/10)."
+            },
+            'languages': {
+                data: [7, 9, 9, 6, 8],
+                drift: "-12%",
+                insight: "Excelente fluidez oral, pero debilidad notable en gramática escrita."
+            }
+        };
+
+        // --- 2. Interaction Handlers ---
+
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function updateLayerInfo(layerId) {
+            const content = layerData[layerId];
+            const titleEl = document.getElementById('layer-title');
+            const descEl = document.getElementById('layer-desc');
+            const exampleBox = document.getElementById('layer-example');
+            const exampleText = document.getElementById('layer-example-text');
+
+            // Animation Reset
+            titleEl.style.opacity = 0;
+            descEl.style.opacity = 0;
+            exampleBox.style.opacity = 0;
+
+            setTimeout(() => {
+                titleEl.innerText = content.title;
+                descEl.innerText = content.desc;
+                exampleText.innerText = content.example;
+                exampleBox.classList.remove('hidden');
+                
+                titleEl.style.opacity = 1;
+                descEl.style.opacity = 1;
+                exampleBox.style.opacity = 1;
+            }, 200);
+        }
+
+        // --- 3. Chart Implementation (Chart.js) ---
+        let gapChartInstance = null;
+
+        function renderGapChart(datasetKey) {
+            const ctx = document.getElementById('gapChart').getContext('2d');
+            const dataSet = chartDatasets[datasetKey];
+
+            if (gapChartInstance) gapChartInstance.destroy();
+
+            gapChartInstance = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['Criterio A', 'Criterio B', 'Criterio C', 'Criterio D', 'Criterio E'],
+                    datasets: [{
+                        label: 'Estándar Oficial (C0)',
+                        data: [10, 10, 10, 10, 10], // The "Perfect" Standard
+                        fill: true,
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)', // Blue 500
+                        borderColor: '#3B82F6',
+                        pointBackgroundColor: '#3B82F6',
+                        pointBorderColor: '#fff',
+                        borderDash: [5, 5]
+                    }, {
+                        label: 'Rendimiento Real',
+                        data: dataSet.data,
+                        fill: true,
+                        backgroundColor: 'rgba(249, 115, 22, 0.4)', // Orange 500
+                        borderColor: '#F97316',
+                        pointBackgroundColor: '#F97316',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: '#F97316'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: { color: 'rgba(255, 255, 255, 0.1)' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            pointLabels: { color: '#94A3B8', font: { size: 12 } },
+                            ticks: { display: false, max: 10 }
+                        }
+                    },
+                    plugins: {
+                        legend: { labels: { color: '#E2E8F0' } }
+                    }
+                }
+            });
+
+            // Update Text Metrics
+            document.getElementById('drift-metric').innerText = dataSet.drift;
+            document.getElementById('insight-text').innerText = dataSet.insight;
+        }
+
+        function updateChartData(key) {
+            // Update Tab Styles
+            ['humanities', 'stem', 'languages'].forEach(k => {
+                const btn = document.getElementById(`btn-${k}`);
+                if (k === key) {
+                    btn.className = "active-tab px-4 py-2 text-sm font-medium border border-orange-600";
+                    if(k === 'humanities') btn.classList.add('rounded-l-lg');
+                    if(k === 'languages') btn.classList.add('rounded-r-lg');
+                } else {
+                    btn.className = "inactive-tab px-4 py-2 text-sm font-medium bg-slate-800 text-slate-300 border-t border-b border-r border-slate-700 hover:bg-slate-700";
+                    if(k === 'humanities') btn.classList.add('rounded-l-lg');
+                    if(k === 'languages') btn.classList.add('rounded-r-lg');
+                }
+            });
+
+            renderGapChart(key);
+        }
+
+        // --- 4. Initialization ---
+        window.addEventListener('load', () => {
+            renderGapChart('humanities');
+            updateLayerInfo('c0');
+            
+            // Add fade transition styles
+            const style = document.createElement('style');
+            style.innerHTML = `
+                #layer-title, #layer-desc, #layer-example { transition: opacity 0.3s ease-in-out; }
+            `;
+            document.head.appendChild(style);
+        });
+
+    </script>
+</BaseLayout>

@@ -1,0 +1,36 @@
+---
+title: Centro de Ayuda ColabEdu
+description: Documentación oficial y soporte para la plataforma ColabEdu.
+template: splash
+hero:
+  tagline: ¡Bienvenido al portal de soporte oficial de ColabEdu!
+  image:
+    file: ../../assets/houston.webp
+  actions:
+    - text: Guía Rápida
+      link: /guides/example/
+      icon: right-arrow
+    - text: Ir a ColabEdu
+      link: https://colabedu.net
+      icon: external
+      variant: minimal
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+## Siguientes pasos
+
+<CardGrid stagger>
+	<Card title="Para Docentes" icon="pencil">
+		Descubre cómo crear ejercicios, revisar rúbricas y evaluar con IA.
+	</Card>
+	<Card title="Para Estudiantes" icon="document">
+		Aprende a acceder a tus tareas, ver tu progreso y utilizar las herramientas.
+	</Card>
+	<Card title="Colegios y Distritos" icon="setting">
+		Administra usuarios, currículos y configuraciones institucionales.
+	</Card>
+	<Card title="Facturación" icon="open-book">
+		Revisa los planes de pago y licencias disponibles.
+	</Card>
+</CardGrid>

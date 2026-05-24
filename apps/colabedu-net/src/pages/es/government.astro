@@ -1,0 +1,234 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+<BaseLayout lang="es">
+
+
+    
+    
+<main class="pt-32 min-h-screen">
+        
+        <!-- ROLE: PROFESOR -->
+        <div id="view-teacher" class="view-content hidden opacity-0">
+            <!-- S1: Hero -->
+            <section class="max-w-7xl mx-auto py-20 px-4 lg:px-8 text-center">
+                <h1 class="text-6xl lg:text-8xl font-black text-dark tracking-tighter mb-8 leading-none italic">Califica menos.<br/><span class="text-primary underline decoration-indigo-200 decoration-8">Enseña más.</span></h1>
+                <p class="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">Libérate de la carga administrativa. Nuestra IA califica audios, manuscritos y textos con precisión del 99%.</p>
+            </section>
+            <!-- S2: Stats -->
+            <section class="py-20 bg-dark text-white"><div class="max-w-7xl mx-auto px-4 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center"><div><h2 class="text-3xl font-bold mb-6 text-secondary">Ahorro de Tiempo Real</h2><p class="text-slate-400 mb-8 leading-relaxed">Reduce el tiempo de corrección de 15 horas a 3 horas semanales. Visualiza el impacto acumulado en un semestre lectivo.</p></div><div class="bg-slate-900 p-6 rounded-3xl border border-slate-800"><div class="chart-container"><canvas id="teacherTimeChart"></canvas></div></div></div></section>
+            <!-- S3: Features -->
+            <section class="py-24 max-w-7xl mx-auto px-4 lg:px-8 text-center"><h2 class="text-4xl font-bold mb-16">Funcionalidades Anti-Burnout</h2><div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-left"><div class="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm bento-item"><i class="fas fa-signature text-3xl text-primary mb-6"></i><h3 class="text-xl font-bold mb-2">OCR de Manuscritos</h3><p class="text-slate-500 text-sm">Interpretación experta de caligrafía difícil y evaluación inmediata.</p></div><div class="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm bento-item"><i class="fas fa-microphone-alt text-3xl text-primary mb-6"></i><h3 class="text-xl font-bold mb-2">Orales One-Shot</h3><p class="text-slate-500 text-sm">Transcripción y calificación de fluidez y contenido en un solo paso.</p></div><div class="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm bento-item"><i class="fas fa-magic text-3xl text-primary mb-6"></i><h3 class="text-xl font-bold mb-2">Diseñador de Rúbricas</h3><p class="text-slate-500 text-sm">Generación dinámica de criterios alineados a estándares internacionales.</p></div></div></section>
+            <!-- S4: Integration -->
+            <section class="py-20 bg-slate-50 border-y border-slate-100"><div class="max-w-7xl mx-auto px-4 lg:px-8 text-center"><h3 class="text-2xl font-bold mb-10">Integración LMS Invisible</h3><p class="text-slate-400 mb-12">Grade Passback automático a Canvas, Classroom y Moodle.</p><div class="flex justify-center space-x-12 opacity-40"><span class="font-black text-2xl">CANVAS</span><span class="font-black text-2xl">MOODLE</span><span class="font-black text-2xl">GOOGLE</span></div></div></section>
+            <!-- S5: Method -->
+            <section class="py-20 bg-white"><div class="max-w-7xl mx-auto px-4 lg:px-8 text-center"><h3 class="text-2xl font-bold mb-12">Pedagogía de 3 Fases</h3><div class="grid grid-cols-1 md:grid-cols-3 gap-4"><div class="p-6 bg-slate-100 rounded-2xl"><h4 class="font-bold">1. The Gym</h4><p class="text-xs text-slate-500">Práctica Socrática</p></div><div class="p-6 bg-slate-100 rounded-2xl"><h4 class="font-bold">2. Game Day</h4><p class="text-xs text-slate-500">Prueba Blindada</p></div><div class="p-6 bg-indigo-600 text-white rounded-2xl"><h4 class="font-bold">3. The Audition</h4><p class="text-xs opacity-80">Revisión Docente</p></div></div></div></section>
+            <!-- S6: CTA -->
+            <section class="py-32 text-center border-t border-slate-100"><h2 class="text-4xl font-bold mb-8">Recupera tu vida personal hoy.</h2><button class="px-12 py-5 bg-primary text-white rounded-full font-bold shadow-xl hover:scale-105 transition-all">Empezar ahora</button></section>
+        </div>
+
+        <!-- ROLE: ESCUELA -->
+        <div id="view-schools" class="role-section">
+            <!-- S1: Hero -->
+            <section class="max-w-7xl mx-auto py-20 px-4 lg:px-8">
+                <h2 class="text-5xl lg:text-7xl font-extrabold text-dark tracking-tighter mb-8 leading-none">Estandarización y <br/><span class="text-primary italic text-6xl">Justicia Académica.</span></h2>
+                <p class="text-xl text-slate-600 max-w-3xl leading-relaxed">Elimine la deriva pedagógica. Asegure que cada profesor de su institución evalúe con el mismo rigor y calidad de feedback.</p>
+            </section>
+            <!-- S2: Consistency Radar -->
+            <section class="py-20 bg-slate-50 border-y border-slate-200"><div class="max-w-7xl mx-auto px-4 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center"><div class="bg-white p-10 rounded-[3rem] shadow-xl border border-slate-100"><h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-10">Consistencia Evaluativa (Humano vs IA)</h3><div class="chart-container"><canvas id="schoolRadarChart"></canvas></div></div><div><h2 class="text-3xl font-bold mb-6 text-dark">Impacto en la Equidad</h2><p class="text-slate-600 mb-8 leading-relaxed">La varianza subjetiva entre docentes es el mayor riesgo para la equidad estudiantil. ColabEdu implementa un motor determinista que garantiza la misma vara de medir para todos.</p></div></div></section>
+            <!-- S3: LTI 1.3 -->
+            <section class="py-24 max-w-7xl mx-auto px-4 lg:px-8"><div class="bg-indigo-600 p-12 rounded-[3.5rem] text-white flex flex-col lg:flex-row justify-between items-center gap-12"><div class="max-w-xl"><h3 class="text-3xl font-bold mb-4">Integración LTI 1.3 Advantage</h3><p class="opacity-90">Sincronización profunda de grado institucional. Sus datos permanecen seguros y soberanos dentro de su infraestructura actual.</p></div><div class="bg-white/10 p-8 rounded-3xl border border-white/20 text-center"><i class="fas fa-shield-alt text-4xl mb-4"></i><p class="text-xs font-bold uppercase tracking-widest">Seguridad Nivel Enterprise</p></div></div></section>
+            <!-- S4: Dashboard Admin -->
+            <section class="py-24 bg-white"><div class="max-w-7xl mx-auto px-4 lg:px-8 text-center"><h3 class="text-2xl font-bold mb-12">Consola para Coordinadores</h3><p class="text-slate-500 mb-16 text-sm">Visualice el rendimiento por departamento en tiempo real, sin pedir informes adicionales a los docentes.</p><div class="grid grid-cols-1 md:grid-cols-3 gap-8"><div class="p-8 bg-slate-50 rounded-3xl border border-slate-100">Analítica de Brechas</div><div class="p-8 bg-slate-50 rounded-3xl border border-slate-100">Detección de Abandono</div><div class="p-8 bg-slate-50 rounded-3xl border border-slate-100">Gobernanza Curricular</div></div></div></section>
+            <!-- S5: Testimonial -->
+            <section class="py-20 bg-neutral italic text-slate-500 text-center text-lg">"La estandarización de criterios en nuestro departamento de idiomas mejoró un 40% en el primer trimestre."</section>
+            <!-- S6: CTA -->
+            <section class="py-32 text-center bg-dark text-white"><h2 class="text-4xl font-bold mb-8 text-white">Escale la excelencia institucional.</h2><button class="px-12 py-5 bg-primary text-white rounded-full font-bold shadow-2xl">Agendar Demo</button></section>
+        </div>
+
+        <!-- ROLE: EDITORIAL -->
+        <div id="view-publishers" class="role-section">
+            <!-- S1: Hero -->
+            <section class="max-w-7xl mx-auto py-20 px-4 lg:px-8">
+                <h2 class="text-5xl lg:text-7xl font-extrabold text-dark tracking-tighter mb-8 leading-none">Revitalice su <br/><span class="gradient-text-publisher italic">IP Editorial.</span></h2>
+                <p class="text-xl text-slate-600 max-w-3xl leading-relaxed">No venda archivos muertos. Convierta su catálogo en una red de tutores inteligentes que protegen su IP mediante referencialidad ciega.</p>
+            </section>
+            <!-- S2: Engagement Chart -->
+            <section class="py-20 bg-dark text-white"><div class="max-w-7xl mx-auto px-4 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center"><div><h2 class="text-3xl font-bold mb-6 text-publisher">Ciclo de Vida Activo</h2><p class="text-slate-400 mb-8 leading-relaxed">Mapeamos el uso del contenido tradicional frente a la versión enriquecida con IA Socrática. El engagement aumenta un 60%.</p></div><div class="bg-slate-900 p-10 rounded-[3rem] border border-slate-800 shadow-inner"><div class="chart-container"><canvas id="publisherEngagementChart"></canvas></div></div></div></section>
+            <!-- S3: RAG Tech -->
+            <section class="py-24 max-w-7xl mx-auto px-4 lg:px-8 text-center"><h3 class="text-3xl font-bold mb-16">La Factoría de Contenidos</h3><div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-left"><div class="p-10 bg-white rounded-3xl border border-slate-100 shadow-sm"><h4 class="font-bold text-amber-600 mb-2">Atomización RAG</h4><p class="text-xs text-slate-500">Transformamos PDFs en grafos de conocimiento estructurados.</p></div><div class="p-10 bg-white rounded-3xl border border-slate-100 shadow-sm"><h4 class="font-bold text-amber-600 mb-2">Mutación Instruccional</h4><p class="text-xs text-slate-500">De texto pasivo a debates y simulaciones automáticas.</p></div><div class="p-10 bg-white rounded-3xl border border-slate-100 shadow-sm"><h4 class="font-bold text-amber-600 mb-2">Tagging Normativo</h4><p class="text-xs text-slate-500">Alineación con decretos oficiales LOMLOE/SEP/AP.</p></div></div></section>
+            <!-- S4: Protection -->
+            <section class="py-20 bg-amber-50 border-y border-amber-100"><div class="max-w-3xl mx-auto text-center px-4"><h3 class="text-2xl font-bold text-amber-900 mb-6">Referencialidad Ciega</h3><p class="text-amber-800 italic">"La IA guía al alumno a consultar su libro físico en pasajes clave, protegiendo las ventas y validando el uso del manual oficial."</p></div></section>
+            <!-- S5: Revenue -->
+            <section class="py-20 bg-white text-center"><h3 class="text-2xl font-bold mb-8 text-dark">Nuevos Modelos de Monetización</h3><p class="text-slate-400 mb-10 text-sm">Pasa de la venta única a licencias de "Capa de Inteligencia" por estudiante/año.</p><div class="flex justify-center space-x-6 font-black text-slate-200"><span>WHITE LABEL</span><span>API ACCESS</span><span>INTEGRATED GRADEBOOK</span></div></section>
+            <!-- S6: CTA -->
+            <section class="py-32 text-center bg-publisher text-white"><h2 class="text-4xl font-bold mb-8 text-white">Modernice su catálogo en 15 días.</h2><button class="px-12 py-5 bg-dark text-white rounded-full font-bold shadow-2xl">Hablar con Estrategia</button></section>
+        </div>
+
+        <!-- ROLE: ESTUDIANTE -->
+        <div id="view-students" class="role-section">
+            <!-- S1: Hero -->
+            <section class="max-w-7xl mx-auto py-20 px-4 lg:px-8 text-center">
+                <h2 class="text-6xl lg:text-8xl font-black text-dark tracking-tighter mb-8 leading-none underline decoration-secondary">Aprende, <br/><span class="text-secondary italic">no atajes.</span></h2>
+                <p class="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">ColabEdu es tu tutor privado disponible 24/7 que no te da la respuesta, sino que te enseña a encontrarla.</p>
+            </section>
+            <!-- S2: Mastery Curve -->
+            <section class="py-20 bg-slate-50 border-y border-slate-200"><div class="max-w-7xl mx-auto px-4 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center"><div class="bg-white p-10 rounded-[3rem] shadow-xl border border-slate-100"><h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-10">Tu Velocidad de Aprendizaje</h3><div class="chart-container"><canvas id="studentMasteryChart"></canvas></div></div><div><h2 class="text-3xl font-bold mb-6 text-dark">El Gimnasio del Aprendizaje</h2><p class="text-slate-600 mb-8 leading-relaxed">Practica en un entorno libre de estrés. Nuestra IA detecta donde te bloqueas y te da la pista exacta que necesitas para superar el reto.</p></div></div></section>
+            <!-- S3: Feedback -->
+            <section class="py-24 max-w-7xl mx-auto px-4 lg:px-8"><div class="grid grid-cols-1 md:grid-cols-2 gap-12"><div class="p-10 bg-indigo-50 rounded-[2.5rem] bento-item"><h3 class="text-2xl font-bold text-indigo-700 mb-4">Feedback Instantáneo</h3><p class="text-indigo-600/80 text-sm">No esperes semanas. Recibe correcciones gramaticales y sugerencias de contenido en el momento de mayor curiosidad.</p></div><div class="p-10 bg-emerald-50 rounded-[2.5rem] bento-item"><h3 class="text-2xl font-bold text-secondary mb-4">Entrenamiento Oral</h3><p class="text-emerald-600/80 text-sm">Graba tu voz y obtén diagnósticos de fluidez inmediatos para mejorar antes del examen real.</p></div></div></section>
+            <!-- S4: Scaffolding -->
+            <section class="py-20 bg-dark text-white text-center"><h3 class="text-2xl font-bold mb-12">Andamiaje Inteligente</h3><p class="text-slate-400 mb-8">Nivelamos el contenido a tu capacidad actual para que el progreso sea constante y motivador.</p></section>
+            <!-- S5: Gamification -->
+            <section class="py-20 bg-white text-center"><h3 class="text-2xl font-bold mb-8 text-dark">Gana Medallas de Maestría</h3><div class="flex justify-center space-x-8 text-4xl opacity-50"><span>🏅</span><span>⚡</span><span>🔥</span><span>🎓</span></div></section>
+            <!-- S6: CTA -->
+            <section class="py-32 text-center bg-secondary text-white"><h2 class="text-4xl font-bold mb-8 text-white">Conviértete en el dueño de tu progreso.</h2><button class="px-12 py-5 bg-dark text-white rounded-full font-bold shadow-2xl">Acceder a mi Portal</button></section>
+        </div>
+
+        <!-- ROLE: GOBIERNO -->
+        <div id="view-governments" class="role-section">
+            <!-- S1: Hero -->
+            <section class="max-w-7xl mx-auto py-20 px-4 lg:px-8">
+                <h2 class="text-5xl lg:text-7xl font-extrabold text-dark tracking-tighter mb-8 leading-none">Analítica de <br/><span class="gradient-text-gov">Impacto Nacional.</span></h2>
+                <p class="text-xl text-slate-600 max-w-3xl leading-relaxed">Infraestructura de datos para el cumplimiento curricular y la toma de decisiones basada en evidencias de aula en tiempo real.</p>
+            </section>
+            <!-- S2: Gov Dashboard -->
+            <section class="py-20 bg-dark text-white relative overflow-hidden"><div class="max-w-7xl mx-auto px-4 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-16 items-center"><div class="lg:col-span-8 bg-slate-900 p-10 rounded-[3rem] border border-slate-800 shadow-inner"><h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-10 text-center">Cumplimiento de Competencias por Región (%)</h3><div class="chart-container"><canvas id="govBarChart"></canvas></div></div><div class="lg:col-span-4 space-y-6"><div><h3 class="text-2xl font-bold mb-2 text-primary">Soberanía de Datos</h3><p class="text-slate-400 text-sm">Modelos de IA alojados localmente con cumplimiento absoluto de leyes nacionales de privacidad.</p></div></div></div></section>
+            <!-- S3: Compliance -->
+            <section class="py-24 max-w-7xl mx-auto px-4 lg:px-8 text-center"><h3 class="text-3xl font-bold mb-16">Pilares Gubernamentales</h3><div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-left"><div class="p-8 bg-white rounded-3xl border border-slate-100 shadow-sm bento-item"><h4 class="font-bold text-indigo-600 mb-2">Compliance Officer</h4><p class="text-xs text-slate-500">Mapeo automático de notas a Decretos Reales (LOMLOE) o estándares estatales (TEKS).</p></div><div class="p-8 bg-white rounded-3xl border border-slate-100 shadow-sm bento-item"><h4 class="font-bold text-indigo-600 mb-2">Equidad Digital</h4><p class="text-xs text-slate-500">Mismos criterios de alta calidad para la escuela rural y la metropolitana.</p></div><div class="p-8 bg-white rounded-3xl border border-slate-100 shadow-sm bento-item"><h4 class="font-bold text-indigo-600 mb-2">Detección Precoz</h4><p class="text-xs text-slate-500">Alertas tempranas de brechas de aprendizaje antes de las pruebas estatales.</p></div></div></section>
+            <!-- S4: UNESCO -->
+            <section class="py-20 bg-slate-50"><div class="max-w-7xl mx-auto px-4 lg:px-8"><div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center"><div><h2 class="text-3xl font-bold mb-6">Respuesta a la Crisis de Personal</h2><p class="text-slate-600">La UNESCO estima una necesidad de 44M de docentes. ColabEdu multiplica la eficiencia del docente actual, permitiendo gestionar sistemas masivos sin pérdida de calidad.</p></div><div class="bg-indigo-600 p-8 rounded-3xl text-white text-center"><div class="text-5xl font-black mb-2">-75%</div><p class="text-xs uppercase font-bold tracking-widest">Carga Administrativa</p></div></div></div></section>
+            <!-- S5: Security -->
+            <section class="py-20 bg-white text-center"><h3 class="text-2xl font-bold mb-12">Seguridad Soberana</h3><div class="flex justify-center space-x-12 opacity-30 grayscale"><span class="font-black">GDPR</span><span class="font-black">FERPA</span><span class="font-black">LOPD</span></div></section>
+            <!-- S6: CTA -->
+            <section class="py-32 text-center bg-dark text-white"><h2 class="text-4xl font-bold mb-8 text-white">Lidere la transformación pública de la educación.</h2><button class="px-12 py-5 bg-primary text-white rounded-full font-bold shadow-2xl">Contactar Asuntos Públicos</button></section>
+        </div>
+
+    </main>
+
+    
+
+    <!-- Interactive Scripts -->
+    <script is:inline>
+        let currentCharts = {};
+
+        function switchView(viewId) {
+            const views = ['teacher', 'schools', 'publishers', 'students', 'governments'];
+            
+            views.forEach(v => {
+                const el = document.getElementById('view-' + v);
+                const btn = document.getElementById('btn-' + v);
+                if (v === viewId) {
+                    el.classList.add('active');
+                    btn.classList.add('tab-active');
+                    btn.classList.remove('text-slate-500');
+                } else {
+                    el.classList.remove('active');
+                    btn.classList.remove('tab-active');
+                    btn.classList.add('text-slate-500');
+                }
+            });
+            
+            initCharts(viewId);
+        }
+
+        function initCharts(activeView) {
+            Object.values(currentCharts).forEach(c => { if(c) c.destroy() });
+
+            if (activeView === 'teacher') {
+                const ctx = document.getElementById('teacherTimeChart').getContext('2d');
+                currentCharts.teacher = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Sin ColabEdu', 'Con ColabEdu'],
+                        datasets: [{ data: [30, 5], backgroundColor: ['#E2E8F0', '#4F46E5'], borderRadius: 15 }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+                });
+            }
+
+            if (activeView === 'schools') {
+                const ctx = document.getElementById('schoolRadarChart').getContext('2d');
+                currentCharts.school = new Chart(ctx, {
+                    type: 'radar',
+                    data: {
+                        labels: ['Gramática', 'Contenido', 'Vocabulario', 'Tono', 'Estructura'],
+                        datasets: [{
+                            label: 'Corrección Humana',
+                            data: [65, 50, 75, 40, 60],
+                            borderColor: '#F43F5E',
+                            backgroundColor: 'rgba(244, 63, 94, 0.1)'
+                        }, {
+                            label: 'ColabEdu IA',
+                            data: [98, 97, 99, 95, 98],
+                            borderColor: '#10B981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)'
+                        }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false }
+                });
+            }
+
+            if (activeView === 'publishers') {
+                const ctx = document.getElementById('publisherEngagementChart').getContext('2d');
+                currentCharts.publisher = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Día 1', 'Día 7', 'Día 14', 'Día 30'],
+                        datasets: [{
+                            label: 'Lectura PDF',
+                            data: [100, 45, 20, 5],
+                            borderColor: '#94A3B8',
+                            tension: 0.4
+                        }, {
+                            label: 'Tutor IA',
+                            data: [100, 92, 88, 85],
+                            borderColor: '#F59E0B',
+                            backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false }
+                });
+            }
+
+            if (activeView === 'students') {
+                const ctx = document.getElementById('studentMasteryChart').getContext('2d');
+                currentCharts.student = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Inicio', 'Semana 2', 'Semana 4', 'Maestría'],
+                        datasets: [{
+                            label: 'Curva con Tutor IA',
+                            data: [10, 45, 80, 98],
+                            borderColor: '#10B981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, max: 100 } } }
+                });
+            }
+
+            if (activeView === 'governments') {
+                const ctx = document.getElementById('govBarChart').getContext('2d');
+                currentCharts.gov = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Región A', 'Región B', 'Región C'],
+                        datasets: [{
+                            label: 'Dominio Estándares Nacionales',
+                            data: [92, 74, 61],
+                            backgroundColor: '#4F46E5',
+                            borderRadius: 10
+                        }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false }
+                });
+            }
+        }
+
+        window.onload = () => switchView('governments');
+    </script>
+</BaseLayout>

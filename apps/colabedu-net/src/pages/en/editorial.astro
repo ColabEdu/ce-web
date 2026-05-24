@@ -1,0 +1,362 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+<BaseLayout lang="en">
+
+
+    <main>
+
+        <!-- SECTION 1: Strategic Hero -->
+        <section class="max-w-7xl mx-auto pt-40 pb-24 px-4 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <div>
+                    <span class="inline-flex items-center px-3 py-1 rounded-full bg-amber-100 text-amber-700 text-[10px] font-black uppercase tracking-[0.2em] mb-6">
+                        <i class="fas fa-bolt mr-2"></i> Editorial Backlist Activation
+                    </span>
+                    <h1 class="text-6xl lg:text-8xl font-black text-dark tracking-tighter mb-8 leading-[0.9]">
+                        Revitalize your <br/><span class="gradient-text italic">Editorial IP.</span>
+                    </h1>
+                    <p class="text-xl text-slate-600 max-w-xl leading-relaxed mb-10">
+                        Stop delivering static files. Transform your catalog into a pedagogical intelligence network that guides the student and saves teacher time through the <strong>Blind Referentiality</strong> model.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <button class="px-10 py-5 bg-publisher text-white font-bold rounded-full shadow-2xl hover:scale-105 transition-all">Modernize my Catalog</button>
+                        <button class="px-10 py-5 bg-white text-dark border border-slate-200 font-bold rounded-full hover:bg-slate-50 transition-all text-sm uppercase tracking-widest">View White Paper</button>
+                    </div>
+                </div>
+                <div class="relative">
+                    <div class="absolute -top-10 -right-10 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl animate-pulse"></div>
+                    <div class="relative bg-white p-4 rounded-[4rem] shadow-2xl border border-slate-100 overflow-hidden group">
+                        <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200&auto=format&fit=crop" alt="Digital Learning" class="rounded-[3.5rem] object-cover h-[550px] w-full group-hover:scale-105 transition-transform duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-dark/80 via-transparent to-transparent"></div>
+                        <div class="absolute bottom-10 left-10 right-10 p-6 bg-white/10 backdrop-blur-md rounded-3xl border border-white/20">
+                            <div class="text-xs font-black text-amber-400 uppercase tracking-widest mb-2">Status: Transformation in progress</div>
+                            <div class="flex items-center space-x-3">
+                                <div class="flex-1 bg-white/20 h-1.5 rounded-full overflow-hidden">
+                                    <div class="bg-amber-500 w-[92%] h-full"></div>
+                                </div>
+                                <span class="text-white text-xs font-bold">92%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: Engagement Dashboard -->
+        <section id="analytics" class="py-24 bg-dark text-white relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-publisher to-primary"></div>
+            <div class="max-w-7xl mx-auto px-4 lg:px-8">
+                <div class="flex flex-col lg:flex-row justify-between items-end mb-20 gap-8">
+                    <div class="max-w-2xl">
+                        <h2 class="text-4xl md:text-5xl font-black mb-6">The Return on Engagement</h2>
+                        <p class="text-slate-400 leading-relaxed">Traditional manuals lose 80% of retention after the first week of use. ColabEdu keeps the student active through a constant interaction loop with your IP.</p>
+                    </div>
+                    <div class="flex space-x-12">
+                        <div class="text-center">
+                            <div class="text-4xl font-black text-publisher">+60%</div>
+                            <div class="text-[10px] text-slate-500 uppercase font-bold mt-1 tracking-widest">Daily Use</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-4xl font-black text-secondary">0%</div>
+                            <div class="text-[10px] text-slate-500 uppercase font-bold mt-1 tracking-widest">Lost Revenue</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-slate-900 p-10 rounded-[3rem] border border-slate-800 shadow-2xl relative">
+                    <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-10 text-center">Catalog Retention: PDFs vs. Active Socratic Tutoring</h3>
+                    <div class="chart-container h-[400px]">
+                        <canvas id="engagementChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: Technical Factory (The "How") -->
+        <section id="transformation" class="py-24 bg-white">
+            <div class="max-w-7xl mx-auto px-4 lg:px-8">
+                <div class="text-center mb-20">
+                    <h2 class="text-4xl font-black text-dark tracking-tight mb-4 text-center">The Content Factory.</h2>
+                    <p class="text-slate-500 max-w-2xl mx-auto">From inert material to structured knowledge graphs through three intelligence layers.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                    <div class="workflow-step">
+                        <div class="p-10 bg-slate-50 rounded-[2.5rem] border border-slate-100 h-full">
+                            <div class="text-amber-500 text-4xl mb-6"><i class="fas fa-layer-group"></i></div>
+                            <h3 class="text-xl font-bold mb-4">RAG Atomization</h3>
+                            <p class="text-slate-500 text-sm leading-relaxed">Our <strong>Curator Agent</strong> segments your books into immutable logical blocks: reading fragments, rubric criteria, and evaluation instructions.</p>
+                        </div>
+                    </div>
+                    <div class="workflow-step">
+                        <div class="p-10 bg-slate-50 rounded-[2.5rem] border border-slate-100 h-full">
+                            <div class="text-primary text-4xl mb-6"><i class="fas fa-dna"></i></div>
+                            <h3 class="text-xl font-bold mb-4">Instructional Mutation</h3>
+                            <p class="text-slate-500 text-sm leading-relaxed">We transform your texts into interactive challenges. AI generates debates, essays, and simulations based exclusively on your proprietary IP.</p>
+                        </div>
+                    </div>
+                    <div class="workflow-step">
+                        <div class="p-10 bg-slate-50 rounded-[2.5rem] border border-slate-100 h-full">
+                            <div class="text-secondary text-4xl mb-6"><i class="fas fa-tags"></i></div>
+                            <h3 class="text-xl font-bold mb-4">Curricular Tagging</h3>
+                            <p class="text-slate-500 text-sm leading-relaxed">Automatic alignment with LOMLOE, TEKS, and AP. Your content becomes compatible with state requirements instantly.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: The Curator Dashboard (Operational Value) -->
+        <section id="curator" class="py-24 bg-slate-100 border-y border-slate-200">
+            <div class="max-w-7xl mx-auto px-4 lg:px-8">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+                    <div class="order-2 lg:order-1">
+                        <div class="bg-white p-4 rounded-[3rem] shadow-2xl border border-slate-200">
+                            <h4 class="text-xs font-black text-slate-400 p-4 uppercase">Editorial Editor Console</h4>
+                            <div class="grid grid-cols-1 gap-2">
+                                <div class="bg-slate-50 p-4 rounded-2xl flex items-center justify-between border border-slate-100">
+                                    <div class="flex items-center">
+                                        <div class="w-8 h-8 bg-amber-500 rounded-lg mr-3"></div>
+                                        <span class="text-xs font-bold">Unit 4: Biochemistry.pdf</span>
+                                    </div>
+                                    <span class="text-[10px] bg-green-100 text-green-700 px-2 py-1 rounded-full font-bold">PROCESSED</span>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-2xl flex items-center justify-between border border-slate-100">
+                                    <div class="flex items-center">
+                                        <div class="w-8 h-8 bg-primary rounded-lg mr-3"></div>
+                                        <span class="text-xs font-bold">20th Century History - Chap 1.pdf</span>
+                                    </div>
+                                    <span class="text-[10px] bg-blue-100 text-blue-700 px-2 py-1 rounded-full font-bold">VALIDATING RUBRIC</span>
+                                </div>
+                            </div>
+                            <div class="mt-4 p-6 bg-dark rounded-[2rem] text-center">
+                                <div class="chart-container h-48">
+                                    <canvas id="ingestionChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="order-1 lg:order-2">
+                        <h2 class="text-4xl font-black text-dark tracking-tight mb-6 leading-tight">Industrial Scalability for your Editors.</h2>
+                        <p class="text-xl text-slate-600 mb-8 leading-relaxed">We do not replace your editors; we give them superpowers. A single person can oversee the digitization of thousands of pages daily, validating the final pedagogical tone.</p>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="p-6 bg-white rounded-3xl border border-slate-200">
+                                <h5 class="font-bold text-dark mb-1">Human-in-the-loop</h5>
+                                <p class="text-[10px] text-slate-500 uppercase font-bold tracking-widest">Guaranteed Quality</p>
+                            </div>
+                            <div class="p-6 bg-white rounded-3xl border border-slate-200">
+                                <h5 class="font-bold text-dark mb-1">15 Days</h5>
+                                <p class="text-[10px] text-slate-500 uppercase font-bold tracking-widest">Total Time-to-Market</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: Global Scale (Multilingual) -->
+        <section id="global" class="py-24 bg-white">
+            <div class="max-w-7xl mx-auto px-4 lg:px-8 text-center">
+                <h2 class="text-4xl md:text-5xl font-black text-dark mb-8 tracking-tighter italic">Your catalog, <span class="gradient-text">in 60 languages.</span></h2>
+                <p class="text-xl text-slate-600 max-w-3xl mx-auto mb-20 leading-relaxed">Our multilingual architecture allows your high-quality IP to be dynamically localized for international markets, respecting the original pedagogical rigor.</p>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    <div class="text-left space-y-8">
+                        <div>
+                            <h4 class="text-2xl font-bold mb-2">Scaffolding Newcomers</h4>
+                            <p class="text-slate-500 text-sm">Allows immigrant students to interact with your content in their native language while learning the local language. Real inclusion without duplicating costs.</p>
+                        </div>
+                        <div class="p-8 bg-indigo-50 rounded-3xl border border-indigo-100 bento-item">
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="font-bold text-indigo-700">Multilingual Coverage</span>
+                                <span class="text-xs font-black text-indigo-400">GCP VERTEX AI POWERED</span>
+                            </div>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-3 py-1 bg-white rounded-full text-[10px] font-bold border border-indigo-200">SPANISH</span>
+                                <span class="px-3 py-1 bg-white rounded-full text-[10px] font-bold border border-indigo-200">ENGLISH</span>
+                                <span class="px-3 py-1 bg-white rounded-full text-[10px] font-bold border border-indigo-200">FRENCH</span>
+                                <span class="px-3 py-1 bg-white rounded-full text-[10px] font-bold border border-indigo-200">CATALAN</span>
+                                <span class="px-3 py-1 bg-white rounded-full text-[10px] font-bold border border-indigo-200">MANDARIN</span>
+                                <span class="px-3 py-1 bg-indigo-200 rounded-full text-[10px] font-bold">+55 MORE</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-10 rounded-[3rem] shadow-xl border border-slate-100">
+                        <div class="chart-container">
+                            <canvas id="languageChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 6: IP Protection (Referencialidad Ciega) -->
+        <section id="ip-protection" class="py-24 bg-dark text-white overflow-hidden relative">
+            <div class="absolute bottom-0 right-0 w-96 h-96 bg-primary/20 rounded-full blur-[100px]"></div>
+            <div class="max-w-7xl mx-auto px-4 lg:px-8 relative z-10">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                    <div>
+                        <h2 class="text-4xl font-black mb-8 leading-tight">Blind Referentiality: <br/><span class="text-publisher italic">Shielding your IP.</span></h2>
+                        <p class="text-slate-400 text-lg leading-relaxed mb-10">We understand that your content is your greatest value. ColabEdu does not reproduce the book; it uses it as a source of truth. AI guides the student, but they must possess the original material to solve the challenges, validating your traditional business model.</p>
+                        <div class="space-y-6">
+                            <div class="flex items-start">
+                                <div class="w-8 h-8 rounded-lg bg-publisher/20 flex items-center justify-center text-publisher mr-4 mt-1"><i class="fas fa-check text-xs"></i></div>
+                                <p class="text-sm text-slate-300 italic">"Incentivizes and validates the purchase of the original book, eliminating the risk of total digital piracy."</p>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="w-8 h-8 rounded-lg bg-publisher/20 flex items-center justify-center text-publisher mr-4 mt-1"><i class="fas fa-check text-xs"></i></div>
+                                <p class="text-sm text-slate-300 italic">"Transforms a cost center (storage) into a pedagogical training asset."</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-slate-800 p-8 rounded-[3rem] border border-slate-700 shadow-2xl">
+                        <div class="p-6 bg-slate-900 rounded-2xl border border-slate-800 mb-6">
+                            <div class="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-4">Socratic Interaction Example</div>
+                            <p class="text-xs text-slate-300 italic leading-relaxed">
+                                <span class="text-publisher font-bold">IA:</span> "Analyze the graph on page 142 of your manual. How does the birth rate relate to the economic growth mentioned in the source text?"
+                            </p>
+                        </div>
+                        <div class="text-center">
+                            <span class="text-xs font-bold text-slate-500 uppercase">The IP remains protected in the student's physical environment.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 7: Integration Ecosystem (LMS) -->
+        <section id="integration" class="py-24 max-w-7xl mx-auto px-4 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-black text-dark tracking-tighter mb-4">Pedagogical Omnichannel.</h2>
+                <p class="text-slate-500">Your content reaches where users are, natively.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="p-8 bg-white rounded-3xl border border-slate-100 shadow-sm text-center bento-item">
+                    <div class="text-2xl font-black mb-2">Canvas</div>
+                    <p class="text-[10px] text-slate-400 uppercase font-bold tracking-widest">LTI 1.3 Advantage</p>
+                </div>
+                <div class="p-8 bg-white rounded-3xl border border-slate-100 shadow-sm text-center bento-item">
+                    <div class="text-2xl font-black mb-2">Google</div>
+                    <p class="text-[10px] text-slate-400 uppercase font-bold tracking-widest">Classroom Add-ons</p>
+                </div>
+                <div class="p-8 bg-white rounded-3xl border border-slate-100 shadow-sm text-center bento-item">
+                    <div class="text-2xl font-black mb-2">Moodle</div>
+                    <p class="text-[10px] text-slate-400 uppercase font-bold tracking-widest">Web Services Integration</p>
+                </div>
+                <div class="p-8 bg-white rounded-3xl border border-slate-100 shadow-sm text-center bento-item">
+                    <div class="text-2xl font-black mb-2">ColabEdu</div>
+                    <p class="text-[10px] text-slate-400 uppercase font-bold tracking-widest">Native Web / Mobile</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 8: Case Study "Remaster" -->
+        <section class="py-24 max-w-7xl mx-auto px-4 lg:px-8">
+            <div class="bg-dark rounded-[3.5rem] p-12 lg:p-24 text-white relative overflow-hidden group">
+                <div class="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-publisher/10 to-transparent"></div>
+                <div class="max-w-2xl relative z-10">
+                    <span class="text-xs font-bold text-amber-500 uppercase tracking-[0.3em] mb-6 block">Success Story: Project "Remaster"</span>
+                    <h2 class="text-4xl md:text-6xl font-black mb-10 leading-tight">Digitizing 10 years of University Entrance Exams in <span class="text-publisher">15 days.</span></h2>
+                    <p class="text-lg text-slate-400 mb-12 leading-relaxed">See how a leading publishing group transformed its bank of 12,000 exam questions and literary readings into a dynamic training platform used today by 50,000 students in Spain.</p>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-8 mb-12">
+                        <div><div class="text-3xl font-black text-white">+40k</div><div class="text-[10px] text-slate-500 uppercase font-bold tracking-widest">RAG Blocks</div></div>
+                        <div><div class="text-3xl font-black text-white">92%</div><div class="text-[10px] text-slate-500 uppercase font-bold tracking-widest">AI Accuracy</div></div>
+                        <div><div class="text-3xl font-black text-white">60+</div><div class="text-[10px] text-slate-500 uppercase font-bold tracking-widest">Languages</div></div>
+                    </div>
+                    <button class="px-10 py-5 bg-white text-dark font-black rounded-full shadow-2xl hover:bg-slate-200 transition-all uppercase text-xs tracking-widest">Read Technical Report</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 9: Strategic Closing -->
+        <section class="py-32 bg-neutral text-center border-t border-slate-100">
+            <div class="max-w-4xl mx-auto px-4">
+                <h2 class="text-5xl font-black text-dark mb-8 tracking-tighter leading-none">Don't let others <br/><span class="text-primary italic">program your content.</span></h2>
+                <p class="text-xl text-slate-600 mb-12 max-w-2xl mx-auto">ColabEdu offers you the infrastructure to lead the generative AI era without compromising your data sovereignty or strategic value.</p>
+                <div class="flex flex-col sm:flex-row justify-center gap-6">
+                    <button class="px-12 py-5 bg-dark text-white font-bold rounded-full shadow-2xl hover:scale-105 transition-all text-sm uppercase tracking-widest">Talk to Partnerships</button>
+                    <button class="px-12 py-5 bg-white text-dark border border-slate-200 font-bold rounded-full shadow-xl hover:bg-slate-50 transition-all text-sm uppercase tracking-widest">Tech Tour</button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    
+
+    <!-- Interactive Scripts -->
+    <script is:inline>
+        window.onload = function() {
+            // Engagement Chart (Linear)
+            const ctx1 = document.getElementById('engagementChart').getContext('2d');
+            new Chart(ctx1, {
+                type: 'line',
+                data: {
+                    labels: ['Week 1', 'Week 2', 'Week 4', 'Week 8', 'Week 12'],
+                    datasets: [{
+                        label: 'Static Book (PDF)',
+                        data: [100, 45, 20, 10, 5],
+                        borderColor: '#94A3B8',
+                        borderDash: [5, 5],
+                        tension: 0.4
+                    }, {
+                        label: 'Socratic AI Book (ColabEdu)',
+                        data: [100, 92, 88, 85, 82],
+                        borderColor: '#F59E0B',
+                        backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'bottom' } },
+                    scales: { y: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%' } } }
+                }
+            });
+
+            // Ingestion Chart (Horizontal Bar)
+            const ctx2 = document.getElementById('ingestionChart').getContext('2d');
+            new Chart(ctx2, {
+                type: 'bar',
+                indexAxis: 'y',
+                data: {
+                    labels: ['Manual Digitization', 'Curator Agent AI'],
+                    datasets: [{
+                        label: 'Days per catalog (100 titles)',
+                        data: [180, 15],
+                        backgroundColor: ['#E2E8F0', '#F59E0B'],
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { x: { beginAtZero: true } }
+                }
+            });
+
+            // Language Chart (Doughnut)
+            const ctx3 = document.getElementById('languageChart').getContext('2d');
+            new Chart(ctx3, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Spanish', 'English', 'French', 'German', 'Others (60+)'],
+                    datasets: [{
+                        data: [40, 25, 15, 10, 10],
+                        backgroundColor: ['#F59E0B', '#4F46E5', '#10B981', '#F43F5E', '#94A3B8'],
+                        borderWidth: 0,
+                        hoverOffset: 20
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '70%',
+                    plugins: { legend: { position: 'bottom' } }
+                }
+            });
+        };
+    </script>
+</BaseLayout>
