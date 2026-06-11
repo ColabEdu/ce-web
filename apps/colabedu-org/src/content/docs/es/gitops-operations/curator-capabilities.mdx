@@ -1,0 +1,305 @@
+---
+title: "Capacidades del Agente Curador"
+description: "Cómo el Agente Curador de ColabEdu descubre, descarga y genera specs pedagógicas con AI a partir de documentos curriculares, paquetes LMS y recursos OER."
+sidebar:
+  order: 2
+---
+
+import { Steps, Aside } from '@astrojs/starlight/components';
+
+# Agente Curador: Capacidades
+
+El **Agente Curador** es el pipeline de ingesta de contenido con AI de ColabEdu. Transforma documentos curriculares (PDFs, paquetes LMS Canvas/Moodle) y recursos educativos abiertos (CK-12, Khan, Procomún, Europeana) en especificaciones pedagógicas estructuradas y listas para la plataforma.
+
+---
+
+## Qué hace el Curador
+
+| Capacidad | Descripción |
+|---|---|
+| **Descubrimiento de fuentes** | Identifica URLs canónicas de documentos curriculares oficiales y APIs de repositorios OER/LMS. |
+| **Descarga de documentos** | Descarga PDFs y paquetes LMS (`.imscc` Canvas, `.mbz` Moodle) al repositorio local de specs. |
+| **Análisis y generación con AI** | Extrae criterios pedagógicos, genera slides/widgets o rúbricas de calidad usando Gemini. |
+| **Routing de Gems** | `curator_router` clasifica cada input y delega al Gem especializado (`lesson`, `resource`, `c2`…). |
+| **Scaffolding de YAML** | Escribe specs `InteractiveLesson`, `ResourceLearning` o `ExerciseSpec` OAS completas. |
+| **Ingesta de paquetes LMS** | Descomprime `.imscc`/`.mbz`, sube assets a GCS y genera `InteractiveLesson` con slides. |
+| **Indexación OER** | Indexa recursos de fuentes abiertas con qualityScore de 3 dimensiones pedagógicas. |
+| **Ingesta masiva** | Sincronización de specs vía `sync_specs.sh` o `curator batch`. |
+| **Seed & Bloom** | Deriva nuevos ejercicios pedagógicos a partir de semillas ingestadas (documentos fuente, rúbricas) usando estrategias Bloom configurables. Las semillas pueden ser privadas; las specs derivadas son públicas. |
+
+---
+
+## Pipeline Unificado
+
+```
+Documento (PDF / GCS URI) — o Paquete LMS (.imscc / .mbz) — o Recurso OER (JSON/API)
+        │
+        ▼
+POST /api/v1/curator/curate
+  { source, sourceType, outputType, courseId?, pathwayId?, sandboxMode,
+    ownerEmail?, shared }
+        │
+        ▼
+CuratorWorkflow (LangGraph4j)
+  ├─ [fetch_source]    → descarga + calcula SHA-256
+  │         │
+  │   ¿sourceType == LMS_PACKAGE?
+  │         ├─ SÍ ─► [unzip_lms]          → LmsPackageProcessor.unzipPackage()
+  │         │             └─► [upload_lms_assets] → GCS + assetUrlMap
+  │         │                     └─► [gather_context]
+  │         └─ NO ─► [gather_context]
+  ├─ [gather_context]   → HierarchyContextResolver → CurricularContext
+  ├─ [propose_content]  → Gem elegido por curator_router
+  │       ├─ ExerciseSpec      ← curator_c2   (PDFs de exámenes)
+  │       ├─ InteractiveLesson ← curator_lesson (paquetes LMS)
+  │       └─ ResourceLearning  ← curator_resource (APIs OER)
+  ├─ [wait_for_review]  → headless=true → auto-approve
+  ├─ [register_specs]   → IngestionService (visibilidad: PUBLIC | PRIVATE)
+
+PIPELINE SEED & BLOOM (Derivación de contenido)
+  ──────────────────────────────────────────────
+  curator curate --source rubrica.pdf --visibility private   ← ingestar como semilla
+       → spec ingestada con visibility=PRIVATE
+  curator bloom derive --seed ib.spa.textual_analysis_rubric \
+                       --strategy SOURCE_DERIVATION|PROGRESSION|MISCONCEPTION_REMEDIATION
+       → specs derivadas generadas con visibility=PUBLIC + provenance.seedRef
+```
+
+### Resolución de contexto curricular
+
+El mismo `HierarchyContextResolver` es compartido con el **Exercise Creation Wizard**:
+
+```
+Override explícito (--standard / --subject)
+    └─ courseId  →  CourseClient (standard, level, subject del curso)
+        └─ pathwayId  →  PathwayClient (standard, level del pathway)
+            └─ referenceCode del manifest (parseo del campo)
+                └─ prompt genérico (sin contexto)
+```
+
+---
+
+## Gems del Curador
+
+El `gem.curator_router` clasifica cada input y delega al Gem especializado:
+
+| Gem | Output | Activa cuando |
+|---|---|---|
+| `gem.curator_router` | — | Siempre (enruta a los demás) |
+| `gem.curator_c0` | `BlockRubric` | Documentos normativos curriculares |
+| `gem.curator_c1` | `Recipe` | Unidades didácticas completas |
+| `gem.curator_c2` | `ExerciseSpec` | PDFs de exámenes, FRQ |
+| `gem.curator_lesson` | `InteractiveLesson` | Paquetes LMS (`.imscc`, `.mbz`) |
+| `gem.curator_resource` | `ResourceLearning` | APIs OER (CK-12, Khan, Procomún, Europeana) |
+
+Los archivos YAML de los Gems se encuentran en `ce-specs/catalog/personas/curators/`.
+
+---
+
+## Tipos de Spec Generados
+
+### ExerciseSpec (`C2_EXERCISES`)
+Spec clásica del Curador: ejercicios, FRQ, análisis de texto con bandas de logro. Almacenada como `BLOCK_CONTENT kind: ExerciseSpec`.
+
+### InteractiveLesson (nuevo)
+Generada desde paquetes LMS (Canvas Commons, Moodle Hub). Contiene slides, widgets interactivos y objetivos de aprendizaje mapeados a competencias curriculares. Ver [Referencia InteractiveLesson](/es/reference/interactive-lesson).
+
+### ResourceLearning (nuevo)
+Indexa recursos OER con un qualityScore de 3 dimensiones: `alignment`, `pedagogicalRichness`, `accessibility`. Ver [Referencia ResourceLearning](/es/reference/resource-learning).
+
+---
+
+## Fuentes Soportadas
+
+El `KnownSourcesRegistry` registra **14 fuentes** activas:
+
+| ID | Tipo | Estándar | Ámbito |
+|---|---|---|---|
+| `madrid`, `mec`, `ebau.cat` | Exámenes EBAU | LOMLOE | 🇪🇸 |
+| `collegeboard`, `apcentral` | Exámenes AP | AP | 🇺🇸 |
+| `web` | Google CSE | — | 🌐 |
+| `mec-procomun`, `mec-recursos` | OER | LOMLOE | 🇪🇸 |
+| `khan-academy`, `ck12` | OER | — | 🌐 |
+| `europeana-edu` | OER | — | 🇪🇺 |
+| `canvas-commons` | LMS | — | 🌐 |
+| `moodle-hub`, `moodle-net` | LMS | — | 🌐 |
+
+```bash
+# Listar todas las fuentes registradas
+docs sources
+
+# Filtrar por tipo (nuevo)
+docs sources --scope es
+docs sources --source canvas-commons
+```
+
+---
+
+## Modos de Operación
+
+### Modo 1 — Headless automático (CI/CD)
+
+```bash
+curator curate \
+  --source exam.pdf \
+  --courseId 142
+# → fetch → context → propose → register (auto-approve)
+# job.shared = true → visible para todos los CONTENT_CREATOR/TEACHER
+```
+
+### Modo 2 — Sandbox + revisión manual
+
+```bash
+curator curate \
+  --source canvas_module.imscc \
+  --source-type LMS_PACKAGE \
+  --output-type INTERACTIVE_LESSON \
+  --sandbox \
+  --output ./draft_specs/
+curator validate --spec ./draft_specs/lesson.yaml --ingest
+```
+
+### Modo 3 — Batch LMS/OER
+
+```bash
+# Descubrir → descargar → ingestar
+docs discover --source canvas-commons --subject biology --output canvas.yaml
+docs download --list canvas.yaml --local-dir ce-specs/sources/lms/canvas/
+curator batch --manifest ce-specs/tests/lms_batch_manifest.yaml --parallel 2
+curator test  --lms --all --threshold 70
+```
+
+### Modo 4 — Cola de revisión compartida (pedagógico)
+
+Permite que cualquier pedagogo con rol `CONTENT_CREATOR`, `TEACHER` o `ADMIN` vea y apruebe los jobs lanzados desde el CLI, independientemente de quién los lanzó.
+
+```bash
+# Sin --user: el job es compartido (visible para todos los pedagogos)
+curator curate \
+  --source exam.pdf \
+  --referenceCode es.lomloe.bach.2.lcl
+# → job.shared = true, job.owner_email = null
+# → badge 🟡 "Shared" en el Job Command Center
+
+# Con --user: el job se asigna al pedagogo indicado (solo él lo ve)
+curator curate \
+  --source exam.pdf \
+  --referenceCode es.lomloe.bach.2.lcl \
+  --user pedagogo@colabedu.org
+# → job.shared = false, job.owner_email = "pedagogo@colabedu.org"
+# → solo visible para ese usuario en su panel
+```
+
+<Aside type="tip">
+**Cola compartida por defecto.** Cuando se lanza `curator curate` sin `--user`, el job queda en la cola pública para que cualquier pedagogo del equipo pueda revisarlo y aprobarlo desde el **Job Command Center** en la interfaz web.
+</Aside>
+
+#### Estrategia de visibilidad RBAC
+
+| Tipo de usuario | Jobs propios | Jobs compartidos (CLI) |
+|---|---|---|
+| Usuario estándar | ✅ Sí | ❌ No |
+| `CONTENT_CREATOR` | ✅ Sí | ✅ Sí |
+| `TEACHER` | ✅ Sí | ✅ Sí |
+| `ADMIN` | ✅ Sí | ✅ Sí |
+
+---
+
+## Arquitectura
+
+```
+ce-svc-cli
+├── CuratorCommands.java      — curate (--source-type, --output-type, --user)
+├── CuratorTestCommands.java  — test (--lms), batch
+├── DocDiscoveryCommands.java — discover, download, catalog, search, stats
+└── LmsPackageProcessor.java  — descompresión IMSCC/MBZ + upload GCS
+
+ce-svc-ai-services
+├── CuratorController         — POST /api/v1/curator/curate + /batch
+├── CuratorWorkflow           — LangGraph4j (rama condicional LMS)
+├── LmsPackageDiscoveryStrategy — Canvas Commons, MoodleNet APIs
+├── HierarchyContextResolver  — contexto curricular compartido con Wizard
+└── IngestionService          — BLOCK_CONTENT kind: Lesson | Resource | Exercise
+
+ce-svc-model-api (DDL v4.5)
+├── jobs.shared       BOOLEAN DEFAULT TRUE  — visibilidad en cola compartida
+├── jobs.owner_id     NULLABLE              — permite jobs sin owner
+├── jobs.owner_email  VARCHAR(255) NULLABLE — email del lanzador CLI
+└── idx_jobs_shared   PARTIAL INDEX WHERE shared = TRUE
+
+ce-specs/
+├── catalog/personas/curators/  — Gems: router, lesson, resource, c2
+├── sources/lms/                — Paquetes .imscc / .mbz
+├── sources/oer/                — Recursos JSON de CK-12, Khan…
+└── tests/lms_curator_test_manifest.yaml
+```
+
+---
+
+## Seed & Bloom — Motor de Derivación de Contenido
+
+El motor **Seed & Bloom** genera ejercicios pedagógicos originales a partir de materiales fuente ingestados sin exponer el contenido propietario. Los documentos fuente (libros, rúbricas, PDFs de examen) se ingestan como **semillas privadas**; los ejercicios derivados son specs **públicas** con trazabilidad de procedencia completa.
+
+### Arquitectura
+
+```
+ce-svc-content-engine
+├── BloomStrategy (interfaz)
+│   ├── SourceDerivationBloom    — deriva ejercicios desde una semilla fuente privada/pública
+│   ├── ProgressionBloom         — genera 4 niveles de dificultad a partir de cualquier semilla
+│   ├── MisconceptionRemediationBloom — ejercicios de remediación para misconceptions conocidos
+│   └── CurricularPipelineBloom  — rúbrica C0 → conjunto de ejercicios C2 (planificado)
+└── SeedBloomService              — despacha a la estrategia activa
+
+ce-svc-ai-services
+├── BloomController               — REST: POST /api/v1/bloom/derive
+└── EduWorkflowTools              — MCP: herramienta bloomContent
+
+ce-svc-cli
+└── CuratorCommands               — curator bloom derive
+```
+
+### Estrategias Bloom
+
+| Estrategia | Disparador | Salida |
+|---|---|---|
+| `SOURCE_DERIVATION` | El docente aporta un documento fuente (libro, rúbrica) | N ejercicios originales derivados de la fuente |
+| `PROGRESSION` | Cualquier ejercicio semilla | Niveles SIMPLIFIED / STANDARD / EXTENDED / CHALLENGE |
+| `MISCONCEPTION_REMEDIATION` | El evaluador detecta un misconception | Ejercicio de remediación dirigido |
+| `CURRICULAR_PIPELINE` | Semilla de rúbrica C0 | Conjunto completo C2 *(planificado)* |
+
+### Modelo de Procedencia
+
+Cada spec derivada incluye un bloque `metadata.provenance`:
+
+```yaml
+metadata:
+  referenceCode: ib.spa.derived.textual_analysis_ex_001
+  visibility: PUBLIC
+  provenance:
+    seedRef: ib.spa.textual_analysis_rubric     # semilla padre
+    bloomStrategy: SOURCE_DERIVATION
+    bloomedAt: "2025-06-11T15:00:00Z"
+```
+
+<Aside type="note">
+Las semillas pueden ingestarse como **PRIVATE** (libros propietarios, rúbricas internas) o PUBLIC (documentos curriculares abiertos). Las specs derivadas son siempre PUBLIC y siempre incluyen `provenance.seedRef` que las vincula con su semilla padre.
+</Aside>
+
+### Puntos de Entrada
+
+| Punto de entrada | Cómo |
+|---|---|
+| **CLI** | `curator bloom derive --seed <ref> --strategy SOURCE_DERIVATION` |
+| **REST** | `POST /api/v1/bloom/derive` |
+| **Herramienta MCP** | `bloomContent` (Companion Docente, Wizard de Ejercicios) |
+| **Evaluación** | `RemediationEventOrchestrator` → `MISCONCEPTION_REMEDIATION` |
+
+---
+
+- [Tutorial del CLI](/es/gitops-operations/cli-tutorial) — Walkthrough completo end-to-end
+- [Referencia de Taxonomy](/es/reference/taxonomy) — Esquemas de bundle y estándar
+- [Referencia InteractiveLesson](/es/reference/interactive-lesson) — Spec generada desde paquetes LMS
+- [Referencia ResourceLearning](/es/reference/resource-learning) — Spec generada desde recursos OER
+- [Referencia Gem](/es/reference/gem) — Gems del Curador: router, lesson, resource
+- [Motor Seed & Bloom](/es/gitops-operations/seed-and-bloom) — Conceptos de derivación de contenido y referencia de procedencia YAML

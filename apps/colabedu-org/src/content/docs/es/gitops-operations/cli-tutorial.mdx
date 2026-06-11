@@ -1,0 +1,923 @@
+---
+title: "Referencia CLI de ColabEdu"
+description: "Guía completa del CLI ce-svc-cli: todos los comandos, subcomandos, flags y flujos de uso para curación pedagógica, descubrimiento de documentos, taxonomía, batch y operaciones de usuario."
+sidebar:
+  order: 3
+---
+
+import { Steps, Aside, Tabs, TabItem } from '@astrojs/starlight/components';
+
+# Referencia CLI de ColabEdu
+
+El CLI `ce-svc-cli` es la interfaz de línea de comandos para operar el pipeline de curación pedagógica de ColabEdu. Agrupa los comandos en seis grupos funcionales:
+
+| Grupo | Prefijo | Descripción |
+|---|---|---|
+| **Curator** | `curator` | Curación AI, tests E2E y batches de generación |
+| **Document Discovery** | `docs` | Descubrimiento, descarga y catalogación de fuentes |
+| **Taxonomy** | `taxonomy` | Exploración de estándares, rúbricas y cursos |
+| **Spec Batch** | `spec batch` | Pipeline declarativo por etapas |
+| **User Operations** | `user` | Aprovisionamiento de usuarios |
+| **CRM Operations** | `crm` | Importación de leads desde CSV |
+
+---
+
+## Configuración de entorno
+
+```bash
+# Obligatorio
+export CURATOR_API_BASE_URL=http://localhost:8081     # URL del backend (ce-svc-ai-services)
+export CE_SPECS_ROOT=/ruta/a/ce-specs                 # Raíz del repositorio de specs
+
+# Opcionales (discovery de fuentes externas)
+export COLABEDU_API_KEY_CANVAS=<token>                # Canvas Commons API
+export COLABEDU_API_KEY_EUROPEANA=<wskey>             # Europeana Education API
+export GOOGLE_CSE_API_KEY=<key>                       # Google Custom Search API
+export GOOGLE_CSE_ID=<cx>                             # Google CSE ID
+
+# Opcionales (operaciones internas)
+export COLABEDU_API_BASE_URL=http://localhost:8081
+export COLABEDU_API_INTERNAL_KEY=<key>               # X-Internal-API-Key
+```
+
+<Aside type="caution">
+El backend `ce-svc-ai-services` debe estar corriendo antes de ejecutar cualquier comando `curator`, `docs` o `taxonomy` que acceda a la API.
+</Aside>
+
+---
+
+## Diagrama general de pipelines
+
+```
+┌──────────────────────────────────────────────────────────────────────┐
+│                    ColabEdu CLI — Pipelines                          │
+│                                                                      │
+│  PIPELINE CLÁSICO (PDFs de exámenes)                                 │
+│  ─────────────────────────────────                                   │
+│  taxonomy check → docs discover → docs download → docs catalog       │
+│       → curator curate → curator validate → sync_specs.sh            │
+│                                                                      │
+│  PIPELINE LMS (Canvas/Moodle)                                        │
+│  ────────────────────────────                                        │
+│  docs discover --source canvas-commons                               │
+│       → docs download → docs catalog --manifest lms_manifest.yaml   │
+│       → curator batch → curator test --lms --all                     │
+│                                                                      │
+│  PIPELINE OER (CK-12/Khan/Procomún/Europeana)                        │
+│  ────────────────────────────────────────────                        │
+│  docs discover --source ck12|europeana                               │
+│       → docs download → docs catalog                                 │
+│       → curator curate --source-type OER_RESOURCE                   │
+│                 --output-type RESOURCE_LEARNING                      │
+│                                                                      │
+│  PIPELINE BATCH DECLARATIVO                                          │
+│  ──────────────────────────                                          │
+│  spec batch generate → spec batch run → spec batch status            │
+│  PIPELINE SEED & BLOOM (Derivación de contenido)                    │
+│  ──────────────────────────────────────────                    │
+│  curator curate --source libro.pdf --visibility private              │
+│       → curator bloom derive --seed <ref> --strategy PROGRESSION    │
+│                                                                      │
+└──────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## Grupo `curator` — Pipeline de curación AI
+
+### `curator curate`
+
+Lanza el pipeline de curación AI sobre un documento local o GCS URI y descarga los YAMLs generados.
+
+```bash
+curator curate --source <archivo-o-gs-uri> --referenceCode <código>
+               [--sections "A,B"] [--type C2_EXERCISES]
+               [--output <dir>] [--country <cc>]
+               [--standard <std>] [--level <nivel>] [--subject <asig>]
+               [--source-type WEB|LMS_PACKAGE]
+               [--output-type RECIPE|INTERACTIVE_LESSON|RESOURCE_LEARNING]
+               [--sandbox true|false] [--validate true|false]
+               [--user <email>]
+```
+
+**Flags:**
+
+| Flag | Tipo | Default | Descripción |
+|---|---|---|---|
+| `--source` | `String` | **obligatorio** | Ruta local (PDF, DOCX, `.imscc`, `.mbz`) o URI GCS (`gs://...`) |
+| `--referenceCode` | `String` | — | Código de referencia taxonómico (p.ej. `es.lomloe.bach.2.lcl`). Auto-resuelve standard, nivel y asignatura. |
+| `--sections` | `String` | — | Secciones separadas por coma: `"Opción A,Opción B"` |
+| `--type` | `String` | `C2_EXERCISES` | Tipo de spec a generar |
+| `--output` | `String` | `./curator_out` | Directorio de salida para los YAMLs |
+| `--country` | `String` | *(del referenceCode)* | Código de país override |
+| `--standard` | `String` | — | Standard curricular override (p.ej. `LOMLOE`, `IB`). Ignorado si se usa `--referenceCode`. |
+| `--level` | `String` | — | Nivel educativo override (p.ej. `4 ESO`, `2 BACH`). Ignorado si se usa `--referenceCode`. |
+| `--subject` | `String` | — | Asignatura override (p.ej. `lcl`, `matematicas`). Ignorado si se usa `--referenceCode`. |
+| `--source-type` | `String` | *(auto)* | `WEB` o `LMS_PACKAGE`. Auto-detectado: `.imscc`/`.mbz`/`.zip` → `LMS_PACKAGE`. |
+| `--output-type` | `String` | `RECIPE` | `RECIPE` \| `INTERACTIVE_LESSON` \| `RESOURCE_LEARNING` |
+| `--sandbox` | `boolean` | `true` | Escribe YAMLs a disco sin registrar en DB |
+| `--validate` | `boolean` | `true` | Valida estructuralmente los YAMLs descargados |
+| `--user` | `String` | — | Email del usuario propietario del job. Sin este flag el job se crea como **compartido** (`shared=true`) y es visible para todos los roles `CONTENT_CREATOR`, `TEACHER` y `ADMIN`. |
+| `--visibility` | `String` | `PUBLIC` | Visibilidad de la spec ingestada: `PUBLIC` (disponible a todos) o `PRIVATE` (solo semilla — no se sirve a estudiantes, se usa como fuente de derivación Bloom). |
+
+**Flujo interno:**
+
+```
+curator curate
+    │
+    ├─ 1. POST /api/v1/curator/curate  → workflowId
+    │       (body: headless=true, sandboxMode, specType, referenceCode,
+    │              rawContentBase64 / storageUrl, lmsSourceType, outputType)
+    │
+    ├─ 2. Poll GET /api/v1/curator/status/{workflowId}
+    │       cada 3s, timeout: 300s
+    │       estados: RUNNING → COMPLETED | FAILED | ERROR
+    │
+    ├─ 3. Descarga proposedSpecs[] → {workflowId}_spec_{n}_{outputType}_{ts}.yaml
+    │
+    └─ 4. (opcional) curator validate sobre cada archivo descargado
+```
+
+**Ejemplos:**
+
+<Tabs>
+<TabItem label="Clásico (PDF)">
+```bash
+# Con referenceCode (recomendado)
+curator curate \
+  --source ce-specs/sources/es/lomloe/2bach/lcl/examen_selectividad_lcl_2023.pdf \
+  --referenceCode es.lomloe.bach.2.lcl
+
+# Con flags explícitos
+curator curate \
+  --source examen.pdf \
+  --standard LOMLOE --level "2 BACH" --subject lcl \
+  --sections "Opción A,Opción B" \
+  --type C2_EXERCISES
+```
+</TabItem>
+<TabItem label="LMS (Canvas/Moodle)">
+```bash
+# Canvas (.imscc) — source-type auto-detectado
+curator curate \
+  --source ce-specs/sources/lms/canvas/canvas_bio_mitosis.imscc \
+  --referenceCode es.lomloe.bach.1.biologia \
+  --output-type INTERACTIVE_LESSON \
+  --sandbox
+
+# Moodle (.mbz)
+curator curate \
+  --source curso_matematicas.mbz \
+  --referenceCode us.ap.calculus.bc \
+  --output-type INTERACTIVE_LESSON
+```
+</TabItem>
+<TabItem label="OER (GCS)">
+```bash
+# Desde GCS
+curator curate \
+  --source gs://colabedu-sources/oer/ck12/ck12_bio_mitosis.json \
+  --referenceCode us.ap.biology \
+  --source-type OER_RESOURCE \
+  --output-type RESOURCE_LEARNING
+
+# Local JSON OER
+curator curate \
+  --source ck12_bio_mitosis.json \
+  --source-type OER_RESOURCE \
+  --output-type RESOURCE_LEARNING \
+  --sandbox
+```
+</TabItem>
+<TabItem label="Cola compartida (Shared Queue)">
+```bash
+# Sin --user: el job queda en la cola compartida
+# Visible para todos los CONTENT_CREATOR/TEACHER/ADMIN
+curator curate \
+  --source ce-specs/sources/es/lomloe/2bach/lcl/exam_lcl_2023.pdf \
+  --referenceCode es.lomloe.bach.2.lcl
+# → badge 🟡 "Shared" en el Job Command Center
+
+# Con --user: el job se asigna a un pedagogo específico
+curator curate \
+  --source exam_lcl_2024.pdf \
+  --referenceCode es.lomloe.bach.2.lcl \
+  --user profesor@colabedu.org
+# → solo visible para profesor@colabedu.org
+```
+</TabItem>
+
+---
+
+### `curator status`
+
+Consulta el estado de un workflow de curación en curso o completado.
+
+```bash
+curator status --id <workflowId>
+```
+
+| Flag | Descripción |
+|---|---|
+| `--id` | **Obligatorio.** ID de workflow devuelto por `curator curate`. |
+
+**Endpoint:** `GET /api/v1/curator/status/{workflowId}`
+
+**Ejemplo:**
+```bash
+curator status --id wf-20240601-abc123
+# → Workflow ID : wf-20240601-abc123
+# → Status      : COMPLETED
+# → Specs ready : 2
+```
+
+---
+
+### `curator validate`
+
+Valida estructuralmente un YAML de spec generado por el curator.
+
+```bash
+curator validate --spec <ruta-al-yaml>
+```
+
+| Flag | Descripción |
+|---|---|
+| `--spec` | **Obligatorio.** Ruta al archivo YAML a validar. |
+
+Comprueba que el YAML tenga los bloques `metadata` (con `type` e `id`) y `spec` (con `exercises[].prompt` si aplica).
+
+**Ejemplo:**
+```bash
+curator validate --spec curator_out/wf-abc123_spec_1_recipe_20240601.yaml
+# → ✅ wf-abc123_spec_1_recipe_20240601.yaml — Valid YAML spec. All required fields present.
+```
+
+---
+
+### `curator test`
+
+Ejecuta casos de prueba E2E desde el test manifest y genera un informe Markdown.
+
+```bash
+curator test [--case <id>] [--all] [--manifest <ruta>] [--report true|false]
+             [--output <dir>] [--lms]
+```
+
+| Flag | Default | Descripción |
+|---|---|---|
+| `--case` | — | Ejecuta un único test case por ID |
+| `--all` | `false` | Ejecuta todos los test cases del manifest |
+| `--manifest` | `ce-specs/tests/curator_test_manifest.yaml` | Ruta al manifest YAML |
+| `--report` | `true` | Genera informe Markdown en el directorio de salida |
+| `--output` | `./curator_out` | Directorio de salida (se crea subdirectorio `yyyy-MM-dd/`) |
+| `--lms` | `false` | Usa `lms_curator_test_manifest.yaml` en vez del manifest estándar |
+
+<Aside type="tip">
+Usa `--lms` para ejecutar los casos de prueba de paquetes LMS (Canvas/Moodle) y recursos OER. El manifest se encuentra en `ce-specs/tests/lms_curator_test_manifest.yaml`.
+</Aside>
+
+**Ejemplos:**
+```bash
+# Un caso concreto del manifest clásico
+curator test --case ap_spanish_2023_ordinaria
+
+# Todos los casos LMS/OER
+curator test --lms --all
+
+# Manifest personalizado
+curator test --manifest mis-tests/batch_test.yaml --all --output ./resultados
+
+# Sin informe Markdown
+curator test --all --report false
+```
+
+---
+
+### `curator batch`
+
+Genera specs para todos los documentos de un manifest en modo producción (sin comparación semántica).
+
+```bash
+curator batch [--manifest <ruta>] [--output <dir>] [--country <cc>] [--standard <std>]
+```
+
+| Flag | Default | Descripción |
+|---|---|---|
+| `--manifest` | `ce-specs/tests/curator_test_manifest.yaml` | Ruta al manifest YAML |
+| `--output` | `./curator_out` | Directorio de salida |
+| `--country` | `ES` | Código de país para el contexto curricular |
+| `--standard` | `LOMLOE` | Standard curricular |
+
+**Ejemplo:**
+```bash
+curator batch --manifest ce-specs/tests/lms_curator_test_manifest.yaml --output batch_output/
+```
+
+---
+
+### `curator bloom derive`
+
+Deriva nuevos ejercicios pedagógicos a partir de una spec semilla ingestada, usando una estrategia Bloom configurable.
+
+```bash
+curator bloom derive --seed <referenceCode>
+                     [--strategy SOURCE_DERIVATION|PROGRESSION|MISCONCEPTION_REMEDIATION]
+                     [--context <standard/level/subject>]
+                     [--levels SIMPLIFIED,STANDARD,EXTENDED,CHALLENGE]
+                     [--count <n>]
+                     [--focus <tema>]
+                     [--output <dir>]
+                     [--sandbox]
+```
+
+**Flags:**
+
+| Flag | Default | Descripción |
+|---|---|---|
+| `--seed` | **obligatorio** | `referenceCode` de la spec semilla ingestada |
+| `--strategy` | `SOURCE_DERIVATION` | Estrategia Bloom a aplicar |
+| `--context` | *(de la semilla)* | Contexto curricular: `IB/HL/spanish_language` |
+| `--levels` | *(los 4)* | Niveles de dificultad (solo PROGRESSION): `SIMPLIFIED,STANDARD,EXTENDED,CHALLENGE` |
+| `--count` | `2` | Número de ejercicios a generar (ignorado para PROGRESSION) |
+| `--focus` | — | Tema o sección concreta de la semilla en la que enfocarse |
+| `--output` | `./bloom_out` | Directorio de salida para los YAMLs generados |
+| `--sandbox` | `false` | Genera los YAML localmente sin registrar en SpecManager |
+
+**Endpoint:** `POST /api/v1/bloom/derive`
+
+**Ejemplos:**
+
+<Tabs>
+<TabItem label="Source Derivation">
+```bash
+# Derivar 3 ejercicios desde un documento fuente privado
+curator bloom derive \
+  --seed ib.spa.textual_analysis_rubric \
+  --strategy SOURCE_DERIVATION \
+  --context IB/HL/spanish_language \
+  --count 3
+# → Generados: bloom_out/ib.spa.derived.ex_001.yaml
+#               bloom_out/ib.spa.derived.ex_002.yaml
+#               bloom_out/ib.spa.derived.ex_003.yaml
+# → Cada YAML tiene metadata.provenance.seedRef = ib.spa.textual_analysis_rubric
+```
+</TabItem>
+<TabItem label="Progression (Niveles de dificultad)">
+```bash
+# Generar los 4 niveles de dificultad desde un ejercicio existente
+curator bloom derive \
+  --seed ib.spa.textual_analysis_ex_001 \
+  --strategy PROGRESSION
+# → Generados: *_SIMPLIFIED.yaml, *_STANDARD.yaml, *_EXTENDED.yaml, *_CHALLENGE.yaml
+
+# Solo dos niveles
+curator bloom derive \
+  --seed ib.spa.textual_analysis_ex_001 \
+  --strategy PROGRESSION \
+  --levels SIMPLIFIED,CHALLENGE
+```
+</TabItem>
+<TabItem label="Sandbox (previsualizar)">
+```bash
+# Generar sin registrar (revisar antes de ingestar)
+curator bloom derive \
+  --seed es.lomloe.spa.rubrica_lcl_2025 \
+  --strategy SOURCE_DERIVATION \
+  --context LOMLOE/2BACH/lengua_castellana \
+  --count 2 \
+  --sandbox
+# → Escrito en ./bloom_out/ — NO registrado en SpecManager
+# → Ejecuta 'curator validate' + 'sync_specs.sh' cuando esté listo
+```
+</TabItem>
+</Tabs>
+
+---
+
+## Grupo `docs` — Descubrimiento de documentos
+
+### `docs discover`
+
+Descubre documentos de examen desde fuentes conocidas o búsqueda web.
+
+```bash
+docs discover [--query "<texto>"] [--source <id>] [--subject <slug>]
+              [--years "2022-2024"|"2022,2023"] [--call-type ordinaria|frq|mcq]
+              [--output <archivo.yaml>] [--dry-run]
+```
+
+| Flag | Descripción |
+|---|---|
+| `--query` | Texto libre para búsqueda web (requiere Google CSE configurado) |
+| `--source` | ID de fuente conocida: `collegeboard`, `madrid`, `boe`, `canvas-commons`, `ck12`, `europeana`... |
+| `--subject` | Asignatura: `lcl`, `matematicas`, `spanish_language`, `biology`... |
+| `--years` | Rango `"2022-2024"` o lista `"2022,2023"` |
+| `--call-type` | `ordinaria` \| `extraordinaria` \| `frq` \| `mcq` |
+| `--output` | Guarda la lista de descubrimiento en un archivo YAML |
+| `--dry-run` | Lista candidatos sin verificación HTTP |
+
+**Estrategias internas:**
+
+```
+docs discover
+    │
+    ├─ [--source canvas-commons|ck12|europeana] → LmsPackageDiscoveryStrategy (API)
+    │
+    ├─ [--source collegeboard|madrid|boe...]     → KnownSourcesStrategy (HEAD check URLs)
+    │
+    └─ [--query "..."]                           → WebSearchStrategy (Google CSE)
+```
+
+**Ejemplos:**
+```bash
+# Exámenes AP de College Board
+docs discover --source collegeboard --subject spanish_language --years 2020-2024 \
+  --output ap_spanish.yaml
+
+# Selectividad Madrid (Lengua Castellana)
+docs discover --source madrid --subject lcl --years 2022-2024 \
+  --call-type ordinaria --output selectividad_lcl.yaml
+
+# Búsqueda web libre (requiere Google CSE)
+docs discover --query "selectividad lcl andalucía 2023" --output web_lcl.yaml
+
+# Paquetes Canvas Commons (requiere COLABEDU_API_KEY_CANVAS)
+docs discover --source canvas-commons --subject biology --output canvas_bio.yaml
+
+# Recursos Europeana (requiere COLABEDU_API_KEY_EUROPEANA)
+docs discover --source europeana --subject history --output europeana_history.yaml
+
+# Dry-run para explorar sin descargar
+docs discover --source boe --subject matematicas --years 2023 --dry-run
+```
+
+---
+
+### `docs download`
+
+Descarga los documentos de una lista de descubrimiento al disco local.
+
+```bash
+docs download --list <discovery_list.yaml> [--local-dir <dir>]
+              [--status FOUND] [--catalog true|false]
+```
+
+| Flag | Default | Descripción |
+|---|---|---|
+| `--list` | **obligatorio** | Ruta al YAML producido por `docs discover` |
+| `--local-dir` | — | Directorio local donde guardar las descargas |
+| `--status` | `FOUND` | Solo descarga documentos con este estado |
+| `--catalog` | `true` | Añade los descargados al catálogo persistente `source_catalog.yaml` |
+
+**Ejemplo:**
+```bash
+docs download --list ap_spanish.yaml --local-dir ce-specs/sources/us/ap/spanish/
+# → Actualiza source_catalog.yaml automáticamente
+# → Siguiente paso: docs catalog --list ap_spanish.yaml --manifest curator_manifest.yaml
+```
+
+---
+
+### `docs catalog`
+
+Añade documentos de una lista de descubrimiento al manifest del curator.
+
+```bash
+docs catalog --list <discovery_list.yaml> [--manifest <curator_manifest.yaml>]
+             [--filter-status DOWNLOADED] [--dry-run]
+```
+
+| Flag | Default | Descripción |
+|---|---|---|
+| `--list` | **obligatorio** | Lista de descubrimiento YAML |
+| `--manifest` | — | Manifest del curator donde añadir entradas (append) |
+| `--filter-status` | `DOWNLOADED` | Solo incluye documentos con este estado |
+| `--dry-run` | `false` | Imprime el YAML en consola sin escribir al disco |
+
+**Ejemplo:**
+```bash
+docs catalog \
+  --list ap_spanish.yaml \
+  --manifest ce-specs/tests/curator_test_manifest.yaml
+
+# Dry-run para revisar antes de escribir
+docs catalog --list ap_spanish.yaml --dry-run
+```
+
+---
+
+### `docs search`
+
+Consulta el catálogo local de fuentes descargadas.
+
+```bash
+docs search [--subject <slug>] [--year <año>] [--source <id>]
+            [--curator-status PENDING|DONE|FAILED]
+```
+
+**Ejemplo:**
+```bash
+docs search --subject lcl --curator-status PENDING
+# Lista todos los PDFs de LCL pendientes de curar
+```
+
+---
+
+### `docs sources`
+
+Lista todas las fuentes de documentos conocidas registradas en el sistema.
+
+```bash
+docs sources [--scope global|es|us] [--subject <slug>]
+```
+
+**Ejemplo:**
+```bash
+docs sources
+docs sources --scope us --subject spanish_language
+```
+
+---
+
+### `docs stats`
+
+Muestra estadísticas del catálogo local de fuentes.
+
+```bash
+docs stats
+# → Nº total, por estado, por subject, por source
+```
+
+---
+
+## Grupo `taxonomy` — Exploración de taxonomía
+
+### `taxonomy standards`
+
+Lista todos los estándares curriculares disponibles, con filtro opcional por país.
+
+```bash
+taxonomy standards [--country <cc>]
+# cc: es | us | mx | (vacío = todos)
+```
+
+**Endpoint:** `GET /api/v1/taxonomy/options/countries` + `/countries/{code}/standards`
+
+**Ejemplo:**
+```bash
+taxonomy standards --country us
+# 🇺🇸 United States
+#   ├── std.intl.ap          Advanced Placement (AP)
+#   ├── std.us.tx.teks       Texas Essential Knowledge and Skills
+#   ├── std.intl.ib          International Baccalaureate (IB)
+```
+
+---
+
+### `taxonomy tree`
+
+Muestra el árbol de niveles y asignaturas de un estándar.
+
+```bash
+taxonomy tree --standard <std_id> [--subject <kw>]
+```
+
+**Endpoints:**
+- `GET /api/v1/taxonomy/options/standards/{std}/levels`
+- `GET /api/v1/taxonomy/options/standards/{std}/subjects`
+- `GET /api/v1/taxonomy/options/standards/{std}/subjects/{sval}/variants`
+
+**Ejemplo:**
+```bash
+taxonomy tree --standard std.intl.ap
+taxonomy tree --standard std.es.lomloe --subject lcl
+```
+
+---
+
+### `taxonomy rubrics`
+
+Lista las rúbricas C0 disponibles en `ce-specs/catalog/`, con filtro por standard y asignatura.
+
+```bash
+taxonomy rubrics [--standard <kw>] [--subject <kw>]
+```
+
+**Ejemplo:**
+```bash
+taxonomy rubrics --standard ap --subject spanish
+taxonomy rubrics --standard lomloe --subject matematicas
+```
+
+---
+
+### `taxonomy courses`
+
+Lista los CourseBundle specs (`BUNDLE_COURSE`) para un país, standard o prefijo de referenceCode.
+
+```bash
+taxonomy courses [--country <cc>] [--standard <kw>] [--referenceCode <prefix>]
+```
+
+**Endpoint:** `GET /api/v1/taxonomy/options/course-bundles?referenceCode=<prefix>`
+
+**Ejemplo:**
+```bash
+taxonomy courses --country es --standard lomloe
+taxonomy courses --referenceCode us.ap.spanish_language
+```
+
+---
+
+### `taxonomy check`
+
+**Pre-flight check completo** para un `referenceCode` antes de curar. Verifica:
+
+1. ✅ Taxonomía en DB (`/api/v1/taxonomy/options/resolve`)
+2. 📐 Rúbricas C0 en `ce-specs/catalog/`
+3. 🧪 Recetas C1 en `ce-specs/catalog/`
+4. 📄 PDFs en `ce-specs/sources/`
+5. 📦 CourseBundles en la DB
+6. 📄 Specs ya curados en `curator_out/`
+
+```bash
+taxonomy check --referenceCode <código>
+```
+
+**Ejemplo:**
+```bash
+taxonomy check --referenceCode us.ap.spanish_language.hl
+# ╔══════════════════════════════════════════════════════════╗
+# ║  Pre-flight Check: us.ap.spanish_language.hl           ║
+# ╚══════════════════════════════════════════════════════════╝
+# 📚 TAXONOMY (DB)
+#   Standard:     AP
+#   Level:        HL
+#   ...
+# RESULTADO: ✅ Listo para curar
+```
+
+<Aside type="tip">
+Ejecuta siempre `taxonomy check` antes de `curator curate` para asegurarte de que todos los prerrequisitos están disponibles.
+</Aside>
+
+---
+
+### `taxonomy report`
+
+Genera una tabla de estado para todos los estándares de un país (o todos).
+
+```bash
+taxonomy report [--country <cc>] [--save]
+```
+
+| Flag | Default | Descripción |
+|---|---|---|
+| `--country` | *(todos)* | Filtra por código de país |
+| `--save` | `false` | Guarda el informe como Markdown en `curator_out/taxonomy_report.md` |
+
+**Ejemplo:**
+```bash
+taxonomy report --country es --save
+taxonomy report   # Todos los países
+```
+
+---
+
+## Grupo `spec batch` — Pipeline declarativo
+
+### `spec batch run`
+
+Ejecuta un pipeline de specs por etapas desde un archivo YAML de definición.
+
+```bash
+spec batch run --batch <archivo.yaml> [--from <etapa>] [--dry-run]
+```
+
+| Flag | Descripción |
+|---|---|
+| `--batch` | **Obligatorio.** Ruta al YAML de definición del batch |
+| `--from` | Reanuda desde una etapa: `taxonomy` \| `discover` \| `fetch` \| `parse` \| `approval` \| `ingest` |
+| `--dry-run` | Muestra el plan de ejecución sin correr nada |
+
+**Etapas del pipeline:**
+```
+taxonomy → discover → fetch → parse → approval → ingest
+```
+
+El estado se persiste en `.ce-batch-state.json` para reanudar en caso de fallo.
+
+**Ejemplo:**
+```bash
+spec batch run --batch batch_ap_spanish.yaml
+spec batch run --batch batch_ap_spanish.yaml --dry-run
+spec batch run --batch batch_ap_spanish.yaml --from parse   # Reanudar desde parse
+```
+
+---
+
+### `spec batch status`
+
+Muestra el estado de la última ejecución de batch (o por ID).
+
+```bash
+spec batch status [--batch-id <id>]
+```
+
+Lee `.ce-batch-state.json` del directorio actual.
+
+**Ejemplo:**
+```bash
+spec batch status
+# Batch ID           : batch-ap-spanish-2024
+# Status             : ✅ COMPLETED
+# Discovered URLs    : 12
+# Fetched files      : 11
+# Parsed specs       : 10
+# Ingested ref codes : 10
+```
+
+---
+
+### `spec batch generate`
+
+Genera un YAML de definición de batch desde una descripción en lenguaje natural usando AI.
+
+```bash
+spec batch generate --description "<descripción>" [--out batch.yaml] [--print]
+```
+
+| Flag | Default | Descripción |
+|---|---|---|
+| `--description` | **obligatorio** | Descripción del contenido pedagógico a ingestar |
+| `--out` | `batch.yaml` | Archivo de salida |
+| `--print` | — | Imprime el YAML en consola en vez de guardar |
+
+**Endpoint:** `POST /api/v1/curator/batch/generate`
+
+**Ejemplo:**
+```bash
+spec batch generate \
+  --description "cursos de español AP para high school en California" \
+  --out batch_ap_ca.yaml
+
+spec batch generate --description "exámenes LOMLOE de matemáticas 4 ESO" --print
+```
+
+---
+
+## Grupo `user` — Operaciones de usuario
+
+### `user provision`
+
+Aprovisiona un usuario individual vía la API Ops del backend.
+
+```bash
+user provision --email <email> --name "<nombre>" [--role "teacher;admin"]
+```
+
+| Flag | Default | Descripción |
+|---|---|---|
+| `--email` | **obligatorio** | Email del usuario |
+| `--name` | **obligatorio** | Nombre completo |
+| `--role` | `teacher` | Roles separados por `;` (p.ej. `teacher;admin`) |
+
+**Endpoint:** `POST /ops/v1/provisioning/trigger`
+
+---
+
+### `user bulk-provision`
+
+Aprovisiona usuarios en masa desde un CSV (`email,name,role`).
+
+```bash
+user bulk-provision --file <usuarios.csv>
+```
+
+**Ejemplo CSV:**
+```csv
+email,name,role
+maria@escuela.es,María García,teacher
+admin@escuela.es,Admin Centro,teacher;admin
+```
+
+---
+
+## Grupo `crm` — Operaciones CRM
+
+### `crm import-leads`
+
+Importa leads en masa al CRM desde un CSV (`email,name,state,subject`).
+
+```bash
+crm import-leads --file <leads.csv> [--owner <ownerId>]
+```
+
+**Endpoint:** `POST /ops/v1/provisioning/crm/leads/ingest`
+
+---
+
+## Workflows típicos completos
+
+### Workflow A: Curación de examen AP (clásico)
+
+```bash
+# 1. Pre-flight
+taxonomy check --referenceCode us.ap.spanish_language.hl
+
+# 2. Descubrir y descargar fuentes
+docs discover --source collegeboard --subject spanish_language --years 2020-2024 \
+  --output ap_spanish.yaml
+docs download --list ap_spanish.yaml --local-dir ce-specs/sources/us/ap/spanish/
+
+# 3. Añadir al manifest y curar
+docs catalog --list ap_spanish.yaml \
+  --manifest ce-specs/tests/curator_test_manifest.yaml
+curator test --case ap_spanish_2023_ordinaria
+
+# 4. Curar un documento específico
+curator curate \
+  --source ce-specs/sources/us/ap/spanish/ap_spanish_2023.pdf \
+  --referenceCode us.ap.spanish_language.hl \
+  --sections "Section I,Section II"
+
+# 5. Validar e ingestar
+curator validate --spec curator_out/wf-abc123_spec_1_recipe_20240601.yaml
+bash sync_specs.sh local GLOBAL
+```
+
+### Workflow B: Paquetes LMS Canvas en batch
+
+```bash
+# 1. Descubrir paquetes en Canvas Commons
+docs discover --source canvas-commons --subject biology --output canvas_bio.yaml
+
+# 2. Descargar
+docs download --list canvas_bio.yaml --local-dir ce-specs/sources/lms/canvas/
+
+# 3. Crear manifest LMS
+docs catalog --list canvas_bio.yaml \
+  --manifest ce-specs/tests/lms_curator_test_manifest.yaml
+
+# 4. Ejecutar batch
+curator batch --manifest ce-specs/tests/lms_curator_test_manifest.yaml \
+  --output batch_output/
+
+# 5. Test LMS
+curator test --lms --all
+```
+
+### Workflow C: Pipeline batch declarativo
+
+```bash
+# 1. Generar definición desde descripción natural
+spec batch generate \
+  --description "exámenes selectividad lengua castellana Madrid 2020-2024" \
+  --out batch_lcl_madrid.yaml
+
+# 2. Revisar y ejecutar
+spec batch run --batch batch_lcl_madrid.yaml --dry-run
+spec batch run --batch batch_lcl_madrid.yaml
+
+# 3. Consultar estado
+spec batch status
+```
+
+### Workflow D: Cola compartida de revisión pedagógica
+
+```bash
+# 1. Lanzar curation desde CI/CD o CLI (sin usuario asignado)
+curator curate \
+  --source ce-specs/sources/es/lomloe/2bach/lcl/exam_lcl_2024.pdf \
+  --referenceCode es.lomloe.bach.2.lcl
+# → job creado con shared=true
+# → badge 🟡 "Shared" aparece en Job Command Center para todos los TEACHER/CONTENT_CREATOR
+
+# 2. (Opcional) Asignar a un pedagogo específico
+curator curate \
+  --source exam_lcl_2024.pdf \
+  --referenceCode es.lomloe.bach.2.lcl \
+  --user pedagogo@colabedu.org
+# → job.shared = false, job.owner_email = "pedagogo@colabedu.org"
+# → solo visible para ese usuario
+
+# 3. Verificar estado del job
+curator status --id <workflowId>
+
+# 4. El pedagogo aprueba el job desde el Job Command Center en la UI web
+# → Estado: PENDING_REVIEW → APPROVED → registro automático en SpecManager
+
+# 5. Ingestar specs aprobadas
+bash sync_specs.sh local GLOBAL
+```
+
+---
+
+## Páginas relacionadas
+
+- [Capacidades del Curador](/es/gitops-operations/curator-capabilities)
+- [Motor Seed & Bloom](/es/gitops-operations/seed-and-bloom)
+- [Referencia InteractiveLesson](/es/reference/interactive-lesson)
+- [Referencia ResourceLearning](/es/reference/resource-learning)
+- [Referencia Gem](/es/reference/gem)
