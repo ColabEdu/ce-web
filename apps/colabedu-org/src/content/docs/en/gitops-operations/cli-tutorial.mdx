@@ -9,15 +9,18 @@ import { Steps, Aside, Tabs, TabItem } from '@astrojs/starlight/components';
 
 # ColabEdu CLI Reference
 
-The `ce-svc-cli` is the command-line interface for operating the ColabEdu pedagogical curation pipeline. Commands are organized into six functional groups:
+The `ce-svc-cli` is the command-line interface for operating the ColabEdu pedagogical curation pipeline. Commands are organized into nine functional groups:
 
 | Group | Prefix | Description |
 |---|---|---|
-| **Curator** | `curator` | AI curation, E2E tests, and batch generation |
+| **Curator** | `curator` | AI curation, Bloom derivation, E2E tests, and batch generation |
 | **Document Discovery** | `docs` | Document discovery, download, and cataloging |
 | **Taxonomy** | `taxonomy` | Standards, rubrics, and course exploration |
 | **Spec Batch** | `spec batch` | Declarative, staged pipeline |
+| **Curriculum** | `curriculum` | Gap analysis, ACA plan creation, progress tracking, and course provisioning |
+| **LMS** | `lms` | E2E LMS provisioning, teardown, and bridge registration |
 | **User Operations** | `user` | User provisioning |
+| **Grading** | `grading` | Headless correction pipeline (Grading V2) |
 | **CRM Operations** | `crm` | Lead import from CSV |
 
 ---
@@ -77,6 +80,12 @@ The `ce-svc-ai-services` backend must be running before executing any `curator`,
 │  ──────────────────────────────────────────                         │
 │  curator curate --source book.pdf --visibility private               │
 │       → curator bloom derive --seed <ref> --strategy PROGRESSION     │
+│                                                                      │
+│  CURRICULUM PIPELINE (Gap-Driven ACA)                                │
+│  ────────────────────────────────────                                │
+│  curriculum gaps --standard AP_SPANISH --country US                  │
+│       → curriculum plan create --theme <gap> --sources "url1,url2"  │
+│       → curriculum progress (tracks all ACA plans per standard)      │
 │                                                                      │
 └──────────────────────────────────────────────────────────────────────┘
 ```
@@ -206,6 +215,7 @@ curator curate \
 # → visible only for teacher@colabedu.org
 ```
 </TabItem>
+</Tabs>
 
 ---
 
@@ -346,6 +356,16 @@ curator bloom derive --seed <referenceCode>
 
 **Endpoint:** `POST /api/v1/bloom/derive`
 
+**Bloom Strategies:**
+
+| Strategy | Description | Best for |
+|---|---|---|
+| `SOURCE_DERIVATION` | **Default.** Uses seed as L1 inspiration; generates L2–L6 as independent exercises. Copyright-safe. | Mass-scale derivation from exam PDFs |
+| `PROGRESSION` | Each difficulty tier builds on the previous. Generates SIMPLIFIED → STANDARD → EXTENDED → CHALLENGE. | Adaptive learning paths |
+| `MEMORY_BLOOM` | Only L1–L2 (recall + comprehension). Fast and lightweight. | Short seeds, vocabulary exercises |
+| `APPLICATION_BLOOM` | L3–L4 (application + analysis). Practice-focused. | Mid-level skills |
+| `ANALYSIS_BLOOM` | L4–L6 (analysis + synthesis + evaluation). Critical thinking. | Advanced / IB-style exercises |
+
 **Examples:**
 
 <Tabs>
@@ -376,6 +396,16 @@ curator bloom derive \
   --seed ib.spa.textual_analysis_ex_001 \
   --strategy PROGRESSION \
   --levels SIMPLIFIED,CHALLENGE
+```
+</TabItem>
+<TabItem label="Memory Bloom">
+```bash
+# Quick L1-L2 derivation for vocabulary seeds
+curator bloom derive \
+  --seed global.ib.spanish_b.vocab.unit3 \
+  --strategy MEMORY_BLOOM \
+  --count 5
+# → 5 recall/comprehension exercises, fast generation
 ```
 </TabItem>
 <TabItem label="Sandbox Preview">
@@ -767,9 +797,346 @@ spec batch generate --description "LOMLOE math exams 4 ESO" --print
 
 ---
 
+## Group `curriculum` — Curriculum Gap & Planning
+
+The `curriculum` command group integrates the **`CurriculumArchitectService`** with the CLI. It reads curriculum requirements from spec-as-code YAML files (`ce-specs/catalog/requirements/`) to identify what specs are missing, and can launch targeted ACA plans to fill those gaps automatically.
+
+### `curriculum gaps`
+
+Returns a structured gap analysis comparing existing specs against curriculum requirements.
+
+```bash
+curriculum gaps --standard <STD> --country <CC>
+```
+
+| Flag | Type | Required | Description |
+|---|---|---|---|
+| `--standard` | `String` | ✅ | Curricular standard code (e.g. `AP_SPANISH`, `LOMLOE`) |
+| `--country` | `String` | ✅ | ISO country code (`US`, `ES`, `MX`…) |
+
+**Endpoint:** `GET /api/v1/curriculum/gaps?standard=&country=`
+
+**Example:**
+```bash
+curriculum gaps --standard AP_SPANISH --country US
+# 📊 Curriculum Gap Analysis — AP_SPANISH / US
+#    Coverage : 42.0% (21 / 50 specs)
+#
+#    Theme                          SpecType        REQ   HAVE   GAP
+#    ──────────────────────────────────────────────────────────────
+# ❌ simulated_conversation          C2_EXERCISES     10      2     8
+# ❌ simulated_conversation          INTERACTIVE_LESSON 5     0     5
+# ⚠️  email_reply                    C2_EXERCISES      8      4     4
+# ✅ cultural_comparison             C2_EXERCISES      6      6     0
+```
+
+Icons:
+- ✅ `coverage ≥ 100%` — fully covered
+- ⚠️ `coverage 50–99%` — partially covered
+- ❌ `coverage < 50%` — critical gap
+
+---
+
+### `curriculum progress`
+
+Shows the aggregated ACA pipeline state across all plans for a given standard + country.
+
+```bash
+curriculum progress --standard <STD> --country <CC>
+```
+
+| Flag | Type | Required | Description |
+|---|---|---|---|
+| `--standard` | `String` | ✅ | Curricular standard code |
+| `--country` | `String` | ✅ | ISO country code |
+
+**Endpoint:** `GET /api/v1/curriculum/progress?standard=&country=`
+
+**Example:**
+```bash
+curriculum progress --standard AP_SPANISH --country US
+# 🚀 Curriculum Progress — AP_SPANISH / US
+#    Overall : 58.0% complete
+#    Items   : 8 DONE | 1 PENDING | 1 REVIEW | 0 FAILED
+#
+#    Plan                                STATUS     STAGE      DONE  PEND  REV  FAIL
+#    ─────────────────────────────────────────────────────────────────────────────
+#    CURRICULUM-AP_SPANISH-US-simulated... RUNNING   c2_exercises  4     1    0    0
+#    CURRICULUM-AP_SPANISH-US-email_reply  COMPLETED c2_exercises  4     0    1    0
+```
+
+---
+
+### `curriculum plan create`
+
+Creates and immediately launches an ACA curator plan to fill a specific curriculum gap.
+The plan name is auto-generated as `CURRICULUM-{standard}-{country}-{theme}-{specType}`.
+
+```bash
+curriculum plan create --standard <STD> --country <CC>
+                       --theme <themeId> --spec-type <TYPE>
+                       --sources "<url1>,<url2>,..."
+                       [--subject <subject>] [--level <level>]
+```
+
+| Flag | Default | Description |
+|---|---|---|
+| `--standard` | **required** | Curricular standard (e.g. `AP_SPANISH`) |
+| `--country` | **required** | ISO country code (`US`, `ES`…) |
+| `--theme` | **required** | Theme ID from the requirements YAML (e.g. `simulated_conversation`) |
+| `--spec-type` | `C2_EXERCISES` | Spec type to produce: `C2_EXERCISES`, `INTERACTIVE_LESSON`, `BLOCK_RUBRIC`… |
+| `--sources` | **required** | Comma-separated source URLs to curate |
+| `--subject` | `spanish` | Subject area override |
+| `--level` | `9-12` | Education level override |
+
+**Endpoint:** `POST /api/v1/curriculum/plans`
+
+**Example:**
+```bash
+curriculum plan create \
+  --standard AP_SPANISH \
+  --country US \
+  --theme simulated_conversation \
+  --spec-type C2_EXERCISES \
+  --sources "https://apcentral.collegeboard.org/media/pdf/ap23-apc-spanish-language.pdf,https://apcentral.collegeboard.org/media/pdf/ap22-apc-spanish-language.pdf"
+# ✅ ACA Plan created and launched
+#    Plan ID      : e4a1c230-...
+#    Items queued : 2
+#    Status       : RUNNING
+#
+# Monitor with:
+#    aca plan status --id e4a1c230-...
+#    curriculum progress --standard AP_SPANISH --country US
+```
+
+<Aside type="tip">
+After `curriculum plan create`, use `aca plan status <planId>` for per-item monitoring and `curriculum progress` for the curriculum-level overview across all plans.
+</Aside>
+
+---
+
+### `curriculum bundle assemble`
+
+Assembles a `BUNDLE_COURSE` spec by grouping seeds and their Bloom-derived exercises into a coherent pedagogical unit.
+
+```bash
+curriculum bundle assemble \
+  --standard <STD> \
+  --level <level> \
+  --strategy SEED_AND_BLOOM \
+  [--referenceCode <prefix>]
+```
+
+| Flag | Default | Description |
+|---|---|---|
+| `--standard` | **required** | Curricular standard |
+| `--level` | **required** | Education level (e.g. `HL`, `SL`, `2BACH`) |
+| `--strategy` | `SEED_AND_BLOOM` | Assembly strategy |
+| `--referenceCode` | *(auto)* | Prefix to filter seeds (e.g. `global.ib.spanish_b.paper2`) |
+
+**Example:**
+```bash
+curriculum bundle assemble \
+  --standard IB \
+  --level HL \
+  --strategy SEED_AND_BLOOM
+# → Bundle assembled: global.ib.spanish_b.paper2.hl.bundle.v1
+# → Contains: 15 seeds + 75 Bloom derivations (L2-L6)
+```
+
+---
+
+### `curriculum bundle status`
+
+Shows the ingestion and delivery status of a curriculum bundle.
+
+```bash
+curriculum bundle status --bundle-ref <referenceCode>
+```
+
+**Example:**
+```bash
+curriculum bundle status --bundle-ref global.ib.spanish_b.paper2.hl.bundle.v1
+# Status: READY
+# Seeds: 15 | Bloom derivations: 75 | Pathways: 2 (HL + SL)
+```
+
+---
+
+### `curriculum catalog list`
+
+Lists all available curriculum bundles ready for teacher assignment.
+
+```bash
+curriculum catalog list [--standard <STD>] [--country <CC>]
+```
+
+**Endpoint:** `GET /api/v1/curriculum/catalog`
+
+**Example:**
+```bash
+curriculum catalog list
+# ┌─────────────────────────────────────────────┬──────────────┬────────┐
+# │ Bundle Ref                                  │ Standard     │ Status │
+# ├─────────────────────────────────────────────┼──────────────┼────────┤
+# │ global.ib.spanish_b.paper2.hl.bundle.v1     │ IB Spanish B │ READY  │
+# │ us.ap.spanish_language.frq.bundle.v1        │ AP Spanish   │ READY  │
+# │ es.ebau.lcl.madrid.bundle.v1               │ EBAU Madrid  │ READY  │
+# └─────────────────────────────────────────────┴──────────────┴────────┘
+```
+
+---
+
+### `curriculum teacher view`
+
+Displays assigned curriculum bundles and course progress for a specific teacher.
+
+```bash
+curriculum teacher view --teacher-id <userId>
+```
+
+**Endpoint:** `GET /api/v1/curriculum/my/overview?teacherIdParam=<userId>`
+
+**Example:**
+```bash
+curriculum teacher view --teacher-id 42
+# Teacher: teacher@colabedu.org (ID: 42)
+# ├── Course: IB Spanish B HL 2024  → 3 classrooms, 67% progress
+# └── Course: AP Spanish Language   → 1 classroom, 45% progress
+```
+
+---
+
+### `curriculum course provision`
+
+Provisions a curriculum bundle as a live course in the relational database (organizations → courses → classrooms).
+
+```bash
+curriculum course provision \
+  --bundle-ref <referenceCode> \
+  --org-id <orgId> \
+  --teacher-id <userId>
+```
+
+| Flag | Description |
+|---|---|
+| `--bundle-ref` | **required.** `referenceCode` of an assembled bundle |
+| `--org-id` | **required.** Organization ID |
+| `--teacher-id` | **required.** Teacher user ID who will own the course |
+
+**Endpoint:** `POST /api/v1/curriculum/course`
+
+**Example:**
+```bash
+curriculum course provision \
+  --bundle-ref global.ib.spanish_b.paper2.hl.bundle.v1 \
+  --org-id 5 \
+  --teacher-id 42
+# ✅ Course provisioned
+#    Course ID   : 88
+#    Name        : IB Spanish B — Paper 2 HL
+#    Teacher     : teacher@colabedu.org
+#    Classrooms  : 0 (ready for enrollment)
+```
+
+<Aside type="note">
+After provisioning, use `lms provision` to connect the course to Canvas or Moodle via the LTI bridge.
+</Aside>
+
+---
+
+## Integrated Workflow: Seed & Bloom + Curriculum Lifecycle
+
+This is the full end-to-end workflow for onboarding a new curriculum standard from scratch:
+
+<Steps>
+1. **Analyze gaps** — Understand what's missing before starting any batch.
+
+   ```bash
+   curriculum gaps --standard IB --country global
+   # → Identify: Paper 2 Writing (HL+SL) has 12-spec deficit
+   ```
+
+2. **Discover & fetch sources** — Find official exam documents.
+
+   ```bash
+   docs discover --source ibdocs --subject spanish_b --years 2019-2024 \
+     --output ib_sb_sources.yaml
+   docs download --list ib_sb_sources.yaml --local-dir ce-specs/sources/ib/spanish_b/
+   ```
+
+3. **Ingest seeds** — Curate PDFs into private BLOCK_CONTENT specs (F3).
+
+   ```bash
+   # Using batch YAML for production runs
+   spec batch run ce-specs/batches/batch_25_ib_spanish_b_seeds_paper2.yaml
+   # Or individually:
+   curator curate \
+     --source ce-specs/sources/ib/spanish_b/ib_paper2_hl_nov2023.pdf \
+     --referenceCode global.ib.spanish_b.paper2.hl.nov2023 \
+     --visibility PRIVATE
+   ```
+
+4. **Expand with Bloom** — Derive L2–L6 exercises from each seed (F4).
+
+   ```bash
+   spec batch run ce-specs/batches/batch_26_ib_spanish_b_bloom_expand.yaml
+   # Or for a single seed:
+   curator bloom derive \
+     --seed global.ib.spanish_b.paper2.hl.nov2023 \
+     --strategy SOURCE_DERIVATION \
+     --count 5
+   ```
+
+5. **Assemble bundles** — Group seeds + derivations into course units (F5).
+
+   ```bash
+   spec batch run ce-specs/batches/batch_27_ib_spanish_b_assemble_bundles.yaml
+   # Or:
+   curriculum bundle assemble --standard IB --level HL --strategy SEED_AND_BLOOM
+   ```
+
+6. **Publish pathways** — Materialize as Teacher Dashboard entries (F6).
+
+   ```bash
+   spec batch run ce-specs/batches/batch_28_ib_spanish_b_assemble_pathways.yaml
+   ```
+
+7. **Verify coverage** — Check the sprint improved the curriculum.
+
+   ```bash
+   curriculum progress --standard IB --country global
+   # Paper 2 Writing: 93% (14/15 specs) ✅
+   ```
+
+8. **Provision course** — Create live course for a teacher (F7).
+
+   ```bash
+   curriculum catalog list   # find the bundle ref
+   curriculum course provision \
+     --bundle-ref global.ib.spanish_b.paper2.hl.bundle.v1 \
+     --org-id 5 --teacher-id 42
+   ```
+
+9. **Connect to LMS** — Register LTI bridge for Canvas/Moodle delivery.
+
+   ```bash
+   lms provision --file lms-ib-spanish-b.yaml --suffix ib-sprint-01
+   lms register-link \
+     --classroom-id <colabedu_classroom_id> \
+     --spec-ref global.ib.spanish_b.paper2.hl.bundle.v1 \
+     --lms-platform canvas \
+     --lms-assignment-id <canvas_assignment_id>
+   ```
+</Steps>
+
+---
+
+
 ## Group `user` — User Operations
 
 ### `user provision`
+
 
 Provisions a single user via the backend Ops API.
 
@@ -948,6 +1315,42 @@ bash sync_specs.sh local GLOBAL
 <Aside type="note">
 **Privacy model:** The private seed (proprietary textbook, internal rubric) is never exposed to students or the public API. Only the derived specs are public. The `provenance.seedRef` field preserves the pedagogical lineage for internal auditing.
 </Aside>
+
+### Workflow F: Curriculum Gap → ACA Sprint
+
+```bash
+# 1. Check what specs are missing for AP Spanish
+curriculum gaps --standard AP_SPANISH --country US
+# → Coverage 42%, critical gaps in simulated_conversation and email_reply
+
+# 2. Discover relevant source documents
+docs discover --source collegeboard --subject spanish_language --years 2020-2024 \
+  --output ap_spanish.yaml
+
+# 3. Download sources
+docs download --list ap_spanish.yaml --local-dir ce-specs/sources/us/ap/spanish/
+
+# 4. Launch targeted ACA plan for the top gap (simulated_conversation)
+curriculum plan create \
+  --standard AP_SPANISH \
+  --country US \
+  --theme simulated_conversation \
+  --spec-type C2_EXERCISES \
+  --sources "$(grep 'url:' ap_spanish.yaml | awk '{print $2}' | tr '\n' ',' | sed 's/,$//') "
+# → Plan created: CURRICULUM-AP_SPANISH-US-simulated_conversation-C2_EXERCISES
+
+# 5. Monitor ACA pipeline progress
+curriculum progress --standard AP_SPANISH --country US
+# → Overall 58% complete, 8 DONE, 1 PENDING
+
+# 6. Handle NEEDS_REVIEW items
+aca plan list <planId> --status NEEDS_REVIEW
+aca plan approve <planId> --item <itemId>
+
+# 7. Verify gap closure
+curriculum gaps --standard AP_SPANISH --country US
+# → simulated_conversation C2_EXERCISES: 10/10 ✅
+```
 
 ---
 
