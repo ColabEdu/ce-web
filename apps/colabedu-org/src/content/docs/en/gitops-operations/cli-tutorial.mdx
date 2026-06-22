@@ -1132,6 +1132,215 @@ This is the full end-to-end workflow for onboarding a new curriculum standard fr
 
 ---
 
+## Group `lms` — LMS E2E Operations
+
+Commands for provisioning, tearing down, and inspecting LMS test fixtures (Canvas / Moodle), and for registering the LTI bridge without manual Deep Linking.
+
+All `lms` commands require the following env vars or `application.properties` entries:
+
+```properties
+lms.canvas.url=https://your-canvas.instructure.com
+lms.canvas.admin-token=<admin_token>
+lms.moodle.url=https://your-moodle.example.com
+lms.moodle.admin-token=<wstoken>
+```
+
+---
+
+### `lms provision`
+
+Provisions a complete LMS environment (organizations → courses → users → assignments) from a YAML template on every configured platform.
+
+All created resources are named with `<suffix>` to enable safe selective teardown.
+
+```bash
+lms provision --file <yaml> --suffix <suffix> [--dry-run] [--canvas-only] [--moodle-only]
+```
+
+| Flag | Default | Description |
+|------|---------|-------------|
+| `--file` | **required** | Path to YAML fixture template (supports `{{suffix}}` tokens) |
+| `--suffix` | **required** | Run-specific suffix appended to all resource names (e.g. `lms-test-20260622`) |
+| `--dry-run` | `false` | Validates YAML and prints plan without executing any remote calls |
+| `--canvas-only` | `false` | Skip Moodle, only provision Canvas |
+| `--moodle-only` | `false` | Skip Canvas, only provision Moodle |
+
+**Endpoint:** `POST /ops/v1/lms/provision-lms-from-yaml`  
+**Timeout:** 180 s (Canvas/Moodle calls are remote — generous read timeout applied automatically)
+
+**Example YAML template** (`lms-ib-spanish-b.yaml`):
+```yaml
+organizations:
+  - name: "Test School {{suffix}}"
+    courses:
+      - name: "IB Spanish B HL {{suffix}}"
+        courseCode: "IB-SPA-B-HL-{{suffix}}"
+        users:
+          - email: teacher@test.com
+            role: teacher
+          - email: student1@test.com
+            role: student
+        assignments:
+          - name: "Paper 2 Writing HL {{suffix}}"
+            points: 20
+```
+
+**Example:**
+```bash
+lms provision \
+  --file ce-specs/e2e/lms-ib-spanish-b.yaml \
+  --suffix ib-sprint-01
+
+# 🏗️  LMS Provision — suffix=ib-sprint-01
+# ══════════════════════════════════════════════
+#   Courses created:     2
+#     ✅ [canvas] id=678  IB Spanish B HL ib-sprint-01
+#     ✅ [moodle] id=42   IB Spanish B HL ib-sprint-01
+#   Users enrolled:      4
+#   Assignments created: 4
+#     📝 [canvas] id=456  Paper 2 Writing HL ib-sprint-01
+#
+#   ✅ Done — suffix=ib-sprint-01
+#   ℹ️  Next: run 'lms register-link' to activate the B→C bridge.
+
+# Dry run (no remote calls):
+lms provision --file lms-ib-spanish-b.yaml --suffix ib-sprint-01 --dry-run
+# → [DRY RUN] YAML read OK — 22 lines. {{suffix}} tokens: 6. No LMS resources created.
+```
+
+<Aside type="tip">
+Use `--dry-run` to validate YAML structure and count `{{suffix}}` tokens before a real provisioning run. Useful in CI before onboarding a new standard.
+</Aside>
+
+---
+
+### `lms teardown`
+
+Selectively deletes LMS courses whose names contain the supplied `suffix`.
+
+**Safety contract:** LTI developer keys, tool registrations, admin accounts, and **any course not matching the suffix are never touched.**
+
+```bash
+lms teardown --suffix <suffix> [--dry-run] [--canvas-only] [--moodle-only]
+```
+
+| Flag | Default | Description |
+|------|---------|-------------|
+| `--suffix` | **required** | Only courses containing this string (case-insensitive) are deleted |
+| `--dry-run` | `false` | Lists what would be deleted without executing |
+| `--canvas-only` | `false` | Only teardown Canvas |
+| `--moodle-only` | `false` | Only teardown Moodle |
+
+**Endpoint:** `POST /ops/v1/lms/teardown-test-data`
+
+**Example:**
+```bash
+# Preview first
+lms teardown --suffix ib-sprint-01 --dry-run
+# 🗑️  LMS Teardown — suffix=ib-sprint-01  [DRY RUN]
+# ⚠️  Only courses matching suffix 'ib-sprint-01' will be deleted.
+#   🔍 IB Spanish B HL ib-sprint-01
+#   🔍 IB Spanish B SL ib-sprint-01
+
+# Execute teardown
+lms teardown --suffix ib-sprint-01
+# 🗑️  LMS Teardown — suffix=ib-sprint-01
+#   Deleted: 2   Skipped: 47
+#   🗑️  IB Spanish B HL ib-sprint-01
+#   🗑️  IB Spanish B SL ib-sprint-01
+#   ✅ Teardown complete. LTI keys and admin config untouched.
+```
+
+---
+
+### `lms register-link`
+
+Seeds `lms_resource_links.lms_assignment_id` in the ColabEdu database to activate the **B→C bridge** without performing a manual LTI Deep Link launch in Canvas or Moodle.
+
+Required before running the student submission test flow (Phase 5 of the E2E orchestrator).
+
+```bash
+lms register-link \
+  --classroom-id <id> \
+  --spec-ref <referenceCode> \
+  --lms-platform <canvas|moodle> \
+  --lms-assignment-id <id> \
+  [--lms-course-id <id>]
+```
+
+| Flag | Description |
+|------|-------------|
+| `--classroom-id` | **required.** ColabEdu classroom ID |
+| `--spec-ref` | **required.** OAS `referenceCode` of the spec to bind (e.g. `global.ib.spanish_b.paper2.hl.bundle.v1`) |
+| `--lms-platform` | **required.** `canvas` or `moodle` |
+| `--lms-assignment-id` | **required.** Native LMS assignment ID (e.g. Canvas `456`) |
+| `--lms-course-id` | *(optional)* LMS course ID for multi-course validation |
+
+**Endpoint:** `POST /ops/v1/lms/register-link`
+
+**Example:**
+```bash
+lms register-link \
+  --classroom-id 13 \
+  --spec-ref global.ib.spanish_b.paper2.hl.bundle.v1 \
+  --lms-platform canvas \
+  --lms-assignment-id 456
+
+# ✅ register-link OK
+#    classroomId     = 13
+#    specRef         = global.ib.spanish_b.paper2.hl.bundle.v1
+#    lmsPlatform     = canvas
+#    lmsAssignmentId = 456
+#    resourceLinkId  = 3f9a1b22-...
+#    bridgeStatus    = ACTIVE
+```
+
+<Aside type="note">
+After `lms register-link`, when a Canvas webhook arrives with `assignment_id=456`, the backend resolves the ColabEdu classroom and spec automatically — no human LTI Deep Link required.
+</Aside>
+
+---
+
+### `lms status`
+
+Displays a unified read-only view of LMS resources and active bridge links matching a given suffix. Combines three backend queries: course list, provision status, and registered resource links.
+
+```bash
+lms status --suffix <suffix> [--canvas-only] [--moodle-only]
+```
+
+| Flag | Default | Description |
+|------|---------|-------------|
+| `--suffix` | **required** | Suffix filter to match resources |
+| `--canvas-only` | `false` | Only query Canvas |
+| `--moodle-only` | `false` | Only query Moodle |
+
+**Endpoints called:**
+- `GET /ops/v1/lms/courses?platform=&nameFilter=<suffix>` — list matching courses per platform
+- `GET /ops/v1/lms/status?suffix=<suffix>` — provision status summary
+- `GET /ops/v1/lms/resource-links?suffixFilter=<suffix>` — active bridge links
+
+**Example:**
+```bash
+lms status --suffix ib-sprint-01
+
+# ══════════════════════════════════════════════════════════════════════
+#   LMS Status — suffix=ib-sprint-01
+# ══════════════════════════════════════════════════════════════════════
+#
+# [canvas] Courses:
+#   678  IB Spanish B HL ib-sprint-01  [courseCode=IB-SPA-B-HL-ib-sprint-01]
+#   679  IB Spanish B SL ib-sprint-01  [courseCode=IB-SPA-B-SL-ib-sprint-01]
+#
+# [moodle] Courses:
+#   42  IB Spanish B HL ib-sprint-01
+#
+# Bridge Links:
+#   canvas  assignmentId=456  specRef=global.ib.spanish_b.paper2.hl.bundle.v1  status=ACTIVE
+#   moodle  assignmentId=cmid:37  specRef=global.ib.spanish_b.paper2.sl.bundle.v1  status=ACTIVE
+```
+
+---
 
 ## Group `user` — User Operations
 
