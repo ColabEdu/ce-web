@@ -1,0 +1,365 @@
+---
+title: "Agente Curador Autónomo (ACA)"
+description: "Ejecuta sprints de ingeniería curricular masivos y autónomos con el ACA. Descubre, descarga, cura e ingesta cientos de specs pedagógicas sin intervención humana."
+sidebar:
+  order: 3
+---
+
+import { Steps, Aside, Badge } from '@astrojs/starlight/components';
+
+# Agente Curador Autónomo (ACA)
+
+El **Agente Curador Autónomo** orquesta un sprint completo de ingesta curricular — descubrir → descargar → curar → ingestar — en un único comando. En lugar de procesar documentos uno a uno, el ACA gestiona un **Plan** persistente que rastrea cada URL de origen, gestiona reintentos, aplica umbrales de calidad y se recupera automáticamente ante fallos.
+
+<Aside type="tip">
+**¿Cuándo usar el ACA vs. `curator curate`?**
+
+Usa `curator curate` para documentos individuales o curación puntual. Usa `aca plan` cuando necesitas ingestar un estándar completo (p.ej., todos los documentos AP Spanish) con mínima intervención humana.
+</Aside>
+
+---
+
+## Cómo Funciona
+
+```
+aca plan create --country US --standard AP --subject spanish
+        │
+        ▼
+AcaPlanController → AutonomousCuratorOrchestrator (@Async)
+        │
+        ├─ ① BatchDiscoverService
+        │      Consulta KnownSourcesRegistry + Google CSE
+        │      → descubre 10-20 URLs canónicas para el estándar
+        │
+        ├─ ② Persistir Items
+        │      Un CuratorPlanItem por URL (status=PENDING)
+        │
+        └─ ③ Bucle de Procesamiento
+               ├─ fetch_source    → descarga + SHA-256
+               ├─ gather_context  → HierarchyContextResolver
+               ├─ propose_content → Gem C0 / C1 / C2
+               └─ register_specs  → IngestionService
+                       ▼ Puerta de Calidad
+                       confianza ≥ 0.75 → DONE
+                       confianza < 0.75 → NEEDS_REVIEW
+                       error             → FAILED
+```
+
+### Recuperación
+
+Un job programado (`checkAndRecoverStalledPlans`) ejecuta cada 60 segundos con **ShedLock**. Si `last_heartbeat` no se actualiza en > 30 minutos, el plan pasa a `PAUSED` y se puede reanudar con `aca plan start`.
+
+---
+
+## Prerrequisitos
+
+- Backend con Flyway **V9** aplicado (tablas `curator_plans` + `curator_plan_items`)
+- `ce-svc-cli` compilado: `mvn clean package -pl ce-svc-cli -am -DskipTests`
+- Opcional: `GOOGLE_CSE_API_KEY` + `GOOGLE_CSE_ID` para descubrimiento web
+
+---
+
+## Inicio Rápido — Sprint AP Spanish US
+
+<Steps>
+
+1. **Crear el plan**
+
+   ```bash
+   ./ce-cli.sh --env local \
+     "aca plan create \
+       --name 'Sprint AP Spanish US — Sept 2026' \
+       --country US --standard AP --level HS \
+       --subject spanish --gates after_c0,after_c1"
+   ```
+
+2. **Iniciar el plan (asíncrono)**
+
+   ```bash
+   ./ce-cli.sh --env local "aca plan start <planId>"
+   ```
+
+3. **Monitorizar el progreso**
+
+   ```bash
+   ./ce-cli.sh --env local "aca plan status <planId>"
+   # Plan: Sprint AP Spanish US  |  Items: 12  |  Done: 7  |  Review: 2  |  Failed: 1
+   ```
+
+4. **Aprobar la puerta C0**
+
+   ```bash
+   git -C ../../ce-specs log --oneline -5
+   ./ce-cli.sh --env local "aca plan approve <planId> --gate after_c0"
+   ```
+
+5. **Gestionar items NEEDS_REVIEW**
+
+   ```bash
+   ./ce-cli.sh --env local "aca plan list <planId> --status NEEDS_REVIEW"
+   ./ce-cli.sh --env local "aca plan approve <planId> --item <itemId>"
+   ```
+
+6. **Resultado final**
+
+   ```bash
+   ./ce-cli.sh --env local "aca plan status <planId>"
+   # → COMPLETED — 9 DONE · 2 NEEDS_REVIEW · 1 FAILED
+   ```
+
+</Steps>
+
+---
+
+## Ciclo de Vida del Plan
+
+```
+DRAFT ──► RUNNING ──► WAITING_REVIEW ──► RUNNING ──► COMPLETED
+              │
+              ▼
+           PAUSED → RUNNING (aca plan start reanuda)
+              │
+              ▼
+           FAILED
+```
+
+| Estado | Descripción |
+|---|---|
+| `DRAFT` | Plan creado, aún no iniciado |
+| `RUNNING` | Procesando items activamente |
+| `WAITING_REVIEW` | Pausado en puerta de aprobación |
+| `PAUSED` | Estancado o pausado manualmente |
+| `COMPLETED` | Todos los items procesados |
+| `FAILED` | Cancelado o error crítico |
+
+---
+
+## Referencia de Comandos
+
+### `aca plan create`
+
+| Flag | Por defecto | Descripción |
+|---|---|---|
+| `--name` | **requerido** | Nombre del plan |
+| `--country` | **requerido** | Código de país: `US`, `ES`, `MX`… |
+| `--standard` | **requerido** | Estándar: `AP`, `LOMLOE`, `IB`… |
+| `--level` | — | Nivel: `HS`, `2 BACH`, `SL`… |
+| `--subject` | — | Asignatura: `spanish`, `lcl`… |
+| `--gates` | — | Puertas: `after_c0,after_c1` |
+| `--threshold` | `0.75` | Confianza mínima para auto-ingesta |
+
+### `aca plan start` / `pause` / `cancel`
+
+```bash
+aca plan start <planId>   # Inicia DRAFT o reanuda PAUSED
+aca plan pause <planId>   # Parada controlada (item actual termina)
+aca plan cancel <planId>  # → FAILED (irreversible)
+```
+
+### `aca plan approve`
+
+```bash
+aca plan approve <planId> --gate after_c0   # Desbloquea puerta
+aca plan approve <planId> --item <itemId>   # Aprueba item NEEDS_REVIEW
+```
+
+---
+
+## Configuración
+
+```yaml
+# application.yml (ce-svc-ai-services)
+aca:
+  confidence-threshold: 0.75
+  stall-threshold-minutes: 30
+  recovery:
+    interval-ms: 60000
+```
+
+---
+
+## Esquema de Base de Datos (Flyway V9)
+
+```sql
+-- curator_plans
+id, name, country, standard, status (DRAFT/RUNNING/PAUSED/WAITING_REVIEW/COMPLETED/FAILED),
+total_items, processed_items, failed_items, current_stage,
+config_json, state_json, last_heartbeat, created_at, updated_at
+
+-- curator_plan_items
+id, plan_id, source_url, spec_type,
+status (PENDING/PROCESSING/DONE/NEEDS_REVIEW/FAILED),
+confidence_score, attempts, output_path, error_message, created_at
+```
+
+---
+
+## Planificación Consciente del Currículo
+
+El **`CurriculumArchitectService`** conecta los requisitos curriculares (definidos como ficheros YAML *spec-as-code* en `ce-specs/catalog/requirements/`) con el pipeline del ACA. En lugar de elegir manualmente qué curar, dejas que el análisis de brechas te diga qué falta — y lanzas un sprint ACA focalizado exactamente sobre esas brechas.
+
+### Cómo Encaja en el ACA
+
+```
+ce-specs/catalog/requirements/
+  └── ap_spanish_us.yaml         ← spec-as-code: temas, tipos de spec requeridos, cantidades
+          │
+          ▼
+CurriculumGapAnalyzer
+  Consulta spec_definitions WHERE reference_code LIKE '%{tema}%'
+  Compara conteos existentes vs. requeridos por tema + tipo de spec
+          │
+          ▼
+CurriculumGapReport
+  { coveragePercent, totalRequired, totalExisting, themes[] }
+          │  (una brecha por tema)
+          ▼
+CurriculumArchitectService.createPlanFromGap()
+  → Crea CuratorPlan (status=RUNNING)
+  → Crea CuratorPlanItem por URL de origen (status=PENDING)
+  → Encola vía AcaPlanPublisher
+          │
+          ▼
+AutonomousCuratorOrchestrator (motor ACA existente)
+  Procesa cada item: fetch → curar → validar → ingestar
+```
+
+### YAML de Requisitos Curriculares
+
+Los requisitos de cada estándar se almacenan en `ce-specs/catalog/requirements/`:
+
+```yaml
+# ap_spanish_us.yaml
+standard: AP_SPANISH
+country: US
+themes:
+  - id: simulated_conversation
+    name: Simulated Conversation
+    specTypes:
+      C2_EXERCISES: 10
+      INTERACTIVE_LESSON: 5
+  - id: email_reply
+    name: Email Reply
+    specTypes:
+      C2_EXERCISES: 8
+      INTERACTIVE_LESSON: 4
+  - id: cultural_comparison
+    name: Cultural Comparison
+    specTypes:
+      C2_EXERCISES: 6
+```
+
+La propiedad `curriculum.requirements.path` en `application.properties` apunta a este directorio.
+
+### Flujo de Sprint Guiado por Brechas
+
+<Steps>
+
+1. **Analizar brechas para un estándar**
+
+   ```bash
+   ./ce-cli.sh --env local "curriculum gaps --standard AP_SPANISH --country US"
+   ```
+
+   Ejemplo de salida:
+   ```
+   📊 Análisis de Brechas Curriculares — AP_SPANISH / US
+      Cobertura: 42,0% (21 / 50 specs)
+
+      Tema                           TipoSpec           REQ  TIENE  BRECHA
+      ──────────────────────────────────────────────────────────────────────
+   ❌ simulated_conversation          C2_EXERCISES        10      2      8
+   ❌ simulated_conversation          INTERACTIVE_LESSON   5      0      5
+   ⚠️  email_reply                    C2_EXERCISES         8      4      4
+   ✅ cultural_comparison             C2_EXERCISES         6      6      0
+   ```
+
+2. **Crear un plan ACA para la brecha de mayor prioridad**
+
+   ```bash
+   ./ce-cli.sh --env local \
+     "curriculum plan create \
+       --standard AP_SPANISH \
+       --country US \
+       --theme simulated_conversation \
+       --spec-type C2_EXERCISES \
+       --sources 'https://apcentral.collegeboard.org/media/pdf/ap23-apc-spanish-language.pdf,https://apcentral.collegeboard.org/media/pdf/ap22-apc-spanish-language.pdf'"
+   ```
+
+   Salida:
+   ```
+   ✅ Plan ACA creado y lanzado
+      Plan ID      : e4a1c230-...
+      Items en cola: 2
+      Estado       : RUNNING
+
+   Monitoriza con:
+      aca plan status --id e4a1c230-...
+      curriculum progress --standard AP_SPANISH --country US
+   ```
+
+3. **Monitorizar el progreso del ACA**
+
+   ```bash
+   ./ce-cli.sh --env local "aca plan status e4a1c230"
+   # → Estado: RUNNING | Done: 1 | Review: 0 | Pending: 1
+   ```
+
+4. **Comprobar el progreso a nivel curricular**
+
+   ```bash
+   ./ce-cli.sh --env local "curriculum progress --standard AP_SPANISH --country US"
+   ```
+
+   Salida:
+   ```
+   🚀 Progreso Curricular — AP_SPANISH / US
+      Global : 58,0% completado
+      Items  : 8 DONE | 1 PENDING | 1 REVIEW | 0 FAILED
+
+      Plan                                   ESTADO     FASE         DONE  PEND  REV  FALL
+      ──────────────────────────────────────────────────────────────────────────────────────
+      CURRICULUM-AP_SPANISH-US-simulated...  RUNNING    c2_exercises    4     1    0     0
+      CURRICULUM-AP_SPANISH-US-email_reply   COMPLETED  c2_exercises    4     0    1     0
+   ```
+
+</Steps>
+
+### Endpoints REST
+
+| Método | Endpoint | Descripción |
+|---|---|---|
+| `GET` | `/api/v1/curriculum/gaps?standard=&country=` | Informe de análisis de brechas |
+| `GET` | `/api/v1/curriculum/progress?standard=&country=` | Progreso del pipeline ACA por estándar |
+| `POST` | `/api/v1/curriculum/plans` | Crear y lanzar un plan ACA desde una brecha |
+
+### Configuración
+
+```properties
+# application.properties (ce-svc-ai-services o ib-svc-parent-app)
+curriculum.requirements.path=/ruta/a/ce-specs/catalog/requirements
+```
+
+Para Cloud Run / Kubernetes, monta el repositorio `ce-specs` como volumen y establece:
+```bash
+curriculum.requirements.path=/app/config/ce-specs/catalog/requirements
+```
+
+---
+
+## Limitaciones Conocidas
+
+| Problema | Solución |
+|---|---|
+| PDFs cifrados (AES-256) | Pre-procesar con `ghostscript -dNOPASSWORD` antes de ejecutar el plan |
+| PDFs escaneados (sin capa de texto) | Pre-procesar con OCR `tesseract` |
+| El descubrimiento requiere clave CSE para búsqueda web | Establecer `GOOGLE_CSE_API_KEY` + `GOOGLE_CSE_ID`; las fuentes conocidas (College Board, EBAU Madrid) funcionan sin clave |
+| Sin UI para aprobar NEEDS_REVIEW | Usar CLI `aca plan approve --item` (dashboard Flutter planificado para v0.8) |
+
+---
+
+## Ver También
+
+- [Capacidades del Curador](/es/gitops-operations/curator-capabilities)
+- [Tutorial CLI](/es/gitops-operations/cli-tutorial)
+- [Referencia de Taxonomías](/es/reference/taxonomy)

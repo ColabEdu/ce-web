@@ -98,14 +98,96 @@ Los archivos YAML de los Gems se encuentran en `ce-specs/catalog/personas/curato
 
 ## Tipos de Spec Generados
 
+El pipeline de curación de ColabEdu puede generar los siguientes tipos de spec conformes con OAS. Cada uno mapea a un Gem y un modo de pipeline:
+
+### Tipos de Spec por Pipeline
+
+| Tipo de Spec | OAS Kind | Gem / Modo | Descripción |
+|---|---|---|---|
+| `ExerciseSpec` | `BLOCK_CONTENT` | `gem.curator_c2` / Clásico | Ejercicios, FRQ, análisis de texto con bandas de logro |
+| `BlockRubric` | `BLOCK_RUBRIC` | `gem.curator_c0` / Clásico | Rúbricas normativas desde documentos curriculares |
+| `Recipe` | `RECIPE` | `gem.curator_c1` / Clásico | Unidades didácticas completas con andamiaje pedagógico |
+| `PathwayTemplate` | `PATHWAY_TEMPLATE` | `gem.curator_c1` / ACA | Rutas de aprendizaje para un estándar o tema curricular |
+| `PathwayBundle` | `PATHWAY_BUNDLE` | `gem.curator_c1` / ACA | Orquestador de múltiples plantillas de ruta con ensamblado |
+| `TaxonomyIndex` | `TAXONOMY_INDEX` | *(CLI)* / Ingesta | Índice de localización e ingesta de taxonomías en SpecManager |
+| `StandardSpec` | `STANDARD_SPEC` | `gem.curator_c0` / Config | Directrices base y directrices globales de misconceptions |
+| `CourseSpec` | `COURSE_SPEC` | `gem.curator_c0` / Config | Acotación de estándar a curso con overrides de librerías |
+| `InteractiveLesson` | `INTERACTIVE_LESSON` | `gem.curator_lesson` / LMS | Slides interactivas desde paquetes LMS (Canvas, Moodle) |
+| `ResourceLearning` | `RESOURCE_LEARNING` | `gem.curator_resource` / OER | Recursos OER indexados con puntuación de calidad 3D |
+| `CurriculumRequirement` | YAML spec-as-code | `CurriculumGapAnalyzer` | Archivos de requisitos que alimentan el análisis de brechas |
+
+---
+
 ### ExerciseSpec (`C2_EXERCISES`)
 Spec clásica del Curador: ejercicios, FRQ, análisis de texto con bandas de logro. Almacenada como `BLOCK_CONTENT kind: ExerciseSpec`.
 
-### InteractiveLesson (nuevo)
+### BlockRubric (`BLOCK_RUBRIC`, C0)
+Generada por `gem.curator_c0` desde documentos curriculares normativos (programas oficiales, marcos de competencias). La rúbrica C0 define la estructura de competencias que los recipes C1 y los ejercicios C2 deben mapear.
+
+```yaml
+kind: BLOCK_RUBRIC
+referenceCode: es.lomloe.bach.2.lcl.rubric_c0
+metadata:
+  standard: LOMLOE
+  country: ES
+  competencies:
+    - id: comprension_lectora
+      weight: 0.35
+    - id: expresion_escrita
+      weight: 0.30
+```
+
+### Recipe / PathwayTemplate (`RECIPE`, C1)
+Generada por `gem.curator_c1` desde unidades didácticas completas. Contiene andamiaje pedagógico completo: objetivos, actividades, criterios de evaluación y secuenciación de contenidos. Se usa como plantilla para generar ejercicios C2 dirigidos.
+
+```yaml
+kind: RECIPE
+referenceCode: es.lomloe.bach.2.lcl.recipe_comprension_lectora
+metadata:
+  theme: comprension_lectora
+  specType: RECIPE
+  provenance:
+    seedRef: es.lomloe.bach.2.lcl.rubric_c0
+```
+
+### PathwayBundle (`PATHWAY_BUNDLE`, C1/C2)
+Agrupamiento declarativo de plantillas de ruta (`PathwayTemplate`) que instruye al ACA sobre cómo ensamblar las rutas y rellenar las brechas de cobertura curriculares. Ver [Referencia PathwayBundle](/es/reference/pathway-bundle).
+
+### TaxonomyIndex (`TAXONOMY_INDEX`, C0)
+Índice maestro autogenerado por el CLI para organizar la ingesta progresiva y la localización de múltiples taxonomías de forma federada. Ver [Referencia TaxonomyIndex](/es/reference/taxonomy-index).
+
+### StandardSpec (`STANDARD_SPEC`, C0)
+Configuración de base de directrices educativas a nivel de estándar (p.ej. AP, IB), incluyendo la carga de librerías globales de misconceptions y comportamientos recomendados. Ver [Referencia StandardSpec](/es/reference/standard-spec).
+
+### CourseSpec (`COURSE_SPEC`, C0)
+Configuración específica a nivel de curso (p.ej. IB Spanish B SL) que hereda de una `StandardSpec` y permite hacer redefiniciones u overrides de las librerías de errores y andamiaje curricular. Ver [Referencia CourseSpec](/es/reference/course-spec).
+
+### InteractiveLesson
 Generada desde paquetes LMS (Canvas Commons, Moodle Hub). Contiene slides, widgets interactivos y objetivos de aprendizaje mapeados a competencias curriculares. Ver [Referencia InteractiveLesson](/es/reference/interactive-lesson).
 
-### ResourceLearning (nuevo)
+### ResourceLearning
 Indexa recursos OER con un qualityScore de 3 dimensiones: `alignment`, `pedagogicalRichness`, `accessibility`. Ver [Referencia ResourceLearning](/es/reference/resource-learning).
+
+### CurriculumRequirement (YAML spec-as-code)
+No es una spec OAS — es un **archivo de definición de requisitos** almacenado en `ce-specs/catalog/requirements/`. Lo lee el `CurriculumGapAnalyzer` para determinar qué specs se necesitan por estándar + país.
+
+```yaml
+# ce-specs/catalog/requirements/lomloe_es.yaml
+standard: LOMLOE
+country: ES
+themes:
+  - id: comprension_lectora
+    name: Comprensión Lectora
+    specTypes:
+      C2_EXERCISES: 12
+      INTERACTIVE_LESSON: 6
+  - id: expresion_escrita
+    name: Expresión Escrita
+    specTypes:
+      C2_EXERCISES: 10
+```
+
+Estos archivos YAML son la **definición curricular como código** — codifican los requisitos institucionales del currículo para que el ACA pueda medir y cerrar las brechas de cobertura automáticamente.
 
 ---
 

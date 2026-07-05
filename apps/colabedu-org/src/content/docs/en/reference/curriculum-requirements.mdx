@@ -1,0 +1,241 @@
+---
+title: "CurriculumRequirements — YAML Reference"
+description: "Complete schema for the curriculum requirements YAML file (ce-specs/catalog/requirements/). Defines how many specs of each type are needed per theme for a curriculum to be 'complete'."
+sidebar:
+  label: "CurriculumRequirements"
+  order: 52
+---
+
+import { Badge, Aside, Tabs, TabItem } from '@astrojs/starlight/components';
+
+# `CurriculumRequirements` <Badge text="Curriculum as Code" variant="tip" />
+
+**`CurriculumRequirements`** files are configuration YAMLs stored in `ce-specs/catalog/requirements/`. They define how many specifications of each type (`BLOCK_CONTENT`, `BLOCK_RUBRIC`, etc.) are needed per theme for a curriculum to be considered **complete**.
+
+They are the **source of truth** that `CurriculumGapAnalyzer` compares against the real `ce-specs` inventory to produce a gap report, and that `CurriculumArchitectService` uses to automatically create ACA plans.
+
+<Aside type="tip">
+**File naming convention:** `{standard_lower}_{country_lower}.yaml`  
+Examples: `ap_spanish_us.yaml`, `lomloe_es.yaml`, `ib_global.yaml`
+</Aside>
+
+---
+
+## Full Schema
+
+```yaml
+# ══════════════════════════════════════════════════════════════════════
+# CurriculumRequirements — Schema v1
+# Path: ce-specs/catalog/requirements/{standard}_{country}.yaml
+# ══════════════════════════════════════════════════════════════════════
+
+standard: string        # Standard key: AP_SPANISH | LOMLOE | IB | COMMON_CORE
+country:  string        # ISO-3166-1 alpha-2: US | ES | MX | GB
+subject:  string        # Subject slug: spanish_language_and_culture | lcl | biology
+level:    string        # Educational level: "9-12" | "2 BACH" | "SL" | "HL"
+
+# ── Sprint metadata (optional) ────────────────────────────────────────
+sprint:
+  current_phase:         integer  # Current sprint phase number
+  auto_approve_mode:     boolean  # true = no HITL gate (headless)
+  confidence_threshold:  float    # 0.0–1.0 — mirrors aca.confidence-threshold
+  started:               date     # "YYYY-MM-DD"
+  target_completion:     date     # "YYYY-MM-DD"
+
+# ── Curriculum themes ─────────────────────────────────────────────────
+themes:
+  - id:          string    # Unique theme identifier (snake_case slug)
+    name:        string    # Human-readable name
+    description: string    # Pedagogical description of the theme
+
+    # References to ACA plans feeding this theme (traceability)
+    aca_plan_refs:
+      - string             # ACA plan name (name field in curator_plans)
+
+    # How many specs of each type are needed for this theme
+    requirements:
+      BLOCK_CONTENT: integer   # Exercises with context (C2)
+      BLOCK_RUBRIC:  integer   # Evaluation rubrics (C0)
+      C0_STANDARDS:  integer   # Alias for BLOCK_RUBRIC — regulatory standards
+      C1_RECIPES:    integer   # Pedagogical recipes (C1)
+
+    # Current inventory (updated manually or by CurriculumGapAnalyzer)
+    current_inventory:
+      BLOCK_CONTENT: integer
+      BLOCK_RUBRIC:  integer
+
+    # Computed delta: gap = requirements - current_inventory
+    gap:
+      BLOCK_CONTENT: integer
+      BLOCK_RUBRIC:  integer
+```
+
+---
+
+## Real Example: `ap_spanish_us.yaml`
+
+<Tabs>
+  <TabItem label="FRQ Tasks (excerpt)">
+```yaml
+standard: AP_SPANISH
+country: US
+subject: spanish_language_and_culture
+level: "9-12"
+
+sprint:
+  current_phase: 2
+  auto_approve_mode: true
+  confidence_threshold: 0.0
+  started: "2026-06-14"
+  target_completion: "2026-07-31"
+
+themes:
+
+  - id: email_reply
+    name: "FRQ Task 1 — Email Reply"
+    description: >
+      Written interpersonal communication. Students reply to a formal email
+      demonstrating register, discourse markers, and cultural conventions.
+    aca_plan_refs:
+      - "FASE 1 — Estándares y Rúbricas AP Spanish (US)"
+      - "Sprint Curricular — AP Spanish Language & Culture (US 2025-2)"
+    requirements:
+      BLOCK_CONTENT: 30
+      C0_STANDARDS:  5
+      BLOCK_RUBRIC:  4
+    current_inventory:
+      BLOCK_CONTENT: 5
+      BLOCK_RUBRIC:  4
+    gap:
+      BLOCK_CONTENT: 25
+
+  - id: persuasive_essay
+    name: "FRQ Task 2 — Persuasive Essay"
+    description: >
+      Presentational writing. Students write a persuasive essay synthesizing
+      three authentic sources (article, graph, audio).
+    requirements:
+      BLOCK_CONTENT: 30
+      C0_STANDARDS:  5
+      BLOCK_RUBRIC:  4
+    current_inventory:
+      BLOCK_CONTENT: 5
+      BLOCK_RUBRIC:  4
+    gap:
+      BLOCK_CONTENT: 25
+```
+  </TabItem>
+  <TabItem label="LOMLOE Template (minimal)">
+```yaml
+standard: LOMLOE
+country: ES
+subject: lengua_castellana_y_literatura
+level: "2 BACH"
+
+sprint:
+  current_phase: 1
+  auto_approve_mode: false
+  confidence_threshold: 0.75
+  started: "2026-09-01"
+  target_completion: "2026-12-31"
+
+themes:
+
+  - id: comentario_texto
+    name: "Text Commentary"
+    description: >
+      Analysis and commentary of literary and non-literary texts.
+      LOMLOE evaluation criterion: CCL1, CCL3.
+    requirements:
+      BLOCK_CONTENT: 20
+      BLOCK_RUBRIC:  3
+    current_inventory:
+      BLOCK_CONTENT: 0
+      BLOCK_RUBRIC:  0
+    gap:
+      BLOCK_CONTENT: 20
+      BLOCK_RUBRIC:  3
+```
+  </TabItem>
+</Tabs>
+
+---
+
+## `referenceCode` Convention (ce-specs)
+
+Specs generated by the ACA for a theme follow the pattern:
+
+```
+global.c2.{standard_lower}.{subject_slug}.{year}.{theme_id}.{spectype}.v{n}
+```
+
+Example for `email_reply` in AP Spanish:
+```
+global.c2.ap.spanish_language.2025.email_reply.frq_exercise.v1
+global.c0.ap.spanish_language.2024.rubrics.email_reply.v1
+```
+
+---
+
+## Valid spec types (`requirements` keys)
+
+| Key | OAS Layer | Description |
+|---|---|---|
+| `BLOCK_CONTENT` | C2 | Exercises and assessments with context |
+| `BLOCK_RUBRIC` | C0 | Immutable evaluation rubrics |
+| `C0_STANDARDS` | C0 | Alias — ingested regulatory standards |
+| `C1_RECIPES` | C1 | Assembled pedagogical recipes |
+| `INTERACTIVE_LESSON` | C2 | Interactive lessons with slides |
+| `RESOURCE_LEARNING` | C2 | Annotated OER pointers |
+
+---
+
+## Usage Flow: Gap Analysis → ACA Sprint
+
+```
+1. Edit ce-specs/catalog/requirements/{standard}_{country}.yaml
+         │
+         ▼
+2. CLI: curriculum gaps --standard AP_SPANISH --country US
+         │  CurriculumRequirementsLoader.load()
+         │  CurriculumGapAnalyzer.analyze()
+         ▼
+3. CurriculumGapReport { coveragePercent, themes[].specGaps[] }
+         │
+         ▼
+4. CLI: curriculum plan create --standard AP_SPANISH --theme email_reply ...
+         │  CurriculumArchitectService.createPlanFromGap()
+         ▼
+5. CuratorPlan (RUNNING) → AutonomousCuratorOrchestrator
+         │
+         ▼
+6. CLI: curriculum progress --standard AP_SPANISH --country US
+```
+
+---
+
+## Where the Files Live
+
+```
+ce-specs/
+└── catalog/
+    └── requirements/
+        ├── ap_spanish_us.yaml          ← AP Spanish Language & Culture (US)
+        ├── lomloe_es.yaml              ← LOMLOE LCL 2º BACH (ES)  [coming soon]
+        └── ib_spanish_b_global.yaml    ← IB Spanish B SL/HL       [coming soon]
+```
+
+The `curriculum.requirements.path` property in `application.properties` points to this directory:
+
+```properties
+# application.properties (ce-svc-ai-services)
+curriculum.requirements.path=/path/to/ce-specs/catalog/requirements
+```
+
+---
+
+## See Also
+
+- [CuratorPlan](/en/reference/curator-plan) — ACA ingestion plan schema
+- [Autonomous Curator Agent (ACA)](/en/gitops-operations/aca) — Full operations guide
+- [Spec Catalog](/en/specs-repository/spec-catalog/catalog) — Current spec inventory

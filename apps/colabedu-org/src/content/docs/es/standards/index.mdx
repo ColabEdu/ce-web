@@ -68,7 +68,7 @@ Este es nuestro **mayor argumento de venta (Killer Feature) B2B/B2G**: permite a
 
 ## 4. Filosofía Punitiva vs. Formativa (Capa C3 - Directivas)
 
-La mayor diferencia entre estos sistemas educativos no es el formato del examen, sino **cómo la IA debe tratar y penalizar los errores del estudiante**. Esto se controla mediante inyecciones en la Capa C3 (`preprocessing_directives`), las cuales alteran el "System Prompt" del orquestador LangGraph antes de llamar al LLM.
+La mayor diferencia entre estos sistemas educativos no es el formato del examen, sino **cómo la IA debe tratar y penalizar los errores del estudiante**. Esto se controla mediante inyecciones en la Capa C3 (`preprocessing_directives`), las cuales alteran el "System Prompt" del orquestador LangGraph4j antes de llamar al LLM.
 
 | **Parámetro de IA** | **España (EBAU)** | **México (EXANI-II)** | **EE. UU. (Common Core)** | **Advanced Placement (AP)** | **Bachillerato Internacional (IB)** |
 | --- | --- | --- | --- | --- | --- |
@@ -88,7 +88,7 @@ Independientemente del país que estemos procesando o de lo exóticas que sean s
 1. **Ingesta (El Contrato C0):** Un documento legal de cualquier país se traduce a la tabla `goals` (`BLOCK_GOAL`) y su matriz de evaluación a `rubrics` (`BLOCK_RUBRIC`). Esto establece las "Leyes de la Física" del sistema.
 2. **Ensamblaje (El Instrumento C1/C2):** El profesor crea una tarea seleccionando un `ExerciseType` (ej. Panel Doble), conectándolo con un texto histórico de la tabla `contexts` (`BLOCK_CONTEXT`) y adjuntando la rúbrica del paso 1. Esto genera una Receta (Recipe).
 3. **Ejecución (El Payload Runtime):** El estudiante abre su iPad o Chromebook. La UI lee la receta y dibuja la pantalla. El estudiante escribe su ensayo y pulsa "Enviar". El frontend empaqueta un payload JSON puro.
-4. **Evaluación (LangGraph + C3):** El payload llega al backend. LangGraph inyecta las modificaciones de comportamiento (`BLOCK_DIRECTIVE`), ensambla el contexto completo y fuerza al LLM a devolver un esquema estructurado (Structured Output).
+4. **Evaluación (LangGraph4j + C3):** El payload llega al backend. LangGraph4j inyecta las modificaciones de comportamiento (`BLOCK_DIRECTIVE`), ensambla el contexto completo y fuerza al LLM a devolver un esquema estructurado (Structured Output).
 5. **Propagación (Crosswalks):** La nota se guarda en la base de datos relacional y se dispara a través de los nodos transversales, actualizando los *Dashboards* de competencias clave de la escuela o el gobierno en tiempo real.
 
-*La magia arquitectónica de ColabEdu es esta: el orquestador principal (LangGraph) no sabe absolutamente nada sobre el sistema educativo mexicano, español o estadounidense. Solo sabe obedecer pesos, límites y tensores que el Spec Manager ensambló dinámicamente en el Payload JSON final. Hemos abstraído la burocracia educativa convirtiéndola en matemáticas.*
+*La magia arquitectónica de ColabEdu es esta: el orquestador principal (LangGraph4j) no sabe absolutamente nada sobre el sistema educativo mexicano, español o estadounidense. Solo sabe obedecer pesos, límites y tensores que el Spec Manager ensambló dinámicamente en el Payload JSON final. Hemos abstraído la burocracia educativa convirtiéndola en matemáticas.*

@@ -1,9 +1,17 @@
 ---
 title: "Gem"
-description: "Documentación de referencia para el recurso Gem en OAS."
+description: "Documentación de referencia para el recurso Gem en OAS, incluyendo los Gems del Curador para ingesta LMS/OER."
 sidebar:
-  order: 7
+  order: 42
+  badge:
+    text: Solo Partners
+    variant: caution
 ---
+
+:::caution[Recurso Restringido - Solo Partners]
+El acceso y configuración de recursos de la **Capa C3 (Directivas, Personas y Gems)** de ColabEdu está restringido a partners autorizados (gobiernos, editoriales asociadas y consultoras).
+:::
+
 
 El recurso `Gem` (Módulo de IA) define perfiles, roles y conjuntos de instrucciones principales (system prompts) para los agentes de Inteligencia Artificial dentro de la plataforma.
 
@@ -24,23 +32,101 @@ El recurso `Gem` (Módulo de IA) define perfiles, roles y conjuntos de instrucci
 
 ## Ejemplo de Uso
 
-A continuación se muestra un ejemplo de un `Gem` para un Diseñador Instruccional:
-
 ```yaml
 apiVersion: core.oas.colabedu.io/v1beta1
 kind: Gem
 metadata:
   name: instructional_designer
-  description: Persona especializada en diseño instruccional y generación procedimental de AssessmentItems interactivos.
+  description: Persona especializada en diseño instruccional y generación de AssessmentItems interactivos.
 spec:
   system_prompt: |
-    Eres un Diseñador Instruccional experto en crear ejercicios interactivos para ColabEdu utilizando la especificación OAS v1beta1.
-    Tu objetivo es ayudar a los profesores a componer borradores de ejercicios (AssessmentItems) de forma dinámica basándote en sus peticiones en lenguaje natural.
+    Eres un Diseñador Instruccional experto en crear ejercicios interactivos para ColabEdu
+    utilizando la especificación OAS v1beta1.
 
     REGLAS DE GENERACIÓN YAML:
-    1. El resultado final debe ser SIEMPRE un recurso de tipo `AssessmentItem` (apiVersion: core.oas.colabedu.io/v1beta1).
-    2. El ejercicio DEBE usar la estructura `mixed_quiz` o estar compuesto por un array de `ui_components` interactivos.
-    
+    1. El resultado final debe ser SIEMPRE un recurso de tipo `AssessmentItem`.
+    2. El ejercicio DEBE usar la estructura `mixed_quiz` o un array de `ui_components`.
+
     USO DE HERRAMIENTAS:
-    1. **TAXONOMY & GUIDANCE:** Si el usuario hace referencia a un estándar pedagógico, DEBES usar `SpecManagerMcpTools` proactivamente para guiar la generación de los ejercicios.
+    1. Si el usuario hace referencia a un estándar pedagógico, DEBES usar
+       `SpecManagerMcpTools` proactivamente para guiar la generación.
 ```
+
+---
+
+## Gems del Curador
+
+El pipeline del **Agente Curador** utiliza un conjunto de Gems especializados para transformar distintos tipos de fuentes en specs pedagógicas. El `curator_router` clasifica cada input y delega al Gem más adecuado:
+
+| Gem | Output | Activa cuando |
+|---|---|---|
+| `gem.curator_router` | — (enruta) | Siempre — clasifica el input y delega |
+| `gem.curator_c0` | `BlockRubric` | Documentos normativos curriculares |
+| `gem.curator_c1` | `Recipe` | Unidades didácticas completas |
+| `gem.curator_c2` | `ExerciseSpec` | PDFs de exámenes, FRQ, problemas |
+| `gem.curator_lesson` | `InteractiveLesson` | Paquetes LMS (`.imscc` Canvas, `.mbz` Moodle) |
+| `gem.curator_resource` | `ResourceLearning` | APIs OER: CK-12, Khan Academy, Procomún, Europeana |
+
+Los YAML de cada Gem se almacenan en `ce-specs/catalog/personas/curators/`.
+
+### Ejemplo: `gem.curator_lesson`
+
+Genera specs `InteractiveLesson` a partir del contenido HTML/XML de un paquete LMS descomprimido:
+
+```yaml
+apiVersion: core.oas.colabedu.io/v1beta1
+kind: Gem
+metadata:
+  name: curator_lesson
+  description: |
+    Transforma el contenido de un paquete LMS (Canvas IMSCC / Moodle MBZ)
+    en una InteractiveLesson con slides estructuradas y widgets pedagógicos.
+spec:
+  system_prompt: |
+    Eres el Curador de Lecciones Interactivas de ColabEdu.
+    Recibirás el contenido extraído de un paquete LMS (HTML, XML, assets).
+
+    TU TAREA:
+    Generar una spec YAML de tipo `InteractiveLesson` con:
+    1. `slides[]` — al menos 3 slides con título, cuerpo y tipo de widget
+    2. `learningObjectives[]` — objetivos alineados al CurricularContext
+    3. `lmsSource` — metadatos del paquete original (url, platform, packageId)
+
+    OUTPUT: Solo YAML OAS válido. Sin explicaciones adicionales.
+```
+
+### Ejemplo: `gem.curator_resource`
+
+Genera specs `ResourceLearning` con qualityScore de 3 dimensiones:
+
+```yaml
+apiVersion: core.oas.colabedu.io/v1beta1
+kind: Gem
+metadata:
+  name: curator_resource
+  description: |
+    Indexa un recurso OER (CK-12, Khan Academy, Procomún, Europeana)
+    con un qualityScore pedagógico de 3 dimensiones.
+spec:
+  system_prompt: |
+    Eres el Curador de Recursos Educativos Abiertos de ColabEdu.
+
+    TU TAREA:
+    Generar una spec YAML de tipo `ResourceLearning` con:
+    1. `source` — url, title, provider, license, language
+    2. `qualityScore` — objeto con 3 claves (0.0–1.0 cada una):
+       - `alignment`: alineación con el CurricularContext
+       - `pedagogicalRichness`: variedad de actividades y profundidad
+       - `accessibility`: soporte multi-idioma, WCAG, formatos alternativos
+    3. `applicableStandards[]` — lista de referenceCode de estándares
+
+    OUTPUT: Solo YAML OAS válido. Sin explicaciones adicionales.
+```
+
+---
+
+## Páginas Relacionadas
+
+- [Capacidades del Curador](/es/gitops-operations/curator-capabilities) — Pipeline completo con Gem router
+- [Referencia InteractiveLesson](/es/reference/interactive-lesson) — Output de `curator_lesson`
+- [Referencia ResourceLearning](/es/reference/resource-learning) — Output de `curator_resource`

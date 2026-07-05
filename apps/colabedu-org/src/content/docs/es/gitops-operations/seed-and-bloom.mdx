@@ -1,0 +1,111 @@
+---
+title: "Motor Seed & Bloom"
+description: "Derivación pedagógica autónoma en ColabEdu utilizando la Taxonomía de Bloom."
+---
+
+import { Aside, Steps, Tabs, TabItem } from '@astrojs/starlight/components';
+
+# Motor Seed & Bloom: Derivación Pedagógica
+
+El motor **Seed & Bloom** es el componente de `ce-svc-content-engine` encargado de la **expansión pedagógica autónoma** en ColabEdu. Toma una especificación base (una "semilla" o *seed*) y genera una familia de ejercicios didácticamente diferenciados y alineados con los niveles de la **Taxonomía de Bloom revisada**.
+
+```
+     [ Semilla / Seed ] (Ej: Texto original o examen real - PRIVADO)
+            │
+            ▼  (Proceso de derivación LLM)
+   ┌────────────────────────────────────────────────────────┐
+   │ L2 Comprensión ──► Ejercicio formativo (C2)            │
+   │ L3 Aplicación  ──► Transferencia de contexto (C2)     │
+   │ L4 Análisis    ──► Análisis textual y estilístico (C2) │
+   │ L5 Síntesis    ──► Receta de redacción guiada (C1)    │
+   │ L6 Evaluación  ──► Evaluación crítica con rúbrica (C1) │
+   └────────────────────────────────────────────────────────┘
+```
+
+> **Garantía Legal de Derechos de Autor:** Al generar nuevos ejercicios inspirados en la semilla pero con enunciados, preguntas y respuestas originales, los derivados pueden ser distribuidos públicamente sin exponer el texto propietario de la semilla. La semilla original se mantiene con visibilidad `PRIVATE`.
+
+---
+
+## Estrategias de Derivación (`BloomStrategy`)
+
+El motor admite cinco estrategias de derivación según el andamiaje requerido:
+
+| Estrategia | Niveles Generados | Caso de Uso Típico |
+|---|---|---|
+| `SOURCE_DERIVATION` | `L2` a `L6` (independientes) | **Por defecto**. Cada derivado se genera tomando el seed como contexto único. |
+| `PROGRESSION` | `L2` ➔ `L3` ➔ `L4` ➔ `L5` ➔ `L6` | **Encadenado**. Cada nivel usa el nivel anterior como contexto, creando una progresión de dificultad. |
+| `MEMORY_BLOOM` | `L2` (Comprensión) | **Básico**. Ideal para semillas muy cortas o ejercicios rápidos de vocabulario. |
+| `APPLICATION_BLOOM`| `L3` y `L4` | **Práctico**. Enfocado en la resolución y aplicación intermedia de conceptos. |
+| `ANALYSIS_BLOOM`   | `L4`, `L5` y `L6` | **Avanzado**. Orientado al pensamiento crítico, ensayos y debates (Estilo IB). |
+
+### Modo de Preservación de Semilla (*Seed Preservation*)
+
+Cuando se utiliza una estrategia que genera el nivel base, el seed original **nunca se sobrescribe**. El motor crea un nuevo derivado estructurado mientras conserva intacta la procedencia del material en la base de datos a través del campo `seedRefCode`.
+
+---
+
+## Flujo de Trabajo en Terminal y CLI
+
+El pipeline completo de derivación y empaquetamiento se ejecuta mediante comandos específicos del CLI:
+
+<Steps>
+
+1. **Ingestar el documento base (Semilla)**
+   
+   Cura el examen original y guárdalo como semilla privada:
+   ```bash
+   curator curate \
+     --source examenes/ebau_lcl_2025.pdf \
+     --referenceCode es.ebau.lcl.madrid.2025 \
+     --visibility PRIVATE
+   ```
+
+2. **Ejecutar la derivación Bloom (Fase F4)**
+   
+   Deriva los ejercicios correspondientes a los niveles de Bloom seleccionados:
+   ```bash
+   curator bloom derive \
+     --seed es.ebau.lcl.madrid.2025 \
+     --strategy PROGRESSION \
+     --output ./bloom_out
+   ```
+
+3. **Ensamblar el Bundle temático (Fase F5)**
+   
+   Asocia la semilla y sus derivados dentro de una especificación de curso:
+   ```bash
+   spec batch run ce-specs/batches/batch_31_ebau_lcl_assemble_bundles.yaml
+   ```
+
+</Steps>
+
+---
+
+## Referencia de API REST y MCP
+
+### Endpoint REST
+`POST /ops/v1/bloom/derive`
+
+**Headers:**
+```http
+X-Internal-API-Key: <internal_key>
+Content-Type: application/json
+```
+
+**Body:**
+```json
+{
+  "seedRef": "es.ebau.lcl.madrid.2025",
+  "strategy": "PROGRESSION",
+  "levels": ["L2", "L3", "L4"],
+  "count": 3,
+  "sandbox": false
+}
+```
+
+### Herramienta MCP
+Disponible en `EduWorkflowTools` para ser consumida directamente por los agentes inteligentes (como el *Exercise Wizard*):
+```java
+@Tool("bloom_content")
+BloomDerivationResult bloomContent(String seedRef, String strategy, int count)
+```

@@ -1,0 +1,175 @@
+---
+title: "CuratorPlan — YAML Reference"
+description: "Complete schema for the CuratorPlan resource: the persistent, crash-recoverable ingestion plan of the Autonomous Curator Agent (ACA)."
+sidebar:
+  label: "CuratorPlan"
+  order: 51
+---
+
+import { Badge, Aside } from '@astrojs/starlight/components';
+
+# `CuratorPlan` <Badge text="ACA Runtime" variant="note" />
+
+A **`CuratorPlan`** represents a long-running, crash-recoverable curriculum ingestion campaign. It is not a `ce-specs` YAML file — it is a **database resource** created by the CLI or REST API to orchestrate the Autonomous Curator Agent (ACA) pipeline.
+
+<Aside type="note">
+Unlike other OAS types (`Recipe`, `Taxonomy`…), `CuratorPlan` and `CuratorPlanItem` are **not stored in `ce-specs`**: they live in the PostgreSQL `curator_plans` table and are managed by the ACA engine.
+</Aside>
+
+---
+
+## Schema: `CuratorPlan`
+
+```yaml
+# Logical representation of a CuratorPlan (table: curator_plans)
+id:              uuid        # Auto-generated (UUID v4)
+name:            string      # Human-readable operator name (--name in CLI)
+country:         string      # ISO-3166-1 alpha-2: "US" | "ES" | "MX" | "GB"…
+standard:        string      # Standard key: "LOMLOE" | "AP" | "IB" | "AP_SPANISH"…
+status:          enum        # See status table below
+total_items:     integer     # Total discovered items
+processed_items: integer     # Items already processed (DONE + FAILED + NEEDS_REVIEW)
+failed_items:    integer     # Items in FAILED state
+current_stage:   string      # Active phase: DISCOVER | FETCH | PARSE | INGEST
+config_json:     object      # Operator configuration (see below)
+state_json:      object      # Execution checkpoint (ACA internal use)
+created_by:      string      # Email / ID of the CLI operator who created the plan
+last_heartbeat:  timestamp   # Last heartbeat from the executePlan() loop
+created_at:      timestamp
+updated_at:      timestamp
+```
+
+### `config_json` — Common keys
+
+```json
+{
+  "approval_gates": ["after_c0", "after_c1"],
+  "confidence_threshold": 0.75,
+  "model_config": {
+    "router": "gemini-2.0-flash",
+    "c0_model": "gemini-2.5-pro"
+  }
+}
+```
+
+### Plan statuses
+
+| Status | Description |
+|---|---|
+| `DRAFT` | Created, not yet started |
+| `RUNNING` | Orchestrator is actively processing items |
+| `WAITING_REVIEW` | Paused at an approval gate — waiting for operator |
+| `PAUSED` | Stall detected (no heartbeat > 30 min) or manual pause |
+| `COMPLETED` | All items processed (DONE + NEEDS_REVIEW + FAILED) |
+| `FAILED` | Cancelled or unrecoverable critical error |
+
+---
+
+## Schema: `CuratorPlanItem`
+
+Each discovered source document creates a `CuratorPlanItem` within a plan.
+
+```yaml
+# Logical representation of a CuratorPlanItem (table: curator_plan_items)
+id:                  uuid      # Auto-generated
+plan_id:             uuid      # FK → curator_plans.id
+source_url:          string    # Source document URI: http://, gs://, drive://
+spec_type:           string    # OAS type to produce: C0_STANDARDS | C1_RECIPES | C2_EXERCISES
+status:              enum      # See status table below
+confidence_score:    float     # 0.0–1.0 — score from the Curator's evaluation node
+attempts:            integer   # Number of processing attempts
+output_path:         string    # Path of the generated YAML in the ce-specs repository
+error_message:       string    # Last error message (FAILED items)
+original_source_url: string    # Original URL before URL Healing (null if not applied)
+created_at:          timestamp
+```
+
+### Item statuses
+
+| Status | Description |
+|---|---|
+| `PENDING` | Queued, not yet processed |
+| `PROCESSING` | CuratorWorkflow actively running |
+| `DONE` | Auto-ingested — `confidence_score ≥ threshold` |
+| `NEEDS_REVIEW` | `confidence_score < threshold` — human review queue (HITL) |
+| `FAILED` | Unrecoverable error (encrypted PDF, timeout, parse error…) |
+
+### `spec_type` — Valid values
+
+| Value | Description | OAS Layer |
+|---|---|---|
+| `C0_STANDARDS` | Regulatory rubrics and standards | C0 |
+| `BLOCK_RUBRIC` | Alias for C0 — evaluation rubric | C0 |
+| `C1_RECIPES` | Pedagogical recipes | C1 |
+| `C2_EXERCISES` | Exercises with context | C2 |
+| `INTERACTIVE_LESSON` | Interactive lesson with slides | C2 |
+| `RESOURCE_LEARNING` | Annotated OER pointer | C2 |
+
+---
+
+## Creation via CLI
+
+```bash
+# Create and launch a complete ACA plan
+./ce-cli.sh --env local \
+  "aca plan create \
+    --name 'AP Spanish US — October 2026 Sprint' \
+    --country US \
+    --standard AP_SPANISH \
+    --level 'HS' \
+    --subject spanish \
+    --gates after_c0 \
+    --threshold 0.80"
+
+./ce-cli.sh --env local "aca plan start <planId>"
+```
+
+## Creation via REST API
+
+```http
+POST /api/v1/aca/plans
+Content-Type: application/json
+
+{
+  "name": "AP Spanish US — October 2026 Sprint",
+  "country": "US",
+  "standard": "AP_SPANISH",
+  "configJson": {
+    "approval_gates": ["after_c0"],
+    "confidence_threshold": 0.80
+  }
+}
+```
+
+Response:
+```json
+{
+  "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "status": "DRAFT",
+  "totalItems": 0,
+  "createdAt": "2026-10-01T09:00:00Z"
+}
+```
+
+---
+
+## Full REST Endpoint Reference
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `POST` | `/api/v1/aca/plans` | Create plan |
+| `GET` | `/api/v1/aca/plans/{id}` | Get plan status |
+| `POST` | `/api/v1/aca/plans/{id}/start` | Start / resume |
+| `POST` | `/api/v1/aca/plans/{id}/pause` | Controlled pause |
+| `POST` | `/api/v1/aca/plans/{id}/cancel` | Cancel (irreversible) |
+| `GET` | `/api/v1/aca/plans/{id}/items` | List plan items |
+| `POST` | `/api/v1/aca/plans/{id}/items/{itemId}/approve` | Approve NEEDS_REVIEW item |
+| `POST` | `/api/v1/aca/plans/{id}/gates/{gateId}/approve` | Approve quality gate |
+
+---
+
+## See Also
+
+- [Autonomous Curator Agent (ACA)](/en/gitops-operations/aca) — Full operations guide
+- [CurriculumRequirements](/en/reference/curriculum-requirements) — Requirements YAML schema
+- [CLI Tutorial](/en/gitops-operations/cli-tutorial)

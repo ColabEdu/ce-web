@@ -1,0 +1,48 @@
+---
+title: "CourseSpec"
+description: "Documentación de referencia para el recurso CourseSpec en OAS."
+sidebar:
+  order: 4
+  badge:
+    text: Nuevo
+    variant: tip
+---
+
+El recurso `CourseSpec` (Especificación de Curso) permite adaptar un estándar educativo general (`StandardSpec`) a un curso y nivel educativo específico (como IB Spanish B SL o 2º de ESO). Habilita la sobreescritura de las librerías de misconceptions configuradas a nivel de estándar para ese curso concreto.
+
+## Esquema (Schema)
+
+### Metadata (`metadata`)
+
+| Campo | Tipo | Requerido | Descripción |
+|---|---|---|---|
+| `reference_code` | `string` | Sí | Identificador único del curso (ej. `course.ib.spanish_b.sl`). |
+| `name` | `string` | Sí | Nombre legible del curso (ej. "IB Spanish B — Standard Level"). |
+| `description` | `string` | Sí | Explicación detallada del curso y nivel de competencia objetivo. |
+| `author` | `string` | No | Autor de la especificación. |
+
+### Especificación (`spec`)
+
+| Campo | Tipo | Requerido | Descripción |
+|---|---|---|---|
+| `standardRef` | `string` | Sí | Referencia canónica al ID de `StandardSpec` del que hereda (ej. `standard.ib.spanish_b`). |
+| `misconceptionRefs` | `array` | Sí | Lista de referencias a librerías de misconceptions (`LIBRARY`) específicas de este curso. |
+| `misconceptionRefsOverride` | `boolean` | Sí | Si `true`, las librerías de este curso reemplazan por completo a las del estándar. Si `false`, se fusionan (merge) con las del estándar. |
+
+## Ejemplo de Uso
+
+```yaml
+apiVersion: colabedu.ai/v1beta1
+kind: CourseSpec
+metadata:
+  reference_code: "course.ib.spanish_b.sl"
+  name: "IB Spanish B — Standard Level"
+  description: "Curso IB Spanish B para Standard Level (SL). Nivel CEFR objetivo: B2."
+  author: "ColabEdu Core"
+spec:
+  standardRef: "standard.ib.spanish_b"
+  misconceptionRefs:
+    - library.misconceptions.spanish_l2.base
+    - library.misconceptions.spanish_l2.intermediate
+  misconceptionRefsOverride: true
+```

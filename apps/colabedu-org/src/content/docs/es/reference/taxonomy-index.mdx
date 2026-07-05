@@ -1,0 +1,51 @@
+---
+title: "TaxonomyIndex"
+description: "Documentación de referencia para el recurso TaxonomyIndex en OAS."
+sidebar:
+  order: 2
+  badge:
+    text: Nuevo
+    variant: tip
+---
+
+El recurso `TaxonomyIndex` (Índice de Taxonomías) actúa como el registro maestro de todos los archivos de taxonomía YAML que se cargan en la base de datos a través de `TaxonomyService`. Sirve para coordinar la ingesta y localización de estándares (como LOMLOE o TEKS) y taxonomías de materias internacionales.
+
+## Esquema (Schema)
+
+### Metadata (`metadata`)
+
+| Campo | Tipo | Requerido | Descripción |
+|---|---|---|---|
+| `id` | `string` | Sí | Identificador único (ej. `global_taxonomy_index`). |
+| `name` | `string` | Sí | Nombre del índice. |
+| `description` | `string` | Sí | Explicación del alcance de este índice de taxonomías. |
+| `version` | `string` | Sí | Versión semántica del índice. |
+
+### Cuerpo de Taxonomías (`global` / `local`)
+
+Define un listado de taxonomías estructuradas por ámbito (global o por país):
+
+| Campo | Tipo | Requerido | Descripción |
+|---|---|---|---|
+| `id` | `string` | Sí | ID canónico de la taxonomía. |
+| `path` | `string` | Sí | Ruta relativa del archivo YAML dentro de `ce-specs`. |
+| `scope` | `string` | No | Ámbito de aplicación (ej. `GLOBAL` o códigos del país). |
+| `status` | `string` | Sí | Estado del ciclo de vida (ej. `PRODUCTION`, `DRAFT`). |
+
+## Ejemplo de Uso
+
+```yaml
+apiVersion: colabedu.ai/v1beta1
+kind: TaxonomyIndex
+metadata:
+  id: global_taxonomy_index
+  name: "ColabEdu Global Taxonomy Index"
+  description: "Master index of all taxonomy YAML files."
+  version: "1.2.0"
+global:
+  standards:
+    - id: std.ap.v1
+      path: catalog/global/taxonomy.std.ap.yaml
+      scope: GLOBAL
+      status: PRODUCTION
+```

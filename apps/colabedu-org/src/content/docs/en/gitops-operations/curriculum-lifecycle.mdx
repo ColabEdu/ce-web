@@ -1,0 +1,84 @@
+---
+title: "Curriculum Lifecycle"
+description: "Automated curriculum engineering and gap analysis (Curriculum-as-Code) in ColabEdu."
+---
+
+import { Aside, Steps, Tabs, TabItem } from '@astrojs/starlight/components';
+
+# Curriculum Lifecycle: Curriculum-as-Code
+
+ColabEdu implements the **Curriculum-as-Code** paradigm to enable structured management, validation, and auditing of national and international educational standards.
+
+This is achieved by integrating the `CurriculumArchitectService` and the `CurriculumGapAnalyzer` service in the backend. These tools measure the coverage of the pedagogical catalog against the actual requirements of a country or standard.
+
+---
+
+## Curriculum Requirements (`curriculum_requirements.yaml`)
+
+Specific requirements are defined in declarative YAML files stored under `ce-specs/catalog/requirements/`. These files specify how many specs (`BLOCK_CONTENT`, `BLOCK_RUBRIC`, etc.) are needed per topic to consider a curriculum complete.
+
+### Example requirements schema:
+```yaml
+# ce-specs/catalog/requirements/ap_spanish_us.yaml
+standard: AP_SPANISH
+country: US
+subject: spanish
+level: HS
+themes:
+  - id: email_reply
+    name: Email Reply (Task 1)
+    specTypes:
+      C2_EXERCISES: 15        # Requires 15 exercises for this competency
+      RECIPE: 5               # Requires 5 recipes
+  - id: simulated_conversation
+    name: Simulated Conversation (Task 3)
+    specTypes:
+      C2_EXERCISES: 10
+```
+
+---
+
+## Gap Analysis and ACA Plans
+
+The engine performs a gap analysis comparing requirements against the indexed catalog:
+
+```
+[ YAML Requirements ] ◄───► [ SpecManager Catalog ]
+            │
+            ▼ (CurriculumGapAnalyzer)
+    Gap Analysis Report ➔ Missing 5 Exercises for "Email Reply"
+            │
+            ▼ (curriculum plan create)
+    ACA Ingestion Plan with source URLs ( KnownSources / Web Search )
+            │
+            ▼ (aca plan start)
+    Automated Curation & Ingestion ➔ Closes the gaps
+```
+
+If the analyzer identifies missing resources for a curriculum theme, it dynamically generates an **ACA Ingestion Plan** (`CuratorPlan`) to discover, fetch, and ingest official source documents until the coverage reaches 100%.
+
+---
+
+## CLI Commands for Curriculum Management
+
+The `ce-svc-cli` includes the `curriculum` command group to monitor and close coverage gaps:
+
+### Analyze Curricular Gaps
+Compares YAML requirements against the database or local catalog:
+```bash
+curriculum gap-analysis --standard AP_SPANISH --subject spanish
+```
+
+### Create a Gap-Filling ACA Plan
+Generates an autonomous ingestion plan focused only on resolving the identified coverage gaps:
+```bash
+curriculum plan create \
+  --theme email_reply \
+  --sources "https://apcentral.collegeboard.org/exams"
+```
+
+### Check Global Progress
+Inspects the status and progress of all active coverage plans:
+```bash
+curriculum progress --standard AP_SPANISH
+```

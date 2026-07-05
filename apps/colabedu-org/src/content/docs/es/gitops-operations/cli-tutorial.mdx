@@ -9,7 +9,7 @@ import { Steps, Aside, Tabs, TabItem } from '@astrojs/starlight/components';
 
 # Referencia CLI de ColabEdu
 
-El CLI `ce-svc-cli` es la interfaz de línea de comandos para operar el pipeline de curación pedagógica de ColabEdu. Agrupa los comandos en seis grupos funcionales:
+El CLI `ce-svc-cli` es la interfaz de línea de comandos para operar el pipeline de curación pedagógica de ColabEdu. Agrupa los comandos en siete grupos funcionales:
 
 | Grupo | Prefijo | Descripción |
 |---|---|---|
@@ -17,8 +17,13 @@ El CLI `ce-svc-cli` es la interfaz de línea de comandos para operar el pipeline
 | **Document Discovery** | `docs` | Descubrimiento, descarga y catalogación de fuentes |
 | **Taxonomy** | `taxonomy` | Exploración de estándares, rúbricas y cursos |
 | **Spec Batch** | `spec batch` | Pipeline declarativo por etapas |
+| **Curriculum** | `curriculum` | Análisis de brechas, creación de planes ACA y seguimiento |
+| **Entidades** | `org` / `course` / `classroom` | Gestión de orgs, cursos, classrooms e importación LMS |
+| **Test Provisioning** | `test provisioning` | Seed nativo YAML + pipeline LMS para entornos de test |
+| **Test Grading** | `test grading` | Suites y pipeline E2E de grading automático |
 | **User Operations** | `user` | Aprovisionamiento de usuarios |
 | **CRM Operations** | `crm` | Importación de leads desde CSV |
+
 
 ---
 
@@ -77,6 +82,12 @@ El backend `ce-svc-ai-services` debe estar corriendo antes de ejecutar cualquier
 │  ──────────────────────────────────────────                    │
 │  curator curate --source libro.pdf --visibility private              │
 │       → curator bloom derive --seed <ref> --strategy PROGRESSION    │
+│                                                                      │
+│  PIPELINE CURRICULUM (ACA Orientado a Brechas)                       │
+│  ───────────────────────────────────                               │
+│  curriculum gaps --standard LOMLOE --country ES                      │
+│       → curriculum plan create --theme <brecha> --sources "url1,..." │
+│       → curriculum progress (estado de todos los planes ACA)         │
 │                                                                      │
 └──────────────────────────────────────────────────────────────────────┘
 ```
@@ -206,6 +217,7 @@ curator curate \
 # → solo visible para profesor@colabedu.org
 ```
 </TabItem>
+</Tabs>
 
 ---
 
@@ -685,6 +697,112 @@ taxonomy report   # Todos los países
 
 ---
 
+### `taxonomy catalog list`
+
+Lista todas las especificaciones registradas en el catálogo de ColabEdu, con filtros por prefijo de ID, tipo de especificación y estado. Intenta consultar el backend de forma remota, y si no está disponible, realiza un escaneo local de archivos YAML.
+
+```bash
+taxonomy catalog list [--root <prefix>] [--type <type>] [--status <status>] [--format table|json] [--local] [--remote]
+```
+
+**Flags:**
+
+| Flag | Tipo | Default | Descripción |
+|---|---|---|---|
+| `--root` | `String` | — | Prefijo del ID para filtrar (ej. `es.c0`, `std.intl`, `bundle.us`) |
+| `--type` | `String` | — | Tipo de especificación (ej. `BLOCK_RUBRIC`, `TAXONOMY`, `BUNDLE_COURSE`, `RECIPE`, `PERSONA`, `STANDARD_SPEC`, `COURSE_SPEC`, `PATHWAY_BUNDLE`) |
+| `--status` | `String` | — | Estado de la spec (`PUBLISHED`, `DRAFT`, `ARCHIVED`) |
+| `--format` | `String` | `table` | Formato de salida: `table` o `json` |
+| `--local` | `boolean` | `false` | Fuerza el escaneo local de ficheros YAML en `ce-specs` sin consultar al backend |
+| `--remote` | `boolean` | `false` | Fuerza la consulta remota a la API del backend |
+
+**Ejemplo:**
+```bash
+taxonomy catalog list --root es.lomloe --type RECIPE
+taxonomy catalog list --type STANDARD_SPEC --local
+```
+
+---
+
+### `taxonomy catalog show`
+
+Muestra el detalle completo de una especificación por su código de referencia (`referenceCode` o `id`), incluyendo todos los IDs canónicos públicos y el YAML correspondiente.
+
+```bash
+taxonomy catalog show --id <referenceCode> [--format detail|yaml]
+```
+
+| Flag | Tipo | Default | Descripción |
+|---|---|---|---|
+| `--id` | `String` | **obligatorio** | ID o referenceCode de la especificación a inspeccionar |
+| `--format` | `String` | `detail` | Formato de visualización: `detail` (información estructurada) o `yaml` (código YAML completo) |
+
+**Ejemplo:**
+```bash
+taxonomy catalog show --id global.c1.ib.spanish_b.sl.debate.v1 --format yaml
+```
+
+---
+
+### `taxonomy catalog tree`
+
+Muestra una representación jerárquica en forma de árbol de las especificaciones del catálogo organizadas bajo un prefijo común.
+
+```bash
+taxonomy catalog tree [--root <prefix>] [--depth <N>]
+```
+
+| Flag | Tipo | Default | Descripción |
+|---|---|---|---|
+| `--root` | `String` | — | Prefijo del ID raíz para construir el árbol (ej. `es.lomloe`) |
+| `--depth` | `int` | `3` | Profundidad máxima del árbol jerárquico |
+
+**Ejemplo:**
+```bash
+taxonomy catalog tree --root es.lomloe.bach.2
+```
+
+---
+
+### `taxonomy catalog export`
+
+Exporta especificaciones filtradas del catálogo a un archivo local en formato JSON o YAML.
+
+```bash
+taxonomy catalog export [--root <prefix>] [--type <type>] [--out <file>] [--format json|yaml]
+```
+
+| Flag | Tipo | Default | Descripción |
+|---|---|---|---|
+| `--root` | `String` | — | Prefijo de ID para filtrar la exportación |
+| `--type` | `String` | — | Tipo de especificación a exportar |
+| `--out` | `String` | — | Ruta del archivo de destino (si se omite, se imprime en consola) |
+| `--format` | `String` | `yaml` | Formato de exportación: `json` o `yaml` |
+
+**Ejemplo:**
+```bash
+taxonomy catalog export --root es.lomloe --type BLOCK_RUBRIC --out rubricas_lomloe.yaml
+```
+
+---
+
+### `taxonomy catalog docs`
+
+Genera dinámicamente las páginas de documentación en formato MDX de referencia del catálogo (`catalog.mdx`) en inglés y español bajo la ruta de `ce-web`.
+
+```bash
+taxonomy catalog docs
+```
+
+Este comando escanea todas las especificaciones disponibles, las agrupa por capas funcionales (C0 a C3) y genera tablas estructuradas de resumen con sus respectivos IDs canónicos.
+
+**Ejemplo:**
+```bash
+taxonomy catalog docs
+```
+
+---
+
 ## Grupo `spec batch` — Pipeline declarativo
 
 ### `spec batch run`
@@ -767,7 +885,255 @@ spec batch generate --description "exámenes LOMLOE de matemáticas 4 ESO" --pri
 
 ---
 
+## Grupo `curriculum` — Análisis de brechas curriculares y planificación ACA
+
+El grupo `curriculum` integra el **`CurriculumArchitectService`** con la CLI. Lee los requisitos curriculares de archivos YAML spec-as-code ubicados en `ce-specs/catalog/requirements/`, identifica qué specs faltan y puede lanzar planes ACA dirigidos a cubrir esas brechas automáticamente.
+
+### `curriculum gaps`
+
+Devuelve un informe estructurado de brechas comparando las specs existentes con los requisitos curriculares.
+
+```bash
+curriculum gaps --standard <ESTANDAR> --country <PAIS>
+```
+
+| Flag | Tipo | Obligatorio | Descripción |
+|---|---|---|---|
+| `--standard` | `String` | ✅ | Código del estándar curricular (p.ej. `AP_SPANISH`, `LOMLOE`) |
+| `--country` | `String` | ✅ | Código de país ISO (`US`, `ES`, `MX`…) |
+
+**Endpoint:** `GET /api/v1/curriculum/gaps?standard=&country=`
+
+**Ejemplo:**
+```bash
+curriculum gaps --standard AP_SPANISH --country US
+# 📊 Curriculum Gap Analysis — AP_SPANISH / US
+#    Coverage : 42.0% (21 / 50 specs)
+#
+#    Theme                          SpecType        REQ   HAVE   GAP
+#    ──────────────────────────────────────────────────────────────
+# ❌ simulated_conversation          C2_EXERCISES     10      2     8
+# ❌ simulated_conversation          INTERACTIVE_LESSON 5     0     5
+# ⚠️  email_reply                    C2_EXERCISES      8      4     4
+# ✅ cultural_comparison             C2_EXERCISES      6      6     0
+```
+
+Íconos de cobertura:
+- ✅ `cobertura ≥ 100%` — completamente cubierto
+- ⚠️ `cobertura 50–99%` — parcialmente cubierto
+- ❌ `cobertura < 50%` — brecha crítica
+
+---
+
+### `curriculum progress`
+
+Muestra el estado agregado del pipeline ACA para todos los planes de un estándar + país.
+
+```bash
+curriculum progress --standard <ESTANDAR> --country <PAIS>
+```
+
+| Flag | Tipo | Obligatorio | Descripción |
+|---|---|---|---|
+| `--standard` | `String` | ✅ | Código del estándar curricular |
+| `--country` | `String` | ✅ | Código de país ISO |
+
+**Endpoint:** `GET /api/v1/curriculum/progress?standard=&country=`
+
+**Ejemplo:**
+```bash
+curriculum progress --standard AP_SPANISH --country US
+# 🚀 Curriculum Progress — AP_SPANISH / US
+#    Overall : 58.0% complete
+#    Items   : 8 DONE | 1 PENDING | 1 REVIEW | 0 FAILED
+#
+#    Plan                                STATUS     STAGE      DONE  PEND  REV  FAIL
+#    ─────────────────────────────────────────────────────────────────────────────
+#    CURRICULUM-AP_SPANISH-US-simulated... RUNNING   c2_exercises  4     1    0    0
+#    CURRICULUM-AP_SPANISH-US-email_reply  COMPLETED c2_exercises  4     0    1    0
+```
+
+---
+
+### `curriculum plan create`
+
+Crea y lanza inmediatamente un plan ACA para cubrir una brecha curricular específica.
+El nombre del plan se genera automáticamente como `CURRICULUM-{standard}-{country}-{theme}-{specType}`.
+
+```bash
+curriculum plan create --standard <ESTANDAR> --country <PAIS>
+                       --theme <themeId> --spec-type <TIPO>
+                       --sources "<url1>,<url2>,..."
+                       [--subject <materia>] [--level <nivel>]
+```
+
+| Flag | Valor por defecto | Descripción |
+|---|---|---|
+| `--standard` | **obligatorio** | Estándar curricular (p.ej. `AP_SPANISH`, `LOMLOE`) |
+| `--country` | **obligatorio** | Código de país ISO (`US`, `ES`…) |
+| `--theme` | **obligatorio** | ID del tema del YAML de requisitos (p.ej. `simulated_conversation`) |
+| `--spec-type` | `C2_EXERCISES` | Tipo de spec a producir: `C2_EXERCISES`, `INTERACTIVE_LESSON`, `BLOCK_RUBRIC`… |
+| `--sources` | **obligatorio** | URLs de fuentes separadas por comas |
+| `--subject` | `spanish` | Materia (override) |
+| `--level` | `9-12` | Nivel educativo (override) |
+
+**Endpoint:** `POST /api/v1/curriculum/plans`
+
+**Ejemplo:**
+```bash
+curriculum plan create \
+  --standard AP_SPANISH \
+  --country US \
+  --theme simulated_conversation \
+  --spec-type C2_EXERCISES \
+  --sources "https://apcentral.collegeboard.org/media/pdf/ap23-apc-spanish-language.pdf,https://apcentral.collegeboard.org/media/pdf/ap22-apc-spanish-language.pdf"
+# ✅ ACA Plan created and launched
+#    Plan ID      : e4a1c230-...
+#    Items queued : 2
+#    Status       : RUNNING
+#
+# Monitor with:
+#    aca plan status --id e4a1c230-...
+#    curriculum progress --standard AP_SPANISH --country US
+```
+
+<Aside type="tip">
+Tras `curriculum plan create`, usa `aca plan status <planId>` para el seguimiento por item y `curriculum progress` para la vista agregada de cobertura curricular.
+</Aside>
+
+---
+
+## Grupo `org` / `course` / `classroom` — Gestión de entidades
+
+### Organización
+
+```bash
+org create --name "IES Goya" --type SCHOOL --country ES [--description …] [--parent-id 5]
+org list [--parent-id <id>]
+org get --id <id>
+```
+
+### Curso
+
+```bash
+course create --name "Spanish B2" --owner-id <userId> [--org-id <id>] \
+              [--code ES-B2-2024] [--lang es] [--standard-code ib.spanish_b.sl]
+course list [--org-id <id>] [--user-id <id>]
+course get --id <id>
+```
+
+### Classroom
+
+```bash
+classroom create --name "Group A" --course-id 5 --org-id 12 [--term 2024-Q1]
+classroom list --course-id 5
+classroom enroll --classroom-id 3 --student-id 42
+classroom assign-teacher --classroom-id 3 --teacher-id 5 [--role PRIMARY_TEACHER]
+classroom enroll-bulk --classroom-id 3 --file roster.csv
+```
+
+### LMS Import (producción)
+
+Llaman a `/ops/v1/lms/*` en `ce-svc-ai-services`. Requieren `COLABEDU_INTERNAL_API_KEY`.
+
+| Comando | Descripción |
+|---|---|
+| `org lms-platforms` | Lista plataformas soportadas (`canvas`, `moodle`) |
+| `org lms-import` | Importa org + course + roster + content + pathways |
+| `classroom lms-sync-roster` | Solo roster (incremental) |
+| `classroom lms-sync-content` | Solo assignments |
+| `classroom lms-sync-pathways` | Solo módulos → pathways |
+
+```bash
+# Importación completa (responde 207 si algún paso falla)
+org lms-import --platform canvas \
+               --url https://myschool.instructure.com \
+               --token <token> \
+               --course-id 12345
+
+# Sincronizaciones incrementales
+classroom lms-sync-roster   --platform canvas --url … --token … --course-id 12345
+classroom lms-sync-content  --platform canvas --url … --token … --course-id 12345
+classroom lms-sync-pathways --platform canvas --url … --token … --course-id 12345
+```
+
+---
+
+## Grupo `test provisioning` — Provisioning de entorno de test
+
+<Aside type="note">
+Reemplaza los comandos legados `test world-seed` y `test e2e-provisioning`, que están **deprecados** y emiten un aviso de migración en tiempo de ejecución.
+</Aside>
+
+**Clase:** `ProvisioningTestCommands.java`
+
+```bash
+# Estado de la plataforma
+test provisioning status
+
+# Sembrar entidades desde YAML nativo
+test provisioning seed --file ce-specs/tests/world-seed.yaml
+
+# Crear usuario individual
+test provisioning users --email profesor@centro.es --role TEACHER
+
+# Crear usuarios en masa desde YAML
+test provisioning users --from-yaml ce-specs/tests/users-seed.yaml
+
+# Pipeline completo via LMS (output paso a paso)
+test provisioning from-lms --platform canvas \
+                           --url https://myschool.instructure.com \
+                           --token <token> \
+                           --course-id 12345
+
+# Solo roster LMS (incremental)
+test provisioning sync-lms-roster --platform canvas --url … --token … --course-id 12345
+```
+
+**Variables de entorno requeridas:**
+```bash
+export COLABEDU_API_BASE_URL=http://localhost:8081
+export COLABEDU_INTERNAL_API_KEY=<clave-interna>
+```
+
+---
+
+## Grupo `test grading` — Tests de grading
+
+<Aside type="note">
+Reemplaza los comandos legados `test assessment run-suite`, `test assessment cleanup` y `grading e2e-test`, todos **deprecados**.
+</Aside>
+
+**Clase:** `GradingTestCommands.java`
+
+```bash
+# Ejecutar suite de grading por nombre
+test grading run-suite --suite ap_spanish_grading
+
+# Pipeline E2E completo: submission → grading → resultado
+test grading e2e
+
+# Limpiar datos de test
+test grading cleanup
+```
+
+Las suites se ubican en `ce-specs/tests/grading/<suite-name>.yaml`:
+
+```yaml
+suite: ap_spanish_grading
+description: "Suite de grading automático para AP Spanish"
+cases:
+  - id: case_01_free_response
+    submissionFile: sources/ap_spanish_2023_frq.pdf
+    referenceCode: us.ap.spanish_language.hl
+    expectedScore: 4
+    rubricCode: us.ap.spa.rubrica_frq
+```
+
+---
+
 ## Grupo `user` — Operaciones de usuario
+
 
 ### `user provision`
 
@@ -884,7 +1250,7 @@ spec batch run --batch batch_lcl_madrid.yaml
 spec batch status
 ```
 
-### Workflow D: Cola compartida de revisión pedagógica
+### Workflow E: Cola compartida de revisión pedagógica
 
 ```bash
 # 1. Lanzar curation desde CI/CD o CLI (sin usuario asignado)
@@ -912,12 +1278,105 @@ curator status --id <workflowId>
 bash sync_specs.sh local GLOBAL
 ```
 
+### Workflow F: Brecha curricular → Sprint ACA
+
+```bash
+# 1. Ver qué specs faltan para AP Spanish
+curriculum gaps --standard AP_SPANISH --country US
+# → Cobertura 42%, brechas críticas en simulated_conversation y email_reply
+
+# 2. Descubrir fuentes relevantes
+docs discover --source collegeboard --subject spanish_language --years 2020-2024 \
+  --output ap_spanish.yaml
+
+# 3. Descargar fuentes
+docs download --list ap_spanish.yaml --local-dir ce-specs/sources/us/ap/spanish/
+
+# 4. Lanzar plan ACA para la brecha prioritaria (simulated_conversation)
+curriculum plan create \
+  --standard AP_SPANISH \
+  --country US \
+  --theme simulated_conversation \
+  --spec-type C2_EXERCISES \
+  --sources "$(grep 'url:' ap_spanish.yaml | awk '{print $2}' | tr '\n' ',' | sed 's/,$//')"
+# → Plan creado: CURRICULUM-AP_SPANISH-US-simulated_conversation-C2_EXERCISES
+
+# 5. Monitorear progreso del pipeline ACA
+curriculum progress --standard AP_SPANISH --country US
+# → Progreso general 58%, 8 DONE, 1 PENDING
+
+# 6. Gestionar items en NEEDS_REVIEW
+aca plan list <planId> --status NEEDS_REVIEW
+aca plan approve <planId> --item <itemId>
+
+# 7. Verificar cierre de brecha
+curriculum gaps --standard AP_SPANISH --country US
+# → simulated_conversation C2_EXERCISES: 10/10 ✅
+```
+
+---
+
+### Workflow G: Provisioning nativo + test de grading
+
+```bash
+# 1. Sembrar entidades de test
+test provisioning seed --file ce-specs/tests/world-seed.yaml
+
+# 2. Crear usuario teacher si no existe
+test provisioning users --email jmolmo@healthcentrix.com --role TEACHER
+
+# 3. Verificar plataforma
+test provisioning status
+
+# 4. Ejecutar suite de grading
+test grading run-suite --suite ap_spanish_grading
+
+# 5. Pipeline E2E completo
+test grading e2e
+
+# 6. Limpiar datos de test
+test grading cleanup
+```
+
+### Workflow H: Onboarding institucional desde LMS (Canvas)
+
+```bash
+# 1. Comprobar plataformas soportadas
+org lms-platforms
+
+# 2. Importación completa (producción)
+org lms-import \
+  --platform canvas \
+  --url https://myschool.instructure.com \
+  --token $CANVAS_TOKEN \
+  --course-id 12345
+# → 200 OK si todo fue bien, 207 Partial Success si algún paso falló
+
+# 3. Sincronización incremental de nuevos alumnos
+classroom lms-sync-roster --platform canvas \
+  --url https://myschool.instructure.com \
+  --token $CANVAS_TOKEN \
+  --course-id 12345
+
+# 4. (alternativa test) Con output detallado paso a paso
+test provisioning from-lms --platform canvas \
+  --url https://myschool.instructure.com \
+  --token $CANVAS_TOKEN \
+  --course-id 12345
+```
+
+<Aside type="caution">
+Rotar `COLABEDU_INTERNAL_API_KEY` en producción antes de exponer `/ops/v1/lms/*` a redes no privadas.
+</Aside>
+
 ---
 
 ## Páginas relacionadas
+
 
 - [Capacidades del Curador](/es/gitops-operations/curator-capabilities)
 - [Motor Seed & Bloom](/es/gitops-operations/seed-and-bloom)
 - [Referencia InteractiveLesson](/es/reference/interactive-lesson)
 - [Referencia ResourceLearning](/es/reference/resource-learning)
 - [Referencia Gem](/es/reference/gem)
+

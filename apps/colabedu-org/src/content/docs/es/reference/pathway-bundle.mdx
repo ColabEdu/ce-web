@@ -1,0 +1,71 @@
+---
+title: "PathwayBundle"
+description: "Documentación de referencia para el recurso PathwayBundle en OAS."
+sidebar:
+  order: 25
+  badge:
+    text: Nuevo
+    variant: tip
+---
+
+El recurso `PathwayBundle` (Paquete de Rutas) forma parte del motor del ACA y del ensamblador de cursos. Permite agrupar múltiples plantillas de rutas de aprendizaje (`PathwayTemplate`), establecer su orden y configurar el umbral de resolución de gaps para el lanzamiento automático del pipeline de ingesta del ACA.
+
+## Esquema (Schema)
+
+### Metadata (`metadata`)
+
+| Campo | Tipo | Requerido | Descripción |
+|---|---|---|---|
+| `id` | `string` | Sí | Identificador único del paquete (ej. `us.ap.spanish.frq.complete_pack.bundle.v1`). |
+| `title` | `string` | Sí | Título descriptivo. |
+| `description` | `string` | Sí | Explicación del pack de materiales y su distribución. |
+| `standard` | `string` | Sí | Estándar principal (ej. `AP_SPANISH`). |
+| `country` | `string` | Sí | Código del país (ej. `US`, `MX`, `ES`). |
+| `subject` | `string` | Sí | Asignatura o materia. |
+| `level` | `string` | No | Rango de niveles educativos (ej. `9-12`). |
+| `locale` | `string` | Sí | Idioma de las rutas (ej. `es`). |
+| `authority` | `string` | No | Autoridad que regula el estándar (ej. `College Board`). |
+| `authority_level` | `string` | No | Nivel de autoridad (`NATIONAL` | `STATE` | `DISTRICT`). |
+
+### Especificación (`pathway_templates`)
+
+Contiene una lista de referencias a plantillas de rutas curriculares y su configuración de ensamblado:
+
+| Campo | Tipo | Requerido | Descripción |
+|---|---|---|---|
+| `ref` | `string` | Sí | Referencia al ID del `PathwayTemplate` asociado. |
+| `label` | `string` | Sí | Nombre para mostrar en el menú del curso. |
+| `sequence_order` | `integer` | Sí | Orden secuencial de este pathway dentro del pack. |
+| `assembly` | `object` | Sí | Parámetros de gap-filling (ver a continuación). |
+
+#### Estructura de `assembly`
+
+| Campo | Tipo | Requerido | Descripción |
+|---|---|---|---|
+| `fill_gaps` | `boolean` | Sí | Indica si se debe lanzar el ACA para cubrir specs faltantes. |
+| `allow_derivation` | `boolean` | No | Si `true`, permite derivar nuevos ejercicios a partir de los existentes. |
+| `gap_threshold` | `double` | Sí | Umbral de cobertura mínima (ej. `0.75` para 75%) que gatilla el ACA. |
+
+## Ejemplo de Uso
+
+```yaml
+apiVersion: colabedu.ai/v1beta1
+kind: PathwayBundle
+metadata:
+  id: us.ap.spanish.frq.complete_pack.bundle.v1
+  version: v1
+  title: "AP Spanish L&C — FRQ Complete Practice Pack"
+  description: Pack de práctica integral para los 4 FRQ Tasks de AP Spanish.
+  standard: AP_SPANISH
+  country: US
+  subject: spanish_language_and_culture
+spec:
+  pathway_templates:
+    - ref: us.ap.spanish.pathway.email_reply.v1
+      label: "FRQ Task 1 — Respuesta al Email"
+      sequence_order: 1
+      assembly:
+        fill_gaps: true
+        allow_derivation: false
+        gap_threshold: 0.75
+```

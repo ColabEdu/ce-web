@@ -1,40 +1,166 @@
 ---
 title: "OAS YAML Reference"
-description: "Index of detailed technical reference documentation for all OAS (Open Assessment Specification) resources in ColabEdu."
+description: "Index of detailed technical reference documentation for all OAS (Open Assessment Specification) resources in ColabEdu, including interactive lessons, OER resources, and exercises."
 sidebar:
   order: 2
 ---
 
+import { Badge } from '@astrojs/starlight/components';
+
 ColabEdu's **OAS (Open Assessment Specification)** v1beta1 architecture is entirely configured through a structured YAML file schema. This *Assessment as Code* approach allows for versioning, auditing, and reproducing the entire pedagogical ecosystem.
 
-In this reference section, you will find detailed technical information about the structure, schemas, and configuration options for each of the *Kinds* (Resource Types) that make up the architecture.
+In this section, you will find the complete technical reference for each *Kind* (resource type), from curriculum taxonomies to AI-generated interactive lessons.
+
+---
+
+## Base structure of any YAML spec
+
+All OAS resources share the same mandatory fields:
+
+```yaml
+apiVersion: colabedu.ai/v1beta1   # schema version
+kind: Recipe                       # resource type (see table below)
+metadata:
+  referenceCode: global.c1.ib.spanish_b.sl.debate.v1
+  title: "IB Spanish B SL — Debate Activity"
+  version: 1.0.0
+  authorityScope: GLOBAL           # GLOBAL | ES | MX | US | TENANT
+  tags: [ib, spanish, sl]
+spec:
+  # type-specific content
+```
 
 ---
 
 ## Available Specification Types
 
-Each YAML specification in ColabEdu requires certain mandatory fields in its base structure:
-- `apiVersion`: Schema API version (currently `colabedu.ai/v1beta1`).
-- `kind`: Resource type identifier.
-- `metadata`: Metadata such as `id`, `title`, `version`, which help index the resource in the SpecManager.
-- `spec`: Resource type-specific configuration.
+### 🏛️ Core Engine and Taxonomies
 
-Below is the reference documentation for each resource type:
+| Kind | Description |
+|------|-------------|
+| [**Taxonomy**](../reference/taxonomy/) | Defines geographical hierarchies, organizational levels, and competencies. |
+| [**TaxonomyIndex**](../reference/taxonomy-index/) <Badge text="New" variant="tip" /> | Global index file for taxonomy localization and ingestion in the SpecManager. |
+| [**StandardSpec**](../reference/standard-spec/) <Badge text="New" variant="tip" /> | Base configuration and global guidelines (misconceptions libraries) for an educational standard. |
+| [**CourseSpec**](../reference/course-spec/) <Badge text="New" variant="tip" /> | Scope of a standard to a specific course and level, allowing library overrides. |
+| [**SubjectArea**](../reference/subject-area/) | Classification of a subject at local and international levels. |
+| [**PathwayTemplate**](../reference/pathway-template/) <Badge text="New" variant="tip" /> | Official curriculum template (e.g., IB Spanish B SL) with themes, subthemes, and assessment weights. |
+| [**PathwayBundle**](../reference/pathway-bundle/) <Badge text="New" variant="tip" /> | Declarative routing template grouping with assembly and gap-filling configuration. |
 
-### Core Engine Resources
-- [**Taxonomy**](../reference/taxonomy/): Defines geographical hierarchies, organizational levels, and competencies.
-- [**SubjectArea**](../reference/subject-area/): Specifies the classification of a subject at local and international levels.
+---
 
-### Regulatory Resources (C0)
-- [**Rubric**](../reference/rubric/): Immutable learning standards, evaluation criteria, and descriptors by level.
+### 📐 Regulatory Standards — Layer C0
 
-### Instruments and Exercises (C1 and C2)
-- [**Recipe**](../reference/recipe/): Assembler "recipe" that associates C0 competencies with exercise types and criteria to generate a C2 assessment.
-- [**ExerciseSpec**](../reference/exercise-spec/): Schema for a generated or manually defined assessment, ready to be solved.
-- [**ExerciseType**](../reference/exercise-type/): Technical definition of the interaction format (e.g., `free_text`, `multiple_choice`).
-- [**AssessmentItem**](../reference/assessment-item/): Atomic interactive assessment component, instantiated and packaged for the frontend.
+| Kind | Description |
+|------|-------------|
+| [**BlockRubric**](../reference/rubric/) | Immutable learning standards, evaluation criteria, and descriptors by level. Ingested automatically by the Curator from official regulatory documents. |
 
-### Artificial Intelligence and Agents (C3)
-- [**Directive**](../reference/directive/): Immutable behavioral guidelines that limit or guide the LLM engine.
-- [**Persona**](../reference/persona/): System interaction profiles (e.g., Instructional Designer).
-- [**Gem**](../reference/gem/): Extended AI modules with embedded configuration and tools.
+---
+
+### 📚 Recipes and Content — Layers C1 and C2
+
+| Kind | Description |
+|------|-------------|
+| [**Recipe**](../reference/recipe/) | Assembler recipe that associates C0 competencies with exercise types and criteria to generate a C2 assessment. |
+| [**ExerciseSpec**](../reference/exercise-spec/) | Generated or manually defined assessment, ready to be solved by the student. |
+| [**ExerciseType**](../reference/exercise-type/) | Technical definition of the interaction format (`free_text`, `multiple_choice`, `grouping`…). |
+| [**AssessmentItem**](../reference/assessment-item/) | Atomic interactive assessment component, instantiated and packaged for the frontend. |
+
+---
+
+### 🎓 Interactive Lessons and Resources — Layer C2 <Badge text="New" variant="tip" />
+
+Automatically generated by the **Curator Agent** from documents, LMS packages, and OER resources.
+
+| Kind | Description | Typical Source |
+|------|-------------|----------------|
+| [**InteractiveLesson**](../reference/interactive-lesson/) | Lesson with slides, embedded widgets (`quiz_widget`, `mermaid_viewer`, `scratchpad_widget`…), and adaptive routing. | Canvas packages `.imscc`, Moodle `.mbz` |
+| [**ResourceLearning**](../reference/resource-learning/) | Annotated pointer to external OER resource with a 3-dimensional pedagogical `qualityScore`. | CK-12, Khan Academy, Procomún, Europeana |
+
+:::note[Database Storage]
+`InteractiveLesson` and `ResourceLearning` are stored as `BLOCK_CONTENT` in the database.
+The YAML `kind` field is the semantic discriminator. Both types are embeddable (`isEmbeddable() = true`).
+:::
+
+#### `InteractiveLesson` structure (summary)
+
+```yaml
+kind: InteractiveLesson
+spec:
+  learningObjectives: [...]
+  slides:
+    - id: intro_slide
+      layout: title           # title | split | content | quote | full
+      title: "Mitosis"
+      markdown: "..."
+      fragmentsCount: 1       # progressive reveal
+      embeddedWidget:
+        type: quiz_widget     # quiz_widget | mermaid_viewer | scratchpad_widget | grouping_widget
+        props:
+          taskId: quiz_mitosis
+          routes:
+            on_success: slide_avanzada   # adaptive routing
+            on_fail: slide_repaso
+```
+
+#### `ResourceLearning` structure (summary)
+
+```yaml
+kind: ResourceLearning
+spec:
+  resourceUrl: "https://www.ck12.org/biology/mitosis/"
+  resourceType: ARTICLE        # ARTICLE | VIDEO | INTERACTIVE | SIMULATION
+  qualityScore:
+    alignment: 0.92
+    pedagogicalRichness: 0.87
+    accessibility: 0.78
+  learningObjectives: [...]
+  tags: [mitosis, biology, cell-division]
+```
+
+---
+
+### 🗂️ ACA Orchestration and Curriculum
+
+| File Type | Description |
+|---|---|
+| [**CuratorPlan**](../reference/curator-plan/) | Persistent ACA ingestion plan. Created by CLI or REST API. Tracks country, standard, status, items, and campaign configuration. |
+| [**CurriculumRequirements**](../reference/curriculum-requirements/) | Curriculum requirements YAML (`ce-specs/catalog/requirements/`). Defines how many specs of each type (`BLOCK_CONTENT`, `BLOCK_RUBRIC`…) are needed per theme to complete a curriculum. Used by `CurriculumGapAnalyzer`. |
+| [**Curator Batch YAML**](../reference/curator-batch/) | Declarative pipeline file (`ce-specs/batches/`). Defines stages (`discover`, `fetch`, `parse`, `approval`, `ingest`) in a YAML and runs with `spec batch run`. |
+
+:::note[These are not standard OAS files]
+`CuratorPlan` lives in the database (table `curator_plans`), not in `ce-specs`.  
+`CurriculumRequirements` lives in `ce-specs/catalog/requirements/`, not in the pedagogical spec catalog.
+:::
+
+---
+
+### 🤖 Artificial Intelligence and Agents — Layer C3
+
+| Kind | Description |
+|------|-------------|
+| [**Directive**](../reference/directive/) <Badge text="Partners Only" variant="caution" /> | Behavioral guidelines that limit or guide the LLM engine. |
+| [**Persona**](../reference/persona/) <Badge text="Partners Only" variant="caution" /> | System interaction profiles (e.g., Instructional Designer). |
+| [**Gem**](../reference/gem/) <Badge text="Partners Only" variant="caution" /> | Extended AI modules with embedded configuration and tools. The `gem.curator_lesson` v1.3.0 generates adaptive interactive lessons. |
+
+---
+
+## Automatic Generation with Curator Agent
+
+The types `InteractiveLesson` and `ResourceLearning` are rarely written by hand: the **Curator Agent** automatically generates them from your existing documents.
+
+```bash
+# PDF or Canvas → InteractiveLesson with adaptive quiz routing
+curator curate \
+  --source canvas_bio_mitosis.imscc \
+  --output-type INTERACTIVE_LESSON \
+  --adaptive \
+  --sandbox
+
+# OER Resource → Annotated ResourceLearning
+curator curate \
+  --source gs://bucket/ck12_bio.json \
+  --source-type OER_RESOURCE \
+  --output-type RESOURCE_LEARNING
+```
+
+→ See [Curator Agent Capabilities](/en/gitops-operations/curator-capabilities) for the complete workflow.

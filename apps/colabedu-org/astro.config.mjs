@@ -8,7 +8,7 @@ import mermaid from 'astro-mermaid';
 // https://astro.build/config
 export default defineConfig({
     redirects: {
-        '/docs': '/es/',
+        '/docs': '/lang-detect',
     },
     integrations: [
         mermaid(),
@@ -62,46 +62,82 @@ export default defineConfig({
                     ]
                 },
                 {
-                    label: 'OAS Specification',
+                    label: 'Especificación OAS',
+                    translations: { en: 'OAS Specification' },
                     items: [
+                        { label: 'Visión General', translations: { en: 'Overview' }, link: '/oas-spec/' },
+                        { label: 'Vacío Tecnológico', translations: { en: 'Technological Gap' }, link: '/oas-spec/why-open-specs/' },
+                        { label: 'Ecosistema y Comunidad', translations: { en: 'Ecosystem and Community' }, link: '/oas-spec/ecosistema-comunidad/' },
+                        { label: 'Nomenclatura GitOps', translations: { en: 'GitOps Nomenclature' }, link: '/oas-spec/architecture/nomenclatura-gitops/' },
+                        { label: 'Contenido Interactivo AI', translations: { en: 'Interactive AI Content' }, link: '/oas-spec/architecture/contenido-interactivo-ai/' },
                         {
-                            label: 'Overview',
-                            autogenerate: { directory: 'oas-spec' },
-                        },
-                        {
-                            label: 'Specs Repository',
+                            label: 'Repositorio de Specs',
+                            translations: { en: 'Specs Repository' },
                             items: [
-                                { label: 'Specifications Repository (OAS YAML)', translations: { es: 'Repositorio de Especificaciones (OAS YAML)' }, link: '/specs-repository/' },
-                                { label: 'OAS YAML Reference', translations: { es: 'Referencia YAML OAS' }, link: '/specs-repository/oas-yaml-reference/' },
+                                { label: 'Repositorio de Especificaciones', translations: { en: 'Specifications Repository' }, link: '/specs-repository/' },
+                                { label: 'Referencia YAML OAS', translations: { en: 'OAS YAML Reference' }, link: '/specs-repository/oas-yaml-reference/' },
                                 {
-                                    label: 'Schemas & Models',
-                                    translations: { es: 'Esquemas y Modelos' },
+                                    label: 'Esquemas y Modelos',
+                                    translations: { en: 'Schemas & Models' },
                                     autogenerate: { directory: 'reference' },
                                 },
-                                { label: 'exercise-catalog', autogenerate: { directory: 'specs-repository/exercise-catalog' } }
+                                {
+                                    label: 'Catálogos',
+                                    translations: { en: 'Catalogs' },
+                                    autogenerate: { directory: 'specs-repository/spec-catalog' },
+                                }
                             ]
                         }
                     ]
                 },
                 {
-                    label: 'Educational Standards',
-                    autogenerate: { directory: 'standards' },
+                    label: 'Estándares y Taxonomías',
+                    translations: { en: 'Standards and Taxonomies' },
+                    items: [
+                        { label: 'Visión General de Estándares', translations: { en: 'Standards Overview' }, link: '/standards/' },
+                        { label: 'Estándar LOMLOE (España)', translations: { en: 'LOMLOE Standard' }, link: '/standards/es/lomloe/' },
+                        { label: 'Estándar IB (Internacional)', translations: { en: 'IB Standard' }, link: '/standards/global/ib/' },
+                        { label: 'Estándar AP (EE. UU.)', translations: { en: 'AP Standard' }, link: '/standards/us/ap/' },
+                        { label: 'Estándar SEP (México)', translations: { en: 'SEP Standard' }, link: '/standards/mx/sep-mejoredu/' },
+                        { label: 'Marcos de Competencia', translations: { en: 'Competency Frameworks' }, link: '/taxonomies/competency-frameworks/' },
+                    ]
                 },
                 {
-                    label: 'Taxonomies',
-                    autogenerate: { directory: 'taxonomies' },
+                    label: 'Motores de Contenido IA',
+                    translations: { en: 'AI Content Engines' },
+                    items: [
+                        { label: 'Capacidades del Curador', translations: { en: 'Curator Capabilities' }, link: '/gitops-operations/curator-capabilities/' },
+                        { label: 'Agente Curador Autónomo (ACA)', translations: { en: 'Autonomous Curator Agent' }, link: '/gitops-operations/aca/' },
+                        { label: 'Motor Seed & Bloom', translations: { en: 'Seed & Bloom Engine' }, link: '/gitops-operations/seed-and-bloom/' },
+                        { label: 'Ciclo de Vida Curricular', translations: { en: 'Curriculum Lifecycle' }, link: '/gitops-operations/curriculum-lifecycle/' },
+                    ]
                 },
                 {
-                    label: 'Use Cases',
+                    label: 'Integraciones y Servicios',
+                    translations: { en: 'Integrations and Services' },
+                    items: [
+                        { label: 'Integración LMS y LTI', translations: { en: 'LMS and LTI Integration' }, link: '/gitops-operations/lms-integration/' },
+                        { label: 'Roles y Arquitectura de UX', translations: { en: 'Roles and UX Architecture' }, link: '/oas-spec/architecture/roles-ux-architecture/' },
+                    ]
+                },
+                {
+                    label: 'Operaciones GitOps y CLI',
+                    translations: { en: 'GitOps Operations and CLI' },
+                    items: [
+                        { label: 'Tutorial del CLI', translations: { en: 'CLI Tutorial' }, link: '/gitops-operations/cli-tutorial/' },
+                        { label: 'Estrategia de Content Factory', translations: { en: 'Content Factory Strategy' }, link: '/gitops-operations/content-factory-strategy/' },
+                        { label: 'Federación de Repositorios', translations: { en: 'Repository Federation' }, link: '/gitops-operations/repo-federation/' },
+                        { label: 'Pipelines de Ingesta', translations: { en: 'Ingestion Pipelines' }, link: '/gitops-operations/ingestion-pipelines/' },
+                    ]
+                },
+                {
+                    label: 'Casos de Uso',
+                    translations: { en: 'Use Cases' },
                     autogenerate: { directory: 'use-cases' },
                 },
                 {
-                    label: 'GitOps Operations',
-                    autogenerate: { directory: 'gitops-operations' },
-                },
-                {
-                    label: 'News & Updates',
-                    translations: { es: 'Noticias y Novedades' },
+                    label: 'Noticias y Novedades',
+                    translations: { en: 'News & Updates' },
                     autogenerate: { directory: 'news' },
                 },
             ],

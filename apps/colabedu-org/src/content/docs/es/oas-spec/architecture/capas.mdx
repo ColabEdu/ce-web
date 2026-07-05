@@ -13,18 +13,20 @@ ColabEdu resolvió la crisis técnica de los LLMs monolíticos aplicando princip
 
 ```mermaid
 graph TD
-    C0[C0: Estándares / La Ley] --> C1[C1: Recipe / La Receta Pedagógica]
-    C2[C2: Contexto / Realia] --> C1
-    C3[C3: Directives / El Profesor] --> C1
-    
-    style C1 fill:#f9f,stroke:#333,stroke-width:2px
-    style C0 fill:#bbf,stroke:#333,stroke-width:1px
-    style C2 fill:#bfb,stroke:#333,stroke-width:1px
-    style C3 fill:#fbb,stroke:#333,stroke-width:1px
+    C0["🏛️ C0: Estándares / La Ley<br/>(Taxonomy)"] --> PT["📋 PATHWAY_TEMPLATE<br/>(Programa Oficial)"]
+    PT --> C1["⚗️ C1: Recipe / La Receta Pedagógica"]
+    C2["📰 C2: Contexto / Realia"] --> C1
+    C3["👩‍🏫 C3: Directives / El Profesor"] --> C1
+
+    style C1 fill:#fce7f3,stroke:#db2777,stroke-width:2px
+    style C0 fill:#dbeafe,stroke:#1d4ed8,stroke-width:1px
+    style PT fill:#f0e6ff,stroke:#7c3aed,stroke-width:2px
+    style C2 fill:#dcfce7,stroke:#16a34a,stroke-width:1px
+    style C3 fill:#fef3c7,stroke:#d97706,stroke-width:1px
 ```
 
-
 - **Capa C0 (Estándares / La Ley):** Diccionarios vectorizados de rúbricas puras (ej. LOMLOE, AP, IB). Actúan como la "Constitución" inmutable del sistema.
+- **PATHWAY_TEMPLATE *(nueva capa)*:** Puente entre la ley (C0) y la receta concreta (C1). Define el andamio oficial de un programa específico (ej. *IB Spanish B SL*) con todos sus temas, textos y criterios de evaluación. [Ver documentación completa →](/es/oas-spec/architecture/pathway-template/)
 - **Capa C2 (Contexto / Realia):** El "Suelo Semántico". Artículos de noticias o literatura preprocesados para *Retrieval-Augmented Generation* (RAG).
 - **Capa C3 (Directives / El Profesor):** Reglas de sobrescritura, tono pedagógico y adaptaciones curriculares individuales.
 - **Capa C1 (Recipe / La Receta Pedagógica):** La instancia que parametriza y orquesta a las demás capas. Especifica el `ExerciseType` (contrato UI/ingeniería) a utilizar e inyecta la ley (C0), el contexto (C2) y las directrices (C3).

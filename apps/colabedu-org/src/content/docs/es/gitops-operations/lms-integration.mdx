@@ -1,0 +1,92 @@
+---
+title: "Integración LMS y LTI"
+description: "Arquitectura de integración de ColabEdu con Canvas, Moodle y Google Classroom."
+---
+
+import { Aside, Steps, Tabs, TabItem } from '@astrojs/starlight/components';
+
+# Integración LMS y LTI
+
+ColabEdu se integra bidireccionalmente con sistemas de gestión de aprendizaje externos (**LMS** como Canvas, Moodle y Google Classroom) utilizando el módulo **`ce-svc-lms-integrator`** en `ce-svc-parent`.
+
+La integración cubre tres dimensiones operativas principales:
+1. **Sincronización Operacional:** Importación de organizaciones, cursos, rosters de alumnos y profesores desde el LMS.
+2. **Aprovisionamiento de Aulas (Provisioning):** Creación y limpieza de entornos de pruebas y onboarding a través de plantillas YAML.
+3. **Publicación Bidireccional de Notas:** Sincronización automática de calificaciones e informes hacia el libro de calificaciones del LMS.
+
+---
+
+## Arquitectura de Sincronización
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                    CANVAS / MOODLE                       │
+│                                                          │
+│  Course ──────────── Assignment ──── Submission          │
+│    │                     │               │              │
+│    │  LTI context_id     │ assignment_id │  webhook     │
+│    ▼                     ▼               ▼              │
+├──────────────────────────┼───────────────┼──────────────┤
+│  Course ◄─ context_id   resource_links ◄── lms_         │
+│    │                       │ assignment_id   │           │
+│  Pathway               Exercise   student_exercise_      │
+│    │                       │       attempts              │
+│  users.lms_external_id ────┘           │                │
+│    "canvas:12345"                      ▼                │
+│                              LmsSubmissionIngestion      │
+│                              Service.resolveUser()       │
+│                                                          │
+│                        COLABEDU                          │
+└─────────────────────────────────────────────────────────┘
+```
+
+---
+
+## El Puente LTI v1.3 y el Patrón B→C
+
+En un flujo estándar LTI 1.3, la vinculación requiere una acción manual del profesor (Deep Linking). Para evitar esto en pruebas automatizadas y tests E2E, ColabEdu implementa el **patrón B→C (Bypass Deep Linking)**:
+
+1. El CLI ejecuta `lms register-link` ➔ persiste el ID nativo del assignment (`lms_assignment_id`) directamente en la tabla `lms_resource_links`.
+2. Al entregarse una tarea en el LMS, llega el webhook a `LmsWebhookController`.
+3. El sistema resuelve el enlace sin haber realizado el Deep Linking manual en la interfaz visual, permitiendo corregir y enviar la nota de vuelta mediante API de forma transparente.
+
+---
+
+## LmsGradeSyncWorker (Cola de Redis)
+
+El envío de calificaciones de vuelta al LMS es asíncrono y se gestiona a través de un consumidor de Redis Stream:
+
+```
+Pipeline de Grading
+     │
+     ▼ (Estado FINALIZADO)
+Redis Stream: lms-grade-sync-queue
+     │
+     ▼
+LmsGradeSyncWorker.onMessage()
+     │
+     ├── Recupera evaluación del estudiante
+     ├── Resuelve lms_assignment_id en lms_resource_links
+     └── LmsService.publishGrade() ➔ Canvas/Moodle REST API
+```
+
+---
+
+## Comandos del CLI para Operaciones LMS
+
+El CLI `ce-svc-cli` incluye el grupo de comandos `lms` para operar estas integraciones de forma rápida:
+
+### Listar estado de cursos
+```bash
+lms status --suffix lms-test-2026
+```
+
+### Aprovisionar entorno desde YAML
+```bash
+lms provision --yaml escenario_canvas.yaml --suffix test-01
+```
+
+### Forzar publicación de notas manualmente
+```bash
+lms grade push --evaluationId <uuid>
+```

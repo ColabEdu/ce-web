@@ -1,0 +1,313 @@
+---
+title: Creación de Contenido Interactivo con IA
+description: >
+  Guía completa para generar lecciones interactivas, ejercicios y rutas de
+  aprendizaje con el pipeline Curator de ColabEdu — desde documentos LMS,
+  artefactos pedagógicos y repositorios de recursos.
+sidebar:
+  order: 6
+  label: "Contenido Interactivo con IA"
+---
+
+import { Badge, Card, CardGrid, Tabs, TabItem } from '@astrojs/starlight/components';
+
+<Badge text="Curator v1.3" variant="success" />
+<Badge text="OAS v1beta1" variant="note" />
+<Badge text="Gemini 2.0" variant="caution" />
+
+El **Curator Pipeline** de ColabEdu es el motor de IA que transforma documentos
+educativos en contenido interactivo estructurado y evaluable, listo para ser
+consumido por la plataforma A2UI.
+
+---
+
+## ¿Qué puede generar el Curator?
+
+El Curator produce tres tipos principales de especificaciones interactivas:
+
+<CardGrid>
+  <Card title="InteractiveLesson" icon="open-book">
+    Lecciones multimedia con diapositivas (slides), widgets interactivos,
+    quizzes adaptativos y lienzos de dibujo STEM.
+    
+    **Activado con:** `--output-type INTERACTIVE_LESSON`
+  </Card>
+  <Card title="ExerciseSpec" icon="pencil">
+    Ejercicios evaluables con rúbrica IA: ensayos, quizzes, debate socrático,
+    pizarras digitales (whiteboard) y actividades guiadas.
+    
+    **Activado con:** `--output-type EXERCISE`
+  </Card>
+  <Card title="ResourceLearning" icon="document">
+    Recursos pedagógicos enriquecidos: flashcards, infografías, glosarios
+    y materiales de referencia curricular.
+    
+    **Activado con:** `--output-type RESOURCE_LEARNING`
+  </Card>
+</CardGrid>
+
+---
+
+## Fuentes de entrada soportadas
+
+El Curator acepta contenido desde múltiples orígenes:
+
+<Tabs>
+  <TabItem label="Paquetes LMS">
+    El flujo más potente: transforma paquetes exportados de plataformas LMS
+    directamente en lecciones interactivas ColabEdu.
+
+    | Formato | Plataforma origen | Notas |
+    |---|---|---|
+    | `.imscc` | Canvas LMS | Incluye páginas HTML, assets y manifiesto XML |
+    | `.mbz` | Moodle | Backup completo con actividades y recursos |
+    | `.zip` SCORM | Cualquier LMS | HTML estructurado + asset map |
+
+    **Ejemplo de uso (CLI):**
+    ```bash
+    ce-cli.sh curator curate \
+      --file ./biology_bach1.imscc \
+      --output-type INTERACTIVE_LESSON \
+      --adaptive \
+      --locale es
+    ```
+
+    El flag `--adaptive` activa el routing dinámico de quizzes (`on_success` / `on_fail`),
+    permitiendo rutas de navegación personalizadas según el rendimiento del alumno.
+  </TabItem>
+
+  <TabItem label="Documentos PDF / DOCX">
+    El Curator puede procesar documentos curriculares en PDF o Word y extraer
+    automáticamente la estructura pedagógica (módulos → lecciones → slides).
+
+    **Formatos soportados:**
+    - PDF (con OCR para documentos escaneados)
+    - DOCX / DOC
+    - Markdown estructurado
+
+    **Ejemplo de uso:**
+    ```bash
+    ce-cli.sh curator curate \
+      --file ./temario_lengua_bach1.pdf \
+      --output-type INTERACTIVE_LESSON \
+      --locale es \
+      --curricular-ref es.c0.lomloe.lcl.bach.1.v1
+    ```
+
+    El `--curricular-ref` inyecta el contexto curricular LOMLOE, IB o AP
+    en el prompt del Curator Gem para alinear el contenido generado.
+  </TabItem>
+
+  <TabItem label="Artefactos LMS API">
+    Para integraciones programáticas, el Curator acepta contenido extraído
+    directamente desde la API de Canvas o Moodle.
+
+    **Parámetros de la API REST:**
+    ```json
+    POST /api/v1/curator/curate
+    {
+      "inputVariables": {
+        "lms_manifest_xml": "<manifest>...</manifest>",
+        "extracted_html_content": "=== RESOURCE: Lesson 1 ===\n...",
+        "asset_url_map": {
+          "images/diagram.png": "https://storage.googleapis.com/..."
+        },
+        "with_quiz_routing": true
+      },
+      "outputType": "INTERACTIVE_LESSON",
+      "locale": "es"
+    }
+    ```
+  </TabItem>
+
+  <TabItem label="Repositorios ce-specs">
+    El Curator puede operar en modo *headless batch* sobre un repositorio
+    `ce-specs` completo, ingiriendo múltiples especificaciones en una sola ejecución.
+
+    ```bash
+    # Sincronizar e ingestar todo el catálogo local
+    ./sync_specs.sh local GLOBAL
+
+    # Sincronizar desde Git (producción)
+    ./sync_specs.sh git GLOBAL
+    ```
+
+    Ver [Referencia del Catálogo](/es/specs-repository/spec-catalog/catalog/)
+    para el listado completo de IDs disponibles.
+  </TabItem>
+</Tabs>
+
+---
+
+## Tipos de ejercicio disponibles (ExerciseType)
+
+Cuando el Curator genera un `ExerciseSpec`, selecciona el `ExerciseType` más
+adecuado según el contexto curricular. Los tipos disponibles son:
+
+| ExerciseType | Descripción | Evaluación |
+|---|---|---|
+| `core.etype.mixed_quiz.v1` | Quiz mixto (MCQ + fill-blank) | Determinista IA |
+| `core.etype.split_pane_essay.v1` | Ensayo guiado a pantalla dividida | Rúbrica IA |
+| `core.etype.socratic_tutor.v1` | Tutor socrático (chatbot) | Log IA + rúbrica |
+| `core.etype.socratic_debate.v1` | Debate socrático oral | Log IA |
+| `core.etype.multimodal_mcq.v1` | MCQ con imagen / gráfico | Determinista IA |
+| `core.etype.grouping.v1` | Clasificación drag-and-drop | Determinista IA |
+| `core.etype.matching.v1` | Emparejamiento | Determinista IA |
+| `core.etype.ordering.v1` | Ordenación cronológica | Determinista IA |
+| `global.exercise_type.free_text.v1` | Ensayo libre / respuesta abierta | Rúbrica IA |
+| `global.exercise_type.mcq.v1` | Opción múltiple clásico | Determinista IA |
+| `global.exercise_type.guided_activity.v1` | Actividad guiada con tutor IA | Log IA + rúbrica |
+| `global.exercise_type.whiteboard.v1` | **Pizarra digital** (dibujo libre) | **Visión IA (PNG)** |
+
+> Ver [Tipos de Ejercicio (C1)](/es/specs-repository/spec-catalog/exercise-types/) para descripción completa de cada tipo.
+
+---
+
+## Lección Interactiva — Anatomía de una Slide
+
+Una `InteractiveLesson` es una secuencia de **slides**, cada una con un layout
+y widgets opcionales. El Curator actúa como **Director de Arte** autónomo:
+selecciona el layout más adecuado para cada bloque de contenido.
+
+### Layouts disponibles
+
+| Layout | Uso óptimo |
+|---|---|
+| `title` | Portada — título grande + imagen de fondo |
+| `split` | Concepto + widget interactivo (50/50) |
+| `quote` | Definición, axioma o ley (≤60 palabras, fondo oscuro) |
+| `image` | Imagen a pantalla completa con caption |
+| `full` | Diagrama Mermaid o widget a pantalla completa |
+| `content` | Texto largo en Markdown enriquecido |
+| `video` | Player de vídeo con transcript |
+
+### Widgets interactivos
+
+Los widgets se embeben en cualquier slide con la sintaxis `embeddedWidget`:
+
+```yaml
+embeddedWidget:
+  type: quiz_widget          # ← Comprobación de comprensión
+  props:
+    questions: [...]
+    routes:                  # Routing adaptativo (activado con --adaptive)
+      on_success: slide_avanzado
+      on_fail: slide_repaso
+```
+
+**Widgets disponibles:**
+
+- **`quiz_widget`** — Quiz con routing adaptativo `on_success / on_fail`
+- **`mermaid_viewer`** — Diagrama generado automáticamente por el Curator
+- **`markdown_editor`** — Editor de texto abierto (síntesis, micro-ensayo)
+- **`grouping_widget`** — Clasificación drag-and-drop
+- **`scratchpad_widget`** — Lienzo de dibujo libre para STEM
+- **`whiteboard_widget`** — Pizarra digital con evaluación por Gemini Vision
+
+---
+
+## Pizarra Digital (Whiteboard) <Badge text="Nuevo" variant="success" />
+
+El `ExerciseType` **`global.exercise_type.whiteboard.v1`** habilita ejercicios
+de dibujo evaluados automáticamente por Gemini Vision sobre el PNG capturado
+del canvas del alumno.
+
+### Casos de uso STEM
+
+<CardGrid>
+  <Card title="Matemáticas" icon="approve-check-circle">
+    Resolución de ecuaciones, trazado de funciones, geometría y álgebra lineal.
+    El alumno muestra el proceso paso a paso en el lienzo.
+  </Card>
+  <Card title="Ciencias" icon="puzzle">
+    Diagramas de fuerzas (Física), reacciones químicas, esquemas anatómicos
+    (Biología) y circuitos eléctricos.
+  </Card>
+</CardGrid>
+
+### Flujo de evaluación
+
+```
+Alumno dibuja en canvas
+        ↓
+[Captura PNG al pulsar "Entregar"]
+        ↓
+Backend → Gemini Vision API
+        ↓
+Rúbrica C0 aplicada (global.c0.whiteboard.stem.math.v1)
+        ↓
+Feedback en 4 criterios:
+  · Completitud  · Corrección conceptual
+  · Claridad     · Visibilidad del proceso
+```
+
+### Configuración en un Recipe
+
+```yaml
+apiVersion: colabedu.ai/v1beta1
+kind: Recipe
+metadata:
+  id: es.c1.lomloe.math.funciones.pizarra.v1
+spec:
+  assembly:
+    param_refs:
+      - global.exercise_type.whiteboard.v1
+    rubric_refs:
+      - global.c0.whiteboard.stem.math.v1
+  interaction_mode: split_pane
+  evaluation:
+    capture_format: png
+    evaluator: vision_ai
+    feedback_on_submit: true
+```
+
+---
+
+## Flujo completo: del documento a la lección
+
+```
+Documento LMS (.imscc / .mbz / .pdf)
+              ↓
+     [Curator CLI / API REST]
+              ↓
+     NativeMultimodalDocumentProcessor
+              ↓
+     Curator Gem (curator_lesson v1.3.0)
+              ↓
+     InteractiveLesson YAML → SpecManager
+              ↓
+     A2UI (Flutter) renderiza la lección
+```
+
+### Comandos CLI de referencia
+
+```bash
+# Lección interactiva desde paquete LMS con routing adaptativo
+ce-cli.sh curator curate \
+  --file ./canvas_export.imscc \
+  --output-type INTERACTIVE_LESSON \
+  --adaptive \
+  --locale es
+
+# Ejercicio de pizarra STEM desde PDF de matemáticas
+ce-cli.sh curator curate \
+  --file ./matematicas_bach2.pdf \
+  --output-type EXERCISE \
+  --exercise-type global.exercise_type.whiteboard.v1 \
+  --locale es
+
+# Test con manifest predefinido
+ce-cli.sh curator test \
+  --manifest ./tests/lms_curator_test_manifest.yaml \
+  --output-type INTERACTIVE_LESSON
+```
+
+---
+
+## Recursos relacionados
+
+- [Referencia YAML OAS](/es/specs-repository/oas-yaml-reference/) — Sintaxis completa de todos los tipos de spec
+- [Tipos de Ejercicio (C1)](/es/specs-repository/spec-catalog/exercise-types/) — Catálogo de ExerciseTypes disponibles
+- [Referencia del Catálogo](/es/specs-repository/spec-catalog/catalog/) — IDs canónicos del SpecManager
+- [Tutorial CLI](/es/gitops-operations/cli-tutorial/) — Guía paso a paso del CLI de curación
+- [Capacidades del Curator](/es/gitops-operations/curator-capabilities/) — Arquitectura del pipeline Curator

@@ -1,0 +1,82 @@
+---
+title: Arquitectura y Motor UI
+description: Análisis global del ecosistema OAS v1beta1, el protocolo A2UI y los motores de generación de informes.
+---
+
+Dentro del ecosistema ColabEdu, el **Recipe Compiler** es el motor central responsable de traducir un estándar legal (como LOMLOE en España o las directrices AP/IB) en un artefacto de evaluación ejecutable por IA. Bajo la arquitectura **Open Assessment Standard (OAS)**, abandonamos los "prompts" monolíticos en favor de un modelo de "Grafo de Componentes por Capas" (*Assessment as Code*).
+
+Este modelo se apoya en la **Separación de Responsabilidades** y la **Máxima Reutilización mediante Late Binding**, garantizando tanto el rigor legal auditable como la autonomía del profesor.
+
+## 1. El Punto de Partida: Recetas Legacy V1 y la "Deriva del Prompt"
+
+En el modelo tradicional (Legacy V1), se enviaba al LLM un único fichero Markdown monolítico que mezclaba rúbricas, instrucciones de tarea, configuración de UI y tono pedagógico. Esto provocaba:
+
+1. **Imposibilidad de Auditoría (Caja Negra):** La rúbrica legal se fundía con las instrucciones del sistema.
+2. **"Prompts Spaghetti" y Deriva del Prompt:** Los LLMs sufrían amnesia de contexto al leer textos tan largos, olvidando reglas clave.
+3. **Contaminación de Responsabilidades:** Las instrucciones "frontend" (p.ej., "Genera una tabla") se mezclaban con las pedagógicas.
+
+## 2. La Magia del "Late Binding" (Plantillas de Contexto Cero)
+
+La arquitectura OAS fragmenta la evaluación en bloques (C0, C1, C2, C3). Para evitar crear una base de datos masiva, usamos **Late Binding**:
+
+1. **El Molde Vacío:** La receta (C1) existe en el servidor completamente vacía de contexto (`requires_dynamic_context: true`).
+2. **El Disparador:** El profesor selecciona la plantilla y adjunta un texto o PDF (C2).
+3. **Inyección JIT:** El *Spec Manager* inyecta dinámicamente C2 en la plantilla C1 en milisegundos, ensamblando el ejercicio al vuelo.
+
+## 3. Recetas (C1) vs Tipos de Ejercicio (ExerciseType)
+
+Por diseño, una plantilla C1 apunta a una Rúbrica C0 específica (p.ej., LOMLOE vs Common Core). Sin embargo, comparten el motor subyacente: el **ExerciseType**.
+
+- **ExerciseType (El Motor Software):** Construido por ingenieros. Define el "contrato de interfaz" que mapea a **Widgets Flutter** (A2UI).
+- **Receta C1 (El Motor Pedagógico):** Construida por expertos curriculares, inyectando la ley (C0), el contexto (C2) y el tono (C3) en el ExerciseType.
+
+## 4. Catálogo UI/UX y el Protocolo A2UI
+
+El protocolo **A2UI (Agent-to-UI)** envía un Payload JSON que dicta qué Widgets Flutter construir.
+
+- **Primitivos y Componentes:** `pdf_viewer`, `markdown_editor`, `forms_mcq`, etc.
+- **El Chatbot Companion:** Un "Sidecar" adjuntable a cualquier widget para ofrecer tutoría Socrática en tiempo real.
+
+### Parametrización (Clave-Valor)
+El ingeniero declara el `configuration_schema` en el ExerciseType, y el pedagogo inyecta las variables en la Receta C1 (p.ej., `word_count_min: 250`, `enable_companion_chatbot: true`).
+
+## 5. El Motor de Informes: Convención sobre Configuración
+
+En OAS v1beta1, aplicamos la **Separación de Presentación y Datos**: el LLM solo genera JSON, y el backend orquesta el formato visual usando Widgets.
+
+### Layouts por Defecto (Informe de Configuración Cero)
+Los profesores no programan interfaces. El protocolo A2UI tiene plantillas predeterminadas. Un creador simplemente apunta al `exerciseTypeRef`, y el backend ensambla automáticamente el informe.
+
+El catálogo de informes incluye:
+- **Familia A (Layout):** `document_header_widget` (protege PII), `section_title_widget`, `divider_widget`.
+- **Familia B (Evaluación Principal):** `score_header_widget`, `criteria_breakdown_list_widget`, `spelling_diff_table_widget`.
+- **Familia C (Feedback Creativo):** `markdown_viewer_widget` (la "Vía de Escape" para la creatividad del LLM).
+
+## 6. Override Avanzado (El Patrón Override)
+
+Un distrito escolar puede alterar el informe predeterminado declarando explícitamente el bloque `report_components` en su YAML, reordenando widgets o añadiendo nuevos (p.ej., `competency_radar_chart_widget`).
+
+## 7. El Payload Compilado (Contrato JSON)
+
+El *Spec Manager* genera un JSON estricto para el modelo evaluador, validando estrictamente la salida de datos vía `required_output_format`.
+
+**Ventajas:**
+1. Resistencia a Alucinaciones (Schema Constrained).
+2. Salida Estructurada Garantizada (Contrato API).
+3. Eficiencia Computacional y Ahorro Masivo de Tokens.
+
+## 8. Casos de Estudio: Ecosistemas Globales
+
+La arquitectura OAS soporta polimorfismo educativo:
+- **LOMLOE (España):** Rigor analítico y punitivo.
+- **AP Spanish (EE.UU.):** Orquestación multimodal (textos, gráficos, audio).
+- **IB Spanish (Global):** Holístico y descriptivo, anulación de reglas vía C3.
+- **CCSS-S California:** Equidad para *Heritage Speakers* (Translanguaging).
+- **EXANI-II (México):** Validación dialectal mexicana estricta y penalización de vicios del lenguaje.
+
+## 9. Beneficios Finales de la Abstracción
+
+1. **UX Prístina:** Cero código para el profesor.
+2. **Ahorro de Tokens:** El LLM devuelve JSON puro, no tablas Markdown.
+3. **Privacidad de Datos (PII/FERPA):** El LLM nunca ve el nombre del estudiante; el backend lo inyecta después en el `document_header_widget`.
+4. **Trazabilidad Forense:** Esencial para auditorías B2G.

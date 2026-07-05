@@ -1,0 +1,84 @@
+---
+title: "Ciclo de Vida Curricular"
+description: "Ingeniería y análisis de brechas curriculares automatizado (Curriculum-as-Code) en ColabEdu."
+---
+
+import { Aside, Steps, Tabs, TabItem } from '@astrojs/starlight/components';
+
+# Ciclo de Vida Curricular: Curriculum-as-Code
+
+ColabEdu implementa el paradigma **Curriculum-as-Code** (currículo como código) para la gestión estructurada, validación y auditoría de los estándares educativos nacionales e internacionales. 
+
+Esto se logra mediante la integración del motor `CurriculumArchitectService` y el servicio `CurriculumGapAnalyzer` en el backend, permitiendo medir de forma exacta el grado de cobertura del catálogo pedagógico frente a los requisitos reales de un país o estándar.
+
+---
+
+## Estructura de Requisitos Curriculares (`curriculum_requirements.yaml`)
+
+Los requisitos específicos se definen en ficheros YAML declarativos almacenados en `ce-specs/catalog/requirements/`. Estos ficheros especifican cuántas especificaciones (`BLOCK_CONTENT`, `BLOCK_RUBRIC`, etc.) son necesarias para cada tema para considerar completo el currículo.
+
+### Ejemplo de esquema de requisitos:
+```yaml
+# ce-specs/catalog/requirements/lomloe_es_lcl.yaml
+standard: LOMLOE
+country: ES
+subject: lcl
+level: 2 BACH
+themes:
+  - id: comprension_lectora
+    name: Comprensión Lectora
+    specTypes:
+      C2_EXERCISES: 12        # Requiere 12 ejercicios de esta competencia
+      INTERACTIVE_LESSON: 6   # Requiere 6 lecciones interactivas
+  - id: expresion_escrita
+    name: Expresión Escrita
+    specTypes:
+      C2_EXERCISES: 10
+```
+
+---
+
+## Análisis de Brechas (Gap Analysis) y Planes ACA
+
+El motor realiza un análisis comparando los requisitos contra el catálogo indexado:
+
+```
+[ Requisitos YAML ] ◄───► [ Catálogo SpecManager ]
+            │
+            ▼ (CurriculumGapAnalyzer)
+    Informe de Brechas (Gaps) ➔ Faltan 5 Ejercicios de "Expresión Escrita"
+            │
+            ▼ (curriculum plan create)
+    Plan ACA con URLs de origen ( KnownSources / Web Search )
+            │
+            ▼ (aca plan start)
+    Ingesta y curación automatizada ➔ Cierra las brechas
+```
+
+Si el analizador identifica que faltan recursos para cubrir un tema curricular, genera dinámicamente un **Plan ACA** (`CuratorPlan`) que rastrea la ingesta de las fuentes oficiales asociadas a ese tema hasta que la cobertura alcanza el 100%.
+
+---
+
+## Comandos del CLI para Gestión Curricular
+
+El CLI `ce-svc-cli` incluye el grupo de comandos `curriculum` para monitorizar y resolver brechas didácticas:
+
+### Analizar brechas curriculares
+Compara los requisitos del archivo YAML contra el catálogo actual de la base de datos o local:
+```bash
+curriculum gap-analysis --standard LOMLOE --subject lcl
+```
+
+### Crear plan de ingesta del ACA orientado a brechas
+Genera un plan de curación autónomo enfocado únicamente en resolver los vacíos de cobertura identificados:
+```bash
+curriculum plan create \
+  --theme comprension_lectora \
+  --sources "https://official-source.es/examenes"
+```
+
+### Consultar progreso global
+Inspecciona el avance y estado de todos los planes de cobertura activos:
+```bash
+curriculum progress --standard LOMLOE
+```

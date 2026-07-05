@@ -6,6 +6,29 @@ import "@colabedu/ui-core/styles/global.css";
 <html lang="es" class="scroll-smooth">
     <head>
         <meta charset="UTF-8" />
+        <!-- Detección automática de idioma del navegador -->
+        <script>
+            (function () {
+                var saved = localStorage.getItem('colabedu_lang');
+                // Si ya eligió idioma manualmente, respetar
+                if (saved === 'en') {
+                    window.location.replace('/en/');
+                    return;
+                }
+                // Primera visita: detectar idioma del browser
+                if (!saved) {
+                    var lang = (navigator.languages && navigator.languages[0])
+                        || navigator.language
+                        || 'es';
+                    if (lang.startsWith('en')) {
+                        localStorage.setItem('colabedu_lang', 'en');
+                        window.location.replace('/en/');
+                    } else {
+                        localStorage.setItem('colabedu_lang', 'es');
+                    }
+                }
+            })();
+        </script>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>ColabEdu.org - Open Assessment Specification</title>
         <meta
@@ -41,7 +64,7 @@ import "@colabedu/ui-core/styles/global.css";
                         <a href="/es/news/" class="text-sm font-medium text-slate-600 hover:text-indigo-600 transition-colors">Noticias</a>
                         <a href="https://github.com/colabedu" class="text-sm font-medium text-slate-600 hover:text-indigo-600 transition-colors">GitHub</a>
                         <div class="h-4 w-px bg-slate-300"></div>
-                        <a href="/en/" class="text-sm font-bold text-slate-400 hover:text-indigo-600 transition-colors" title="Switch to English">EN</a>
+                        <a id="lang-switch-en" href="/en/" class="text-sm font-bold text-slate-400 hover:text-indigo-600 transition-colors" title="Switch to English" onclick="localStorage.setItem('colabedu_lang','en')">EN</a>
                     </nav>
                     <div class="flex items-center space-x-4">
                         <a href="/docs" class="bg-slate-900 text-white px-5 py-2 rounded-lg text-sm font-semibold hover:bg-slate-800 transition-all shadow-sm">
@@ -279,7 +302,7 @@ import "@colabedu/ui-core/styles/global.css";
                                 La educación debe garantizar de forma absoluta la privacidad de los datos de los estudiantes. Creemos firmemente que el futuro de la evaluación con IA pasa por el uso de <span class="text-white font-bold">Modelos de IA Abiertos</span> y arquitecturas <span class="text-white font-bold">On-Premise</span>.
                             </p>
                             <p class="text-slate-300 text-lg mb-8 leading-relaxed">
-                                Buscamos <span class="text-white font-bold">partners educadores e institucionales</span> para proyectos de colaboración. Ponemos nuestra infraestructura a disposición de iniciativas públicas como <span class="text-indigo-300 font-bold">ALIA</span> o <span class="text-indigo-300 font-bold">AINA</span> para investigar y construir herramientas transparentes y soberanas.
+                                Buscamos <span class="text-white font-bold">partners educadores e institucionales</span> para proyectos de colaboración. Ponemos nuestra infraestructura a disposición de iniciativas públicas como <span class="text-indigo-300 font-bold">ALIA</span> o <span class="text-indigo-300 font-bold">LATAM-GPT</span> para investigar y construir herramientas transparentes y soberanas.
                             </p>
                             <a href="/es/soberania-digital/" class="inline-flex items-center gap-2 px-6 py-3 bg-indigo-600 text-white rounded-lg font-bold hover:bg-indigo-500 transition-colors">
                                 Leer sobre nuestro compromiso

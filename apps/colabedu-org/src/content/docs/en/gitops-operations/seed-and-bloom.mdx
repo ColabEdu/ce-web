@@ -1,0 +1,111 @@
+---
+title: "Seed & Bloom Engine"
+description: "Autonomous content derivation in ColabEdu using Bloom's Taxonomy."
+---
+
+import { Aside, Steps, Tabs, TabItem } from '@astrojs/starlight/components';
+
+# Seed & Bloom Engine: Content Derivation
+
+The **Seed & Bloom** engine is the component of `ce-svc-content-engine` responsible for **autonomous pedagogical expansion** in ColabEdu. It takes a base specification (a "seed") and generates a family of pedagogically differentiated exercises, organized according to the **Revised Bloom's Taxonomy**.
+
+```
+     [ Original Material / Seed ] (E.g., Original text or real exam - PRIVATE)
+            │
+            ▼  (LLM derivation process)
+   ┌────────────────────────────────────────────────────────┐
+   │ L2 Understanding ──► Formative exercise (C2)           │
+   │ L3 Applying      ──► Context transfer (C2)             │
+   │ L4 Analyzing     ──► Textual and stylistic analysis (C2)│
+   │ L5 Synthesizing  ──► Guided writing recipe (C1)        │
+   │ L6 Evaluating    ──► Critical assessment rubric (C1)   │
+   └────────────────────────────────────────────────────────┘
+```
+
+> **Copyright Guarantee:** By generating new exercises inspired by the seed but with original prompts, questions, and answers, the derived specs can be distributed publicly without exposing the proprietary text of the seed. The original seed remains with `PRIVATE` visibility.
+
+---
+
+## Derivation Strategies (`BloomStrategy`)
+
+The engine supports five derivation strategies depending on the required scaffolding:
+
+| Strategy | Generated Levels | Typical Use Case |
+|---|---|---|
+| `SOURCE_DERIVATION` | `L2` to `L6` (independent) | **Default**. Each derived spec is generated using the seed as a single context. |
+| `PROGRESSION` | `L2` ➔ `L3` ➔ `L4` ➔ `L5` ➔ `L6` | **Chained**. Each level uses the previous one as context, creating a complete learning progression. |
+| `MEMORY_BLOOM` | `L2` (Understanding) | **Basic**. Ideal for very short seeds or quick vocabulary exercises. |
+| `APPLICATION_BLOOM`| `L3` and `L4` | **Practical**. Focused on intermediate resolution and application of concepts. |
+| `ANALYSIS_BLOOM`   | `L4`, `L5`, and `L6` | **Advanced**. Oriented towards critical thinking, essay writing, and debates (IB Style). |
+
+### Seed Preservation Mode
+
+When using a strategy that generates the base level, the original seed **is never overwritten**. The engine creates a new structured derived spec while preserving the origin of the material in the database via the `seedRefCode` field.
+
+---
+
+## CLI and Terminal Workflow
+
+The complete derivation and packaging pipeline is executed via specific CLI commands:
+
+<Steps>
+
+1. **Ingest the base document (Seed)**
+   
+   Cure the original exam and store it as a private seed:
+   ```bash
+   curator curate \
+     --source exams/ap_spanish_2025.pdf \
+     --referenceCode us.ap.spanish_language.2025 \
+     --visibility PRIVATE
+   ```
+
+2. **Execute the Bloom derivation (Phase F4)**
+   
+   Derive exercises corresponding to the selected Bloom levels:
+   ```bash
+   curator bloom derive \
+     --seed us.ap.spanish_language.2025 \
+     --strategy PROGRESSION \
+     --output ./bloom_out
+   ```
+
+3. **Assemble the thematic Bundle (Phase F5)**
+   
+   Associate the seed and its derivatives inside a course specification:
+   ```bash
+   spec batch run ce-specs/batches/batch_31_ap_spanish_assemble_bundles.yaml
+   ```
+
+</Steps>
+
+---
+
+## REST API and MCP Reference
+
+### REST Endpoint
+`POST /ops/v1/bloom/derive`
+
+**Headers:**
+```http
+X-Internal-API-Key: <internal_key>
+Content-Type: application/json
+```
+
+**Body:**
+```json
+{
+  "seedRef": "us.ap.spanish_language.2025",
+  "strategy": "PROGRESSION",
+  "levels": ["L2", "L3", "L4"],
+  "count": 3,
+  "sandbox": false
+}
+```
+
+### MCP Tool
+Available in `EduWorkflowTools` to be consumed directly by intelligent agents (like the *Exercise Wizard*):
+```java
+@Tool("bloom_content")
+BloomDerivationResult bloomContent(String seedRef, String strategy, int count)
+```

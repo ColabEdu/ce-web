@@ -1,0 +1,74 @@
+---
+title: "Pipelines de Ingesta Automatizados"
+description: "Expansión global de ColabEdu: AP, IB, Estados Unidos y México."
+---
+
+# Pipelines de Ingesta Automatizados: Expansión Global
+
+**Arquitectura:** Open Assessment Standard (OAS v1beta1)
+
+Para escalar la plataforma más allá de España, el "Volante de Contenido" debe alimentarse con los estándares internacionales más demandados y con las normativas de los estados clave de EE.UU. (California, Texas) y México (NEM, CENEVAL). La capacidad de generar currículum hiperpersonalizado a partir de materiales auténticos (Realia) se convierte en una ventaja competitiva insalvable.
+
+Este documento detalla la estrategia de automatización (RPA + LLMs) para ingestar normativas (Capa C0) y contenido multimodal de dominio público (Capa C2) orientados a estos currículos.
+
+---
+
+## 1. Expansión: EE.UU. e Internacional (AP, IB, CA, TX)
+
+### A. Mapeo de Objetivos Legales y Estándares (Capa C0)
+
+A diferencia del sistema LOMLOE en España, los currículos de EE.UU. e internacionales tienen un fuerte énfasis en la Evaluación Basada en Datos.
+
+- **Advanced Placement (AP):** Ingesta de *Course and Exam Descriptions* y rúbricas (1-5 puntos) para tareas de *Free Response* (FRQ). Los temas globales se mapean como `BLOCK_COMPETENCY`. El LLM debe penalizar los fallos de transición cultural o de registro en la arquitectura OAS.
+- **International Baccalaureate (IB):** Ingesta de las guías de Spanish A y B. Matrices de evaluación para *Paper 1* y *Paper 2* con sus bandas de calificación y criterios desglosados cualitativamente.
+- **California (Common Core & World Languages):** Mapeo de los niveles de competencia multidimensionales del CDE y los Common Core State Standards en español (CCSS-S) como `BLOCK_GOAL`.
+- **Texas (TEKS - LOTE & SLAR):** El *Agente Curador* extraerá códigos TEKS alfanuméricos exactos (p.ej., TEKS.SLAR.110.53.b.1.A). La alineación estricta es obligatoria legalmente en Texas.
+
+### B. Catálogo de Ingesta de Realia Multimodal (Capa C2)
+
+La materia prima es el **Realia** (materiales auténticos creados por y para hablantes nativos).
+- **AP:** UN News, CEPAL, NASA en Español, CDC en Español.
+- **TX y CA:** Texas Gateway (TEA OER), The Portal to Texas History (UNT), OER Commons.
+- **IB / Literatura:** Project Gutenberg en Español, Biblioteca Virtual Miguel de Cervantes.
+- **Audio:** Radio Bilingüe (NPR), Radio Ambulante. OpenAI Whisper está integrado para generar transcripciones de texto completas.
+
+---
+
+## 2. Expansión: México (SEP, CENEVAL, COMIPEMS)
+
+La expansión a México representa el mayor Mercado Total Direccionable (TAM). El sistema educativo tiene una dualidad: el currículo formativo de la SEP (NEM) y el sistema de admisión competitivo (CENEVAL).
+
+### A. Mapeo de Objetivos Legales y Estándares (Capa C0)
+
+- **SEP - Nueva Escuela Mexicana (NEM):** El Agente transforma cada Proceso de Desarrollo de Aprendizaje (PDA) en un bloque `BLOCK_GOAL` inmutable. Los Ejes Articuladores (Interculturalidad Crítica, etc.) se ingestarán como etiquetas de validación.
+- **CENEVAL (EXANI-II) y COMIPEMS:** El agente extrae los programas exactos. Para *Redacción Indirecta*, parametriza los estándares de ortografía y morfosintaxis. Para *Comprensión Lectora*, inferencia y sentido léxico.
+
+### B. Catálogo de Ingesta de Contenido y Realia (Capa C2)
+
+México posee una infraestructura masiva de materiales educativos gratuitos:
+- **CONALITEG (Libros de Texto Gratuitos):** El crawler extrae texto con OCR avanzado de los visores de libros de texto.
+- **UNAM y Bibliotecas Nacionales:** Descarga Cultura UNAM, Memórica.
+- **Textos Informativos (CENEVAL):** INEGI (censos, infografías para alfabetización en datos), Agencia Informativa CONAHCYT.
+
+---
+
+## 3. Arquitectura de Scripts de Automatización (RPA + Qwen/LLM)
+
+El pipeline de ingesta opera desde un clúster local robusto bajo un pipeline completamente asíncrono.
+
+1. **El Crawler Resiliente:** Un script Python con Playwright renderiza sitios web dinámicos y descarga HTML, PDF y MP3.
+2. **El "Agente Curador" (Chunking Semántico):** El texto o la transcripción brutos se envían al LLM. El agente aplica *Semantic Chunking*, dividiendo el documento en pasajes lógicos y alineándolos con los estándares (AP, TEKS, NEM, CENEVAL).
+3. **Generación de YAML:** El LLM devuelve el artefacto `BLOCK_CONTEXT` validado, inyectando metadatos de indexación cruciales y punteros al grafo de la Capa C0 (etiquetas).
+4. **Combinación Dinámica (Recetas C1):** El sistema toma un `BLOCK_CONTEXT` y genera múltiples ejercicios paralelos (p.ej., Monólogo para AP, Ensayo para TEKS, Cuestionario CENEVAL, Panel NEM).
+
+## Garantías Legales e Ingesta con Conciencia de Derechos
+
+Para satisfacer los estrictos requisitos legales y de cumplimiento B2G (Business-to-Government), ColabEdu implementa un marco de **Ingesta de Contenido con Conciencia de Derechos**. No nos basamos en reclamaciones genéricas de "Uso Justo Transformativo".
+
+Cada `ContextBlock` (C2) está estrictamente etiquetado con un esquema de licencia explícito:
+- `license_type`: [PUBLIC_DOMAIN, OER_CC_BY, OER_CC_BY_NC, LICENSED, PROPRIETARY]
+- `attribution_required`: boolean
+- `source_url`: URL
+- `expiration_date`: (para contenido con licencia)
+
+El motor Spec Manager evalúa activamente estas etiquetas durante la compilación de recetas, garantizando que los materiales propietarios o incompatibles nunca se mezclen ni expongan de formas que violen sus términos de uso. La privacidad está asegurada de forma nativa ya que los pipelines de ingesta operan completamente desconectados de los datos personales de los estudiantes (PII).

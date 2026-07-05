@@ -238,6 +238,93 @@
         </div>
     </section>
 
+    <!-- Section 3b: PATHWAY_TEMPLATE — Structural Blueprints -->
+    <section id="pathway-templates" class="py-20 bg-white">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-12 flex flex-col md:flex-row gap-8 items-center">
+                <div class="flex-1">
+                    <div class="inline-flex items-center bg-violet-100 text-violet-700 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide mb-4">Nuevo Tipo de Spec</div>
+                    <h2 class="text-3xl font-bold text-slate-900 mb-4">PATHWAY_TEMPLATE — Planos Curriculares</h2>
+                    <p class="text-lg text-slate-600">
+                        Una <code class="bg-slate-100 px-1.5 py-0.5 rounded text-violet-700 font-mono text-base">PATHWAY_TEMPLATE</code> es una especificación OAS que pre-define la estructura recomendada de pathways para un estándar y variante concretos (ej. IB Spanish B SL). Vive entre la Taxonomía y las Recetas C1, actuando como <strong>plano arquitectónico oficial</strong> del currículum.
+                    </p>
+                    <div class="mt-6 space-y-3 text-sm">
+                        <div class="flex items-start gap-3">
+                            <span class="mt-0.5 w-5 h-5 rounded-full bg-violet-600 text-white flex items-center justify-center text-xs font-bold flex-shrink-0">1</span>
+                            <p class="text-slate-600"><strong>El profesor NO está forzado</strong> a usarla. Aparece como campo opcional en el Wizard de creación de Pathway.</p>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <span class="mt-0.5 w-5 h-5 rounded-full bg-violet-600 text-white flex items-center justify-center text-xs font-bold flex-shrink-0">2</span>
+                            <p class="text-slate-600"><strong>Auto-detect por referenceCode:</strong> Si el curso es <code class="bg-slate-100 px-1 rounded font-mono">ib.spanish_b.sl</code>, el sistema busca automáticamente <code class="bg-slate-100 px-1 rounded font-mono">tmpl.ib.spanish_b.sl</code>.</p>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <span class="mt-0.5 w-5 h-5 rounded-full bg-violet-600 text-white flex items-center justify-center text-xs font-bold flex-shrink-0">3</span>
+                            <p class="text-slate-600"><strong>Pre-relleno inteligente:</strong> Al seleccionar un tema, el nombre y la descripción del pathway se autocompletan. El profesor puede editarlos libremente.</p>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <span class="mt-0.5 w-5 h-5 rounded-full bg-violet-600 text-white flex items-center justify-center text-xs font-bold flex-shrink-0">4</span>
+                            <p class="text-slate-600"><strong>Versionable en Git:</strong> Cada cambio anual del IB se gestiona como un commit en <code class="bg-slate-100 px-1 rounded font-mono">ce-specs/catalog/global/pathway_templates/</code>.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Example card: IB Spanish B SL -->
+                <div class="w-full md:w-96 bg-gradient-to-br from-violet-50 to-indigo-50 border border-violet-200 rounded-2xl p-6 shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <p class="text-xs text-violet-500 font-semibold uppercase tracking-wide">tmpl.ib.spanish_b.sl</p>
+                            <h4 class="text-lg font-bold text-slate-900 mt-0.5">IB Spanish B SL</h4>
+                        </div>
+                        <span class="bg-violet-600 text-white text-xs px-2 py-1 rounded-full font-semibold">PATHWAY_TEMPLATE</span>
+                    </div>
+                    <p class="text-xs text-slate-500 mb-4">6 pathways · Estructura oficial 2020–2026</p>
+                    <div class="space-y-2">
+                        <div class="flex items-center gap-2 bg-white rounded-lg px-3 py-2 border border-violet-100 text-sm">
+                            <span class="w-5 h-5 rounded-full bg-violet-100 text-violet-700 flex items-center justify-center text-xs font-bold">1</span>
+                            <span class="text-slate-700">Identidades y relaciones personales</span>
+                        </div>
+                        <div class="flex items-center gap-2 bg-white rounded-lg px-3 py-2 border border-violet-100 text-sm">
+                            <span class="w-5 h-5 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-xs font-bold">2</span>
+                            <span class="text-slate-700">Experiencias</span>
+                        </div>
+                        <div class="flex items-center gap-2 bg-white rounded-lg px-3 py-2 border border-violet-100 text-sm">
+                            <span class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs font-bold">3</span>
+                            <span class="text-slate-700">Ingenio humano</span>
+                        </div>
+                        <div class="flex items-center gap-2 bg-white rounded-lg px-3 py-2 border border-violet-100 text-sm">
+                            <span class="w-5 h-5 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center text-xs font-bold">4</span>
+                            <span class="text-slate-700">Organización social</span>
+                        </div>
+                        <div class="flex items-center gap-2 bg-white rounded-lg px-3 py-2 border border-violet-100 text-sm">
+                            <span class="w-5 h-5 rounded-full bg-rose-100 text-rose-700 flex items-center justify-center text-xs font-bold">5</span>
+                            <span class="text-slate-700">Compartir el planeta</span>
+                        </div>
+                        <div class="flex items-center gap-2 bg-white rounded-lg px-3 py-2 border border-slate-200 text-sm">
+                            <span class="w-5 h-5 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center text-xs font-bold">6</span>
+                            <span class="text-slate-500 italic">Preparación al Examen SL</span>
+                        </div>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-violet-100">
+                        <p class="text-xs text-slate-400">HL incluye 7 pathways + Lecturas Literarias obligatorias</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Architecture position callout -->
+            <div class="bg-slate-800 text-white rounded-xl p-6 mt-2">
+                <p class="text-xs text-slate-400 uppercase tracking-widest mb-3 font-semibold">Posición en la arquitectura OAS</p>
+                <div class="flex flex-col md:flex-row items-center gap-2 text-sm font-mono">
+                    <span class="bg-slate-700 px-3 py-1.5 rounded text-emerald-400">TAXONOMY</span>
+                    <span class="text-slate-500">→</span>
+                    <span class="bg-violet-700 px-3 py-1.5 rounded text-white ring-2 ring-violet-400">PATHWAY_TEMPLATE ✦ nuevo</span>
+                    <span class="text-slate-500">→</span>
+                    <span class="bg-slate-700 px-3 py-1.5 rounded text-blue-400">RECIPE (C1)</span>
+                    <span class="text-slate-500">→</span>
+                    <span class="bg-slate-700 px-3 py-1.5 rounded text-slate-300">BLOCK_RUBRIC / BLOCK_CONTENT (C0-C2)</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Section 4: Agent Orchestration (The Workflow) -->
     <section id="agent-workflow" class="py-20 bg-white">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">

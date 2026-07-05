@@ -1,9 +1,17 @@
 ---
 title: "Gem"
-description: "Reference documentation for the Gem resource in OAS."
+description: "Reference documentation for the Gem resource in OAS, including the Curator Gems for LMS/OER ingestion."
 sidebar:
-  order: 7
+  order: 42
+  badge:
+    text: Partners
+    variant: caution
 ---
+
+:::caution[Restricted Resource - Partners Only]
+Access and configuration of ColabEdu **Layer C3 resources (Directives, Personas, and Gems)** is restricted to authorized partner organizations (governments, partner publishers, and consultancies).
+:::
+
 
 The `Gem` resource (AI Module) defines profiles, roles, and core instruction sets (system prompts) for Artificial Intelligence agents within the platform.
 
@@ -13,34 +21,112 @@ The `Gem` resource (AI Module) defines profiles, roles, and core instruction set
 
 | Field | Type | Required | Description |
 |---|---|---|---|
-| `name` | `string` | Yes | Name or technical alias of the Gem (e.g., `instructional_designer`). |
+| `name` | `string` | Yes | Technical name or alias for the Gem (e.g., `instructional_designer`). |
 | `description` | `string` | Yes | Natural language description of this agent's function and capabilities. |
 
 ### Specification (`spec`)
 
 | Field | Type | Required | Description |
 |---|---|---|---|
-| `system_prompt` | `string` | Yes | The exact instructions, behavioral rules, and operational directives that will be injected as the system message to the LLM. |
+| `system_prompt` | `string` | Yes | Exact instructions, behavioral rules, and operational directives injected as a system message to the LLM. |
 
 ## Usage Example
-
-Below is an example of a `Gem` for an Instructional Designer:
 
 ```yaml
 apiVersion: core.oas.colabedu.io/v1beta1
 kind: Gem
 metadata:
   name: instructional_designer
-  description: A person specialized in instructional design and procedural generation of interactive AssessmentItems.
+  description: Persona specialized in instructional design and procedural generation of interactive AssessmentItems.
 spec:
   system_prompt: |
-    You are an expert Instructional Designer in creating interactive exercises for ColabEdu using the OAS v1beta1 specification.
-    Your goal is to help teachers dynamically compose exercise drafts (AssessmentItems) based on their natural language requests.
+    You are an expert Instructional Designer for ColabEdu, creating interactive exercises
+    using the OAS v1beta1 specification.
 
     YAML GENERATION RULES:
-    1. The final output must ALWAYS be an `AssessmentItem` type resource (apiVersion: core.oas.colabedu.io/v1beta1).
-    2. The exercise MUST use the `mixed_quiz` structure or be composed of an array of interactive `ui_components`.
-    
+    1. The final result MUST ALWAYS be an `AssessmentItem` resource.
+    2. The exercise MUST use `mixed_quiz` structure or an array of `ui_components`.
+
     TOOL USAGE:
-    1. **TAXONOMY & GUIDANCE:** If the user refers to a pedagogical standard, you MUST proactively use `SpecManagerMcpTools` to guide the generation of exercises.
+    1. If the user references a pedagogical standard, you MUST proactively use
+       `SpecManagerMcpTools` to guide generation.
 ```
+
+---
+
+## Curator Gems
+
+The **Curator Agent** pipeline uses a set of specialized Gems to transform different source types into pedagogical specs. The `curator_router` classifies each input and delegates to the most appropriate Gem:
+
+| Gem | Output | Triggers when |
+|---|---|---|
+| `gem.curator_router` | — (routes) | Always — classifies input and delegates |
+| `gem.curator_c0` | `BlockRubric` | Normative curricular documents |
+| `gem.curator_c1` | `Recipe` | Complete didactic units |
+| `gem.curator_c2` | `ExerciseSpec` | Exam PDFs, FRQ, problems |
+| `gem.curator_lesson` | `InteractiveLesson` | LMS packages (`.imscc` Canvas, `.mbz` Moodle) |
+| `gem.curator_resource` | `ResourceLearning` | OER APIs: CK-12, Khan Academy, Procomún, Europeana |
+
+YAML files for each Gem are stored in `ce-specs/catalog/personas/curators/`.
+
+### Example: `gem.curator_lesson`
+
+Generates `InteractiveLesson` specs from the HTML/XML content of an unzipped LMS package:
+
+```yaml
+apiVersion: core.oas.colabedu.io/v1beta1
+kind: Gem
+metadata:
+  name: curator_lesson
+  description: |
+    Transforms the content of an LMS package (Canvas IMSCC / Moodle MBZ)
+    into an InteractiveLesson with structured slides and pedagogical widgets.
+spec:
+  system_prompt: |
+    You are the Interactive Lesson Curator for ColabEdu.
+    You will receive content extracted from an LMS package (HTML, XML, assets).
+
+    YOUR TASK:
+    Generate a YAML spec of type `InteractiveLesson` with:
+    1. `slides[]` — at least 3 slides with title, body, and widget type
+    2. `learningObjectives[]` — objectives aligned to the CurricularContext
+    3. `lmsSource` — metadata from the original package (url, platform, packageId)
+
+    OUTPUT: Valid OAS YAML only. No additional explanations.
+```
+
+### Example: `gem.curator_resource`
+
+Generates `ResourceLearning` specs with a 3-dimension qualityScore:
+
+```yaml
+apiVersion: core.oas.colabedu.io/v1beta1
+kind: Gem
+metadata:
+  name: curator_resource
+  description: |
+    Indexes an OER resource (CK-12, Khan Academy, Procomún, Europeana)
+    with a 3-dimension pedagogical qualityScore.
+spec:
+  system_prompt: |
+    You are the Open Educational Resource Curator for ColabEdu.
+
+    YOUR TASK:
+    Generate a YAML spec of type `ResourceLearning` with:
+    1. `source` — url, title, provider, license, language
+    2. `qualityScore` — object with 3 keys (0.0–1.0 each):
+       - `alignment`: alignment with the provided CurricularContext
+       - `pedagogicalRichness`: variety of activities and content depth
+       - `accessibility`: multilingual support, WCAG, alternative formats
+    3. `applicableStandards[]` — list of applicable standard referenceCodes
+
+    OUTPUT: Valid OAS YAML only. No additional explanations.
+```
+
+---
+
+## Related Pages
+
+- [Curator Agent Capabilities](/en/gitops-operations/curator-capabilities) — Full pipeline with Gem router
+- [InteractiveLesson Reference](/en/reference/interactive-lesson) — Output of `curator_lesson`
+- [ResourceLearning Reference](/en/reference/resource-learning) — Output of `curator_resource`

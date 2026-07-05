@@ -1,0 +1,70 @@
+---
+title: Relación de Entidades (El Ejercicio)
+description: Diagrama y explicación de la relación entre ExerciseSpec, AssessmentItem y ExerciseType.
+sidebar:
+  order: 3
+---
+
+Cuando analizamos la arquitectura OAS desde la perspectiva del desarrollo web tradicional (donde solemos tener "Exámenes", "Preguntas" y "Componentes UI"), los nombres de las entidades pueden parecer un poco confusos al principio.
+
+Esta nomenclatura existe porque OAS fusiona los **estándares de interoperabilidad educativa (IMS QTI)** con los **patrones de arquitectura Cloud-Native (Assessment as Code)**.
+
+A continuación explicamos las tres entidades fundamentales que componen un instrumento de evaluación interactivo.
+
+## Diagrama de Relaciones
+
+```mermaid
+graph TD
+    subgraph "Nivel Documento (El Examen)"
+        ES[ExerciseSpec]
+    end
+
+    subgraph "Nivel Atómico (Los Datos de la Pregunta)"
+        AI1[AssessmentItem 1]
+        AI2[AssessmentItem 2]
+        AI3[AssessmentItem N]
+    end
+
+    subgraph "Nivel UI (El Widget Frontend)"
+        ET_MC[ExerciseType: multiple_choice]
+        ET_FT[ExerciseType: free_text]
+    end
+
+    ES -- Contiene N --> AI1
+    ES -- Contiene N --> AI2
+    ES -- Contiene N --> AI3
+    
+    AI1 -- Usa un --> ET_MC
+    AI2 -- Usa un --> ET_FT
+    AI3 -- Usa un --> ET_MC
+    
+    style ES fill:#f9f,stroke:#333,stroke-width:2px
+    style AI1 fill:#bbf,stroke:#333,stroke-width:1px
+    style AI2 fill:#bbf,stroke:#333,stroke-width:1px
+    style AI3 fill:#bbf,stroke:#333,stroke-width:1px
+    style ET_MC fill:#bfb,stroke:#333,stroke-width:1px
+    style ET_FT fill:#bfb,stroke:#333,stroke-width:1px
+```
+
+---
+
+## 1. ExerciseSpec (El Agrupador / El Documento)
+*Equivalente tradicional: `ExamDocument`, `QuizContainer` o `Worksheet`*
+
+La palabra "Spec" (Specification) proviene de la arquitectura inspirada en Kubernetes. En OAS, todo se define mediante archivos YAML que declaran un "estado deseado". 
+Un `ExerciseSpec` es el documento maestro o "cuadernillo" completo. Define el contexto general (por ejemplo, un texto de lectura o un caso de estudio) y agrupa la lista de preguntas que los estudiantes deben responder basándose en ese contexto.
+
+## 2. AssessmentItem (La Instancia de Datos)
+*Equivalente tradicional: `QuestionInstanceData`*
+
+Este nombre se hereda directamente del estándar global **IMS QTI (Question and Test Interoperability)**. En QTI, la unidad atómica de evaluación (la pregunta en sí, sus opciones, su rúbrica y la respuesta esperada) se llama "Assessment Item".
+En OAS, un `AssessmentItem` es puramente un payload de datos. No contiene información sobre estilos, colores o interactividad; simplemente almacena *el qué* de la pregunta.
+
+## 3. ExerciseType (El Componente Visual)
+*Equivalente tradicional: `QuestionUIWidget` o `FrontendComponent`*
+
+Dado que `AssessmentItem` es agnóstico a la presentación visual (podría imprimirse en papel o enviarse por SMS), introducimos el `ExerciseType`. Esta entidad actúa como el puente hacia el frontend. 
+El `ExerciseType` define estrictamente la interfaz gráfica de usuario (UI), como un widget de arrastrar y soltar (`drag_and_drop`), una caja de texto libre (`free_text`), o botones de opción múltiple (`multiple_choice`). 
+
+**¿Por qué separarlo?**
+Esta separación permite una reutilización masiva. Puedes tener 10.000 `AssessmentItems` distintos sobre historia, geografía o biología, y todos utilizarán la misma lógica visual de un único `ExerciseType` (como `multiple_choice`). Si decides rediseñar tus botones de opción múltiple, solo modificas el código de ese `ExerciseType` una vez, y automáticamente actualizará la apariencia de las 10.000 preguntas.

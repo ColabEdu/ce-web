@@ -68,7 +68,7 @@ How does legal abstraction materialize on the screen of a student's device? This
 
 ## 4. Punitive vs. Formative Philosophy (C3 Layer - Directives)
 
-The biggest difference between these educational systems is not the exam format, but **how the AI must treat and penalize student errors**. This is controlled through injections in the C3 Layer (`preprocessing_directives`), which alter the "System Prompt" of the LangGraph orchestrator before calling the LLM.
+The biggest difference between these educational systems is not the exam format, but **how the AI must treat and penalize student errors**. This is controlled through injections in the C3 Layer (`preprocessing_directives`), which alter the "System Prompt" of the LangGraph4j orchestrator before calling the LLM.
 
 | **AI Parameter** | **Spain (EBAU)** | **Mexico (EXANI-II)** | **US (Common Core)** | **Advanced Placement (AP)** | **International Baccalaureate (IB)** |
 | --- | --- | --- | --- | --- | --- |
@@ -88,7 +88,7 @@ Regardless of the country we are processing or how exotic its rules are, the dat
 1. **Ingestion (The C0 Contract):** A legal document from any country is translated to the `goals` table (`BLOCK_GOAL`) and its evaluation matrix to `rubrics` (`BLOCK_RUBRIC`). This establishes the "Laws of Physics" of the system.
 2. **Assembly (The C1/C2 Instrument):** The teacher creates a task by selecting an `ExerciseType` (e.g., Split Pane), connecting it with a historical text from the `contexts` table (`BLOCK_CONTEXT`), and attaching the rubric from step 1. This generates a Recipe.
 3. **Execution (The Runtime Payload):** The student opens their iPad or Chromebook. The UI reads the recipe and draws the screen. The student writes their essay and clicks "Submit". The frontend packages a pure JSON payload.
-4. **Evaluation (LangGraph + C3):** The payload reaches the backend. LangGraph injects the behavioral modifications (`BLOCK_DIRECTIVE`), assembles the full context, and forces the LLM to return a structured schema (Structured Output).
+4. **Evaluation (LangGraph4j + C3):** The payload reaches the backend. LangGraph4j injects the behavioral modifications (`BLOCK_DIRECTIVE`), assembles the full context, and forces the LLM to return a structured schema (Structured Output).
 5. **Propagation (Crosswalks):** The grade is saved in the relational database and is triggered through the transversal nodes, updating the key competency *Dashboards* of the school or government in real time.
 
-*The architectural magic of ColabEdu is this: the main orchestrator (LangGraph) knows absolutely nothing about the Mexican, Spanish, or American educational system. It only knows how to obey weights, limits, and tensors that the Spec Manager dynamically assembled into the final JSON Payload. We have abstracted educational bureaucracy by turning it into mathematics.*
+*The architectural magic of ColabEdu is this: the main orchestrator (LangGraph4j) knows absolutely nothing about the Mexican, Spanish, or American educational system. It only knows how to obey weights, limits, and tensors that the Spec Manager dynamically assembled into the final JSON Payload. We have abstracted educational bureaucracy by turning it into mathematics.*

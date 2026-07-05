@@ -1,11 +1,100 @@
 ---
 title: "Facturación y Cuentas"
-description: "Soporte para pagos, licencias y planes."
+description: "Soporte para pagos, licencias, planes y gestión operativa de billing y rewards."
 ---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
 
 Todo lo que necesitas saber sobre los aspectos comerciales y la gestión de tu cuenta en ColabEdu.
 
 ## Preguntas Frecuentes
+
 - **Cómo actualizar a un plan ColabEdu Pro.**
 - **Licencias por volumen para Secretarías de Educación.**
 - **Descarga de facturas.**
+
+---
+
+## Gestión Operativa (Equipo de Soporte Técnico)
+
+Esta sección describe las acciones que el equipo de soporte puede realizar directamente desde el CLI de operaciones, sin necesidad de acceder al dashboard de Chargebee.
+
+<Aside type="tip">
+Antes de ejecutar cualquier comando de `billing` o `rewards`, necesitas el Firebase UID del usuario. Úsalo así:
+
+```bash
+./ce-cli.sh user lookup --email "teacher@school.org"
+# Copia el campo "uid" del resultado
+```
+</Aside>
+
+### Consultar el estado de un usuario
+
+```bash
+# Ver tier, cuota usada, límite y features activas
+./ce-cli.sh billing entitlements --uid "<uid>"
+
+# Ver rewards activos
+./ce-cli.sh rewards list --uid "<uid>" --status ACTIVE
+```
+
+### Resetear cuota mensual agotada
+
+Si un usuario ha agotado sus envíos mensualmente antes de tiempo y tiene un caso de soporte válido:
+
+```bash
+./ce-cli.sh billing quota-reset --uid "<uid>"
+```
+
+### Conceder un reward manual (promo de soporte)
+
+Para casos como compensación, partnership, o usuarios piloto:
+
+```bash
+./ce-cli.sh rewards grant \
+  --uid "<uid>" \
+  --days 30 \
+  --tier premium \
+  --reason "support-ticket-XXXX"
+```
+
+### Revocar un reward
+
+```bash
+# 1. Obtener el rewardId
+./ce-cli.sh rewards list --uid "<uid>" --status ACTIVE
+
+# 2. Revocar
+./ce-cli.sh rewards revoke --uid "<uid>" --reward-id "<rewardId>"
+```
+
+### Sincronizar Chargebee → Redis
+
+Después de cualquier cambio manual en el dashboard de Chargebee, propaga los cambios a Redis:
+
+```bash
+./ce-cli.sh billing sync --uid "<uid>"
+```
+
+### Ver pipeline de referidos de un usuario
+
+```bash
+./ce-cli.sh rewards referrals --uid "<uid>"
+```
+
+---
+
+## División de Responsabilidades
+
+| Operación | Herramienta |
+|:---|:---|
+| Ver entitlements, cuotas, tier | CLI (`billing entitlements`) |
+| Resetear cuota mensual | CLI (`billing quota-reset`) |
+| Conceder / revocar reward | CLI (`rewards grant` / `rewards revoke`) |
+| Ver pipeline de referidos | CLI (`rewards referrals`) |
+| Sincronizar Chargebee → Redis | CLI (`billing sync`) |
+| Aprovisionar planes y cupones | CLI (`billing setup-catalog`) |
+| Reembolsos y facturas | Chargebee Dashboard |
+| Disputas de pago | Chargebee Dashboard |
+| Métricas MRR / churn | Chargebee Dashboard |
+| Configuración de impuestos | Chargebee Dashboard |

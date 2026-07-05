@@ -7,7 +7,7 @@ sidebar:
 
 The `Taxonomy` resource allows defining and structuring hierarchical concepts such as geographical locations (countries, regions), organizational levels of the educational system, or curriculum standards grouped by subject and level.
 
-This structure is fundamental for organizing and filtering other resources within the system (such as rubrics and exercises).
+This structure is fundamental for organizing and filtering other resources within the system (such as rubrics and exercises). It is also the backbone of the **CLI scaffolding pipeline**, which uses taxonomy identifiers to discover, fetch, and auto-generate evaluation rubrics from official curriculum documents.
 
 ## Schema
 
@@ -42,9 +42,30 @@ When `type: standard`, the `spec` block defines standards, levels, and subjects:
 | `levels` | `array` | (Within a standard) Educational levels covered (e.g., DP, MYP). Contains `id`, `name`, `active`. |
 | `subjects` | `array` | (Within a standard) Subjects. Contains `id`, `name`, `active`, and `applicableLevels` (list of level `id`s). |
 
-## Usage Example
+### Specification (`spec`) - `bundle_course` Variant
 
-Below is an example of a `Taxonomy` of type `location_country`:
+When `type: bundle_course`, the resource groups a full course offering under a single taxonomy node. This is the primary input for the **CLI rubric scaffolding pipeline**:
+
+| Field | Type | Description |
+|---|---|---|
+| `displayName` | `string` | Human-readable course name (e.g., "AP Spanish Language and Culture"). |
+| `taxonomyRef` | `string` | Reference to the parent standard taxonomy (e.g., `std.intl.ap.v1`). |
+| `subject` | `string` | Subject identifier (e.g., `subj.intl.ap.spanish_language_and_culture`). |
+| `educationLevel` | `string` | Education level identifier (e.g., `lvl.intl.ap.high`). |
+| `units` | `array` | Ordered list of course units. Each unit contains `id`, `name`, `description`, and `suggested_hours`. |
+
+## Relationship to Rubrics
+
+Taxonomy bundles are the source of truth for rubric generation. The `taxonomy rubrics scaffold` CLI command reads a `bundle_course` spec to derive the rubric structure:
+
+```
+bundle_course (Taxonomy)
+    └── units[]  →  rubric criteria[]  →  BLOCK_RUBRIC (C0 Layer)
+```
+
+Each unit in the bundle maps to one criterion in the generated rubric, inheriting `id`, `name`, `description`, and `suggested_hours`.
+
+## Usage Example
 
 ```yaml
 apiVersion: colabedu.ai/v1beta1
@@ -73,3 +94,18 @@ spec:
     - id: org.lvl.es.primaria
       name: Primaria
 ```
+
+## Related CLI Commands
+
+```bash
+# Discover official source documents for a bundle
+bash ce-cli.sh taxonomy sources discover --referenceCode bundle.us.ap.spanish_language.hl
+
+# Download the curriculum PDF
+bash ce-cli.sh taxonomy sources fetch --referenceCode bundle.us.ap.spanish_language.hl
+
+# Generate rubric YAML (AI-powered levels from the PDF)
+bash ce-cli.sh taxonomy rubrics scaffold --referenceCode bundle.us.ap.spanish_language.hl --ai true
+```
+
+See the [CLI Tutorial](/en/gitops-operations/cli-tutorial) for the full end-to-end walkthrough.

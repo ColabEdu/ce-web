@@ -1,0 +1,51 @@
+---
+title: Catalogs
+description: Index of ColabEdu SpecManager catalogs — exercise types, canonical IDs and OAS ecosystem references.
+sidebar:
+  order: 1
+  label: "Catalogs"
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+The **ColabEdu SpecManager** registers all pedagogical specifications
+of the OAS ecosystem in a Git-versioned, traceable database.
+
+This section contains the reference catalogs for content developers
+and curriculum integrators.
+
+---
+
+<CardGrid>
+  <Card title="Exercise Types (C1)" icon="puzzle">
+    The 21 subject-agnostic exercise types: quizzes, essays, digital
+    whiteboards, Socratic debate, and more.
+    
+    [View exercise types →](/en/specs-repository/spec-catalog/exercise-types/)
+  </Card>
+  <Card title="Catalog Reference" icon="list-format">
+    The 692 canonical IDs in the SpecManager: taxonomies, C0 rubrics, C1 recipes,
+    personas, bundles and pathway templates.
+    
+    [View full reference →](/en/specs-repository/spec-catalog/catalog/)
+  </Card>
+</CardGrid>
+
+---
+
+## How to use these catalogs?
+
+Canonical IDs are referenced in OAS YAML files using the fields
+`rubricRef`, `personaRef`, `recipeRef` and similar:
+
+```yaml
+# In an exercise, reference a type and a rubric:
+spec:
+  exerciseTypeRef: global.exercise_type.whiteboard.v1
+  rubricRef: global.c0.whiteboard.stem.math.v1
+```
+
+The catalog is updated automatically by running:
+```bash
+bash ce-cli.sh taxonomy catalog docs
+```

@@ -1,0 +1,436 @@
+---
+title: "Frameworks de Competencias y Equivalencias entre Estándares"
+description: "Cómo el sistema de taxonomías de ColabEdu habilita la evaluación por competencias y la reutilización de contenidos entre AP, IB, LOMLOE, EBAU y otros estándares educativos globales."
+sidebar:
+  order: 2
+---
+
+import { Aside, Badge, Card, CardGrid, Tabs, TabItem } from '@astrojs/starlight/components';
+
+**Arquitectura:** Open Assessment Standard (OAS v1beta1)
+
+**Propósito:** Este documento explica cómo ColabEdu clasifica cada ejercicio y rúbrica en dos dimensiones independientes — habilidades propias de la materia y competencias transversales entre materias — y cómo esta doble clasificación permite reutilizar contenidos entre cursos de diferentes países y programas sin trabajo manual adicional.
+
+---
+
+## ¿Por Qué Implementar Este Sistema?
+
+Antes de entrar en la arquitectura, conviene entender qué problemas concretos resuelve este framework y por qué vale la pena su complejidad interna (que es invisible para el autor y para el motor de calificación).
+
+### El autor no hace nada extra
+
+La regla fundamental del diseño es: **el autor de un ejercicio nunca escribe etiquetas de competencias**. Solo declara un `task_type` (p. ej., `comp.ap.slc.frq_task2`) y el **CompetencyClassifier** infiere automáticamente todos los tags — skills MCER, niveles Bloom, Competencias Clave UE — a partir de las reglas definidas en los ficheros YAML de taxonomía.
+
+```yaml
+# Lo que escribe el autor (un solo campo):
+spec:
+  exercises:
+    - task_type: comp.ap.slc.frq_task2   # ← eso es todo
+
+# Lo que el sistema infiere automáticamente:
+# competency_tags:
+#   skills: [presentational_writing, argumentation, source_analysis]
+#   cefr:   [C1]
+#   bloom:  [ANALYZE, EVALUATE]
+# transversal_competency_tags:
+#   eu_key_competences: [EU_CCL, EU_CPSAA]
+#   lomloe_cc:          [CCL, CPSAA]
+```
+
+### El grading específico de cada estándar no cambia
+
+Las etiquetas de competencias son **metadatos de indexación**, no lógica de calificación. El `GradingOrchestrator` siempre califica un ejercicio AP con la rúbrica AP y un ejercicio LOMLOE con la rúbrica LOMLOE. Las etiquetas no alteran ningún criterio de puntuación — solo permiten los casos de uso transversales descritos abajo.
+
+### Los seis beneficios reales del sistema
+
+<CardGrid>
+  <Card title="🌎 Reutilización entre países" icon="translate">
+    Un ejercicio AP FRQ Task 2 etiquetado con `argumentation / C1` puede cubrir automáticamente el gap `CE.LCL.B.1.4` (LOMLOE) en un bundle curricular español. **Sin curación manual.**
+  </Card>
+  <Card title="📊 Radar de competencias del alumno" icon="information">
+    El dashboard puede mostrar: "Estás en B2 en comprensión lectora, pero B1 en producción oral". Datos accionables para el alumno y el profesor.
+  </Card>
+  <Card title="🔍 Gap analysis curricular automático" icon="magnifier">
+    El ACA detecta automáticamente que un bundle AP SLC tiene 0 ejercicios de `literary_analysis` y sugiere importar specs IB Spanish A o LOMLOE C.1.
+  </Card>
+  <Card title="🎯 Recomendación inteligente" icon="star">
+    Si un alumno falla `argumentation` en LOMLOE, el sistema puede recomendarle ejercicios AP FRQ Task 2 — misma competencia, contexto diferente. Mayor retención.
+  </Card>
+  <Card title="⚖️ Calibración del grader IA" icon="approve-check">
+    El `GradingOrchestrator` sabe que "C1 `argumentation`" requiere tesis, contraargumento y cierre — independientemente de si el ejercicio es AP, IB o LOMLOE.
+  </Card>
+  <Card title="📋 Reporting normativo" icon="document">
+    Generación automática de informes de cobertura de Competencias Clave UE para centros educativos. Diferenciador B2B ante administraciones con requisitos de acreditación europea.
+  </Card>
+</CardGrid>
+
+<Aside type="tip">
+**Principio de diseño:** La complejidad del sistema reside en los ficheros YAML de taxonomía y en el `CompetencyClassifier` — no en los autores de ejercicios ni en las rúbricas de calificación. Estas últimas permanecen 100% específicas de cada estándar, país y región.
+</Aside>
+
+---
+
+## La Idea Central: Dos Dimensiones Ortogonales
+
+Todo ejercicio educativo trabaja simultáneamente en dos planos. Un ejercicio de carta formal en AP Spanish Language es:
+
+- **Una habilidad lingüística** → escritura interactiva en nivel CEFR B2 (dimensión *vertical*)
+- **Una competencia vital** → capacidad de comunicarse eficazmente por escrito, que es CCL en LOMLOE y EU_CCL en el marco europeo (dimensión *horizontal*)
+
+Estas dos dimensiones son **ortogonales**: nunca se reemplazan entre sí y se almacenan de forma separada en los metadatos de cada spec.
+
+```
+DIMENSIÓN VERTICAL                         DIMENSIÓN HORIZONTAL
+(habilidades de área curricular)           (competencias transversales)
+──────────────────────────────────────     ──────────────────────────────────────
+¿Qué habilidad lingüística practica?       ¿Qué competencia ciudadana/vital desarrolla?
+
+skill: interpersonal_writing               EU_CCL → Competencia en comunicación lingüística
+cefr:  B2                                  LOMLOE: CCL, CPSAA
+bloom: APPLY                               IB Learner Profile: communicator
+language: es                               OECD 2030: use_tools_interactively
+```
+
+En el YAML de spec OAS, esto genera dos bloques de metadatos diferenciados:
+
+```yaml
+metadata:
+  competency_tags:               # ← dimensión VERTICAL
+    skills: [interpersonal_writing, formal_register]
+    cefr:   [B2, C1]
+    bloom:  [APPLY]
+    language: es
+    source_standard: AP_SLC
+
+  transversal_competency_tags:   # ← dimensión HORIZONTAL
+    eu_key_competences: [EU_CCL]
+    lomloe_cc:          [CCL, CPSAA]
+    ib_learner_profile: [communicator, reflective]
+    oecd_lc2030:        [use_tools_interactively]
+```
+
+<Aside type="tip">
+**¿Por qué dos bloques?** Las etiquetas verticales habilitan la **búsqueda de contenidos** entre estándares (encontrar ejercicios con la misma habilidad independientemente del país de origen). Las etiquetas horizontales habilitan el **reporting de cumplimiento normativo** ante reguladores (demostrar que un curso cubre las Competencias Clave de LOMLOE o el Perfil del Aprendiz de IB).
+</Aside>
+
+---
+
+## 1. Competencias de Área Curricular: La Dimensión Vertical
+
+Las taxonomías de área curricular definen el **vocabulario universal de habilidades** para una disciplina. Para la lengua española, este vocabulario está anclado en el MCER (Marco Común Europeo de Referencia) y en las ACTFL Proficiency Guidelines — marcos que aplican globalmente con independencia de si el currículo es AP, LOMLOE, IB o SEP.
+
+### Las Seis Macrohabilidades del Español
+
+| ID de Habilidad | Nombre | Rango MCER | Correspondencias entre Estándares |
+|-----------------|--------|------------|-----------------------------------|
+| `interpretive_reading` | Comprensión Lectora | A1–C2 | AP Modo 1, LOMLOE CE.LCL.A, IB AO1 |
+| `interpretive_listening` | Comprensión Auditiva | A1–C2 | AP Modo 1 (audio), LOMLOE CE.LCL.A.1 |
+| `interpersonal_writing` | Escritura Interactiva | A2–C1 | AP FRQ Tarea 1, LOMLOE CE.LCL.B.1.1, IB Written Interaction |
+| `presentational_writing` | Escritura Presentacional | A2–C2 | AP FRQ Tarea 2, LOMLOE CE.LCL.B.1.4, IB Paper 2 |
+| `interpersonal_speaking` | Expresión Oral Interactiva | A2–C1 | AP FRQ Tarea 3, LOMLOE CE.LCL.B.2.1, IB Oral |
+| `presentational_speaking` | Expresión Oral Presentacional | A2–C2 | AP FRQ Tarea 4, LOMLOE CE.LCL.B.2, IB Individual Oral |
+
+Más allá de las macrohabilidades, la taxonomía define **microcompetencias** — capacidades específicas que atraviesan varias macrohabilidades:
+
+| Microcompetencia | Se aplica a | MCER | Bloom |
+|-----------------|-------------|------|-------|
+| `formal_register` | Escritura y expresión oral interactiva/presentacional | B1–C2 | APPLY |
+| `argumentation` | Escritura y expresión oral presentacional | B2–C2 | ANALYZE, EVALUATE, CREATE |
+| `source_analysis` | Escritura y comprensión lectora | B2–C2 | ANALYZE, EVALUATE |
+| `cultural_comparison` | Escritura y expresión oral | B1–C2 | ANALYZE, EVALUATE |
+| `literary_analysis` | Comprensión lectora y escritura | B2–C2 | ANALYZE, EVALUATE, CREATE |
+
+<Aside type="note">
+El español como L1 (LOMLOE LCL, AP SLC, SEP) y como L2/LE (IB Spanish B) comparten el mismo vocabulario de habilidades. El campo `source_standard` en `competency_tags` indica el contexto pedagógico. La Literatura en Español (AP SLIT, IB Spanish A) utiliza un fichero de taxonomía separado con habilidades de análisis literario extendidas.
+</Aside>
+
+---
+
+## 2. Competencias Transversales: La Dimensión Horizontal
+
+Las competencias transversales aplican **en todas las materias y todos los países**. Un alumno que escribe un ensayo argumentativo formal en Lengua está desarrollando simultáneamente una competencia igual de relevante en Historia, Ciencias o Educación Cívica.
+
+### La Base Universal: Las 8 Competencias Clave de la UE (2018)
+
+Las 8 Competencias Clave del Consejo Europeo funcionan como capa de anclaje universal porque:
+- LOMLOE (España) las adoptó prácticamente sin cambios como sus 8 Competencias Clave
+- Son el marco de referencia para más de 40 países europeos
+- Son compatibles con el Perfil del Aprendiz del IB, el OECD Learning Compass y el P21
+
+```
+Competencia Clave UE          LOMLOE (ES)    IB Learner Profile    OCDE LC 2030
+─────────────────────────────────────────────────────────────────────────────
+Lingüística (CCL)         →   CCL        →  communicator        → use_tools_interactively
+Plurilingüe (CP)          →   CP         →  communicator          —
+Matemática/STEM (STEM)    →   STEM       →  thinker             → pensamiento crítico
+Digital (CD)              →   CD         →  —                   → use_tools_interactively
+Personal/Social (CPSAA)   →   CPSAA      →  reflective, balanced → self_reflection
+Ciudadana (CC)            →   CC         →  principled           → act_with_responsibility
+Emprendedora (CE)         →   CE         →  risk-taker           → create_new_value
+Conciencia Cultural (CCEC)→   CCEC       →  open-minded          —
+```
+
+### Reglas de Inferencia Automática
+
+Los agentes de IA de la plataforma **infieren automáticamente** las competencias transversales a partir de la clasificación de habilidades verticales — sin etiquetado manual:
+
+| Si el ejercicio tiene… | → Se asigna automáticamente |
+|-----------------------|------------------------------|
+| `interpersonal_writing` o `presentational_writing` | EU_CCL (CCL) |
+| `cultural_comparison` o `literary_analysis` | EU_CCEC (CCEC) |
+| `argumentation` con Bloom EVALUATE+ | EU_CCL + EU_CPSAA |
+| `interpersonal_speaking` | EU_CCL + EU_CP |
+| Cualquier tarea de producción formal | EU_CCL + EU_CPSAA |
+
+---
+
+## 3. Equivalencias entre Estándares: Compartir Contenidos entre Países
+
+Esta es la característica que hace única a ColabEdu: la misma competencia pedagógica aparece en AP, IB, LOMLOE y EBAU bajo diferentes nombres. La plataforma declara formalmente estas equivalencias para que el contenido creado para un estándar esté **automáticamente disponible** para estudiantes de otro programa.
+
+### Los Cinco Puentes Universales de Habilidades (Español)
+
+<Tabs>
+  <TabItem label="Comprensión Lectora">
+    **ID de Habilidad:** `interpretive_reading` · Anclaje MCER: A1–C2
+
+    | Estándar | Tarea | Descripción |
+    |----------|-------|-------------|
+    | AP SLC | `comp.ap.slc.interpretive` | Comunicación Interpretiva — Lectura (Modo 1) |
+    | AP SLIT | `comp.ap.slit.reading_multiple_choice` | Sección I Parte A — Comprensión de texto literario |
+    | LOMLOE LCL | `CE.LCL.A.2` | Criterio de evaluación — Comprensión lectora |
+    | IB Spanish B | `ib.sb.reading` | Paper 1 — Comprensión (SL/HL) |
+    | IB Spanish A | `ib.sa.paper1` | Paper 1 — Análisis literario guiado (texto no visto) |
+    | EBAU | `ebau.comprension_lectora` | Pregunta de comprensión lectora |
+
+    Cualquier spec etiquetada con estas habilidades puede ser descubierta por un itinerario LOMLOE, AP o IB — sin mapeo manual.
+  </TabItem>
+  <TabItem label="Argumentación">
+    **ID de Habilidad:** `argumentation` · Anclaje MCER: B2–C2
+
+    | Estándar | Tarea | Descripción |
+    |----------|-------|-------------|
+    | AP SLC | `comp.ap.slc.frq_task2` | FRQ Tarea 2 — Ensayo argumentativo con 3 fuentes |
+    | AP SLIT | `comp.ap.slit.frq_task2` | FRQ — Ensayo temático comparando dos textos literarios |
+    | LOMLOE LCL | `CE.LCL.B.1.4` | Producción de textos argumentativos |
+    | IB Spanish B | `ib.sb.writing` | Paper 2 — Tarea escrita (argumentativa/persuasiva) |
+    | IB Spanish A | `ib.sa.paper2` | Paper 2 — Ensayo comparativo con tesis |
+    | EBAU | `ebau.redaccion_argumentativa` | Redacción argumentativa |
+
+    El AP FRQ Tarea 2, el IB Paper 2 y la redacción de la EBAU son la misma macrocompetencia expresada a diferentes niveles de formalidad. Un alumno que domina una la transfiere directamente a las demás.
+  </TabItem>
+  <TabItem label="Expresión Oral Interactiva">
+    **ID de Habilidad:** `interpersonal_speaking` · Anclaje MCER: A2–C1
+
+    | Estándar | Tarea | Descripción |
+    |----------|-------|-------------|
+    | AP SLC | `comp.ap.slc.frq_task3` | FRQ Tarea 3 — Conversación simulada (5 turnos, 20 seg cada uno) |
+    | LOMLOE LCL | `CE.LCL.B.2.1` | Interacción oral en situaciones formales e informales |
+    | IB Spanish B | `ib.sb.oral` | Oral individual — conversación con el profesor (15 min) |
+    | IB Spanish A | `ib.sa.ioa` | Oral individual — temas literarios y globales (15 min, HL) |
+
+    Brecha crítica para estudiantes de herencia en AP SLC. Los ejercicios de LOMLOE CE.LCL.B.2.1 e IB oral pueden cubrir esta brecha en un bundle de currículo AP.
+  </TabItem>
+  <TabItem label="Análisis Literario">
+    **ID de Habilidad:** `literary_analysis` · Anclaje MCER: C1–C2
+
+    | Estándar | Tarea | Descripción |
+    |----------|-------|-------------|
+    | AP SLIT | `comp.ap.slit.frq_task1` | FRQ Tarea 1 — Ensayo corto: análisis textual de un poema o prosa |
+    | LOMLOE LCL | `CE.LCL.C.1` | Análisis de textos literarios |
+    | IB Spanish A | `ib.sa.paper1` | Paper 1 — Análisis literario guiado (texto no visto) |
+    | EBAU | `ebau.comentario_literario` | Comentario de texto literario guiado |
+
+    El AP FRQ Tarea 1, el LOMLOE CE.LCL.C.1, el IB Paper 1 y el comentario de la EBAU son equivalentes en competencia pedagógica. La diferencia está en el alcance y el texto fuente, no en la habilidad evaluada.
+  </TabItem>
+  <TabItem label="Comparación Cultural">
+    **ID de Habilidad:** `cultural_comparison` · Anclaje MCER: B1–C2
+
+    | Estándar | Tarea | Descripción |
+    |----------|-------|-------------|
+    | AP SLC | `comp.ap.slc.frq_task4` | FRQ Tarea 4 — Comparación cultural (presentación oral de 2 min) |
+    | AP SLIT | `comp.ap.slit.frq_task3` | FRQ Tarea 3 — Análisis cultural/histórico con arte visual |
+    | LOMLOE LCL | `CE.LCL.C.2` | Comparación de textos de distintas épocas y culturas |
+    | IB Spanish B | `ib.sb.oral` | Oral individual — comparación cultural entre dos comunidades |
+    | IB Spanish A | `ib.sa.ioa` | Oral individual — cuestiones globales vinculadas a texto literario |
+  </TabItem>
+</Tabs>
+
+---
+
+## 4. Los Ficheros YAML de Taxonomía
+
+Todo el sistema de competencias se declara en tres tipos de ficheros YAML dentro del repositorio `ce-specs`. Estos ficheros son la **fuente única de verdad** que consumen todos los agentes de IA.
+
+### Mapa de Ficheros
+
+```
+ce-specs/catalog/
+│
+├── global/
+│   ├── taxonomy.competency_transversal.v1.yaml     ← capa HORIZONTAL
+│   │   (Competencias Clave UE, mappings nacionales,
+│   │    reglas de inferencia, equivalencias entre estándares)
+│   │
+│   └── subject_areas/
+│       ├── taxonomy.subject_area.spanish_language.v1.yaml   ← capa VERTICAL (L1/L2)
+│       └── taxonomy.subject_area.spanish_literature.v1.yaml ← capa VERTICAL (Literatura)
+│
+├── es/
+│   └── taxonomy.std.lomloe.yaml                    ← específico España (Capa 2)
+│
+└── global/
+    ├── taxonomy.std.ap.yaml                         ← específico AP (Capa 2)
+    └── taxonomy.ib_standards.v1.yaml                ← específico IB (Capa 2)
+```
+
+### Qué Contiene Cada Fichero
+
+**`taxonomy.competency_transversal.v1.yaml`** (horizontal, global)
+- `eu_key_competences` — las 8 Competencias Clave UE con mappings a LOMLOE CC, IB LP, OCDE, P21
+- `national_mappings` — cómo cada país adapta el marco europeo
+- `standard_task_rules` — reglas de inferencia deterministas por tipo de tarea (AP FRQ → Competencias Clave UE)
+- `cross_standard_equivalencies` — los 5 puentes de habilidades universales con `task_id` para cada estándar
+
+**`taxonomy.subject_area.spanish_language.v1.yaml`** (vertical, global)
+- `cefr_levels` con equivalencias ACTFL
+- `skills` (receptivas, productivas, interactivas) con `standard_mappings`
+- `micro_competencies` con niveles Bloom
+- `classifier_rules` — reglas if/then para inferencia automática de habilidades a partir de metadatos de tarea
+
+**`taxonomy.std.ap.yaml` / `taxonomy.std.lomloe.yaml`** (específico por estándar)
+- El vocabulario de competencias propio de cada programa (Tareas FRQ de AP, Criterios de Evaluación de LOMLOE)
+- Cada tarea tiene un campo `capa1_skills` que hace de puente hacia el vocabulario universal de habilidades
+
+<Aside type="caution">
+**Regla de diseño:** Los ficheros de taxonomía de área curricular (`subject_areas/`) **nunca** contienen equivalencias entre estándares. Las equivalencias entre estándares **siempre** residen en `taxonomy.competency_transversal.v1.yaml`. Mantener estas responsabilidades separadas es lo que hace extensible al sistema sin tocar todos los ficheros al añadir un nuevo estándar.
+</Aside>
+
+---
+
+## 5. Cómo Utilizan Estos Ficheros los Agentes de IA
+
+### 5.1 ACA / Curator — Pipeline de Ingestión
+
+El pipeline de ingestión por batches tiene una etapa dedicada `classify` entre `parse` y `approval`:
+
+```
+taxonomy → discover → fetch → parse → [classify] → approval → ingest
+```
+
+Durante `classify`, el **CompetencyClassifier** aplica esta secuencia:
+
+1. **Lee** `source_standard` de la spec generada por `parse` (p. ej., `AP_SPANISH_FRQ_TASK1`)
+2. **Busca** `capa1_skills` en `taxonomy.std.ap.yaml` → `[interpersonal_writing, formal_register]`, MCER `[B2, C1]`
+3. **Confirma** con `classifier_rules` en `taxonomy.subject_area.spanish_language.v1.yaml`
+4. **Infiere** etiquetas transversales desde `standard_task_rules` en `taxonomy.competency_transversal.v1.yaml` → `EU_CCL`, `CPSAA`
+5. **Escribe** `competency_tags` (vertical) y `transversal_competency_tags` (horizontal) en los metadatos de la spec
+
+Este proceso es **determinista para tipos de tarea conocidos** (sin LLM). La inferencia con LLM se utiliza solo como fallback para tipos de tarea desconocidos.
+
+### 5.2 Asistente de Creación de Ejercicios
+
+Cuando un docente crea un ejercicio y selecciona un criterio de evaluación (p. ej., AP FRQ Tarea 2), el asistente automáticamente:
+
+1. Carga la taxonomía del estándar correspondiente (ficheros [C]) para mostrar los detalles del criterio
+2. Llama al CompetencyClassifier para etiquetar el ejercicio generado con competencias verticales + horizontales
+3. Utiliza `cross_standard_equivalencies` para sugerir rúbricas de tareas equivalentes en otros estándares
+
+El resultado: un docente que trabaja con AP Spanish crea un ejercicio que queda automáticamente disponible para un bundle de currículo LOMLOE o IB — sin ningún esfuerzo adicional.
+
+### 5.3 Agente de Calificación
+
+El pipeline de calificación utiliza las etiquetas de competencias de dos maneras:
+
+**Selección de rúbrica:** El `GradingOrchestrator` selecciona rúbricas no solo por estándar sino por `competency_tags`. Si existe un ejercicio de AP FRQ Tarea 3, puede evaluarse con una rúbrica de LOMLOE CE.LCL.B.2.1 (misma habilidad `interpersonal_speaking`, mismo nivel MCER B2) si esa rúbrica es más rica o apropiada.
+
+**Reporting de cobertura:** Tras la calificación, el sistema agrega `transversal_competency_tags` para generar dashboards de cobertura de competencias — mostrando qué Competencias Clave UE y LOMLOE CC ha desarrollado un alumno en todos sus ejercicios, con independencia de la materia.
+
+```
+Alumno completa 20 ejercicios → El sistema informa:
+  EU_CCL cubierta:   15 ejercicios (75%)   ← Competencia comunicación lingüística
+  EU_CCEC cubierta:   5 ejercicios (25%)   ← Conciencia y expresión cultural
+  CPSAA cubierta:     8 ejercicios (40%)   ← Personal/aprender a aprender
+  → Recomendación: añadir ejercicios de comparación cultural (brecha EU_CCEC)
+```
+
+---
+
+## 6. Impacto Práctico: Reutilización de Contenidos entre Países
+
+El sistema de equivalencias entre estándares desbloquea un beneficio económico y pedagógico concreto: **los ejercicios creados para un programa pueden reutilizarse en otro sin curación manual**.
+
+### Flujo Completo: De Spec AP a Bundle LOMLOE
+
+```
+[Autor crea ejercicio AP FRQ Task 2]
+         ↓
+[CompetencyClassifier — determinista, sin LLM]
+  lee: taxonomy.std.ap.yaml → capa1_skills
+  confirma: taxonomy.subject_area.spanish_language.v1.yaml
+  infiere: taxonomy.competency_transversal.v1.yaml
+         ↓
+[Spec se almacena con metadatos completos]
+  competency_tags:             ← VERTICAL
+    skills: [presentational_writing, argumentation, source_analysis]
+    cefr:   [C1]
+    bloom:  [ANALYZE, EVALUATE]
+  transversal_competency_tags: ← HORIZONTAL
+    eu_key_competences: [EU_CCL, EU_CPSAA]
+    lomloe_cc:          [CCL, CPSAA]
+         ↓
+[BundleAssembler LOMLOE busca gap CE.LCL.B.1.4]
+  competency_query: {skills: [argumentation], cefr: [C1]}
+  → devuelve el ejercicio AP como candidato válido  ✓
+         ↓
+[GradingOrchestrator califica con rúbrica LOMLOE]
+  → usa la rúbrica CE.LCL.B.1.4 original          ✓
+  → los tags no alteran la calificación            ✓
+```
+
+### Cómo Consulta el BundleAssembler las Equivalencias
+
+Un bundle de currículo LOMLOE que solicita 20 ejercicios de comprensión lectora utiliza una `competency_query` en lugar de un token específico de programa:
+
+```yaml
+# Itinerario LOMLOE solicitando ejercicios de comprensión lectora
+content_targets:
+  - spec_type: BLOCK_CONTENT
+    count: 20
+    competency_query:
+      skills: [interpretive_reading]
+      cefr:   [B2, C1]
+      language: es
+```
+
+Esta consulta se ejecuta contra una columna JSONB indexada con GIN en PostgreSQL y devuelve ejercicios etiquetados con `interpretive_reading` + `B2/C1` — con independencia de si fueron creados originalmente para AP, LOMLOE, IB o EBAU. El sistema **no tiene sesgo nacional**.
+
+### Escenarios de Reutilización Concretos
+
+| Escenario | Estándar origen | Estándar destino | Competencia puente |
+|-----------|----------------|-------------------|-------------------|
+| Heritage speakers en AP SLC | LOMLOE / IB Oral | AP FRQ Task 3 | `interpersonal_speaking` B2 |
+| Bundle EBAU con material AP | AP FRQ Task 2 | EBAU redacción | `argumentation` C1 |
+| Curso IB ampliado con LOMLOE | LOMLOE CE.LCL.C.1 | IB Spanish A Paper 1 | `literary_analysis` C1–C2 |
+| Dashboard EU para colegios ES | Cualquier ejercicio | Competencias Clave UE | Todas via `transversal_competency_tags` |
+
+### Añadir un Nuevo Estándar
+
+Extender el sistema a un nuevo país (p. ej., Brasil con BNCC o México con SEP) requiere cambios en solo tres ficheros:
+
+1. **Crear** `br/taxonomy.std.bncc.yaml` con competencias BNCC y puentes `capa1_skills`
+2. **Añadir** `standard_mappings` para BNCC en `taxonomy.subject_area.portuguese_language.v1.yaml` (pocas líneas)
+3. **Añadir** `standard_task_rules` para tipos de tarea BNCC en `taxonomy.competency_transversal.v1.yaml`
+
+**No se requieren cambios en el código.** El ACA, el BundleAssembler y el GradingOrchestrator soportan el nuevo estándar de forma automática.
+
+---
+
+## 7. Documentos Relacionados
+
+| Documento | Propósito |
+|-----------|-----------|
+| [Rúbricas de Lengua y Literatura](/es/taxonomies/language-literature/) | Bloques de rúbrica C0 LOMLOE para Lengua Castellana y Literatura en ESO |
+| [Crosswalk de Estándares Educativos](/es/standards/) | Tabla de mapping: cómo se traducen los conceptos educativos entre AP, IB, LOMLOE y SEP |
+| [Referencia YAML OAS](/es/specs-repository/oas-yaml-reference/) | Referencia completa del esquema de ficheros YAML spec, incluido `competency_tags` |
+| [Repositorio de Specs](/es/specs-repository/) | Visión general del catálogo GitOps de ce-specs |

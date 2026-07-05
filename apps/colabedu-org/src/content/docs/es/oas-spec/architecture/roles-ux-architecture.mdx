@@ -1,0 +1,69 @@
+---
+title: "Roles y Arquitectura de UX"
+description: "Diseño y orquestación de la interfaz de usuario basada en roles en ColabEdu."
+---
+
+import { Aside, Steps, Tabs, TabItem } from '@astrojs/starlight/components';
+
+# Roles y Arquitectura de UX
+
+ColabEdu presenta una interfaz de usuario (**UX**) unificada pero **sensible al rol** del usuario autenticado. Para evitar lógica de control de acceso pesada o duplicada en el frontend (Flutter), el backend utiliza el patrón **A2UI** (Adaptive Agent UI), dictando de forma dinámica qué elementos y opciones visualiza el usuario en su pantalla.
+
+---
+
+## 1. Estructura de Pestañas (Tab Model)
+
+El entorno de trabajo se organiza mediante una barra de pestañas persistente en la cabecera. Existen dos tipos de pestañas:
+
+| Pestaña | Tipo | Comportamiento al iniciar | Cierre |
+|---|---|---|---|
+| `dashboard` | **Fijo** | Siempre abierta al iniciar la aplicación | ❌ No closeable |
+| `command-center` | Dinámico | Se abre al pulsar el icono de buzón 📬 en la topbar | ✔ Closeable |
+| `job-{id}` | Dinámico | Se abre al seleccionar un trabajo en el command center | ✔ Closeable |
+
+Cada pestaña de trabajo (`job-{id}`) contiene un contenedor independiente con su propia sesión del **AI Companion**, permitiendo al usuario operar múltiples pipelines de curación o grading en paralelo.
+
+---
+
+## 2. Iconos de Topbar y Controles por Rol
+
+Los controles que se muestran en la barra superior son filtrados por el backend en base a los claims del token JWT de Firebase Auth:
+
+| Icono | Acción | STUDENT | TEACHER | SCHOOL_ADMIN | CONTENT_CREATOR | PLATFORM_ADMIN |
+|---|---|:---:|:---:|:---:|:---:|:---:|
+| 🧭 Explorar | Abre el explorador de taxonomía | ✅ | ✅ | ✅ | ✅ | ✅ |
+| 📬 Inbox | Abre la pestaña `command-center` | ❌ | ✅ | ✅ | ✅ | ✅ |
+| 🌳 Spec Manager | Accede al gestor de specs YAML | ❌ | ❌ | ❌ | ✅ | ✅ |
+| 👤 Perfil | Configuración y cierre de sesión | ✅ | ✅ | ✅ | ✅ | ✅ |
+
+---
+
+## 3. Lógica de Navegación del Dashboard
+
+La pestaña principal `dashboard` carga dinámicamente el nodo raíz correspondiente a las atribuciones del rol del usuario:
+
+* **STUDENT:** Entra directamente en el nodo de su aula activa.
+* **TEACHER:** Entra en el nodo de su organización escolar principal (`primaryOrganizationId`).
+* **SCHOOL_ADMIN:** Accede a la raíz de administración de su escuela.
+* **CONTENT_CREATOR / PLATFORM_ADMIN:** Accede a la raíz global del catálogo para gestionar todos los tenants y escuelas.
+
+---
+
+## 4. Accesos Directos (Sidebar Shortcuts)
+
+Para evitar la navegación repetitiva, la pestaña `dashboard` incluye un panel lateral con atajos rápidos. El backend los inyecta dinámicamente:
+
+```json
+{
+  "label": "sidebar.my_classrooms",
+  "icon": "class_outlined",
+  "action": "goto_node",
+  "nodeId": "uuid-of-classroom",
+  "nodeType": "CLASSROOM",
+  "badge": 3
+}
+```
+
+* **Atajos de Alumno:** *Mis Tareas* (con contador de tareas vencidas), *Mis Aulas* y *Mi Progreso*.
+* **Atajos de Profesor:** *Mis Aulas*, *Tareas por corregir* (con contador de entregas pendientes) y *Acciones de creación rápida* (Wizard).
+* **Atajos de Administrador:** *Profesores* (con alertas de aprobación pendientes) y *Alumnos matriculados*.

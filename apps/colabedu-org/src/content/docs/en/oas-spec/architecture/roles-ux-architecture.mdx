@@ -1,0 +1,69 @@
+---
+title: "Roles and UX Architecture"
+description: "Design and orchestration of role-based user interfaces in ColabEdu."
+---
+
+import { Aside, Steps, Tabs, TabItem } from '@astrojs/starlight/components';
+
+# Roles and UX Architecture
+
+ColabEdu features a unified yet **role-sensitive** user interface (**UX**). To prevent redundant access-control checks in the frontend (Flutter), the backend utilizes the **A2UI** (Adaptive Agent UI) pattern to dynamically decide which view elements, actions, and menus are visible to the user.
+
+---
+
+## 1. Application Tab Model
+
+The workspace is organized via a persistent tab bar at the top of the screen. Tabs are categorized into two types:
+
+| Tab | Type | Behavior at Startup | Closing |
+|---|---|---|---|
+| `dashboard` | **Fixed** | Always open at startup | ❌ Non-closeable |
+| `command-center` | Dynamic | Opens when clicking the 📬 inbox icon in the topbar | ✔ Closeable |
+| `job-{id}` | Dynamic | Opens when selecting a job in the command center | ✔ Closeable |
+
+Each dynamic workspace tab (`job-{id}`) runs its own independent **AI Companion** chat session, allowing users to execute and monitor multiple concurrent pipelines.
+
+---
+
+## 2. Topbar Icons by Role
+
+The topbar configuration is filtered server-side based on the authenticated user's Firebase Auth JWT claims:
+
+| Icon | Action | STUDENT | TEACHER | SCHOOL_ADMIN | CONTENT_CREATOR | PLATFORM_ADMIN |
+|---|---|:---:|:---:|:---:|:---:|:---:|
+| 🧭 Explore | Opens the taxonomy tree explorer | ✅ | ✅ | ✅ | ✅ | ✅ |
+| 📬 Inbox | Opens the `command-center` tab | ❌ | ✅ | ✅ | ✅ | ✅ |
+| 🌳 Spec Manager | Opens the YAML Spec Manager view | ❌ | ❌ | ❌ | ✅ | ✅ |
+| 👤 Profile | Account settings and logout | ✅ | ✅ | ✅ | ✅ | ✅ |
+
+---
+
+## 3. Dashboard Navigation Entry Points
+
+The `dashboard` tab automatically loads the root navigation node corresponding to the user's role and tenant mapping:
+
+* **STUDENT:** Lands directly inside their first active classroom enrollment node.
+* **TEACHER:** Lands in their primary assigned school organization (`primaryOrganizationId`).
+* **SCHOOL_ADMIN:** Accesses the root of their school organization.
+* **CONTENT_CREATOR / PLATFORM_ADMIN:** Accesses the global catalog root to manage all tenants, courses, and schools.
+
+---
+
+## 4. Sidebar Shortcuts
+
+To bypass deep menu navigation, the dashboard view features a sidebar containing role-specific quick shortcuts injected dynamically by the backend:
+
+```json
+{
+  "label": "sidebar.my_classrooms",
+  "icon": "class_outlined",
+  "action": "goto_node",
+  "nodeId": "uuid-of-classroom",
+  "nodeType": "CLASSROOM",
+  "badge": 3
+}
+```
+
+* **Student Shortcuts:** *My Assignments* (with due-date urgency badges), *My Classrooms*, and *My Progress*.
+* **Teacher Shortcuts:** *My Classrooms*, *To Grade* (with pending submission counters), and *Quick Create Wizard* actions.
+* **Administrator Shortcuts:** *Teachers* (with pending approval alerts) and *Registered Students*.

@@ -1,0 +1,46 @@
+---
+// Página intermediaria de detección de idioma.
+// Redirige a /es/ o /en/ según la preferencia del navegador.
+// Respeta la preferencia guardada en localStorage ('colabedu_lang').
+---
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ColabEdu — Redirecting...</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            background: #f8fafc;
+            color: #64748b;
+        }
+    </style>
+    <script is:inline>
+        (function () {
+            var saved = localStorage.getItem('colabedu_lang');
+            var lang = saved
+                || (navigator.languages && navigator.languages[0])
+                || navigator.language
+                || 'es';
+
+            var dest = lang.startsWith('en') ? '/en/' : '/es/';
+
+            // Guardar preferencia si es la primera vez
+            if (!saved) {
+                localStorage.setItem('colabedu_lang', lang.startsWith('en') ? 'en' : 'es');
+            }
+
+            window.location.replace(dest);
+        })();
+    </script>
+</head>
+<body>
+    <p>Redirecting / Redirigiendo…</p>
+</body>
+</html>

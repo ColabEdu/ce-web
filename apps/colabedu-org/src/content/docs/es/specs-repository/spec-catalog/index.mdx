@@ -1,0 +1,51 @@
+---
+title: Catálogos
+description: Índice de catálogos del SpecManager de ColabEdu — tipos de ejercicio, IDs canónicos y referencias del ecosistema OAS.
+sidebar:
+  order: 1
+  label: "Catálogos"
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+El **SpecManager de ColabEdu** registra todas las especificaciones pedagógicas
+del ecosistema OAS en una base de datos versionada y trazable en Git.
+
+Esta sección contiene los catálogos de referencia para desarrolladores de contenido
+e integradores de curriculum.
+
+---
+
+<CardGrid>
+  <Card title="Tipos de Ejercicio (C1)" icon="puzzle">
+    Los 21 tipos de ejercicio agnósticos a la materia: quizzes, ensayos, pizarras
+    digitales, debate socrático y más.
+    
+    [Ver catálogo de tipos →](/es/specs-repository/spec-catalog/exercise-types/)
+  </Card>
+  <Card title="Referencia del Catálogo" icon="list-format">
+    Los 692 IDs canónicos del SpecManager: taxonomías, rúbricas C0, recetas C1,
+    personas, bundles y templates de ruta.
+    
+    [Ver referencia completa →](/es/specs-repository/spec-catalog/catalog/)
+  </Card>
+</CardGrid>
+
+---
+
+## ¿Cómo usar estos catálogos?
+
+Los IDs canónicos se referencian en los ficheros YAML OAS mediante los campos
+`rubricRef`, `personaRef`, `recipeRef` y similares:
+
+```yaml
+# En un ejercicio, referenciar un tipo y una rúbrica:
+spec:
+  exerciseTypeRef: global.exercise_type.whiteboard.v1
+  rubricRef: global.c0.whiteboard.stem.math.v1
+```
+
+El catálogo se actualiza automáticamente al ejecutar:
+```bash
+bash ce-cli.sh taxonomy catalog docs
+```

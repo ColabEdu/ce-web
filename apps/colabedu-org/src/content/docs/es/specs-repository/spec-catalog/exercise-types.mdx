@@ -1,0 +1,213 @@
+---
+title: Catálogo de Tipos de Ejercicio (C1)
+description: Tipos de Ejercicio (Exercise Scaffolds) en la arquitectura OAS — moldes de UI agnósticos a la materia que se cruzan con contenido C2 y rúbricas C0.
+sidebar:
+  order: 2
+  label: "Tipos de Ejercicio (C1)"
+---
+
+import { Badge, Card, CardGrid, Tabs, TabItem } from '@astrojs/starlight/components';
+
+**Arquitectura:** Open Assessment Standard (OAS v1beta1)  
+**Capa:** C1 (Exercise Types / Plantillas Estructurales)
+
+En la arquitectura OAS, un **Tipo de Ejercicio** es un *esqueleto de UI ciego a la materia*. No contiene preguntas específicas ni leyes curriculares — contiene la **lógica de widgets** y el **motor de evaluación base**. El contenido (C2) y la rúbrica (C0) se inyectan en tiempo de ejecución.
+
+---
+
+## Tipos disponibles
+
+| `referenceCode` | Título | Evaluación | Estado |
+|---|---|---|---|
+| `core.etype.split_pane_essay.v1` | Ensayo Guiado (Pantalla Dividida) | Rúbrica IA | <Badge text="Activo" variant="success" /> |
+| `core.etype.mixed_quiz.v1` | Quiz Compuesto | Determinista | <Badge text="Activo" variant="success" /> |
+| `core.etype.multimodal_mcq.v1` | MCQ Multimodal + Chatbot | IA + Determinista | <Badge text="Activo" variant="success" /> |
+| `core.etype.grouping.v1` | Agrupación (Drag & Drop) | Determinista | <Badge text="Activo" variant="success" /> |
+| `core.etype.matching.v1` | Emparejamiento | Determinista | <Badge text="Activo" variant="success" /> |
+| `core.etype.ordering.v1` | Ordenación | Determinista | <Badge text="Activo" variant="success" /> |
+| `core.etype.socratic_tutor.v1` | Tutor Socrático | Log IA + transcript | <Badge text="Activo" variant="success" /> |
+| `core.etype.socratic_debate.v1` | Debate Socrático | Log IA + rúbrica | <Badge text="Activo" variant="success" /> |
+| `core.etype.syntactic_analysis.v1` | Análisis Sintáctico Interactivo | Determinista | <Badge text="Activo" variant="success" /> |
+| `global.exercise_type.mcq.v1` | Opción Múltiple (MCQ simple) | Determinista | <Badge text="Activo" variant="success" /> |
+| `global.exercise_type.free_text.v1` | Texto Libre / Ensayo | Rúbrica IA | <Badge text="Activo" variant="success" /> |
+| `global.exercise_type.guided_activity.v1` | Actividad Guiada con Tutor | Log IA + rúbrica | <Badge text="Activo" variant="success" /> |
+| `global.exercise_type.document_submission.v1` | Entrega de Documento | OCR + rúbrica IA | <Badge text="Activo" variant="success" /> |
+| `global.exercise_type.whiteboard.v1` | **Pizarra Digital** | **Gemini Vision (PNG)** | <Badge text="Nuevo" variant="tip" /> |
+
+---
+
+## Detalle por tipo
+
+### `core.etype.split_pane_essay.v1` — Ensayo Guiado
+
+El alumno lee el texto fuente en el **panel izquierdo** (`markdown_viewer_widget`) y redacta su respuesta en el **panel derecho** (`markdown_editor_widget`). El informe incluye desglose de rúbrica y tabla de diferencias de ortografía.
+
+*Casos de uso:* comentario literario, ensayo histórico, resumen científico, análisis de fuente primaria.
+
+---
+
+### `core.etype.mixed_quiz.v1` — Quiz Compuesto
+
+Los `ui_components` están **vacíos intencionalmente** — la secuencia de preguntas la define el bloque C2 (`AssessmentItem`). Permite combinar libremente MCQ, huecos, respuesta corta y otros widgets en un único flujo adaptativo.
+
+*Casos de uso:* examen tipo IB Paper 1, test de comprensión lectora con preguntas mixtas.
+
+---
+
+### `core.etype.multimodal_mcq.v1` — MCQ Multimodal
+
+Tres widgets simultáneos:
+- **`document_viewer_widget`** (panel superior) — visualiza el documento o instrucciones C2
+- **`mcq_form_widget`** (panel inferior) — preguntas MCQ + respuesta libre mezcladas
+- **`chatbot_companion_widget`** (flotante) — compañero socrático con pistas proactivas
+
+*Casos de uso:* comprensión lectora con gráfico, análisis de imagen histórica, lectura de paper científico.
+
+---
+
+### `core.etype.grouping.v1` — Agrupación
+
+Widget de **drag-and-drop** donde el alumno arrastra elementos a categorías definidas en el bloque C2.
+
+*Casos de uso:* clasificar organismos por reino, agrupar causas/consecuencias, ordenar fuentes históricas por tipo.
+
+---
+
+### `core.etype.matching.v1` — Emparejamiento
+
+El alumno relaciona elementos de dos columnas. Evaluación determinista con puntuación parcial configurable.
+
+*Casos de uso:* vocabulario y definiciones, fechas y eventos, fórmulas y nombres.
+
+---
+
+### `core.etype.ordering.v1` — Ordenación
+
+Drag-and-drop para ordenar una lista de elementos según un criterio (cronológico, lógico, etc.).
+
+*Casos de uso:* pasos del método científico, cronología histórica, orden de operaciones matemáticas.
+
+---
+
+### `core.etype.socratic_tutor.v1` — Tutor Socrático
+
+Interfaz de chat (`chat_interface_widget` en modo `socratic`). La IA sigue un guion de preguntas guiadas —no da respuestas directas, sino que conduce al alumno a descubrirlas. El informe incluye transcript de conversación y desglose de rúbrica.
+
+*Casos de uso:* preparación de Individual Oral IB, análisis filosófico, roleplay histórico.
+
+---
+
+### `core.etype.socratic_debate.v1` — Debate Socrático
+
+Variante del tutor socrático en modo `debate`. El alumno defiende una posición y la IA rebate con argumentos contrarios. Incluye transcript + feedback evaluativo.
+
+*Casos de uso:* debate de dilemas éticos, defensa de tesis, preparación de examen oral AP.
+
+---
+
+### `core.etype.syntactic_analysis.v1` — Análisis Sintáctico
+
+Widget especializado (`syntactic_analysis_widget`) que permite al alumno etiquetar constituyentes sintácticos sobre una oración. Incluye un conjunto predefinido de etiquetas:
+
+> Sujeto · Predicado Verbal/Nominal · SN · SV · SPrep · SAdj · SAdv · Núcleo · Determinante · CD · CI · CRég · CC · Atributo · CPvo · CAg · Adyacente · Nexo
+
+*Casos de uso:* análisis sintáctico LOMLOE (Lengua Castellana y Literatura), preparación EBAU, ejercicios de gramática IB.
+
+---
+
+### `global.exercise_type.mcq.v1` — Opción Múltiple Simple
+
+MCQ clásico con `radio_button_group_widget`. Evaluación determinista. Sin companion ni documento de referencia adicional.
+
+*Casos de uso:* test rápido de vocabulario, preguntas de comprensión directa, autoevaluación.
+
+---
+
+### `global.exercise_type.free_text.v1` — Texto Libre / Ensayo
+
+Editor Markdown abierto sin restricción de formato. La IA evalúa contra la rúbrica C0 inyectada mediante `free_text_rubric_evaluation`.
+
+*Casos de uso:* respuesta abierta de examen, reflexión personal, desarrollo argumentativo libre.
+
+---
+
+### `global.exercise_type.guided_activity.v1` — Actividad Guiada
+
+Combinación de tres widgets: `split_screen_layout` + `document_viewer_widget` + `chatbot_companion_widget` + `markdown_editor_widget`. El tutor IA guía al alumno paso a paso. El informe registra el log de interacción con el tutor y la evaluación de la respuesta final.
+
+*Casos de uso:* tarea de investigación asistida, escritura por etapas, análisis guiado de fuente primaria.
+
+---
+
+### `global.exercise_type.document_submission.v1` — Entrega de Documento
+
+El alumno sube un fichero (`file_picker_widget`). El sistema extrae el texto mediante OCR y lo evalúa con la rúbrica C0 usando `free_text_rubric_evaluation`.
+
+*Casos de uso:* entrega de trabajo escrito a mano, portafolio, documento escaneado.
+
+---
+
+### `global.exercise_type.whiteboard.v1` — Pizarra Digital <Badge text="Nuevo" variant="tip" />
+
+El alumno dibuja libremente en un canvas (`whiteboard_widget`). Al entregar, se captura un **PNG** y se envía a **Gemini Vision** para evaluación automática contra la rúbrica C0.
+
+<Tabs>
+  <TabItem label="Modos de interacción">
+    | Modo | Descripción |
+    |---|---|
+    | `standalone` | Canvas a pantalla completa. Enunciado en panel lateral o cabecera. |
+    | `split_pane` | Panel izquierdo: documento C2 de referencia. Panel derecho: canvas de dibujo. |
+    | `overlay` | Whiteboard transparente sobre una slide de InteractiveLesson (scratchpad efímero, no genera AssessmentItem). |
+  </TabItem>
+  <TabItem label="Widgets">
+    - `whiteboard_widget` — Canvas de dibujo libre (flutter_painter_v2)
+    - `document_viewer_widget` — Panel de enunciado / figura de referencia
+    - `toolbar_widget` — Color, grosor, undo/redo, limpiar
+  </TabItem>
+  <TabItem label="Evaluación">
+    - `vision_ai_evaluation` — Gemini Vision evalúa el PNG contra la rúbrica C0
+    - `stroke_metadata_log` — Registro de trazos (tiempo, número de correcciones)
+    
+    **Rúbrica por defecto:** `global.c0.whiteboard.stem.math.v1`  
+    Criterios: *Completitud · Corrección conceptual · Claridad · Visibilidad del proceso*
+  </TabItem>
+  <TabItem label="Configuración mínima">
+    ```yaml
+    spec:
+      assembly:
+        param_refs:
+          - global.exercise_type.whiteboard.v1
+        rubric_refs:
+          - global.c0.whiteboard.stem.math.v1
+      evaluation:
+        capture_format: png
+        evaluator: vision_ai
+    ```
+  </TabItem>
+</Tabs>
+
+<CardGrid>
+  <Card title="STEM" icon="approve-check-circle">
+    Ecuaciones, diagramas de fuerzas, reacciones químicas, geometría, funciones, circuitos eléctricos.
+  </Card>
+  <Card title="Arte y otros" icon="puzzle">
+    Mapas conceptuales, esquemas anatómicos, croquis geográficos, notación musical básica.
+  </Card>
+</CardGrid>
+
+---
+
+## El secreto de la evaluación agnóstica
+
+Si la UI es la misma (ej. `split_pane_essay`), ¿cómo sabe la IA que corrige Historia y no Lengua? **La inyección de la Rúbrica (C0).**
+
+| C1 (Tipo) | C2 (Contenido) | C0 (Rúbrica) | Resultado |
+|---|---|---|---|
+| `split_pane_essay` | Poema de Lorca | Métrica, Figuras Literarias | Evaluación literaria |
+| `split_pane_essay` | Constitución 1812 | Causas, Consecuencias, Anacronismos | Evaluación histórica |
+| `whiteboard` | Enunciado de física | Diagrama de fuerzas, Unidades, Proceso | Evaluación STEM visual |
+| `syntactic_analysis` | Oración LOMLOE | Tags sintácticos permitidos | Evaluación gramatical |
+
+:::tip[Arquitectura Lego]
+Si ColabEdu lanza un producto para Facultades de Medicina, **no se programa ni una pantalla nueva**. Se añaden nuevos textos (C2) y rúbricas médicas (C0) al catálogo.
+:::

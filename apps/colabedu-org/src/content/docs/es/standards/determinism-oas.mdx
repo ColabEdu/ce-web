@@ -1,0 +1,49 @@
+---
+title: "Determinismo en la Evaluación IA con OAS"
+description: "Cómo la arquitectura de ColabEdu y la especificación OAS garantizan evaluaciones pedagógicas objetivas, matemáticas y libres de alucinaciones."
+sidebar:
+  order: 1
+---
+
+## El Desafío de la Inteligencia Artificial en la Educación
+
+Uno de los principales problemas para adoptar Modelos de Lenguaje Grande (LLMs) en el sector educativo es su naturaleza probabilística. Por defecto, un modelo de IA "adivina" la siguiente palabra en base a probabilidades estadísticas, lo que puede llevar a:
+
+- **Alucinaciones:** Inventar criterios, métricas o justificaciones que no existen.
+- **Inconsistencia:** El mismo examen calificado dos veces puede recibir notas diferentes.
+- **Sesgo Positivo (Adulación):** La tendencia de la IA a ser excesivamente indulgente para "complacer" al usuario, evitando dar un "Cero" incluso cuando la respuesta es totalmente incorrecta.
+- **Opacidad:** La imposibilidad de trazar exactamente por qué se otorgó una nota específica basándose en la normativa educativa legal.
+
+## La Solución: Assessment as Code
+
+**ColabEdu transforma la evaluación probabilística en un proceso determinista y matemático.**
+
+Para lograrlo, hemos diseñado el **OAS (Open Assessment Specification)**, que obliga a la IA a comportarse como un motor de ejecución estricto en lugar de un conversador creativo.
+
+### 1. Rúbricas Matemáticas y el "Cero Matemático"
+
+Nuestra arquitectura utiliza un sistema de nivelación estandarizado (típicamente **L0 a L4** o similar).
+
+La clave del éxito reside en la definición explícita del **L0 (Nivel 0)**. Las inteligencias artificiales, por diseño, evitan penalizar con dureza. Para contrarrestar este sesgo, en OAS **modelamos matemáticamente la ignorancia, la ausencia o el error crítico** como un estado explícito. Si la respuesta del estudiante cumple las condiciones del estado L0, la IA está forzada algorítmicamente a asignar ese valor, garantizando que un cero absoluto es una salida válida y predecible.
+
+### 2. La Arquitectura en Capas del OAS
+
+El OAS garantiza el determinismo separando la lógica en capas estrictas:
+
+*   **Capa C0 (Normativa Inmutable):** Esta es la "Piedra Rosetta". Convierte PDFs legales (como el BOE, SEP, IB) en ficheros YAML inmutables. Las rúbricas y criterios de evaluación residen aquí. La IA no puede modificar, inventar ni ignorar esta capa; solo puede leerla y aplicarla.
+*   **Capa C1 (Recetas y Ejercicios):** Define el contenedor del ejercicio (p.ej., un examen de literatura). Conecta el texto del estudiante con los bloques de la Capa C0 que deben aplicarse.
+*   **Capa C3 (Directivas Algorítmicas y Defensas):** Inyecta reglas de comportamiento duras, como la protección dialectal (p.ej., "No penalizar el *seseo* canario" o "No penalizar el *voseo* rioplatense") y el enrutamiento de severidad.
+
+### 3. Ejecución y Trazabilidad (Chain of Thought)
+
+Durante la calificación, ColabEdu emplea flujos de razonamiento estructurado (como el patrón *Chain of Thought*). La IA debe:
+1. Citar la evidencia exacta en el texto del estudiante.
+2. Referenciar el nodo exacto de la Capa C0 (p.ej., `es.c0.lomloe.lcl.eso.1.v1`).
+3. Justificar matemáticamente por qué la evidencia corresponde al nivel L1, L2, L3, etc.
+4. Emitir un JSON validado bajo un esquema estricto, que nuestros servicios backend (`ce-svc-ai-services`) parsean y verifican.
+
+Si la IA no cumple con el esquema JSON o intenta producir un formato conversacional, el sistema rechaza la salida y reintenta la ejecución, garantizando que solo datos deterministas lleguen a la base de datos y al informe del estudiante.
+
+## Resumen
+
+A través de la especificación OAS, el motor de ColabEdu aísla con éxito la creatividad del LLM y explota sus capacidades de comprensión lectora semántica, sometiéndolo a un arnés algorítmico y matemático. Esto permite una calificación de nivel institucional que es justa, auditable, trazable hasta el milímetro a la ley educativa y, sobre todo, **determinista**.

@@ -1,0 +1,75 @@
+---
+title: "GitOps y Federación de Repositorios"
+description: "Flujo GitOps para Agentes de IA y estructura federada de repositorios y nomenclatura en la arquitectura OAS."
+---
+
+# Flujo GitOps y Estructura Federada de Repositorios
+
+**Arquitectura:** Open Assessment Standard (OAS v1beta1)  
+**Área:** DevOps, MLOps, CI/CD, Indexación Spec Manager y Taxonomía.
+
+Este documento establece el canal de comunicación óptimo entre el *Agente Curador* (el LLM generador de contenido), Gitea (el almacenamiento en MicroK8s) y el *Spec Manager* (el backend Java), así como las convenciones estrictas de directorio y nomenclatura para una indexación correcta a través de múltiples repositorios descentralizados.
+
+---
+
+## 1. Flujo GitOps: Orquestando el Agente, Gitea y el Spec Manager
+
+Cuando un Agente de IA genera miles de ficheros YAML, el método de inyección de estos ficheros en la base de datos (PostgreSQL con pgvector) dicta la estabilidad de toda la plataforma.
+
+### Análisis de Opciones Arquitectónicas
+
+#### ❌ Opción A: Modificar el hostpath en MicroK8s directamente
+- **Mecánica:** El Agente Python escribe ficheros YAML directamente en disco.
+- **Veredicto:** **ANTIPATRÓN CRÍTICO. PROHIBIDO.**
+- **Por qué:** Modificar ficheros directamente en disco evita el servidor git. Gitea no reconocerá los cambios, los commits no se registrarán, el historial se corromperá y **los Webhooks no se dispararán**.
+
+#### ⚠️ Opción B: Enviar YAMLs directamente a la API del Spec Manager
+- **Mecánica:** El Agente hace una petición POST al backend Java. El Spec Manager guarda en PostgreSQL y hace un commit.
+- **Veredicto:** **Válido, pero acopla el sistema.**
+- **Por qué:** Convierte al Spec Manager en un CMS pesado y pierde trazabilidad si el YAML falla antes de la inserción. Rompe el principio GitOps.
+
+#### ✅ Opción C: El Agente interactúa con Gitea (La Arquitectura Ganadora)
+- **Mecánica:** El Agente de IA actúa como un "Junior Developer", usando la API REST de Gitea para crear Commits y Pull Requests. Gitea notifica al Spec Manager vía webhooks.
+- **Veredicto:** **EL ESTÁNDAR DE ORO (GitOps Puro).**
+- **Por qué:** Mantiene la separación de responsabilidades. Git es la Fuente Única de Verdad (SSOT) y permite revisión Human-in-the-Loop.
+
+### El Pipeline "GitOps Agéntico" (Paso a Paso)
+
+1. **El Agente Curador genera contenido**: El LLM procesa un PDF y genera un bloque YAML en memoria.
+2. **El Agente hace un Commit vía API**: El script hace una llamada API a Gitea (`POST /api/v1/repos/{owner}/{repo}/contents/{filepath}`) con el YAML en base64.
+3. **Validación CI y Aprobación**: Gitea ejecuta linters. Un humano aprueba el Merge a la rama principal.
+4. **Webhook de Gitea**: Gitea lanza un Webhook al **Spec Manager** indicando los cambios.
+5. **El Spec Manager actúa**: Descarga el YAML en bruto, lo transforma en entidades Java, vectoriza con LangChain4j y guarda en PostgreSQL (pgvector).
+
+**Beneficios:** Reversibilidad segura, Auditoría clara, Desacoplamiento arquitectónico.
+
+---
+
+## 2. Especificación GitOps: Estructura Federada de Repositorios
+
+En ColabEdu, Git es la **Fuente Única de Verdad (SSOT)**. Para garantizar la Soberanía de Datos (B2G/B2B), la arquitectura evoluciona de un monorepo a un modelo GitOps Federado.
+
+### Estrategia de Despliegue: Del Monorepo a la Federación
+
+- **FASE 1: El Monorepo Transitorio (Meses 1-12)**  
+  Todo vive en `colabedu-specs-repo`. Para simular la federación, usamos Namespaces en los nombres de fichero y carpetas lógicas (`/core/` vs `/tenants/sandbox/`).
+- **FASE 2: Federación Real (Escalado B2B/B2G)**  
+  Mover la carpeta del tenant a su propio repositorio privado y conectar el Webhook. Sin refactorización Java necesaria.
+
+### Arquitectura Federada Lógica (Core vs. Tenant)
+
+- **El "Core" (Gestionado por ColabEdu):** Esqueleto del sistema y conocimiento de dominio público (Leyes C0 Públicas, Taxonomías, Plantillas C1).
+- **Los "Tenants" (Gestionados por Clientes):** Información privada o personalizada (Rúbricas C0 Privadas, Textos C2 Sensibles, Recetas C1).
+
+### Reglas Estrictas de Nomenclatura (Notación con Punto)
+
+El campo `metadata.id` dentro del YAML debe coincidir exactamente con el nombre del fichero (sin la extensión `.yaml`).
+
+- **Taxonomía:** `taxonomy.[scope].[framework_name].v[version].yaml`
+- **Capa C0 (Rúbricas y Leyes):** `[namespace_org].[country].c0.[law_or_institution].[exam_or_topic].v[version].yaml`
+- **Capa C2 (Contextos y Textos):** `[namespace_org].[country].c2.[type].[source].[short_title].v[version].yaml`
+- **Capa C3 (Directivas):** `[namespace_org].[country].c3.directive.[behavior].v[version].yaml`
+
+### La Magia del "Spec Manager" y la Resolución de Crosswalks
+
+La base de datos relacional actúa como el "Linker" definitivo usando **URNs** para conectar piezas públicas (Core) y privadas (Tenant). Además, los Tenants pueden mapear sus rúbricas internas a estándares globales usando el bloque `maps_to_taxonomy`, permitiendo soberanía local sin perder el cumplimiento normativo general.

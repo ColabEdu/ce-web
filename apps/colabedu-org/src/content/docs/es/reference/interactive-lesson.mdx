@@ -1,0 +1,162 @@
+---
+title: "InteractiveLesson"
+description: "Documentación de referencia para el recurso InteractiveLesson en OAS."
+sidebar:
+  order: 33
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+# InteractiveLesson
+
+`InteractiveLesson` es un tipo de spec pedagógica generada por el **Agente Curador** a partir de paquetes LMS (Canvas `.imscc`, Moodle `.mbz`). Representa una lección estructurada con slides, widgets interactivos y objetivos de aprendizaje alineados a un currículo.
+
+<Aside type="note">
+`InteractiveLesson` se almacena como `BLOCK_CONTENT` con `kind: InteractiveLesson` en el SpecManager. No requiere cambios de esquema DDL.
+</Aside>
+
+---
+
+## Casos de Uso
+
+| Origen | Herramienta | Output |
+|---|---|---|
+| Paquete Canvas (`.imscc`) | `curator curate --source-type LMS_PACKAGE` | `InteractiveLesson` |
+| Paquete Moodle (`.mbz`) | `curator curate --source-type LMS_PACKAGE` | `InteractiveLesson` |
+| Canvas Commons (batch) | `docs discover --source canvas-commons` + `curator batch` | `InteractiveLesson[]` |
+
+---
+
+## Esquema YAML
+
+```yaml
+apiVersion: core.oas.colabedu.io/v1beta1
+kind: InteractiveLesson
+metadata:
+  name: <referenceCode>        # ej: es.lesson.bio.mitosis.bach1.v1
+  displayName: "<Título legible>"
+  description: "<Descripción pedagógica>"
+  tags:
+    - biology
+    - bachillerato
+  lmsSource:
+    platform: canvas            # canvas | moodle
+    packageId: "<id-del-paquete>"
+    url: "<url-original>"
+    importedAt: "2026-06-09T00:00:00Z"
+
+spec:
+  learningObjectives:
+    - "El estudiante comprende las fases de la mitosis."
+    - "El estudiante identifica diferencias entre mitosis y meiosis."
+
+  slides:
+    - id: slide_01
+      title: "Introducción a la Mitosis"
+      type: text_image           # text_image | quiz | video | interactive
+      content: |
+        La mitosis es el proceso de división celular por el que una célula
+        produce dos células hijas genéticamente idénticas.
+      assets:
+        - type: image
+          gcsUri: "gs://colabedu-lms-assets/<pkg-id>/mitosis_diagram.png"
+          alt: "Diagrama de las fases de la mitosis"
+
+    - id: slide_02
+      title: "Fases de la Mitosis"
+      type: interactive
+      widget: timeline_widget
+      data:
+        phases:
+          - name: "Profase"
+            description: "La cromatina se condensa formando cromosomas visibles."
+          - name: "Metafase"
+            description: "Los cromosomas se alinean en la placa metafásica."
+          - name: "Anafase"
+            description: "Las cromátidas hermanas se separan hacia los polos."
+          - name: "Telofase"
+            description: "Se forman dos núcleos hijos y comienza la citocinesis."
+
+    - id: slide_03
+      title: "Comprobación de Comprensión"
+      type: quiz
+      widget: multiple_choice
+      data:
+        question: "¿En qué fase los cromosomas se alinean en la placa ecuatorial?"
+        options:
+          - "Profase"
+          - "Metafase"
+          - "Anafase"
+          - "Telofase"
+        correct: 1
+        feedback: "Correcto. En la Metafase los cromosomas se alinean en la placa metafásica."
+
+  curricularContext:
+    standard: LOMLOE
+    level: "1 BACH"
+    subject: "biologia"
+    referenceCode: "es.lomloe.bach.1.bio"
+```
+
+---
+
+## Campos del Schema
+
+### `metadata`
+
+| Campo | Tipo | Descripción |
+|---|---|---|
+| `name` | `string` | Identificador único en formato `referenceCode` |
+| `displayName` | `string` | Título legible para la UI |
+| `lmsSource.platform` | `string` | `canvas` o `moodle` |
+| `lmsSource.packageId` | `string` | ID del paquete en la plataforma original |
+| `lmsSource.url` | `string` | URL de descarga del paquete |
+
+### `spec.slides[]`
+
+| Campo | Tipo | Descripción |
+|---|---|---|
+| `id` | `string` | Identificador único dentro de la lección |
+| `title` | `string` | Título del slide |
+| `type` | `enum` | `text_image` \| `quiz` \| `video` \| `interactive` |
+| `widget` | `string` | Nombre del widget Flutter registrado en A2UI |
+| `assets[]` | `array` | Referencias a assets subidos a GCS |
+
+### `spec.learningObjectives[]`
+Lista de objetivos de aprendizaje alineados al `curricularContext`. El Gem `curator_lesson` los extrae del manifiesto del paquete LMS y los refina con el CurricularContext del backend.
+
+---
+
+## Ingesta con el CLI
+
+```bash
+# Paquete único en sandbox
+curator curate \
+  --source ce-specs/sources/lms/canvas/canvas_bio_mitosis.imscc \
+  --output-type INTERACTIVE_LESSON \
+  --courseId 88 --sandbox
+
+# Batch desde Canvas Commons
+docs discover --source canvas-commons --subject biology --output canvas.yaml
+docs download --list canvas.yaml --local-dir ce-specs/sources/lms/canvas/
+curator batch --manifest ce-specs/tests/lms_batch_manifest.yaml --parallel 2
+
+# Tests LMS
+curator test --lms --case canvas_biology_bach1_smoke
+curator test --lms --all --threshold 70
+```
+
+---
+
+## Integración con A2UI
+
+Las `InteractiveLesson` se renderizan en el frontend Flutter mediante el widget `interactive_lesson_widget.dart`. El widget emite el evento `lesson_completed` al finalizar todos los slides.
+
+---
+
+## Páginas Relacionadas
+
+- [Capacidades del Curador](/es/gitops-operations/curator-capabilities)
+- [Tutorial del CLI](/es/gitops-operations/cli-tutorial)
+- [Referencia ResourceLearning](/es/reference/resource-learning)
+- [Referencia Gem](/es/reference/gem)

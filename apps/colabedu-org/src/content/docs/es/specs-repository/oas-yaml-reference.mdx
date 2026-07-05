@@ -1,40 +1,166 @@
 ---
 title: "Referencia YAML OAS"
-description: "Índice de la documentación de referencia técnica detallada para todos los recursos OAS (Open Assessment Specification) en ColabEdu."
+description: "Índice de la documentación de referencia técnica detallada para todos los recursos OAS (Open Assessment Specification) en ColabEdu, incluyendo lecciones interactivas, recursos OER y ejercicios."
 sidebar:
   order: 2
 ---
 
+import { Badge } from '@astrojs/starlight/components';
+
 La arquitectura **OAS (Open Assessment Specification)** v1beta1 de ColabEdu se configura enteramente a través de un esquema estructurado de archivos YAML. Esta aproximación *Assessment as Code* permite versionar, auditar y reproducir todo el ecosistema pedagógico.
 
-En esta sección de referencia encontrarás información técnica detallada sobre la estructura, los esquemas y las opciones de configuración de cada uno de los *Kinds* (Tipos de Recursos) que componen la arquitectura.
+En esta sección encontrarás la referencia técnica completa de cada *Kind* (tipo de recurso), desde taxonomías curriculares hasta lecciones interactivas generadas por AI.
 
 ---
 
-## Tipos de Especificaciones Disponibles
+## Estructura base de cualquier spec YAML
 
-Cada especificación YAML en ColabEdu requiere ciertos campos obligatorios en su estructura base:
-- `apiVersion`: Versión de la API del esquema (actualmente `colabedu.ai/v1beta1`).
-- `kind`: Identificador del tipo de recurso.
-- `metadata`: Metadatos como `id`, `title`, `version`, que ayudan a indexar el recurso en el SpecManager.
-- `spec`: Configuración específica del tipo de recurso.
+Todos los recursos OAS comparten los mismos campos obligatorios:
 
-A continuación, la documentación de referencia para cada tipo de recurso:
+```yaml
+apiVersion: colabedu.ai/v1beta1   # versión del esquema
+kind: Recipe                       # tipo de recurso (ver tabla inferior)
+metadata:
+  referenceCode: global.c1.ib.spanish_b.sl.debate.v1
+  title: "IB Spanish B SL — Debate Activity"
+  version: 1.0.0
+  authorityScope: GLOBAL           # GLOBAL | ES | MX | US | TENANT
+  tags: [ib, spanish, sl]
+spec:
+  # contenido específico del tipo
+```
 
-### Recursos del Motor Core
-- [**Taxonomy**](../reference/taxonomy/): Define jerarquías geográficas, niveles organizativos y competencias.
-- [**SubjectArea**](../reference/subject-area/): Especifica la clasificación de una materia a nivel local e internacional.
+---
 
-### Recursos de Normativa (C0)
-- [**Rubric**](../reference/rubric/): Estándares inmutables de aprendizaje, criterios de evaluación y descriptores por nivel.
+## Tipos de especificaciones disponibles
 
-### Instrumentos y Ejercicios (C1 y C2)
-- [**Recipe**](../reference/recipe/): "Receta" ensambladora que asocia competencias C0 con tipos de ejercicio y criterios para generar una evaluación C2.
-- [**ExerciseSpec**](../reference/exercise-spec/): Esquema de una evaluación generada o definida manualmente, lista para resolver.
-- [**ExerciseType**](../reference/exercise-type/): Definición técnica del formato de interacción (ej. `free_text`, `multiple_choice`).
-- [**AssessmentItem**](../reference/assessment-item/): Componente atómico de evaluación interactiva, instanciado y empaquetado para el frontend.
+### 🏛️ Motor y Taxonomías
 
-### Inteligencia Artificial y Agentes (C3)
-- [**Directive**](../reference/directive/): Directrices de comportamiento inmutables que limitan o guían al motor LLM.
-- [**Persona**](../reference/persona/): Perfiles de interacción del sistema (ej. Instructional Designer).
-- [**Gem**](../reference/gem/): Módulos extendidos de IA con configuración y herramientas embebidas.
+| Kind | Descripción |
+|------|-------------|
+| [**Taxonomy**](../reference/taxonomy/) | Define jerarquías geográficas, niveles organizativos y competencias. |
+| [**TaxonomyIndex**](../reference/taxonomy-index/) <Badge text="Nuevo" variant="tip" /> | Índice maestro para la localización e ingesta de taxonomías en el SpecManager. |
+| [**StandardSpec**](../reference/standard-spec/) <Badge text="Nuevo" variant="tip" /> | Configuración base y directrices globales (librerías de misconceptions) para un estándar educativo. |
+| [**CourseSpec**](../reference/course-spec/) <Badge text="Nuevo" variant="tip" /> | Adaptación de un estándar a un curso y nivel específico, permitiendo overrides de librerías. |
+| [**SubjectArea**](../reference/subject-area/) | Clasificación de una materia a nivel local e internacional. |
+| [**PathwayTemplate**](../reference/pathway-template/) <Badge text="Nuevo" variant="tip" /> | Template oficial de currículum (ej. IB Spanish B SL) con temas, subtemas y pesos de evaluación. |
+| [**PathwayBundle**](../reference/pathway-bundle/) <Badge text="Nuevo" variant="tip" /> | Agrupación declarativa de plantillas de ruta con configuración de ensamblado y gap-filling. |
+
+---
+
+### 📐 Normativa Curricular — Capa C0
+
+| Kind | Descripción |
+|------|-------------|
+| [**BlockRubric**](../reference/rubric/) | Estándares inmutables de aprendizaje, criterios de evaluación y descriptores por nivel. Ingestada automáticamente por el Curator desde documentos normativos. |
+
+---
+
+### 📚 Recetas y Contenidos — Capas C1 y C2
+
+| Kind | Descripción |
+|------|-------------|
+| [**Recipe**](../reference/recipe/) | Receta ensambladora que asocia competencias C0 con tipos de ejercicio y criterios para generar una evaluación C2. |
+| [**ExerciseSpec**](../reference/exercise-spec/) | Evaluación generada o definida manualmente, lista para resolver por el alumno. |
+| [**ExerciseType**](../reference/exercise-type/) | Definición técnica del formato de interacción (`free_text`, `multiple_choice`, `grouping`…). |
+| [**AssessmentItem**](../reference/assessment-item/) | Componente atómico de evaluación interactiva, instanciado y empaquetado para el frontend. |
+
+---
+
+### 🎓 Contenidos Interactivos y Recursos — Capa C2 <Badge text="Nuevo" variant="tip" />
+
+Generados automáticamente por el **Agente Curador** a partir de documentos, paquetes LMS y recursos OER.
+
+| Kind | Descripción | Fuente típica |
+|------|-------------|---------------|
+| [**InteractiveLesson**](../reference/interactive-lesson/) | Lección con slides, widgets embebidos (`quiz_widget`, `mermaid_viewer`, `scratchpad_widget`…) y routing adaptativo. | Paquetes Canvas `.imscc`, Moodle `.mbz` |
+| [**ResourceLearning**](../reference/resource-learning/) | Puntero anotado a recurso OER externo con `qualityScore` pedagógico de 3 dimensiones. | CK-12, Khan Academy, Procomún, Europeana |
+
+:::note[Almacenamiento en base de datos]
+`InteractiveLesson` y `ResourceLearning` se almacenan como `BLOCK_CONTENT` en la base de datos.
+El campo `kind` del YAML es el discriminador semántico. Ambos tipos son embeddables (`isEmbeddable() = true`).
+:::
+
+#### Estructura `InteractiveLesson` (resumen)
+
+```yaml
+kind: InteractiveLesson
+spec:
+  learningObjectives: [...]
+  slides:
+    - id: intro_slide
+      layout: title           # title | split | content | quote | full
+      title: "Mitosis"
+      markdown: "..."
+      fragmentsCount: 1       # revelación progresiva
+      embeddedWidget:
+        type: quiz_widget     # quiz_widget | mermaid_viewer | scratchpad_widget | grouping_widget
+        props:
+          taskId: quiz_mitosis
+          routes:
+            on_success: slide_avanzada   # routing adaptativo
+            on_fail: slide_repaso
+```
+
+#### Estructura `ResourceLearning` (resumen)
+
+```yaml
+kind: ResourceLearning
+spec:
+  resourceUrl: "https://www.ck12.org/biology/mitosis/"
+  resourceType: ARTICLE        # ARTICLE | VIDEO | INTERACTIVE | SIMULATION
+  qualityScore:
+    alignment: 0.92
+    pedagogicalRichness: 0.87
+    accessibility: 0.78
+  learningObjectives: [...]
+  tags: [mitosis, biology, cell-division]
+```
+
+---
+
+### 🗂️ Orquestación ACA y Currículo
+
+| Tipo de Fichero | Descripción |
+|---|---|
+| [**CuratorPlan**](../reference/curator-plan/) | Plan de ingesta persistente del ACA. Creado por CLI o REST API. Registra país, estándar, estado, ítems y configuración de la campaña. |
+| [**CurriculumRequirements**](../reference/curriculum-requirements/) | YAML de requisitos curriculares (`ce-specs/catalog/requirements/`). Define cuántas specs de cada tipo (`BLOCK_CONTENT`, `BLOCK_RUBRIC`…) se necesitan por tema para completar un currículo. Usado por `CurriculumGapAnalyzer`. |
+| [**Curator Batch YAML**](../reference/curator-batch/) | Fichero declarativo de pipeline (`ce-specs/batches/`). Define etapas (`discover`, `fetch`, `parse`, `approval`, `ingest`) en un YAML y se ejecuta con `spec batch run`. |
+
+:::note[No son ficheros OAS estándar]
+`CuratorPlan` vive en base de datos (tabla `curator_plans`), no en `ce-specs`.  
+`CurriculumRequirements` lives in `ce-specs/catalog/requirements/`, not in the pedagogical spec catalog.
+:::
+
+---
+
+### 🤖 Inteligencia Artificial y Agentes — Capa C3
+
+| Kind | Descripción |
+|------|-------------|
+| [**Directive**](../reference/directive/) <Badge text="Solo Partners" variant="caution" /> | Directrices de comportamiento que limitan o guían al motor LLM. |
+| [**Persona**](../reference/persona/) <Badge text="Solo Partners" variant="caution" /> | Perfiles de interacción del sistema (ej. Instructional Designer). |
+| [**Gem**](../reference/gem/) <Badge text="Solo Partners" variant="caution" /> | Módulos extendidos de IA con configuración y herramientas embebidas. El `gem.curator_lesson` v1.3.0 genera lecciones interactivas adaptativas. |
+
+---
+
+## Generación automática con el Agente Curador
+
+Los tipos `InteractiveLesson` y `ResourceLearning` rara vez se escriben a mano: el **Agente Curador** los genera automáticamente desde tus documentos existentes.
+
+```bash
+# PDF o Canvas → InteractiveLesson con quiz routing adaptativo
+curator curate \
+  --source canvas_bio_mitosis.imscc \
+  --output-type INTERACTIVE_LESSON \
+  --adaptive \
+  --sandbox
+
+# Recurso OER → ResourceLearning anotada
+curator curate \
+  --source gs://bucket/ck12_bio.json \
+  --source-type OER_RESOURCE \
+  --output-type RESOURCE_LEARNING
+```
+
+→ Ver [Capacidades del Agente Curador](/es/gitops-operations/curator-capabilities) para el flujo completo.

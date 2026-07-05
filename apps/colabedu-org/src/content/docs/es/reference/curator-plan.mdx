@@ -1,0 +1,175 @@
+---
+title: "CuratorPlan — Referencia YAML"
+description: "Schema completo del recurso CuratorPlan: el plan de ingesta persistente y recuperable del Agente Curador Autónomo (ACA)."
+sidebar:
+  label: "CuratorPlan"
+  order: 51
+---
+
+import { Badge, Aside } from '@astrojs/starlight/components';
+
+# `CuratorPlan` <Badge text="ACA Runtime" variant="note" />
+
+Un **`CuratorPlan`** representa una campaña de ingesta curricular de larga duración y recuperable ante fallos. No es un fichero YAML de `ce-specs` — es un **recurso de base de datos** creado por el CLI o la API REST para orquestar el pipeline del Agente Curador Autónomo (ACA).
+
+<Aside type="note">
+A diferencia de los otros tipos OAS (`Recipe`, `Taxonomy`…), `CuratorPlan` y `CuratorPlanItem` **no se almacenan en `ce-specs`**: viven en la tabla `curator_plans` de PostgreSQL y son gestionados por el motor ACA.
+</Aside>
+
+---
+
+## Schema: `CuratorPlan`
+
+```yaml
+# Representación lógica de un CuratorPlan (tabla: curator_plans)
+id:            uuid           # Generado automáticamente (UUID v4)
+name:          string         # Nombre legible del operador (--name en CLI)
+country:       string         # ISO-3166-1 alpha-2: "US" | "ES" | "MX" | "GB"…
+standard:      string         # Clave del estándar: "LOMLOE" | "AP" | "IB" | "AP_SPANISH"…
+status:        enum           # Ver tabla de estados abajo
+total_items:   integer        # Total de ítems descubiertos
+processed_items: integer      # Ítems ya procesados (DONE + FAILED + NEEDS_REVIEW)
+failed_items:  integer        # Ítems en estado FAILED
+current_stage: string         # Fase activa: DISCOVER | FETCH | PARSE | INGEST
+config_json:   object         # Configuración del operador (ver abajo)
+state_json:    object         # Checkpoint de ejecución (uso interno del ACA)
+created_by:    string         # Email / ID del operador CLI que creó el plan
+last_heartbeat: timestamp     # Última señal de vida del bucle executePlan()
+created_at:    timestamp
+updated_at:    timestamp
+```
+
+### `config_json` — Claves habituales
+
+```json
+{
+  "approval_gates": ["after_c0", "after_c1"],
+  "confidence_threshold": 0.75,
+  "model_config": {
+    "router": "gemini-2.0-flash",
+    "c0_model": "gemini-2.5-pro"
+  }
+}
+```
+
+### Estados del plan
+
+| Estado | Descripción |
+|---|---|
+| `DRAFT` | Creado, aún no iniciado |
+| `RUNNING` | El orquestador está procesando ítems activamente |
+| `WAITING_REVIEW` | Pausado en una puerta de aprobación — esperando al operador |
+| `PAUSED` | Estancamiento detectado (sin heartbeat > 30 min) o pausa manual |
+| `COMPLETED` | Todos los ítems procesados (DONE + NEEDS_REVIEW + FAILED) |
+| `FAILED` | Cancelado o error crítico irrecuperable |
+
+---
+
+## Schema: `CuratorPlanItem`
+
+Cada documento fuente descubierto crea un `CuratorPlanItem` dentro de un plan.
+
+```yaml
+# Representación lógica de un CuratorPlanItem (tabla: curator_plan_items)
+id:                  uuid      # Generado automáticamente
+plan_id:             uuid      # FK → curator_plans.id
+source_url:          string    # URI del documento fuente: http://, gs://, drive://
+spec_type:           string    # Tipo OAS a producir: C0_STANDARDS | C1_RECIPES | C2_EXERCISES
+status:              enum      # Ver tabla de estados abajo
+confidence_score:    float     # 0.0–1.0 — puntuación del nodo de evaluación del Curador
+attempts:            integer   # Número de intentos realizados
+output_path:         string    # Ruta del YAML generado en el repositorio ce-specs
+error_message:       string    # Último mensaje de error (ítems FAILED)
+original_source_url: string    # URL original antes del URL Healing (null si no aplica)
+created_at:          timestamp
+```
+
+### Estados del ítem
+
+| Estado | Descripción |
+|---|---|
+| `PENDING` | En cola, aún no procesado |
+| `PROCESSING` | CuratorWorkflow ejecutándose activamente |
+| `DONE` | Auto-ingestado — `confidence_score ≥ umbral` |
+| `NEEDS_REVIEW` | `confidence_score < umbral` — cola de revisión humana (HITL) |
+| `FAILED` | Error irrecuperable (PDF cifrado, timeout, error de parseo…) |
+
+### `spec_type` — Valores válidos
+
+| Valor | Descripción | Capa OAS |
+|---|---|---|
+| `C0_STANDARDS` | Rúbricas y estándares normativos | C0 |
+| `BLOCK_RUBRIC` | Alias para C0 — rúbrica de evaluación | C0 |
+| `C1_RECIPES` | Recetas pedagógicas | C1 |
+| `C2_EXERCISES` | Ejercicios con contexto | C2 |
+| `INTERACTIVE_LESSON` | Lección interactiva con slides | C2 |
+| `RESOURCE_LEARNING` | Puntero OER anotado | C2 |
+
+---
+
+## Creación vía CLI
+
+```bash
+# Crear y lanzar un plan ACA completo
+./ce-cli.sh --env local \
+  "aca plan create \
+    --name 'LOMLOE LCL 2º BACH — Sprint Octubre 2026' \
+    --country ES \
+    --standard LOMLOE \
+    --level '2 BACH' \
+    --subject lcl \
+    --gates after_c0 \
+    --threshold 0.80"
+
+./ce-cli.sh --env local "aca plan start <planId>"
+```
+
+## Creación vía REST API
+
+```http
+POST /api/v1/aca/plans
+Content-Type: application/json
+
+{
+  "name": "LOMLOE LCL 2º BACH — Sprint Octubre 2026",
+  "country": "ES",
+  "standard": "LOMLOE",
+  "configJson": {
+    "approval_gates": ["after_c0"],
+    "confidence_threshold": 0.80
+  }
+}
+```
+
+Respuesta:
+```json
+{
+  "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "status": "DRAFT",
+  "totalItems": 0,
+  "createdAt": "2026-10-01T09:00:00Z"
+}
+```
+
+---
+
+## Referencia completa de endpoints REST
+
+| Método | Endpoint | Descripción |
+|---|---|---|
+| `POST` | `/api/v1/aca/plans` | Crear plan |
+| `GET` | `/api/v1/aca/plans/{id}` | Estado del plan |
+| `POST` | `/api/v1/aca/plans/{id}/start` | Iniciar / reanudar |
+| `POST` | `/api/v1/aca/plans/{id}/pause` | Pausa controlada |
+| `POST` | `/api/v1/aca/plans/{id}/cancel` | Cancelar (irreversible) |
+| `GET` | `/api/v1/aca/plans/{id}/items` | Listar ítems del plan |
+| `POST` | `/api/v1/aca/plans/{id}/items/{itemId}/approve` | Aprobar ítem NEEDS_REVIEW |
+| `POST` | `/api/v1/aca/plans/{id}/gates/{gateId}/approve` | Aprobar puerta de calidad |
+
+---
+
+## Ver También
+
+- [Agente Curador Autónomo (ACA)](/es/gitops-operations/aca) — Guía de operación completa
+- [CurriculumRequirements](/es/reference/curriculum-requirements) — Schema del fichero de requisitos
+- [Tutorial CLI](/es/gitops-operations/cli-tutorial)

@@ -1,0 +1,144 @@
+---
+title: "ResourceLearning"
+description: "Referencia de la spec ResourceLearning — generada por el Curador a partir de fuentes OER (CK-12, Khan Academy, Procomún, Europeana) con qualityScore pedagógico de 3 dimensiones."
+sidebar:
+  order: 34
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+# ResourceLearning
+
+`ResourceLearning` es un tipo de spec pedagógica generada por el **Agente Curador** a partir de recursos educativos abiertos (OER). Indexa el recurso con un `qualityScore` de 3 dimensiones que permite evaluar su idoneidad para un contexto curricular concreto.
+
+<Aside type="note">
+`ResourceLearning` se almacena como `BLOCK_CONTENT` con `kind: ResourceLearning` en el SpecManager. No requiere cambios de esquema DDL.
+</Aside>
+
+---
+
+## Casos de Uso
+
+| Origen | Herramienta | Output |
+|---|---|---|
+| CK-12 FlexBook (JSON) | `curator curate --source-type OER_RESOURCE` | `ResourceLearning` |
+| Khan Academy (JSON/API) | `curator curate --source-type OER_RESOURCE` | `ResourceLearning` |
+| Procomún / INTEF (MEC) | `docs discover --source mec-procomun` + batch | `ResourceLearning` |
+| Europeana Education | `docs discover --source europeana-edu` + batch | `ResourceLearning` |
+
+---
+
+## Esquema YAML
+
+```yaml
+apiVersion: core.oas.colabedu.io/v1beta1
+kind: ResourceLearning
+metadata:
+  name: <referenceCode>          # ej: global.res.ck12.bio.mitosis.v1
+  displayName: "<Título del recurso>"
+  description: "<Descripción pedagógica>"
+  tags:
+    - biology
+    - open-education
+    - ck12
+
+spec:
+  source:
+    url: "https://www.ck12.org/biology/mitosis/"
+    provider: "ck12"             # ck12 | khan-academy | mec-procomun | europeana-edu
+    title: "Mitosis — CK-12 Biology FlexBook"
+    license: "CC BY-NC 3.0"
+    language: "en"
+    contentType: "article"       # article | video | interactive | lesson | quiz
+    importedAt: "2026-06-09T00:00:00Z"
+
+  qualityScore:
+    # Escala 0.0 – 1.0 por dimensión
+    alignment: 0.85              # alineación con el CurricularContext proporcionado
+    pedagogicalRichness: 0.70    # variedad de actividades y profundidad de contenido
+    accessibility: 0.60          # soporte multi-idioma, WCAG, formatos alternativos
+    # Score global = media ponderada (alignment×0.5 + richness×0.3 + accessibility×0.2)
+    overall: 0.76
+
+  applicableStandards:
+    - "es.lomloe.bach.1.bio"
+    - "us.ap.biology"
+
+  curricularContext:
+    standard: LOMLOE
+    level: "1 BACH"
+    subject: "biologia"
+    referenceCode: "es.lomloe.bach.1.bio"
+```
+
+---
+
+## Campos del Schema
+
+### `spec.source`
+
+| Campo | Tipo | Descripción |
+|---|---|---|
+| `url` | `string` | URL canónica del recurso |
+| `provider` | `string` | ID del proveedor: `ck12`, `khan-academy`, `mec-procomun`, `europeana-edu` |
+| `title` | `string` | Título original del recurso |
+| `license` | `string` | Licencia del recurso (p.ej. `CC BY-NC 3.0`, `CC BY 4.0`) |
+| `language` | `string` | Código de idioma ISO 639-1 |
+| `contentType` | `enum` | `article` \| `video` \| `interactive` \| `lesson` \| `quiz` |
+
+### `spec.qualityScore`
+
+El Gem `curator_resource` evalúa cada recurso con una rúbrica de 3 dimensiones:
+
+| Dimensión | Peso | Qué evalúa |
+|---|---|---|
+| `alignment` | 50% | Alineación del contenido con el `CurricularContext` (estándar, nivel, asignatura) |
+| `pedagogicalRichness` | 30% | Variedad de actividades, profundidad conceptual, scaffolding progresivo |
+| `accessibility` | 20% | Soporte multi-idioma, subtítulos, WCAG 2.1 AA, formatos alternativos |
+
+El campo `overall` es la media ponderada. Los recursos con `overall < 0.5` se marcan con `status: LOW_QUALITY` y se excluyen de las recomendaciones al profesor.
+
+### `spec.applicableStandards[]`
+Lista de `referenceCode` de estándares curriculares a los que aplica el recurso. Permite que el motor de recomendación del SpecManager filtre recursos relevantes para un curso concreto.
+
+---
+
+## Ingesta con el CLI
+
+```bash
+# Recurso único en sandbox
+curator curate \
+  --source ce-specs/sources/oer/ck12/ck12_bio_mitosis_smoke.json \
+  --source-type OER_RESOURCE \
+  --output-type RESOURCE_LEARNING \
+  --sandbox
+
+# Batch desde Procomún
+docs discover --source mec-procomun --subject lengua --output mec_lcl.yaml
+docs download --list mec_lcl.yaml --local-dir ce-specs/sources/oer/mec-procomun/
+curator batch --manifest ce-specs/tests/lms_batch_manifest.yaml
+
+# Tests OER
+curator test --lms --case ck12_oer_bio_resource
+curator test --lms --all --threshold 70
+```
+
+---
+
+## Variables de Entorno para Fuentes OER
+
+| Variable | Fuente |
+|---|---|
+| `COLABEDU_API_KEY_EUROPEANA` | Europeana Education API (wskey) |
+| `COLABEDU_API_KEY_CANVAS` | Canvas Commons API token |
+
+Las fuentes `ck12`, `khan-academy` y `mec-procomun` no requieren API key.
+
+---
+
+## Páginas Relacionadas
+
+- [Capacidades del Curador](/es/gitops-operations/curator-capabilities)
+- [Tutorial del CLI](/es/gitops-operations/cli-tutorial)
+- [Referencia InteractiveLesson](/es/reference/interactive-lesson)
+- [Referencia Gem](/es/reference/gem)

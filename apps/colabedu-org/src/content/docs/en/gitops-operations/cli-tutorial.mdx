@@ -702,15 +702,118 @@ Generates a status table for all standards of a country (or all countries).
 taxonomy report [--country <cc>] [--save]
 ```
 
-| Flag | Default | Description |
-|---|---|---|
-| `--country` | *(all)* | Filter by country code |
 | `--save` | `false` | Save report as Markdown to `curator_out/taxonomy_report.md` |
 
 **Example:**
 ```bash
 taxonomy report --country es --save
 taxonomy report   # All countries
+```
+
+---
+
+### `taxonomy catalog list`
+
+Lists all specifications registered in the ColabEdu catalog, with filters for ID prefix, specification type, and status. It attempts to query the backend remotely; if not available, it performs a local scan of YAML files.
+
+```bash
+taxonomy catalog list [--root <prefix>] [--type <type>] [--status <status>] [--format table|json] [--local] [--remote]
+```
+
+**Flags:**
+
+| Flag | Type | Default | Description |
+|---|---|---|---|
+| `--root` | `String` | — | ID prefix to filter (e.g. `es.c0`, `std.intl`, `bundle.us`) |
+| `--type` | `String` | — | Specification type (e.g. `BLOCK_RUBRIC`, `TAXONOMY`, `BUNDLE_COURSE`, `RECIPE`, `PERSONA`, `STANDARD_SPEC`, `COURSE_SPEC`, `PATHWAY_BUNDLE`) |
+| `--status` | `String` | — | Spec status (`PUBLISHED`, `DRAFT`, `ARCHIVED`) |
+| `--format` | `String` | `table` | Output format: `table` or `json` |
+| `--local` | `boolean` | `false` | Force local YAML scan in `ce-specs` without querying the backend |
+| `--remote` | `boolean` | `false` | Force remote backend API query |
+
+**Example:**
+```bash
+taxonomy catalog list --root es.lomloe --type RECIPE
+taxonomy catalog list --type STANDARD_SPEC --local
+```
+
+---
+
+### `taxonomy catalog show`
+
+Shows full details of a specification by its reference code (`referenceCode` or `id`), including all public canonical IDs and the corresponding YAML.
+
+```bash
+taxonomy catalog show --id <referenceCode> [--format detail|yaml]
+```
+
+| Flag | Type | Default | Description |
+|---|---|---|---|
+| `--id` | `String` | **required** | Spec ID or referenceCode to inspect |
+| `--format` | `String` | `detail` | Display format: `detail` (structured info) or `yaml` (full YAML code) |
+
+**Example:**
+```bash
+taxonomy catalog show --id global.c1.ib.spanish_b.sl.debate.v1 --format yaml
+```
+
+---
+
+### `taxonomy catalog tree`
+
+Shows a hierarchical tree representation of catalog specifications organized under a common prefix.
+
+```bash
+taxonomy catalog tree [--root <prefix>] [--depth <N>]
+```
+
+| Flag | Type | Default | Description |
+|---|---|---|---|
+| `--root` | `String` | — | Root ID prefix to build the tree (e.g. `es.lomloe`) |
+| `--depth` | `int` | `3` | Maximum depth of the hierarchy tree |
+
+**Example:**
+```bash
+taxonomy catalog tree --root es.lomloe.bach.2
+```
+
+---
+
+### `taxonomy catalog export`
+
+Exports filtered catalog specifications to a local file in JSON or YAML format.
+
+```bash
+taxonomy catalog export [--root <prefix>] [--type <type>] [--out <file>] [--format json|yaml]
+```
+
+| Flag | Type | Default | Description |
+|---|---|---|---|
+| `--root` | `String` | — | ID prefix to filter exports |
+| `--type` | `String` | — | Specification type to export |
+| `--out` | `String` | — | Destination file path (if omitted, prints to console) |
+| `--format` | `String` | `yaml` | Export format: `json` or `yaml` |
+
+**Example:**
+```bash
+taxonomy catalog export --root es.lomloe --type BLOCK_RUBRIC --out rubricas_lomloe.yaml
+```
+
+---
+
+### `taxonomy catalog docs`
+
+Dynamically generates the MDX catalog reference documentation page (`catalog.mdx`) in both English and Spanish under the `ce-web` paths.
+
+```bash
+taxonomy catalog docs
+```
+
+This command scans all available specifications, groups them by educational layers (C0 to C3), and outputs structured summary tables with their respective canonical IDs.
+
+**Example:**
+```bash
+taxonomy catalog docs
 ```
 
 ---

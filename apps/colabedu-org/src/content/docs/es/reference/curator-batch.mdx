@@ -1,0 +1,318 @@
+---
+title: "Batch YAML — Referencia"
+description: "Schema completo de los ficheros YAML de batch del Curator (ce-specs/batches/). Define pipelines declarativos de ingesta con etapas: taxonomy, discover, fetch, parse, approval, ingest."
+sidebar:
+  label: "Curator Batch YAML"
+  order: 50
+---
+
+import { Badge, Aside, Tabs, TabItem } from '@astrojs/starlight/components';
+
+# Curator Batch YAML <Badge text="Pipeline as Code" variant="note" />
+
+Los **ficheros batch YAML** del Curator permiten definir pipelines de ingesta de contenido pedagógico de forma **completamente declarativa**. Se almacenan en `ce-specs/batches/` y se ejecutan con el comando `spec batch run`.
+
+Un batch puede encadenar cualquier subconjunto de las etapas del pipeline en el orden que necesites: desde el descubrimiento automático de fuentes hasta la ingesta final en el catálogo OAS.
+
+---
+
+## Schema Completo
+
+```yaml
+# ══════════════════════════════════════════════════════════════════════
+# Curator Batch Definition — Schema v1
+# Ruta: ce-specs/batches/{nombre}.yaml
+# ══════════════════════════════════════════════════════════════════════
+
+# ── Metadatos del batch ───────────────────────────────────────────────
+batch:
+  id:          string   # Identificador único (slug kebab-case)
+  name:        string   # Nombre legible del operador
+  description: string   # Descripción pedagógica del contenido a ingestar
+
+# ── Contexto curricular ───────────────────────────────────────────────
+context:
+  standard:      string   # Clave del estándar: AP | LOMLOE | IB | EBAU | COMMON_CORE
+  country:       string   # ISO-3166-1 alpha-2: US | ES | MX | GB
+  locale:        string   # Idioma: es | en | fr
+  subject:       string   # Slug de asignatura: spanish_language_and_culture | lcl | biology
+  level:         string   # Nivel educativo: "9-12" | "2 BACH" | "HL" | "SL"
+  authority:     string   # Autoridad educativa (opcional): "Comunidad de Madrid"
+  program:       string   # Programa específico (opcional): "AP Spanish Language"
+  referenceCode: string   # Código base OAS para las specs generadas
+
+# ── Etapas a ejecutar (en orden) ─────────────────────────────────────
+operations:
+  - taxonomy    # Asegurar nodos de taxonomía en el backend
+  - discover    # Descubrir URLs de fuentes documentales
+  - fetch       # Descargar documentos al staging local
+  - parse       # Extraer specs YAML vía AI (Curator)
+  - approval    # Esperar revisión humana (HITL)
+  - ingest      # Ingestar specs aprobadas en el catálogo OAS
+
+# ── Configuración por etapa (solo incluir las etapas usadas) ──────────
+
+taxonomy:
+  nodes:        # Lista de nodos de taxonomía a asegurar
+    - standard: string
+      level:    string
+      subject:  string
+
+discover:
+  types:       [string]   # exams | standards | open_books
+  keywords:    [string]   # Términos de búsqueda
+  sources:     [string]   # Dominios fuente: educacion.gob.es, collegeboard.org…
+  maxResults:  integer    # Límite de resultados
+
+fetch:
+  stagingDir:         string    # Directorio local de descarga
+  parallelDownloads:  integer   # Descargas paralelas (default: 1)
+  urls:               [string]  # URLs estáticas (si se omite DISCOVER)
+
+parse:
+  specTypes:  [string]   # C0_STANDARDS | C1_RECIPES | C2_EXERCISES | BLOCK_RUBRIC
+  sections:   [string]   # Secciones del documento a procesar (vacío = documento completo)
+  filePaths:  [string]   # Rutas de ficheros locales (si se omite FETCH)
+
+approval:
+  timeoutHours:  integer   # Horas antes de cancelar la espera (default: 48)
+  autoApprove:   boolean   # true = aprobar automáticamente sin revisión humana
+
+ingest:
+  targetRepo:  string    # Repositorio destino (siempre: "ce-specs")
+  branch:      string    # Rama GitOps: batch/{batch-id}
+  specsDir:    [string]  # Directorios locales con YAMLs listos para ingestar
+```
+
+---
+
+## Etapas del pipeline
+
+| Etapa | Descripción | Endpoint REST |
+|---|---|---|
+| `taxonomy` | Asegura que los nodos de taxonomía (standard → level → subject) existen en el backend antes de procesar contenido | `POST /api/v1/curator/taxonomy/ensure` |
+| `discover` | Busca en fuentes educativas (portales de exámenes, repositorios OER) y construye una lista de URLs de documentos | `POST /api/v1/curator/discover` |
+| `fetch` | Descarga los documentos descubiertos a un directorio local de staging con progreso | `POST /api/v1/curator/fetch` |
+| `parse` | Envía los documentos al servicio Curator AI para extracción de specs OAS vía multimodal | `POST /api/v1/curator/parse` |
+| `approval` | Bloquea el pipeline hasta que un humano aprueba las specs en la UI de aprobación | `POST /api/v1/curator/approval/submit` + polling |
+| `ingest` | Empuja las specs aprobadas al spec-manager vía la API de ingesta OAS | `POST /api/v1/curator/ingest` |
+
+<Aside type="tip">
+**Puedes combinar cualquier subconjunto.** Si ya tienes los PDFs descargados, usa solo `[parse, ingest]`. Si quieres descubrimiento automático completo, usa `[discover, fetch, parse, approval, ingest]`.
+</Aside>
+
+---
+
+## Ejemplos reales
+
+<Tabs>
+  <TabItem label="Solo parse + ingest (PDFs locales)">
+```yaml
+# batch_02_ap_slc_frq_2024.yaml
+batch:
+  id: batch-02-ap-slc-frq-2024
+  name: "Batch 02 — AP Spanish Language FRQ 2024"
+  description: >
+    AP Spanish Language and Culture — Free-Response Questions 2024.
+    Secciones: Task 1 (Email), Task 2 (Ensayo), Task 3 (Conversación),
+    Task 4 (Presentación oral/escrita).
+
+context:
+  standard: AP
+  country: US
+  locale: es
+  subject: spanish_language_and_culture
+  level: HL
+  referenceCode: us.ap.spanish_language_and_culture.ap_spanish_language_2024_frq.v1
+
+operations: [parse, ingest]
+
+parse:
+  filePaths:
+    - "/ruta/a/ce-specs/sources/us/ap/c2_exams/ap_spanish_language_2024_frq.pdf"
+  specTypes: [C0_STANDARDS, C2_EXERCISES]
+  sections:
+    - "Task 1"
+    - "Task 2"
+    - "Task 3"
+    - "Task 4"
+
+ingest:
+  targetRepo: ce-specs
+  branch: batch/batch-02-ap-slc-frq-2024
+```
+  </TabItem>
+  <TabItem label="Rúbricas multi-PDF">
+```yaml
+# batch_10_rubricas_lcl_nacional.yaml
+batch:
+  id: batch-10-ebau-nacional-rubricas
+  name: "Batch 10 — Rúbricas LCL Nacionales (ESO + Bach)"
+  description: >
+    Rúbricas oficiales de LCL del Ministerio de Educación:
+    ESO (LOMLOE, anexo 2, 2025) + Bachillerato.
+    Genera BLOCK_RUBRIC specs para el catálogo global.
+
+context:
+  standard: LOMLOE
+  country: ES
+  locale: es
+  subject: lcl
+  referenceCode: es.lomloe.lcl.rubricas_oficiales_mec.v1
+
+operations: [parse, ingest]
+
+parse:
+  filePaths:
+    - "/ruta/a/sources/es/national/20250515_anexo_2_rubricas_eso.pdf"
+    - "/ruta/a/sources/es/national/rubricas_lcl_bach.pdf"
+  specTypes: [BLOCK_RUBRIC]
+  sections: []    # Documento completo — sin secciones
+
+ingest:
+  targetRepo: ce-specs
+  branch: batch/batch-10-ebau-rubricas-nacional
+```
+  </TabItem>
+  <TabItem label="Pipeline completo (con discover)">
+```yaml
+# discover_spanish_california.yaml
+batch:
+  id: discover-spanish-california-2026
+  name: "Discover — Cursos de Español en California 2026"
+  description: >
+    Descubrimiento automático y descarga de materiales de español
+    para high school en California (Common Core + AP).
+
+context:
+  standard: COMMON_CORE
+  country: US
+  locale: en
+  subject: spanish
+  level: "9-12"
+  authority: "California Department of Education"
+
+operations: [taxonomy, discover, fetch, parse, approval, ingest]
+
+taxonomy:
+  nodes:
+    - standard: COMMON_CORE
+      level: high_school
+      subject: world_languages_spanish
+
+discover:
+  types: [standards, open_books]
+  keywords:
+    - "California Spanish standards high school"
+    - "AP Spanish California curriculum"
+  sources:
+    - cde.ca.gov
+    - collegeboard.org
+  maxResults: 15
+
+fetch:
+  stagingDir: /tmp/batch-spanish-ca-2026
+  parallelDownloads: 3
+
+parse:
+  specTypes: [C0_STANDARDS, C1_RECIPES]
+
+approval:
+  timeoutHours: 72
+  autoApprove: false
+
+ingest:
+  targetRepo: ce-specs
+  branch: batch/discover-spanish-california-2026
+```
+  </TabItem>
+</Tabs>
+
+---
+
+## Comandos CLI
+
+```bash
+# Ejecutar un batch
+./ce-cli.sh --env local "spec batch run --batch ce-specs/batches/batch_02_ap_slc_frq_2024.yaml"
+
+# Dry-run: ver el plan de ejecución sin correr nada
+./ce-cli.sh --env local "spec batch run --batch mi_batch.yaml --dry-run"
+
+# Reanudar desde una etapa específica (tras un fallo)
+./ce-cli.sh --env local "spec batch run --batch mi_batch.yaml --from parse"
+
+# Ver estado del último batch ejecutado
+./ce-cli.sh --env local "spec batch status"
+
+# Generar un batch YAML con IA desde una descripción en lenguaje natural
+./ce-cli.sh --env local \
+  "spec batch generate 'exámenes EBAU de lengua castellana Madrid 2024 y 2025' --out mi_batch.yaml"
+```
+
+### Flags disponibles
+
+| Flag | Alias | Descripción |
+|---|---|---|
+| `--batch <file>` | `-b` | Ruta al fichero YAML de batch |
+| `--from <stage>` | `-f` | Reanudar desde la etapa indicada: `taxonomy\|discover\|fetch\|parse\|approval\|ingest` |
+| `--dry-run` | `-d` | Muestra el plan de ejecución sin ejecutar nada |
+
+---
+
+## Checkpoint y recuperación
+
+El CLI persiste el estado del batch en `.ce-batch-state.json` en el directorio de trabajo. Si el pipeline falla en cualquier etapa, puedes reanudarlo desde donde se quedó:
+
+```bash
+# Ver el checkpoint actual
+cat .ce-batch-state.json
+
+# Reanudar desde parse (tras corregir el error)
+./ce-cli.sh --env local "spec batch run --batch mi_batch.yaml --from parse"
+```
+
+El state file guarda:
+- `batchId`, `status` (`RUNNING` | `COMPLETED` | `FAILED` | `PAUSED`)
+- `discoveredUrls[]`, `fetchedFiles[]`, `parsedSpecs[]`
+- `approvalWorkflowIds[]`, `ingestedReferenceCodes[]`
+- `log[]` con el historial de ejecución
+
+---
+
+## Tipos de spec válidos (`specTypes`)
+
+| Valor | Capa OAS | Descripción |
+|---|---|---|
+| `C0_STANDARDS` | C0 | Estándares normativos ingestados desde documentos oficiales |
+| `BLOCK_RUBRIC` | C0 | Rúbricas de evaluación inmutables |
+| `C1_RECIPES` | C1 | Recetas pedagógicas ensambladas |
+| `C2_EXERCISES` | C2 | Ejercicios con contexto |
+| `INTERACTIVE_LESSON` | C2 | Lecciones interactivas con slides |
+| `RESOURCE_LEARNING` | C2 | Punteros OER anotados |
+
+---
+
+## Dónde viven los ficheros
+
+```
+ce-specs/
+└── batches/
+    ├── batch_01_ap_slc_frq_2023.yaml
+    ├── batch_02_ap_slc_frq_2024.yaml
+    ├── batch_03_ap_slit_frq_2024.yaml
+    ├── batch_04_ap_slc_scoring_guide.yaml
+    ├── batch_06_ebau_madrid_2024_25.yaml
+    ├── batch_10_rubricas_lcl_nacional.yaml
+    ├── discover_spanish_california.yaml
+    └── ...
+```
+
+---
+
+## Ver También
+
+- [CuratorPlan](/es/reference/curator-plan) — Plan ACA para pipelines autónomos de larga duración
+- [CurriculumRequirements](/es/reference/curriculum-requirements) — Schema de requisitos curriculares
+- [Capacidades del Curator](/es/gitops-operations/curator-capabilities) — Guía completa del Curador
+- [Tutorial CLI](/es/gitops-operations/cli-tutorial) — Guía paso a paso del CLI

@@ -1,8 +1,8 @@
 ---
 title: Agent Ecosystem
-description: The neural network of roles (Curator, Evaluator, Modernizer) in the ColabEdu architecture.
+description: The network of specialized intelligences operating on the Spec Manager to generate the Perfect Exam.
 sidebar:
-  order: 4
+  order: 5
 ---
 
 ## The Agent Ecosystem and OAS
@@ -39,7 +39,7 @@ graph LR
     
     subgraph ColabEdu Cloud
         Gateway[API Gateway]
-        Supervisor[LangGraph Supervisor]
+        Supervisor[LangGraph4j Supervisor]
         
         Worker1[Evaluator Worker]
         Worker2[Curator Worker]
@@ -59,4 +59,4 @@ graph LR
     style ColabEdu Cloud fill:#f0f8ff,stroke:#00509E,stroke-width:2px
 ```
 
-The **Supervisor (based on LangGraph)** acts as the traffic brain. It analyzes the user's intent (e.g., *"Evaluate this History essay"*) and exclusively awakens the *Evaluator Worker* with precise instructions. In turn, all these agents lack their own long-term memory; they use the **SpecManager API** as their single source of truth, ensuring that any change in law or rubric is immediately applied to all agents.
+The **Supervisor (based on LangGraph4j)** acts as the traffic brain. It analyzes the user's intent (e.g., *"Evaluate this History essay"*) and exclusively awakens the *Evaluator Worker* with precise instructions. In turn, all these agents lack their own long-term memory; they use the **SpecManager API** as their single source of truth, ensuring that any change in law or rubric is immediately applied to all agents.

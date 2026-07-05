@@ -1,0 +1,44 @@
+---
+title: "StandardSpec"
+description: "Documentación de referencia para el recurso StandardSpec en OAS."
+sidebar:
+  order: 3
+  badge:
+    text: Nuevo
+    variant: tip
+---
+
+El recurso `StandardSpec` (Especificación de Estándar) define la configuración base y las directrices globales para un estándar educativo completo (como LOMLOE, AP, o IB) dentro del motor de corrección de ColabEdu. Permite registrar las bibliotecas de misconceptions (conceptos erróneos comunes) que se aplicarán de forma predeterminada a todas las evaluaciones del estándar.
+
+## Esquema (Schema)
+
+### Metadata (`metadata`)
+
+| Campo | Tipo | Requerido | Descripción |
+|---|---|---|---|
+| `reference_code` | `string` | Sí | Identificador único del estándar (ej. `standard.ap.slc`). |
+| `name` | `string` | Sí | Nombre legible del estándar educativo. |
+| `description` | `string` | Sí | Explicación detallada del estándar, niveles CEFR objetivo y alcance. |
+| `author` | `string` | No | Autor o equipo que redactó la especificación. |
+
+### Especificación (`spec`)
+
+| Campo | Tipo | Requerido | Descripción |
+|---|---|---|---|
+| `defaultMisconceptionRefs` | `array` | Sí | Lista de referencias canónicas a bibliotecas de misconceptions (`LIBRARY`) aplicables por defecto a este estándar. |
+
+## Ejemplo de Uso
+
+```yaml
+apiVersion: colabedu.ai/v1beta1
+kind: StandardSpec
+metadata:
+  reference_code: "standard.ap.slc"
+  name: "AP Spanish Language and Culture"
+  description: "College Board Advanced Placement — Spanish Language and Culture. Nivel CEFR objetivo: C1."
+  author: "ColabEdu Core"
+spec:
+  defaultMisconceptionRefs:
+    - library.misconceptions.spanish_l2.base
+    - library.misconceptions.spanish_l2.advanced
+```

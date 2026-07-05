@@ -7,7 +7,7 @@ sidebar:
 
 El recurso `Taxonomy` permite definir y estructurar conceptos jerárquicos como ubicaciones geográficas (países, regiones), niveles organizativos del sistema educativo, o estándares curriculares agrupados por materia y nivel.
 
-Esta estructura es fundamental para organizar y filtrar otros recursos dentro del sistema (como rúbricas y ejercicios).
+Esta estructura es fundamental para organizar y filtrar otros recursos dentro del sistema (como rúbricas y ejercicios). También es la base del **pipeline de scaffolding CLI**, que usa los identificadores de taxonomía para descubrir, descargar y auto-generar rúbricas de evaluación a partir de documentos curriculares oficiales.
 
 ## Esquema (Schema)
 
@@ -42,9 +42,30 @@ Cuando `type: standard`, el bloque `spec` define estándares, niveles y materias
 | `levels` | `array` | (Dentro de un estándar) Niveles educativos que cubre (ej. DP, MYP). Contiene `id`, `name`, `active`. |
 | `subjects` | `array` | (Dentro de un estándar) Materias. Contiene `id`, `name`, `active` y `applicableLevels` (lista de `id`s de niveles). |
 
-## Ejemplo de Uso
+### Especificación (`spec`) - Variante `bundle_course`
 
-A continuación se muestra un ejemplo de un `Taxonomy` de tipo `location_country`:
+Cuando `type: bundle_course`, el recurso agrupa una oferta de curso completa bajo un único nodo de taxonomía. Es la entrada principal del **pipeline de scaffolding CLI**:
+
+| Campo | Tipo | Descripción |
+|---|---|---|
+| `displayName` | `string` | Nombre legible del curso (ej. "AP Spanish Language and Culture"). |
+| `taxonomyRef` | `string` | Referencia a la taxonomía de estándar padre (ej. `std.intl.ap.v1`). |
+| `subject` | `string` | Identificador de materia (ej. `subj.intl.ap.spanish_language_and_culture`). |
+| `educationLevel` | `string` | Identificador de nivel educativo (ej. `lvl.intl.ap.high`). |
+| `units` | `array` | Lista ordenada de unidades del curso. Cada unidad contiene `id`, `name`, `description` y `suggested_hours`. |
+
+## Relación con las Rúbricas
+
+Los bundles de taxonomía son la fuente de verdad para la generación de rúbricas. El comando CLI `taxonomy rubrics scaffold` lee un spec `bundle_course` para derivar la estructura de la rúbrica:
+
+```
+bundle_course (Taxonomy)
+    └── units[]  →  rubric criteria[]  →  BLOCK_RUBRIC (Capa C0)
+```
+
+Cada unidad del bundle se convierte en un criterio de la rúbrica generada, heredando `id`, `name`, `description` y `suggested_hours`.
+
+## Ejemplo de Uso
 
 ```yaml
 apiVersion: colabedu.ai/v1beta1
@@ -73,3 +94,18 @@ spec:
     - id: org.lvl.es.primaria
       name: Primaria
 ```
+
+## Comandos CLI Relacionados
+
+```bash
+# Descubrir documentos oficiales para un bundle
+bash ce-cli.sh taxonomy sources discover --referenceCode bundle.us.ap.spanish_language.hl
+
+# Descargar el PDF curricular
+bash ce-cli.sh taxonomy sources fetch --referenceCode bundle.us.ap.spanish_language.hl
+
+# Generar el YAML de rúbrica (con niveles de logro generados por AI desde el PDF)
+bash ce-cli.sh taxonomy rubrics scaffold --referenceCode bundle.us.ap.spanish_language.hl --ai true
+```
+
+Consulta el [Tutorial del CLI](/es/gitops-operations/cli-tutorial) para el walkthrough completo end-to-end.
