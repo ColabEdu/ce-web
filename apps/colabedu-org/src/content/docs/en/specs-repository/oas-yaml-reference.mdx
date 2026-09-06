@@ -41,10 +41,15 @@ spec:
 | [**Taxonomy**](../reference/taxonomy/) | Defines geographical hierarchies, organizational levels, and competencies. |
 | [**TaxonomyIndex**](../reference/taxonomy-index/) <Badge text="New" variant="tip" /> | Global index file for taxonomy localization and ingestion in the SpecManager. |
 | [**StandardSpec**](../reference/standard-spec/) <Badge text="New" variant="tip" /> | Base configuration and global guidelines (misconceptions libraries) for an educational standard. |
-| [**CourseSpec**](../reference/course-spec/) <Badge text="New" variant="tip" /> | Scope of a standard to a specific course and level, allowing library overrides. |
+| [**CourseSpec**](../reference/course-spec/) <Badge text="New" variant="tip" /> | **Sovereign curriculum authoring unit**. Live adaptation of an educational standard to a course, grade level, and instructional profiles (`FULL_YEAR`, `INTENSIVE`, `EXAM_MASTERY`, `REMEDIATION`). |
 | [**SubjectArea**](../reference/subject-area/) | Classification of a subject at local and international levels. |
 | [**PathwayTemplate**](../reference/pathway-template/) <Badge text="New" variant="tip" /> | Official curriculum template (e.g., IB Spanish B SL) with themes, subthemes, and assessment weights. |
-| [**PathwayBundle**](../reference/pathway-bundle/) <Badge text="New" variant="tip" /> | Declarative routing template grouping with assembly and gap-filling configuration. |
+| [**PathwayBundle / CourseBundle**](../reference/pathway-bundle/) <Badge text="New" variant="tip" /> | **Distribution & immutable freeze artifact**. Packaging courses for academic year snapshots (cohort freeze), external LMS export (Canvas/Moodle), or multi-subject commercial marketplace bundles. |
+
+:::tip[CourseSpec vs Bundle]
+* To **author, customize, or specialize a curriculum**, always create a new **`CourseSpec` YAML**.
+* Use a **`CourseBundle`** solely for **freezing an academic year cohort**, exporting offline LMS archives, or offering multi-subject marketplace packages.
+:::
 
 ---
 

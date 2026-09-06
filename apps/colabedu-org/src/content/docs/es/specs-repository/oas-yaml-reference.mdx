@@ -41,10 +41,15 @@ spec:
 | [**Taxonomy**](../reference/taxonomy/) | Define jerarquías geográficas, niveles organizativos y competencias. |
 | [**TaxonomyIndex**](../reference/taxonomy-index/) <Badge text="Nuevo" variant="tip" /> | Índice maestro para la localización e ingesta de taxonomías en el SpecManager. |
 | [**StandardSpec**](../reference/standard-spec/) <Badge text="Nuevo" variant="tip" /> | Configuración base y directrices globales (librerías de misconceptions) para un estándar educativo. |
-| [**CourseSpec**](../reference/course-spec/) <Badge text="Nuevo" variant="tip" /> | Adaptación de un estándar a un curso y nivel específico, permitiendo overrides de librerías. |
+| [**CourseSpec**](../reference/course-spec/) <Badge text="Nuevo" variant="tip" /> | **Unidad soberana de autoría curricular**. Adaptación viva de un estándar a un curso, nivel y perfiles pedagógicos (`FULL_YEAR`, `INTENSIVE`, `EXAM_MASTERY`, `REMEDIATION`). |
 | [**SubjectArea**](../reference/subject-area/) | Clasificación de una materia a nivel local e internacional. |
 | [**PathwayTemplate**](../reference/pathway-template/) <Badge text="Nuevo" variant="tip" /> | Template oficial de currículum (ej. IB Spanish B SL) con temas, subtemas y pesos de evaluación. |
-| [**PathwayBundle**](../reference/pathway-bundle/) <Badge text="Nuevo" variant="tip" /> | Agrupación declarativa de plantillas de ruta con configuración de ensamblado y gap-filling. |
+| [**PathwayBundle / CourseBundle**](../reference/pathway-bundle/) <Badge text="Nuevo" variant="tip" /> | **Artefacto de distribución / congelamiento inmutable**. Agrupación de cursos para snapshots escolares (cohort freeze), exportación LMS o marketplace multi-materia. |
+
+:::tip[¿CourseSpec o Bundle?]
+* Para **diseñar o especializar un curso**, crea siempre un **`CourseSpec` YAML**.
+* Usa **`CourseBundle`** únicamente para **congelar un año académico**, exportar a Canvas/Moodle offline o vender un pack comercial multi-materia.
+:::
 
 ---
 

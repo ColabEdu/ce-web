@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.9.0] - 2026-09-06
+
+### Added
+- **Catalog & Reference Documentation Updates**: Updated reference docs and curriculum catalog specifications for v0.9.0 release.
+- **Digital Sovereignty & AI Ethics Content**: Expanded documentation on regional sovereignty and local model execution.
+
 ## [0.5.0] - 2026-05-24
 
 ### Added
