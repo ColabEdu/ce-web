@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.9.2] - 2026-09-10
+
+### Changed
+- **Ecosystem Alignment**: Bumped web documentation and reference portals to align with release `v0.9.2`.
+
 ## [0.9.0] - 2026-09-06
 
 ### Added
