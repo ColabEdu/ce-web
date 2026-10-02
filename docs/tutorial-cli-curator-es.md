@@ -9,7 +9,7 @@ El proceso de curación en ColabEdu se basa en la automatización de flujos de t
 Las operaciones principales que puedes orquestar son:
 - **`discover`**: Busca fuentes en internet basadas en criterios pedagógicos.
 - **`fetch`**: Descarga los documentos y los cachea localmente.
-- **`parse`**: Convierte documentos sin formato a especificaciones curriculares estructuradas (OAS YAML).
+- **`parse`**: Convierte documentos sin formato a especificaciones curriculares estructuradas (OPS YAML).
 - **`validate`**: (¡Nuevo!) Verifica la estructura YAML y audita pedagógicamente el contenido generado utilizando LangChain4j y Gemini.
 - **`compose_bundle`**: Ensambla las unidades curriculares individuales en cursos completos.
 - **`classify`** e **`ingest`**: Taxonomía y almacenamiento en la base de datos de producción.

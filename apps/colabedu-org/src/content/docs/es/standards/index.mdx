@@ -1,11 +1,11 @@
 ---
-title: "Crosswalk Global: Mapeo de Conceptos Educativos (OAS V2)"
+title: "Crosswalk Global: Mapeo de Conceptos Educativos (OPS V2)"
 description: "La Piedra Rosetta de la plataforma ColabEdu, traduciendo marcos educativos a primitivas arquitectónicas inmutables."
 sidebar:
   order: 1
 ---
 
-**Arquitectura:** Open Assessment Standard (OAS v1beta1)
+**Arquitectura:** Open Pedagogy Standard (OPS v1beta1)
 
 **Propósito:** Este documento actúa como la **Piedra Rosetta** de la plataforma ColabEdu. Traduce la jerga burocrática, legal y pedagógica de los cinco principales marcos educativos hispanohablantes (España, México, EE. UU., AP e IB) a las primitivas arquitectónicas inmutables de nuestra base de datos.
 
@@ -17,7 +17,7 @@ En ColabEdu, resolvemos la **Brecha Semántica** mediante este estándar. Esto p
 
 ¿Cómo llama cada país a las reglas del juego? Cada ministerio de educación inventa sus propios términos para describir la jerarquía del conocimiento. Esta tabla mapea los conceptos desde la ley macro hasta el criterio microscópico que la IA debe evaluar en tiempo de ejecución.
 
-| **Arquitectura OAS (ColabEdu)** | **España (LOMLOE)** | **México (NEM / MCCEMS)** | **EE. UU. (Common Core / WL)** | **Advanced Placement (AP)** | **Bachillerato Internacional (IB)** |
+| **Arquitectura OPS (ColabEdu)** | **España (LOMLOE)** | **México (NEM / MCCEMS)** | **EE. UU. (Common Core / WL)** | **Advanced Placement (AP)** | **Bachillerato Internacional (IB)** |
 | --- | --- | --- | --- | --- | --- |
 | **Documento Maestro (La Ley)** | Real Decreto / Decreto Autonómico | Programa Sintético / MCCEMS | State Standards / Framework | Course and Exam Description (CED) | Subject Guide (Guía de la Asignatura) |
 | **Dominio Macro (category)** | Materia (Ej. Lengua Castellana y Literatura) | Recurso Sociocognitivo (Ej. Lengua y Comunicación) | Strand / Domain (Ej. Reading, Interpersonal Communication) | Modality (Ej. Interpersonal Writing) | Component (Ej. Paper 1, Internal Assessment) |
@@ -27,7 +27,7 @@ En ColabEdu, resolvemos la **Brecha Semántica** mediante este estándar. Esto p
 
 ### **Implicaciones Arquitectónicas y de Base de Datos**
 
-- **La Profundidad del Árbol:** Mientras que el sistema de EE. UU. (Common Core) tiende a ser muy plano y amplio (cientos de *Performance Expectations* granulares), los sistemas europeos e iberoamericanos (LOMLOE, NEM) son profundamente jerárquicos. El campo `category` y `subcategories` (array de strings) en OAS absorbe esta varianza sin requerir migraciones en el esquema SQL de PostgreSQL.
+- **La Profundidad del Árbol:** Mientras que el sistema de EE. UU. (Common Core) tiende a ser muy plano y amplio (cientos de *Performance Expectations* granulares), los sistemas europeos e iberoamericanos (LOMLOE, NEM) son profundamente jerárquicos. El campo `category` y `subcategories` (array de strings) en OPS absorbe esta varianza sin requerir migraciones en el esquema SQL de PostgreSQL.
 - **El Mapeo de Puntos:** Los niveles L0-L4 no siempre representan notas del 0 al 10. En AP, un nivel 5 holístico puede equivaler a un 100%. En el IB, una banda de marcas (Markband) de "10-12" equivale a la nota máxima de un criterio. El *Spec Manager* normaliza estos valores flotantes en el backend antes de presentarlos en la interfaz.
 
 ## 2. Ejes Transversales y Auditorías B2G (Taxonomy Crosswalks)
@@ -36,7 +36,7 @@ Casi todos los sistemas educativos modernos exigen que una materia (ej. Literatu
 
 Este es nuestro **mayor argumento de venta (Killer Feature) B2B/B2G**: permite a un colegio privado evaluar a su manera, pero reportar automáticamente los resultados a los tableros de auditoría del gobierno sin doble esfuerzo.
 
-| **Arquitectura OAS (ColabEdu)** | **España (LOMLOE)** | **México (NEM / MCCEMS)** | **EE. UU. (Common Core / WL)** | **Advanced Placement (AP)** | **Bachillerato Internacional (IB)** |
+| **Arquitectura OPS (ColabEdu)** | **España (LOMLOE)** | **México (NEM / MCCEMS)** | **EE. UU. (Common Core / WL)** | **Advanced Placement (AP)** | **Bachillerato Internacional (IB)** |
 | --- | --- | --- | --- | --- | --- |
 | **Habilidades Transversales (taxonomy_ref)** | Competencias Clave (Ej. CCL, CD, CPSAA) | Ejes Articuladores (Ej. Pensamiento Crítico, Inclusión) | Cross-Disciplinary Skills / 21st Century Skills | The 6 Themes (Ej. Desafíos Mundiales, Identidad) | Conceptos (Ej. Identidad, Perspectiva, Transformación) |
 | **Perfil del Egresado (taxonomy_ref)** | Perfil de Salida del Alumnado | Perfil de Egreso | College and Career Readiness | AP Scholar Profile | El Perfil de la Comunidad del IB |

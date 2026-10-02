@@ -9,7 +9,7 @@ The curation process in ColabEdu relies on automating workflows (pipelines) usin
 The main operations you can orchestrate are:
 - **`discover`**: Searches the web for sources based on pedagogical criteria.
 - **`fetch`**: Downloads documents and caches them locally.
-- **`parse`**: Converts unstructured documents into structured curricular specifications (OAS YAML).
+- **`parse`**: Converts unstructured documents into structured curricular specifications (OPS YAML).
 - **`validate`**: (New!) Checks the YAML structure and pedagogically audits the generated content using LangChain4j and Gemini.
 - **`compose_bundle`**: Assembles individual curricular units into full courses.
 - **`classify`** and **`ingest`**: Taxonomy tagging and storage in the production database.

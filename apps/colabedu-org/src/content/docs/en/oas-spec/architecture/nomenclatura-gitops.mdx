@@ -1,26 +1,26 @@
 ---
 title: "Implementation and Federation"
-description: "How to implement the OAS standard: Universal naming rules and ColabEdu's reference architecture."
+description: "How to implement the OPS standard: Universal naming rules and ColabEdu's reference architecture."
 sidebar:
   order: 6
 ---
 
 # Repository Implementation and Federation
 
-**Architecture:** Open Assessment Standard (OAS v1beta1)
+**Architecture:** Open Pedagogy Standard (OPS v1beta1)
 
-The OAS standard is designed to be agnostic of the underlying infrastructure. Any government, institution, or technology *partner* can implement the standard using the tools of their choice.
+The OPS standard is designed to be agnostic of the underlying infrastructure. Any government, institution, or technology *partner* can implement the standard using the tools of their choice.
 
 To ensure interoperability and **Data Sovereignty**, the standard strictly separates the **universal format rules** from the **reference implementation** (how ColabEdu orchestrates it internally).
 
 ---
 
-## 1. The OAS Standard (Universal Rules for Partners)
+## 1. The OPS Standard (Universal Rules for Partners)
 
 Any entity wishing to build OAS-compatible tools, generate automated content, or create a private "Institutional Node" only needs to comply with two fundamental principles:
 
 ### A. Git as the Single Source of Truth (GitOps)
-OAS standard YAML files must be stored in version control repositories (Git). This ensures forensic traceability, legal audits, and enables federation (inheritance between repositories).
+OPS standard YAML files must be stored in version control repositories (Git). This ensures forensic traceability, legal audits, and enables federation (inheritance between repositories).
 - **Absolute Sovereignty:** Ministries of education, regional governments, or institutions can host and manage their own *specs* repositories completely privately on their own servers and infrastructures.
 - You are free to use **GitHub, GitLab, Bitbucket, or Gitea** in the cloud or *On-Premise*.
 - You are free to use any programming language or database to read, index, or write these YAMLs.

@@ -3,7 +3,7 @@ title: "Rúbrica (Capa C0): ESO Lengua Castellana y Literatura"
 description: "Matriz de evaluación detallada para ESO Lengua y Literatura basada en el marco de la LOMLOE."
 ---
 
-**Arquitectura:** Open Assessment Standard (OAS v1beta1)
+**Arquitectura:** Open Pedagogy Standard (OPS v1beta1)
 
 **Scope:** LOMLOE Educación Secundaria Obligatoria (ESO) - España (Baseline Canarias)
 
@@ -17,7 +17,7 @@ Este catálogo utiliza como línea base (Baseline) las matrices de evaluación d
 
 ## 1. Lógica Algorítmica: ¿Puntos o Probabilidades?
 
-En la arquitectura OAS, la IA **no evalúa usando probabilidades**, sino que actúa como un motor matemático determinista. Para lograrlo, la rúbrica impone reglas estrictas sobre cómo se calculan los puntos finales.
+En la arquitectura OPS, la IA **no evalúa usando probabilidades**, sino que actúa como un motor matemático determinista. Para lograrlo, la rúbrica impone reglas estrictas sobre cómo se calculan los puntos finales.
 
 ### Los Pesos (Weights) y la Escala de Puntos
 
@@ -39,7 +39,7 @@ La traducción matemática estándar es la siguiente:
 
 ## 2. La Arquitectura de 5 Niveles: ¿Por qué no eliminar el L0?
 
-Aunque el PDF oficial de Canarias muestra solo 4 columnas (*Insuficiente, Suficiente/Bien, Notable, Sobresaliente*), el estándar OAS las desdobla en 5 niveles (L0-L4). **Es algorítmicamente vital no eliminar el L0.**
+Aunque el PDF oficial de Canarias muestra solo 4 columnas (*Insuficiente, Suficiente/Bien, Notable, Sobresaliente*), el estándar OPS las desdobla en 5 niveles (L0-L4). **Es algorítmicamente vital no eliminar el L0.**
 
 1.  **El Cero Matemático (Ausencia de Evidencia):** Si un alumno entrega un examen en blanco, o responde sobre un tema completamente ajeno, la IA necesita un nivel que represente el cero absoluto (0%). Ese es el L0.
 
@@ -51,7 +51,7 @@ Aunque el PDF oficial de Canarias muestra solo 4 columnas (*Insuficiente, Sufici
 
 Si elimináramos el L0, la IA se vería obligada a usar el L1 como la base mínima, "regalando" un 25% de los puntos a un alumno que no ha demostrado ninguna competencia.
 
-## 3. Guía de Mapeo: Del PDF de Canarias a la Capa C0 (OAS)
+## 3. Guía de Mapeo: Del PDF de Canarias a la Capa C0 (OPS)
 
 | **Elemento en el PDF de Canarias**          | **Mapeo en la Capa C0 (YAML)**                               | **Ejemplo de Extracción**                  |
 |---------------------------------------------|--------------------------------------------------------------|--------------------------------------------|
@@ -202,7 +202,7 @@ El nivel de precisión y rigor de las rúbricas publicadas por el Gobierno de Ca
 
 ## 6. El Diccionario de Competencias: GitOps y la Tabla `goals`
 
-Para que el ecosistema sea un verdadero modelo de **Assessment as Code**, Git debe ser la única fuente de la verdad. No podemos permitir que las competencias (como CCL1 o CD1) se creen manualmente en la base de datos o existan solo como texto libre en la rúbrica.
+Para que el ecosistema sea un verdadero modelo de **Pedagogy as Code**, Git debe ser la única fuente de la verdad. No podemos permitir que las competencias (como CCL1 o CD1) se creen manualmente en la base de datos o existan solo como texto libre en la rúbrica.
 
 ### El Flujo del "Curator Agent"
 
@@ -268,7 +268,7 @@ Una vez que el YAML está en Gitea, el **Spec Manager** orquesta el resto de la 
 
 3.  **Inyección RAG en Tiempo de Evaluación:** Cuando el LLM va a calificar el Criterio 5.1 (que tiene el tag `CCL1`), el sistema usa la relación de IDs para extraer el texto exacto del Goal desde la base de datos e inyectarlo en el prompt. El LLM evalúa basándose en la definición legal exacta, reduciendo a cero el riesgo de alucinación semántica.
 
-## 7. Del YAML al Dashboard: Trazabilidad y Analítica Global (OAS Analytics)
+## 7. Del YAML al Dashboard: Trazabilidad y Analítica Global (OPS Analytics)
 
 La razón principal por la que estructuramos la rúbrica y los tags con tanta rigurosidad es para habilitar la **inteligencia analítica**. El objetivo es que una calificación no termine simplemente como un "7/10" estático en un boletín de notas, sino que se convierta en datos procesables para Dashboards a diferentes escalas.
 

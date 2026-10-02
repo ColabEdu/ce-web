@@ -1,171 +1,149 @@
 ---
-title: "OAS YAML Reference"
-description: "Index of detailed technical reference documentation for all OAS (Open Assessment Specification) resources in ColabEdu, including interactive lessons, OER resources, and exercises."
+title: "OPS Reference & Conceptual Map"
+description: "Conceptual taxonomy and technical reference of all YAML specification types under the Open Pedagogy Specification (OPS) standard."
 sidebar:
   order: 2
 ---
 
-import { Badge } from '@astrojs/starlight/components';
+import { Badge, Card, CardGrid } from '@astrojs/starlight/components';
+import SpecVersionViewer from '../../../../components/SpecVersionViewer.astro';
 
-ColabEdu's **OAS (Open Assessment Specification)** v1beta1 architecture is entirely configured through a structured YAML file schema. This *Assessment as Code* approach allows for versioning, auditing, and reproducing the entire pedagogical ecosystem.
+<SpecVersionViewer 
+  specKind="OPS Specification Master Registry" 
+  version="0.9.4" 
+  status="ACTIVE" 
+  schemaPath="catalog.json" 
+/>
 
-In this section, you will find the complete technical reference for each *Kind* (resource type), from curriculum taxonomies to AI-generated interactive lessons.
+ColabEdu's **OPS (Open Pedagogy Specification)** architecture treats education as code (*Pedagogy as Code*). Every component of the pedagogical ecosystem—from statutory curriculum standards to exercise prompts or Socratic grading rubrics—is defined via a typed, immutable, and Git-auditable YAML specification.
+
+To make the system immediately understandable for educators and engineers alike, specifications are grouped into **four functional categories**, cleanly separating the **Open Standard** schemas from the **Partner Automation Tooling**.
 
 ---
 
-## Base structure of any YAML spec
+## 🏛️ The 4 Pedagogical Spec Categories
 
-All OAS resources share the same mandatory fields:
+```mermaid
+flowchart LR
+    subgraph Cat1["1. Content & Learning"]
+        IL["InteractiveLesson<br/>(Interactive Lesson)"]
+        RL["ResourceLearning<br/>(OER Resource)"]
+    end
+
+    subgraph Cat2["2. Assessment & Grading"]
+        BR["BlockRubric<br/>(C0 Rubric)"]
+        RC["Recipe<br/>(C1 Orchestrator)"]
+        EX["ExerciseSpec<br/>(C2 Assessments)"]
+    end
+
+    subgraph Cat3["3. Curriculum & Management"]
+        CS["CourseSpec<br/>(Sovereign Course)"]
+        PT["PathwayTemplate<br/>(Official Framework)"]
+        TX["Taxonomy<br/>(Standards/Levels)"]
+        CB["CourseBundle<br/>(Cohort Freeze)"]
+    end
+
+    subgraph Cat4["4. Governance & Roles (C3)"]
+        DI["Directive<br/>(Classroom Directives)"]
+        PE["Persona<br/>(AI Didactic Role)"]
+    end
+
+    Cat3 -->|"Structures"| Cat1
+    Cat3 -->|"Weights"| Cat2
+    Cat1 -->|"Practices via"| Cat2
+    Cat4 -.->|"Constrains"| Cat2
+```
+
+---
+
+## 1. For Content and Learning (Classroom Experiences)
+
+Specifications designed for **direct student interaction** with learning material. These are not static texts: they are dynamic, stateful learning units with embedded formative checks.
+
+| Kind | Pedagogical Purpose | Designed by |
+|---|---|---|
+| [**InteractiveLesson**](/en/reference/interactive-lesson/) | **Multimedia interactive lessons**. Organized in slides with Markdown, LaTeX math, adaptive branches (*routes*), and embedded widgets (`quiz_widget`, `mermaid_viewer`, `scratchpad_widget`). | Content Authors / LMS Importers |
+| [**ResourceLearning**](/en/reference/resource-learning/) | **Curated Open Educational Resource (OER) pointers** (videos, PhET simulations, open articles) annotated with a 3D pedagogical quality score (*alignment*, *pedagogicalRichness*, *accessibility*). | Curriculum Librarians / Educators |
+
+---
+
+## 2. For Assessment and Grading
+
+Specifications that ensure **rigorous, reproducible, and curriculum-aligned assessment** matching statutory standards or standardized exams (EBAU, AP, IB).
+
+| Kind | Pedagogical Purpose | Designed by |
+|---|---|---|
+| [**BlockRubric**](/en/reference/rubric/) | **The statutory source of truth (Layer C0)**. Defines official analytical criteria, qualitative achievement descriptors, and scoring bands. | Ministries, Quality Agencies, Exam Boards |
+| [**Recipe**](/en/reference/recipe/) | **The pedagogical orchestrator (Layer C1)**. Connects target competencies, evaluation rubrics, report formatting, and feedback directives. | Instructional Designers / Dept Heads |
+| [**ExerciseSpec**](/en/reference/exercise-spec/) | **Concrete assessment instrument (Layer C2)**. Contains the stimulus material (passage, audio, chart) and associated prompt questions. | Teachers / Content Authors |
+| [**AssessmentItem**](/en/reference/assessment-item/) | **Atomic interactive assessment component**. An isolated item packaged for real-time frontend execution and evaluation. | Item Writers |
+| [**ExerciseType**](/en/reference/exercise-type/) | **Agnostic interaction catalog**. Standardizes interaction formats: free-text, multiple-choice, matching, ordering, virtual whiteboard, etc. | Educational Engineers |
+
+---
+
+## 3. For Curriculum, Taxonomies, and Academic Governance
+
+Specifications resolving **course structure, territorial sovereignty, and academic cohort lifecycles**.
+
+| Kind | Pedagogical Purpose | Designed by |
+|---|---|---|
+| [**CourseSpec**](/en/reference/course-spec/) | **Sovereign course instance**. Specializes an educational standard for a specific school and delivery track (`FULL_YEAR`, `INTENSIVE`, `EXAM_MASTERY`, `REMEDIATION`), with targeted misconception libraries. | Schools / Academic Coordinators |
+| [**PathwayTemplate**](/en/reference/pathway-template/) | **Official curriculum framework**. Structures a subject into units, estimated hours, and official exam component weights. | Standard Organizations (IB, College Board) |
+| [**StandardSpec**](/en/reference/standard-spec/) | **Standard foundation spec**. Holds overarching guidelines and diagnostic misconception libraries for an educational framework. | Educational Authorities |
+| [**Taxonomy**](/en/reference/taxonomy/) & [**TaxonomyIndex**](/en/reference/taxonomy-index/) | **Jurisdiction and grade hierarchy**. Encodes countries, regions, organizational levels, and transversal competencies as GitOps code. | Governance Teams |
+| [**SubjectArea**](/en/reference/subject-area/) | **Unified subject taxonomy**. Classifies and normalizes academic disciplines globally (Mathematics, Spanish, Sciences). | Catalog Administrators |
+| [**CourseBundle**](/en/reference/pathway-bundle/) | **Immutable snapshot artifact**. Packages courses and units to create immutable academic snapshots for cohort rollover or LMS export. | Academic Leadership / SysAdmins |
+
+---
+
+## 4. For Governance and Classroom Roles (Layer C3)
+
+Specifications establishing the **ethical, didactic, and behavioral boundary** of AI in education.
+
+| Kind | Pedagogical Purpose | Designed by |
+|---|---|---|
+| [**Directive**](/en/reference/directive/) | **Classroom didactic directives**. Teacher-imposed constraints (e.g., *"Never give direct answers"*, *"Use Socratic counter-questions"*). | Classroom Teacher |
+| [**Persona**](/en/reference/persona/) | **Pedagogical tone and character**. Configures tutor demeanor (e.g., *Empathetic Socratic Tutor*, *Formal Exam Grader*). | School Counselors / Educators |
+
+---
+
+## 5. Partner Tooling (Content Factory & Automation)
+
+:::caution[Reserved for Partners and Content Automation]
+The following resources **do not represent static pedagogical content**; they are operational artifacts utilized by the **Autonomous Curator Agent (ACA)** and `ce-cli` for batch ingestion and curriculum auditing:
+:::
+
+- [**CuratorPlan**](/en/reference/curator-plan/): Persistent ingestion campaign tracking.
+- [**CuratorBatch**](/en/reference/curator-batch/): Declarative multi-stage pipelines (`discover` $\to$ `parse` $\to$ `approval` $\to$ `ingest`).
+- [**CurriculumRequirements**](/en/reference/curriculum-requirements/): Quantitative target rules for `CurriculumGapAnalyzer`.
+- [**Gem**](/en/reference/gem/): Modular AI configuration packages for domain-specific curation.
+
+---
+
+## Canonical Universal Envelope (`colabedu/v1`)
 
 ```yaml
-apiVersion: colabedu.ai/v1beta1   # schema version
-kind: Recipe                       # resource type (see table below)
+# --- UNIVERSAL OPS ENVELOPE ---
+api_version: "colabedu/v1"         # Formal schema version
+kind: "BLOCK_RUBRIC"               # Resource type from SpecType enum
 metadata:
-  referenceCode: global.c1.ib.spanish_b.sl.debate.v1
-  title: "IB Spanish B SL — Debate Activity"
-  version: 1.0.0
-  authorityScope: GLOBAL           # GLOBAL | ES | MX | US | TENANT
-  tags: [ib, spanish, sl]
+  reference_code: "us.ca.c0.spanish_2.rubric.oral_presentation.v1"
+  title: "California Spanish 2 — Oral Presentation Rubric"
+  version: "1.0.0"                 # Semantic version
+  authority: "DISTRICT"            # GLOBAL | NATIONAL | DISTRICT | SCHOOL | TEACHER
+  tags: ["cde", "california", "spanish_2", "speaking"]
+
+# --- POLYMORPHIC PAYLOAD ---
 spec:
-  # type-specific content
+  # Internal fields strictly defined by 'kind'
 ```
 
 ---
 
-## Available Specification Types
+## ⚡ Dynamic Contract Governance & SSOT
 
-### 🏛️ Core Engine and Taxonomies
+Under OPS v0.9.4, specifications and reference documentation are governed through a **Single Source of Truth (SSOT)**:
 
-| Kind | Description |
-|------|-------------|
-| [**Taxonomy**](../reference/taxonomy/) | Defines geographical hierarchies, organizational levels, and competencies. |
-| [**TaxonomyIndex**](../reference/taxonomy-index/) <Badge text="New" variant="tip" /> | Global index file for taxonomy localization and ingestion in the SpecManager. |
-| [**StandardSpec**](../reference/standard-spec/) <Badge text="New" variant="tip" /> | Base configuration and global guidelines (misconceptions libraries) for an educational standard. |
-| [**CourseSpec**](../reference/course-spec/) <Badge text="New" variant="tip" /> | **Sovereign curriculum authoring unit**. Live adaptation of an educational standard to a course, grade level, and instructional profiles (`FULL_YEAR`, `INTENSIVE`, `EXAM_MASTERY`, `REMEDIATION`). |
-| [**SubjectArea**](../reference/subject-area/) | Classification of a subject at local and international levels. |
-| [**PathwayTemplate**](../reference/pathway-template/) <Badge text="New" variant="tip" /> | Official curriculum template (e.g., IB Spanish B SL) with themes, subthemes, and assessment weights. |
-| [**PathwayBundle / CourseBundle**](../reference/pathway-bundle/) <Badge text="New" variant="tip" /> | **Distribution & immutable freeze artifact**. Packaging courses for academic year snapshots (cohort freeze), external LMS export (Canvas/Moodle), or multi-subject commercial marketplace bundles. |
-
-:::tip[CourseSpec vs Bundle]
-* To **author, customize, or specialize a curriculum**, always create a new **`CourseSpec` YAML**.
-* Use a **`CourseBundle`** solely for **freezing an academic year cohort**, exporting offline LMS archives, or offering multi-subject marketplace packages.
-:::
-
----
-
-### 📐 Regulatory Standards — Layer C0
-
-| Kind | Description |
-|------|-------------|
-| [**BlockRubric**](../reference/rubric/) | Immutable learning standards, evaluation criteria, and descriptors by level. Ingested automatically by the Curator from official regulatory documents. |
-
----
-
-### 📚 Recipes and Content — Layers C1 and C2
-
-| Kind | Description |
-|------|-------------|
-| [**Recipe**](../reference/recipe/) | Assembler recipe that associates C0 competencies with exercise types and criteria to generate a C2 assessment. |
-| [**ExerciseSpec**](../reference/exercise-spec/) | Generated or manually defined assessment, ready to be solved by the student. |
-| [**ExerciseType**](../reference/exercise-type/) | Technical definition of the interaction format (`free_text`, `multiple_choice`, `grouping`…). |
-| [**AssessmentItem**](../reference/assessment-item/) | Atomic interactive assessment component, instantiated and packaged for the frontend. |
-
----
-
-### 🎓 Interactive Lessons and Resources — Layer C2 <Badge text="New" variant="tip" />
-
-Automatically generated by the **Curator Agent** from documents, LMS packages, and OER resources.
-
-| Kind | Description | Typical Source |
-|------|-------------|----------------|
-| [**InteractiveLesson**](../reference/interactive-lesson/) | Lesson with slides, embedded widgets (`quiz_widget`, `mermaid_viewer`, `scratchpad_widget`…), and adaptive routing. | Canvas packages `.imscc`, Moodle `.mbz` |
-| [**ResourceLearning**](../reference/resource-learning/) | Annotated pointer to external OER resource with a 3-dimensional pedagogical `qualityScore`. | CK-12, Khan Academy, Procomún, Europeana |
-
-:::note[Database Storage]
-`InteractiveLesson` and `ResourceLearning` are stored as `BLOCK_CONTENT` in the database.
-The YAML `kind` field is the semantic discriminator. Both types are embeddable (`isEmbeddable() = true`).
-:::
-
-#### `InteractiveLesson` structure (summary)
-
-```yaml
-kind: InteractiveLesson
-spec:
-  learningObjectives: [...]
-  slides:
-    - id: intro_slide
-      layout: title           # title | split | content | quote | full
-      title: "Mitosis"
-      markdown: "..."
-      fragmentsCount: 1       # progressive reveal
-      embeddedWidget:
-        type: quiz_widget     # quiz_widget | mermaid_viewer | scratchpad_widget | grouping_widget
-        props:
-          taskId: quiz_mitosis
-          routes:
-            on_success: slide_avanzada   # adaptive routing
-            on_fail: slide_repaso
-```
-
-#### `ResourceLearning` structure (summary)
-
-```yaml
-kind: ResourceLearning
-spec:
-  resourceUrl: "https://www.ck12.org/biology/mitosis/"
-  resourceType: ARTICLE        # ARTICLE | VIDEO | INTERACTIVE | SIMULATION
-  qualityScore:
-    alignment: 0.92
-    pedagogicalRichness: 0.87
-    accessibility: 0.78
-  learningObjectives: [...]
-  tags: [mitosis, biology, cell-division]
-```
-
----
-
-### 🗂️ ACA Orchestration and Curriculum
-
-| File Type | Description |
-|---|---|
-| [**CuratorPlan**](../reference/curator-plan/) | Persistent ACA ingestion plan. Created by CLI or REST API. Tracks country, standard, status, items, and campaign configuration. |
-| [**CurriculumRequirements**](../reference/curriculum-requirements/) | Curriculum requirements YAML (`ce-specs/catalog/requirements/`). Defines how many specs of each type (`BLOCK_CONTENT`, `BLOCK_RUBRIC`…) are needed per theme to complete a curriculum. Used by `CurriculumGapAnalyzer`. |
-| [**Curator Batch YAML**](../reference/curator-batch/) | Declarative pipeline file (`ce-specs/batches/`). Defines stages (`discover`, `fetch`, `parse`, `approval`, `ingest`) in a YAML and runs with `spec batch run`. |
-
-:::note[These are not standard OAS files]
-`CuratorPlan` lives in the database (table `curator_plans`), not in `ce-specs`.  
-`CurriculumRequirements` lives in `ce-specs/catalog/requirements/`, not in the pedagogical spec catalog.
-:::
-
----
-
-### 🤖 Artificial Intelligence and Agents — Layer C3
-
-| Kind | Description |
-|------|-------------|
-| [**Directive**](../reference/directive/) <Badge text="Partners Only" variant="caution" /> | Behavioral guidelines that limit or guide the LLM engine. |
-| [**Persona**](../reference/persona/) <Badge text="Partners Only" variant="caution" /> | System interaction profiles (e.g., Instructional Designer). |
-| [**Gem**](../reference/gem/) <Badge text="Partners Only" variant="caution" /> | Extended AI modules with embedded configuration and tools. The `gem.curator_lesson` v1.3.0 generates adaptive interactive lessons. |
-
----
-
-## Automatic Generation with Curator Agent
-
-The types `InteractiveLesson` and `ResourceLearning` are rarely written by hand: the **Curator Agent** automatically generates them from your existing documents.
-
-```bash
-# PDF or Canvas → InteractiveLesson with adaptive quiz routing
-curator curate \
-  --source canvas_bio_mitosis.imscc \
-  --output-type INTERACTIVE_LESSON \
-  --adaptive \
-  --sandbox
-
-# OER Resource → Annotated ResourceLearning
-curator curate \
-  --source gs://bucket/ck12_bio.json \
-  --source-type OER_RESOURCE \
-  --output-type RESOURCE_LEARNING
-```
-
-→ See [Curator Agent Capabilities](/en/gitops-operations/curator-capabilities) for the complete workflow.
+1. **Formal Schemas (`ce-specs-registry`):** All schemas are written in YAML and compiled to JSON Schema Draft 2020-12 in `ce-specs-registry/dist/json-schemas/`.
+2. **Canonical Examples:** Every specification kind has a tested example in `ce-specs-registry/examples/` validated via `pnpm test` (using `Ajv`).
+3. **Live Auto-Synchronization:** The ColabEdu documentation site directly consumes the compiled JSON Schemas and canonical examples using the `<SpecVersionViewer />` component. Schema changes, field additions, or description updates propagate into the documentation in real time without manual edits.

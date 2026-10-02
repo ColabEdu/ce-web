@@ -7,6 +7,9 @@ import mermaid from 'astro-mermaid';
 
 // https://astro.build/config
 export default defineConfig({
+    server: {
+        allowedHosts: true,
+    },
     redirects: {
         '/docs': '/lang-detect',
     },
@@ -62,8 +65,8 @@ export default defineConfig({
                     ]
                 },
                 {
-                    label: 'Especificación OAS',
-                    translations: { en: 'OAS Specification' },
+                    label: 'Especificación OPS',
+                    translations: { en: 'OPS Specification' },
                     items: [
                         { label: 'Visión General', translations: { en: 'Overview' }, link: '/oas-spec/' },
                         { label: 'Vacío Tecnológico', translations: { en: 'Technological Gap' }, link: '/oas-spec/why-open-specs/' },
@@ -75,15 +78,61 @@ export default defineConfig({
                             translations: { en: 'Specs Repository' },
                             items: [
                                 { label: 'Repositorio de Especificaciones', translations: { en: 'Specifications Repository' }, link: '/specs-repository/' },
-                                { label: 'Referencia YAML OAS', translations: { en: 'OAS YAML Reference' }, link: '/specs-repository/oas-yaml-reference/' },
+                                { label: 'Referencia YAML OPS', translations: { en: 'OPS YAML Reference' }, link: '/specs-repository/oas-yaml-reference/' },
                                 {
-                                    label: 'Esquemas y Modelos',
-                                    translations: { en: 'Schemas & Models' },
-                                    autogenerate: { directory: 'reference' },
+                                    label: 'Para Contenido y Aprendizaje',
+                                    translations: { en: 'For Content & Learning' },
+                                    items: [
+                                        { label: 'InteractiveLesson (Lecciones)', translations: { en: 'InteractiveLesson (Lessons)' }, link: '/reference/interactive-lesson/' },
+                                        { label: 'ResourceLearning (OER)', translations: { en: 'ResourceLearning (OER)' }, link: '/reference/resource-learning/' },
+                                    ]
                                 },
                                 {
-                                    label: 'Catálogos',
-                                    translations: { en: 'Catalogs' },
+                                    label: 'Para Evaluación (Assessment)',
+                                    translations: { en: 'For Assessment & Grading' },
+                                    items: [
+                                        { label: 'BlockRubric (Rúbricas C0)', translations: { en: 'BlockRubric (Rubrics C0)' }, link: '/reference/rubric/' },
+                                        { label: 'Recipe (Orquestador C1)', translations: { en: 'Recipe (Orchestrator C1)' }, link: '/reference/recipe/' },
+                                        { label: 'ExerciseSpec (Evaluaciones C2)', translations: { en: 'ExerciseSpec (Assessments C2)' }, link: '/reference/exercise-spec/' },
+                                        { label: 'AssessmentItem (Reactivos)', translations: { en: 'AssessmentItem (Items)' }, link: '/reference/assessment-item/' },
+                                        { label: 'ExerciseType (Interacciones)', translations: { en: 'ExerciseType (Interactions)' }, link: '/reference/exercise-type/' },
+                                    ]
+                                },
+                                {
+                                    label: 'Para Currículo y Gestión',
+                                    translations: { en: 'For Curriculum & Management' },
+                                    items: [
+                                        { label: 'CourseSpec (Curso Soberano)', translations: { en: 'CourseSpec (Sovereign Course)' }, link: '/reference/course-spec/' },
+                                        { label: 'PathwayTemplate (Malla Oficial)', translations: { en: 'PathwayTemplate (Official Framework)' }, link: '/reference/pathway-template/' },
+                                        { label: 'StandardSpec (Estándar Base)', translations: { en: 'StandardSpec (Base Standard)' }, link: '/reference/standard-spec/' },
+                                        { label: 'Taxonomy (Geografía y Niveles)', translations: { en: 'Taxonomy (Geography & Levels)' }, link: '/reference/taxonomy/' },
+                                        { label: 'TaxonomyIndex', translations: { en: 'TaxonomyIndex' }, link: '/reference/taxonomy-index/' },
+                                        { label: 'SubjectArea (Áreas de Materia)', translations: { en: 'SubjectArea (Subject Areas)' }, link: '/reference/subject-area/' },
+                                        { label: 'CourseBundle (Congelamiento)', translations: { en: 'CourseBundle (Snapshots)' }, link: '/reference/pathway-bundle/' },
+                                    ]
+                                },
+                                {
+                                    label: 'Para Gobernanza y Roles (C3)',
+                                    translations: { en: 'For Governance & Roles (C3)' },
+                                    items: [
+                                        { label: 'Directive (Directivas de Aula)', translations: { en: 'Directive (Classroom Directives)' }, link: '/reference/directive/' },
+                                        { label: 'Persona (Perfiles Didácticos)', translations: { en: 'Persona (Didactic Profiles)' }, link: '/reference/persona/' },
+                                    ]
+                                },
+                                {
+                                    label: 'Herramientas de Partner (Content Factory)',
+                                    translations: { en: 'Partner Tooling (Content Factory)' },
+                                    items: [
+                                        { label: 'CuratorPlan', link: '/reference/curator-plan/' },
+                                        { label: 'CuratorBatch', link: '/reference/curator-batch/' },
+                                        { label: 'CurriculumRequirements', link: '/reference/curriculum-requirements/' },
+                                        { label: 'Gem (Módulos IA)', translations: { en: 'Gem (AI Modules)' }, link: '/reference/gem/' },
+                                    ]
+                                },
+                                { label: 'Catálogo de IDs Canónicos', translations: { en: 'Canonical IDs Catalog' }, link: '/reference/catalog/' },
+                                {
+                                    label: 'Catálogos por Tipo',
+                                    translations: { en: 'Catalogs by Type' },
                                     autogenerate: { directory: 'specs-repository/spec-catalog' },
                                 }
                             ]
@@ -159,5 +208,8 @@ export default defineConfig({
     ],
     vite: {
         plugins: [tailwindcss()],
+        server: {
+            allowedHosts: true,
+        },
     },
 });

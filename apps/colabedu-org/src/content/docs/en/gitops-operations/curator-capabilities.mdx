@@ -21,7 +21,7 @@ The **Curator Agent** is ColabEdu's AI-powered content ingestion pipeline. It tr
 | **Document Download** | Downloads PDFs and LMS packages (`.imscc` Canvas, `.mbz` Moodle) to the local specs repository. |
 | **AI Analysis & Generation** | Extracts pedagogical criteria, generates slides/widgets or quality rubrics using Gemini. |
 | **Gem Routing** | `curator_router` classifies each input and delegates to the specialized Gem (`lesson`, `resource`, `c2`…). |
-| **YAML Scaffolding** | Writes complete OAS `InteractiveLesson`, `ResourceLearning`, or `ExerciseSpec` specs. |
+| **YAML Scaffolding** | Writes complete OPS `InteractiveLesson`, `ResourceLearning`, or `ExerciseSpec` specs. |
 | **LMS Package Ingestion** | Unzips `.imscc`/`.mbz`, uploads assets to GCS, and generates `InteractiveLesson` with slides. |
 | **OER Indexing** | Indexes open source resources with a 3-dimension pedagogical `qualityScore`. |
 | **Bulk Ingestion** | Spec sync via `sync_specs.sh` or `curator batch`. |
@@ -102,7 +102,7 @@ The ColabEdu curation pipeline can generate the following OAS-compliant spec typ
 
 ### Spec Types by Pipeline
 
-| Spec Type | OAS Kind | Gem / Mode | Description |
+| Spec Type | OPS Kind | Gem / Mode | Description |
 |---|---|---|---|
 | `ExerciseSpec` | `BLOCK_CONTENT` | `gem.curator_c2` / Classic | Exercises, FRQ, text analysis with achievement bands |
 | `BlockRubric` | `BLOCK_RUBRIC` | `gem.curator_c0` / Classic | Normative rubrics from curricular documents |
@@ -169,7 +169,7 @@ Generated from LMS packages (Canvas Commons, Moodle Hub). Contains slides, inter
 Indexes OER resources with a 3-dimension `qualityScore`: `alignment`, `pedagogicalRichness`, `accessibility`. See [ResourceLearning Reference](/en/reference/resource-learning).
 
 ### CurriculumRequirement (spec-as-code YAML)
-Not an OAS spec — a **requirement definition file** stored in `ce-specs/catalog/requirements/`. Read by the `CurriculumGapAnalyzer` to determine what specs are needed per standard + country.
+Not an OPS spec — a **requirement definition file** stored in `ce-specs/catalog/requirements/`. Read by the `CurriculumGapAnalyzer` to determine what specs are needed per standard + country.
 
 ```yaml
 # ce-specs/catalog/requirements/ap_spanish_us.yaml

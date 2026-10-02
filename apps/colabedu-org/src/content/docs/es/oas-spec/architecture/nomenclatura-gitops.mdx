@@ -1,26 +1,26 @@
 ---
 title: "Implementación y Federación"
-description: "Cómo implementar el estándar OAS: Reglas universales de nomenclatura y la arquitectura de referencia de ColabEdu."
+description: "Cómo implementar el estándar OPS: Reglas universales de nomenclatura y la arquitectura de referencia de ColabEdu."
 sidebar:
   order: 6
 ---
 
 # Implementación y Federación de Repositorios
 
-**Arquitectura:** Open Assessment Standard (OAS v1beta1)
+**Arquitectura:** Open Pedagogy Standard (OPS v1beta1)
 
-El estándar OAS está diseñado para ser agnóstico de la infraestructura subyacente. Cualquier gobierno, institución o *partner* tecnológico puede implementar el estándar utilizando las herramientas de su elección. 
+El estándar OPS está diseñado para ser agnóstico de la infraestructura subyacente. Cualquier gobierno, institución o *partner* tecnológico puede implementar el estándar utilizando las herramientas de su elección. 
 
 Para garantizar la interoperabilidad y la **Soberanía de Datos**, el estándar separa estrictamente las **reglas universales del formato** de la **implementación de referencia** (cómo lo orquesta ColabEdu internamente).
 
 ---
 
-## 1. El Estándar OAS (Reglas Universales para Partners)
+## 1. El Estándar OPS (Reglas Universales para Partners)
 
-Cualquier entidad que desee construir herramientas compatibles con OAS, generar contenido automatizado o crear un "Nodo Institucional" privado, solo necesita cumplir con dos principios fundamentales:
+Cualquier entidad que desee construir herramientas compatibles con OPS, generar contenido automatizado o crear un "Nodo Institucional" privado, solo necesita cumplir con dos principios fundamentales:
 
 ### A. Git como Fuente Única de Verdad (GitOps)
-Los archivos YAML del estándar OAS deben almacenarse en repositorios de control de versiones (Git). Esto garantiza la trazabilidad forense, las auditorías legales y permite la federación (herencia entre repositorios).
+Los archivos YAML del estándar OPS deben almacenarse en repositorios de control de versiones (Git). Esto garantiza la trazabilidad forense, las auditorías legales y permite la federación (herencia entre repositorios).
 - **Soberanía Absoluta:** Los ministerios de educación, gobiernos regionales o instituciones pueden alojar y gestionar sus propios repositorios de *specs* de forma completamente privada en sus propios servidores e infraestructuras.
 - Eres libre de usar **GitHub, GitLab, Bitbucket, o Gitea** en la nube o *On-Premise*.
 - Eres libre de usar cualquier lenguaje de programación o base de datos para leer, indexar o escribir estos YAMLs.

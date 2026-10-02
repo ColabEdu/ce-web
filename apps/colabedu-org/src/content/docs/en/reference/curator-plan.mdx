@@ -4,6 +4,9 @@ description: "Complete schema for the CuratorPlan resource: the persistent, cras
 sidebar:
   label: "CuratorPlan"
   order: 51
+  badge:
+    text: Partners Only
+    variant: caution
 ---
 
 import { Badge, Aside } from '@astrojs/starlight/components';
@@ -13,7 +16,7 @@ import { Badge, Aside } from '@astrojs/starlight/components';
 A **`CuratorPlan`** represents a long-running, crash-recoverable curriculum ingestion campaign. It is not a `ce-specs` YAML file — it is a **database resource** created by the CLI or REST API to orchestrate the Autonomous Curator Agent (ACA) pipeline.
 
 <Aside type="note">
-Unlike other OAS types (`Recipe`, `Taxonomy`…), `CuratorPlan` and `CuratorPlanItem` are **not stored in `ce-specs`**: they live in the PostgreSQL `curator_plans` table and are managed by the ACA engine.
+Unlike other OPS types (`Recipe`, `Taxonomy`…), `CuratorPlan` and `CuratorPlanItem` are **not stored in `ce-specs`**: they live in the PostgreSQL `curator_plans` table and are managed by the ACA engine.
 </Aside>
 
 ---
@@ -74,7 +77,7 @@ Each discovered source document creates a `CuratorPlanItem` within a plan.
 id:                  uuid      # Auto-generated
 plan_id:             uuid      # FK → curator_plans.id
 source_url:          string    # Source document URI: http://, gs://, drive://
-spec_type:           string    # OAS type to produce: C0_STANDARDS | C1_RECIPES | C2_EXERCISES
+spec_type:           string    # OPS type to produce: C0_STANDARDS | C1_RECIPES | C2_EXERCISES
 status:              enum      # See status table below
 confidence_score:    float     # 0.0–1.0 — score from the Curator's evaluation node
 attempts:            integer   # Number of processing attempts
@@ -96,7 +99,7 @@ created_at:          timestamp
 
 ### `spec_type` — Valid values
 
-| Value | Description | OAS Layer |
+| Value | Description | OPS Layer |
 |---|---|---|
 | `C0_STANDARDS` | Regulatory rubrics and standards | C0 |
 | `BLOCK_RUBRIC` | Alias for C0 — evaluation rubric | C0 |

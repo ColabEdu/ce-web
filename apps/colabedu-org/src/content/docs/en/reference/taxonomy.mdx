@@ -4,55 +4,25 @@ description: "Reference documentation for the Taxonomy resource in OAS."
 sidebar:
   order: 1
 ---
+import SpecVersionViewer from '../../../../components/SpecVersionViewer.astro';
+
+<SpecVersionViewer 
+  specKind="Taxonomy" 
+  version="0.9.4" 
+  status="ACTIVE" 
+  schemaPath="schemas/taxonomy/taxonomy.base.schema.yaml" 
+/>
 
 The `Taxonomy` resource allows defining and structuring hierarchical concepts such as geographical locations (countries, regions), organizational levels of the educational system, or curriculum standards grouped by subject and level.
 
 This structure is fundamental for organizing and filtering other resources within the system (such as rubrics and exercises). It is also the backbone of the **CLI scaffolding pipeline**, which uses taxonomy identifiers to discover, fetch, and auto-generate evaluation rubrics from official curriculum documents.
 
-## Schema
+## Variants and Spec Behaviors
 
-### Metadata (`metadata`)
-
-| Field | Type | Required | Description |
-|---|---|---|---|
-| `id` | `string` | Yes | Unique identifier for the taxonomy (e.g., `loc.es` or `std.intl`). |
-| `type` | `string` | Yes | The type of taxonomy. Common values: `location_country`, `standard`. |
-| `active` | `boolean` | Yes | Indicates whether the taxonomy is active. |
-| `name` | `string` | Yes | Human-readable name of the taxonomy (e.g., "Spain" or "International Standards"). |
-| `flag` | `string` | No | (For locations only) Country flag emoji. |
-| `languages` | `string[]` | No | List of supported languages (e.g., `[es-ES]`). |
-| `countryRef` | `string` | No | Reference to which country it applies (e.g., `global`). |
-
-### Specification (`spec`) - `location_country` Variant
-
-When `type: location_country`, the `spec` block defines regions and organizational levels:
-
-| Field | Type | Description |
-|---|---|---|
-| `regions` | `array` | List of regions/states in the country. Each region contains `id`, `name`, `active`, `languages`, and `flagAsset`. |
-| `orgLevels` | `array` | List of organizational levels (e.g., Primary, Secondary). Each contains `id` and `name`. |
-
-### Specification (`spec`) - `standard` Variant
-
-When `type: standard`, the `spec` block defines standards, levels, and subjects:
-
-| Field | Type | Description |
-|---|---|---|
-| `standards` | `array` | List of standards (e.g., IB, AP). Each contains `id`, `name`, `active`, as well as `levels` and `subjects`. |
-| `levels` | `array` | (Within a standard) Educational levels covered (e.g., DP, MYP). Contains `id`, `name`, `active`. |
-| `subjects` | `array` | (Within a standard) Subjects. Contains `id`, `name`, `active`, and `applicableLevels` (list of level `id`s). |
-
-### Specification (`spec`) - `bundle_course` Variant
-
-When `type: bundle_course`, the resource groups a full course offering under a single taxonomy node. This is the primary input for the **CLI rubric scaffolding pipeline**:
-
-| Field | Type | Description |
-|---|---|---|
-| `displayName` | `string` | Human-readable course name (e.g., "AP Spanish Language and Culture"). |
-| `taxonomyRef` | `string` | Reference to the parent standard taxonomy (e.g., `std.intl.ap.v1`). |
-| `subject` | `string` | Subject identifier (e.g., `subj.intl.ap.spanish_language_and_culture`). |
-| `educationLevel` | `string` | Education level identifier (e.g., `lvl.intl.ap.high`). |
-| `units` | `array` | Ordered list of course units. Each unit contains `id`, `name`, `description`, and `suggested_hours`. |
+Depending on the `metadata.type` property, the specification adapts:
+- **`location_country`**: Defines national boundaries, `regions`, and organizational education levels (`orgLevels`).
+- **`standard`**: Configures official frameworks (e.g. IB, AP, LOMLOE) with `levels` and `subjects`.
+- **`bundle_course`**: Groups complete curriculum units (`units`) mapping to evaluation criteria.
 
 ## Relationship to Rubrics
 
@@ -65,35 +35,7 @@ bundle_course (Taxonomy)
 
 Each unit in the bundle maps to one criterion in the generated rubric, inheriting `id`, `name`, `description`, and `suggested_hours`.
 
-## Usage Example
 
-```yaml
-apiVersion: colabedu.ai/v1beta1
-kind: Taxonomy
-metadata:
-  id: loc.es
-  type: location_country
-  active: true
-  name: España
-  flag: 🇪🇸
-  languages: [es-ES]
-spec:
-  regions:
-    - id: loc.es.mad
-      name: Comunidad de Madrid
-      active: true
-      flagAsset: assets/flags/en/mad.svg
-    - id: loc.es.cat
-      name: Catalunya
-      active: true
-      languages: [ca-ES]
-      flagAsset: assets/flags/en/cat.svg
-  orgLevels:
-    - id: org.lvl.es.infantil
-      name: Infantil
-    - id: org.lvl.es.primaria
-      name: Primaria
-```
 
 ## Related CLI Commands
 

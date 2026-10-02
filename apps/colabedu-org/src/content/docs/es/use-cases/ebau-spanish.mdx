@@ -1,17 +1,17 @@
 ---
-title: "Casos Prácticos EBAU (OAS V2)"
+title: "Casos Prácticos EBAU (OPS V2)"
 description: "Implementación de la Prueba de Acceso a la Universidad (España) bajo la especificación OAS."
 ---
 
-# Catálogo de Casos Prácticos: Ecosistema EBAU bajo OAS V2
+# Catálogo de Casos Prácticos: Ecosistema EBAU bajo OPS V2
 
-**Arquitectura:** Open Assessment Standard (OAS v1beta1)
+**Arquitectura:** Open Pedagogy Standard (OPS v1beta1)
 
 **Scope Educativo:** Bachillerato (LOMLOE) y Evaluación del Bachillerato para el Acceso a la Universidad (EBAU) - Lengua Castellana y Literatura II (España).
 
 El ecosistema **EBAU (Selectividad)** es el modelo paradigmático de evaluación "High-Stakes" punitiva. A diferencia del enfoque holístico del IB, la EBAU se centra en la precisión técnica, el análisis sintáctico riguroso y la penalización estricta por errores ortográficos y gramaticales (pudiendo restar hasta 3 puntos de la nota final).
 
-Este documento detalla la implementación en **Assessment as Code** de las preguntas clave del examen de Lengua Castellana y Literatura II, demostrando cómo OAS V2 maneja la corrección ortográfica implacable y el dibujo de árboles sintácticos.
+Este documento detalla la implementación en **Pedagogy as Code** de las preguntas clave del examen de Lengua Castellana y Literatura II, demostrando cómo OPS V2 maneja la corrección ortográfica implacable y el dibujo de árboles sintácticos.
 
 ## 1. Pregunta 1: El Resumen y el Tema (Precisión y Concisión)
 
@@ -190,4 +190,4 @@ Se implementa como un `BLOCK_DIRECTIVE` inyectado en *todas* las recetas de la E
 
 El ecosistema EBAU obliga a la IA a comportarse de forma **hiper-determinista y punitiva**.
 
-Mientras que en el IB la IA actúa como un mentor que valora el "intento" y la "comprensión", en la EBAU la IA actúa como un **Auditor Sintáctico y Ortográfico**. Gracias a la separación de capas en OAS v1beta1, podemos usar el *mismo LLM base* (Gemini), pero alterando drásticamente su comportamiento mediante las `BLOCK_DIRECTIVE` de la Capa C3 y las rúbricas rígidas de la Capa C0.
+Mientras que en el IB la IA actúa como un mentor que valora el "intento" y la "comprensión", en la EBAU la IA actúa como un **Auditor Sintáctico y Ortográfico**. Gracias a la separación de capas en OPS v1beta1, podemos usar el *mismo LLM base* (Gemini), pero alterando drásticamente su comportamiento mediante las `BLOCK_DIRECTIVE` de la Capa C3 y las rúbricas rígidas de la Capa C0.

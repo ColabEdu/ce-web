@@ -6,10 +6,12 @@ import icon from 'astro-icon';
 
 // https://astro.build/config
 export default defineConfig({
-
+    server: {
+        allowedHosts: true,
+    },
     integrations: [
         starlight({
-            title: 'ColabEdu.ai',
+            title: 'ColabEdu.net',
             social: {
                 github: 'https://github.com/colabedu/ce-web',
             },
@@ -48,5 +50,8 @@ export default defineConfig({
     ],
     vite: {
         plugins: [tailwindcss()],
+        server: {
+            allowedHosts: true,
+        },
     },
 });

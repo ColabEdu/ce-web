@@ -17,12 +17,24 @@ const segments = currentPath.split("/").filter(Boolean);
 const existingLocale = locales.find((l) => segments[0] === l.code);
 const currentLocale = existingLocale ? existingLocale.code : "es_ES";
 
-const navItems = [
-    { name: "Profesores", href: `/${currentLocale}/` },
-    { name: "Instituciones", href: `/${currentLocale}/schools` },
-    { name: "Editoriales", href: `/${currentLocale}/editorial` },
-    { name: "Gobierno", href: `/${currentLocale}/government` },
-];
+const isSpain = currentLocale === "es_ES" || currentLocale === "ca_ES" || currentLocale === "eu_ES" || currentLocale === "gl_ES";
+const isUS = currentLocale === "en_US" || currentLocale === "es_US";
+
+const navItems = isSpain
+    ? [
+          { name: "Pilotos & CCAA", href: `/${currentLocale}/#piloto` },
+          { name: "Centros", href: `/${currentLocale}/schools` },
+          { name: "Docentes", href: `/${currentLocale}/#docentes` },
+          { name: "Editoriales", href: `/${currentLocale}/editorial` },
+          { name: "EBAU Academy", href: `/${currentLocale}/#academy` },
+      ]
+    : [
+          { name: "Teachers", href: `/${currentLocale}/` },
+          { name: "Schools", href: `/${currentLocale}/schools` },
+          { name: "AP Academy", href: `/${currentLocale}/#academy` },
+          { name: "Publishers", href: `/${currentLocale}/editorial` },
+          { name: "Government", href: `/${currentLocale}/government` },
+      ];
 
 function getLocalizedPath(path: string, locale: string) {
     const pathSegments = path.split("/").filter(Boolean);
@@ -48,12 +60,12 @@ function getLocalizedPath(path: string, locale: string) {
                     href={`/${currentLocale}/`}
                     class="text-2xl font-black tracking-tighter text-slate-900"
                 >
-                    Colab<span class="text-indigo-600">Edu</span>
+                    Colab<span class="text-indigo-600">Edu</span><span class="text-slate-400 font-normal text-lg">.net</span>
                 </a>
                 <span
                     class="bg-indigo-50 text-indigo-600 text-[10px] px-2 py-0.5 rounded font-bold uppercase tracking-widest border border-indigo-100 hidden sm:inline-block"
                 >
-                    Commercial
+                    Plataforma
                 </span>
             </div>
 
@@ -121,16 +133,20 @@ function getLocalizedPath(path: string, locale: string) {
                 </div>
 
                 <a
-                    href="/docs"
-                    class="text-xs font-bold text-slate-500 hover:text-slate-900 uppercase tracking-widest hidden lg:block"
+                    href="https://colabedu.org"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="text-xs font-bold text-slate-500 hover:text-indigo-600 uppercase tracking-widest hidden lg:inline-flex items-center gap-1"
+                    title="Estándar Abierto OPS en ColabEdu.org"
                 >
-                    Docs
+                    Estándar OPS (org) ↗
                 </a>
-                <button
-                    class="px-6 py-2.5 bg-slate-900 text-white rounded-full text-xs font-bold hover:bg-slate-800 transition-all shadow-lg"
+                <a
+                    href={isSpain ? `/${currentLocale}/#piloto` : "https://app.colabedu.net"}
+                    class="px-6 py-2.5 bg-slate-900 text-white rounded-full text-xs font-bold hover:bg-slate-800 transition-all shadow-lg text-center"
                 >
-                    Consola Admin
-                </button>
+                    {isSpain ? "Acceso Piloto" : "Teacher Sign In"}
+                </a>
             </div>
 
             <!-- Mobile Menu Button -->
@@ -198,16 +214,20 @@ function getLocalizedPath(path: string, locale: string) {
             </div>
 
             <a
-                href="/docs"
+                href="https://colabedu.org"
+                target="_blank"
+                rel="noopener noreferrer"
                 class="block px-3 py-3 rounded-md text-base font-medium text-slate-700 hover:text-indigo-600 hover:bg-slate-50 border-b border-slate-50"
-                >Docs</a
             >
+                Estándar OPS (org) ↗
+            </a>
             <div class="pt-4">
-                <button
-                    class="w-full px-5 py-3 text-center font-bold text-white bg-indigo-600 rounded-full hover:bg-indigo-700 shadow-md"
+                <a
+                    href={isSpain ? `/${currentLocale}/#piloto` : "https://app.colabedu.net"}
+                    class="block w-full px-5 py-3 text-center font-bold text-white bg-indigo-600 rounded-full hover:bg-indigo-700 shadow-md"
                 >
-                    Consola Admin
-                </button>
+                    {isSpain ? "Acceso Piloto (CCAA / Centros)" : "Teacher Sign In"}
+                </a>
             </div>
         </div>
     </div>

@@ -6,6 +6,14 @@ sidebar:
 ---
 
 import { Aside } from '@astrojs/starlight/components';
+import SpecVersionViewer from '../../../../components/SpecVersionViewer.astro';
+
+<SpecVersionViewer 
+  specKind="InteractiveLesson" 
+  version="0.9.4" 
+  status="ACTIVE" 
+  schemaPath="schemas/lms/interactive_lesson.schema.yaml" 
+/>
 
 # InteractiveLesson
 
@@ -25,105 +33,13 @@ import { Aside } from '@astrojs/starlight/components';
 | Moodle package (`.mbz`) | `curator curate --source-type LMS_PACKAGE` | `InteractiveLesson` |
 | Canvas Commons (batch) | `docs discover --source canvas-commons` + `curator batch` | `InteractiveLesson[]` |
 
----
 
-## YAML Schema
-
-```yaml
-apiVersion: core.oas.colabedu.io/v1beta1
-kind: InteractiveLesson
-metadata:
-  name: <referenceCode>        # e.g.: global.lesson.bio.mitosis.bach1.v1
-  displayName: "<Human-readable title>"
-  description: "<Pedagogical description>"
-  tags:
-    - biology
-    - bachillerato
-  lmsSource:
-    platform: canvas            # canvas | moodle
-    packageId: "<package-id>"
-    url: "<original-url>"
-    importedAt: "2026-06-09T00:00:00Z"
-
-spec:
-  learningObjectives:
-    - "Students understand the phases of mitosis."
-    - "Students identify differences between mitosis and meiosis."
-
-  slides:
-    - id: slide_01
-      title: "Introduction to Mitosis"
-      type: text_image           # text_image | quiz | video | interactive
-      content: |
-        Mitosis is the cell division process by which a cell produces
-        two genetically identical daughter cells.
-      assets:
-        - type: image
-          gcsUri: "gs://colabedu-lms-assets/<pkg-id>/mitosis_diagram.png"
-          alt: "Diagram of mitosis phases"
-
-    - id: slide_02
-      title: "Phases of Mitosis"
-      type: interactive
-      widget: timeline_widget
-      data:
-        phases:
-          - name: "Prophase"
-            description: "Chromatin condenses to form visible chromosomes."
-          - name: "Metaphase"
-            description: "Chromosomes align at the metaphase plate."
-          - name: "Anaphase"
-            description: "Sister chromatids separate toward the poles."
-          - name: "Telophase"
-            description: "Two daughter nuclei form and cytokinesis begins."
-
-    - id: slide_03
-      title: "Comprehension Check"
-      type: quiz
-      widget: multiple_choice
-      data:
-        question: "In which phase do chromosomes align at the equatorial plate?"
-        options:
-          - "Prophase"
-          - "Metaphase"
-          - "Anaphase"
-          - "Telophase"
-        correct: 1
-        feedback: "Correct. In Metaphase, chromosomes align at the metaphase plate."
-
-  curricularContext:
-    standard: LOMLOE
-    level: "1 BACH"
-    subject: "biology"
-    referenceCode: "es.lomloe.bach.1.bio"
-```
 
 ---
 
-## Field Reference
+## Curricular Alignment Notes
 
-### `metadata`
-
-| Field | Type | Description |
-|---|---|---|
-| `name` | `string` | Unique identifier in `referenceCode` format |
-| `displayName` | `string` | Human-readable title for the UI |
-| `lmsSource.platform` | `string` | `canvas` or `moodle` |
-| `lmsSource.packageId` | `string` | Package ID in the original platform |
-| `lmsSource.url` | `string` | Download URL of the original package |
-
-### `spec.slides[]`
-
-| Field | Type | Description |
-|---|---|---|
-| `id` | `string` | Unique identifier within the lesson |
-| `title` | `string` | Slide title |
-| `type` | `enum` | `text_image` \| `quiz` \| `video` \| `interactive` |
-| `widget` | `string` | Flutter widget name registered in A2UI |
-| `assets[]` | `array` | References to assets uploaded to GCS |
-
-### `spec.learningObjectives[]`
-List of learning objectives aligned to the `curricularContext`. The `curator_lesson` Gem extracts them from the LMS package manifest and refines them using the backend's CurricularContext.
+The `curator_lesson` Gem automatically extracts learning objectives aligned to the `curricularContext` from the LMS package manifest and refines them using the backend's CurricularContext.
 
 ---
 

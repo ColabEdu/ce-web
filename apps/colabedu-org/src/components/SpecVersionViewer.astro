@@ -1,0 +1,248 @@
+---
+import fs from 'node:fs';
+import path from 'node:path';
+import { Code } from 'astro:components';
+
+interface Props {
+  specKind: string;
+  version?: string;
+  status?: string;
+  sourceRepo?: string;
+  schemaPath?: string;
+  examplePath?: string;
+  showProperties?: boolean;
+  showExample?: boolean;
+}
+
+const {
+  specKind,
+  version = "0.9.4",
+  status = "ACTIVE",
+  sourceRepo = "colabedu/ce-specs-registry",
+  schemaPath = `schemas/${specKind.toLowerCase()}.schema.yaml`,
+  examplePath,
+  showProperties = true,
+  showExample = true
+} = Astro.props;
+
+const statusColor = status === "ACTIVE" 
+  ? "bg-emerald-500/10 text-emerald-600 border-emerald-500/20 dark:text-emerald-400"
+  : status === "DRAFT"
+  ? "bg-amber-500/10 text-amber-600 border-amber-500/20 dark:text-amber-400"
+  : "bg-rose-500/10 text-rose-600 border-rose-500/20 dark:text-rose-400";
+
+// Load compiled JSON schema dynamically from ce-specs-registry
+let metadataProps: Array<{ name: string; type: string; required: boolean; description: string }> = [];
+let specProps: Array<{ name: string; type: string; required: boolean; description: string }> = [];
+let schemaDescription = "";
+
+try {
+  const jsonRelPath = schemaPath.replace(/^schemas\//, '').replace(/\.schema\.ya?ml$/, '.schema.json').replace(/\.ya?ml$/, '.schema.json');
+  const candidates = [
+    path.resolve(process.cwd(), '../../ce-specs-registry/dist/json-schemas', jsonRelPath),
+    path.resolve('/home/jmolmo/git/colabedu/ce-specs-registry/dist/json-schemas', jsonRelPath),
+    path.resolve('/home/jmolmo/git/colabedu/ce-specs-registry/dist/json-schemas', schemaPath.replace(/^schemas\//, '').replace(/\.ya?ml$/, '.json'))
+  ];
+
+  let foundJson: any = null;
+  for (const c of candidates) {
+    if (fs.existsSync(c)) {
+      foundJson = JSON.parse(fs.readFileSync(c, 'utf8'));
+      break;
+    }
+  }
+
+  if (foundJson) {
+    schemaDescription = foundJson.description || "";
+    
+    // Extract metadata properties
+    if (foundJson.properties?.metadata?.properties) {
+      const metaObj = foundJson.properties.metadata.properties;
+      const reqList: string[] = foundJson.properties.metadata.required || [];
+      // Also check anyOf requirements
+      const anyOfReqs: string[] = [];
+      if (Array.isArray(foundJson.properties.metadata.anyOf)) {
+        foundJson.properties.metadata.anyOf.forEach((ao: any) => {
+          if (Array.isArray(ao.required)) anyOfReqs.push(...ao.required);
+        });
+      }
+
+      metadataProps = Object.entries(metaObj).map(([name, val]: [string, any]) => ({
+        name,
+        type: val.type || (val.enum ? 'enum' : 'object'),
+        required: reqList.includes(name) || anyOfReqs.includes(name),
+        description: val.description || "—"
+      }));
+    }
+
+    // Extract spec properties
+    if (foundJson.properties?.spec?.properties) {
+      const specObj = foundJson.properties.spec.properties;
+      const reqList: string[] = foundJson.properties.spec.required || [];
+      specProps = Object.entries(specObj).map(([name, val]: [string, any]) => ({
+        name,
+        type: val.type === 'array' ? `${val.items?.type || 'item'}[]` : (val.type || 'object'),
+        required: reqList.includes(name),
+        description: val.description || (val.enum ? `Enum: [${val.enum.join(', ')}]` : "—")
+      }));
+    }
+  }
+} catch (e) {
+  // Silent fallback to standard header view
+}
+
+// Load canonical example dynamically from ce-specs-registry/examples
+let canonicalExampleYaml = "";
+let canonicalExampleRelPath = "";
+
+if (showExample) {
+  try {
+    const rawKind = specKind.toLowerCase().replace(/[^a-z0-9_]/g, '_');
+    // Candidates for example file
+    const exampleRelPathCalculated = examplePath 
+      ? examplePath.replace(/^examples\//, '')
+      : schemaPath.replace(/^schemas\//, '').replace(/(\.schema)?\.ya?ml$/, '.example.yaml');
+
+    const exampleCandidates = [
+      path.resolve(process.cwd(), '../../ce-specs-registry/examples', exampleRelPathCalculated),
+      path.resolve('/home/jmolmo/git/colabedu/ce-specs-registry/examples', exampleRelPathCalculated),
+      path.resolve('/home/jmolmo/git/colabedu/ce-specs-registry/examples', `${rawKind}.example.yaml`),
+      path.resolve('/home/jmolmo/git/colabedu/ce-specs-registry/examples/assessment', `${rawKind}.example.yaml`),
+      path.resolve('/home/jmolmo/git/colabedu/ce-specs-registry/examples/meta', `${rawKind}.example.yaml`),
+      path.resolve('/home/jmolmo/git/colabedu/ce-specs-registry/examples/lms', `${rawKind}.example.yaml`),
+      path.resolve('/home/jmolmo/git/colabedu/ce-specs-registry/examples/taxonomy', `${rawKind}.example.yaml`)
+    ];
+
+    for (const ec of exampleCandidates) {
+      if (fs.existsSync(ec)) {
+        canonicalExampleYaml = fs.readFileSync(ec, 'utf8').trim();
+        canonicalExampleRelPath = path.relative('/home/jmolmo/git/colabedu/ce-specs-registry', ec);
+        break;
+      }
+    }
+  } catch (err) {
+    // Silent fallback
+  }
+}
+---
+
+<div class="my-6 rounded-xl border border-gray-200 bg-gray-50/60 p-4 dark:border-gray-800 dark:bg-gray-900/50">
+  <div class="flex flex-wrap items-center justify-between gap-3 border-b border-gray-200/80 pb-3 dark:border-gray-800">
+    <div class="flex items-center space-x-2">
+      <span class="font-mono text-sm font-bold text-gray-900 dark:text-gray-100">{specKind}</span>
+      <span class={`rounded-full border px-2.5 py-0.5 text-xs font-semibold ${statusColor}`}>
+        ● {status}
+      </span>
+    </div>
+    <div class="flex items-center space-x-3 text-xs text-gray-500 dark:text-gray-400">
+      <span>Contract: <strong class="text-gray-700 dark:text-gray-300">v{version}</strong></span>
+      <span>•</span>
+      <a 
+        href={`https://github.com/${sourceRepo}/blob/main/${schemaPath}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center text-primary-600 hover:underline dark:text-primary-400 font-mono"
+      >
+        View Schema ↗
+      </a>
+    </div>
+  </div>
+  
+  <div class="pt-3 text-xs text-gray-500 dark:text-gray-400 flex items-center justify-between">
+    <span>Specification Standard: <strong>Open Pedagogy Specification (OPS)</strong></span>
+    <span class="font-mono">ce-specs-registry: {schemaPath}</span>
+  </div>
+
+  {showProperties && (metadataProps.length > 0 || specProps.length > 0) && (
+    <div class="mt-4 border-t border-gray-200/80 pt-3 dark:border-gray-800">
+      <details open class="group text-xs">
+        <summary class="cursor-pointer font-semibold text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100 select-none flex items-center justify-between pb-1">
+          <span>⚡ Live Schema Contract Definition (Auto-synced from <code>{schemaPath}</code>)</span>
+          <span class="text-gray-400 group-open:rotate-180 transition-transform">▼</span>
+        </summary>
+        
+        {metadataProps.length > 0 && (
+          <div class="mt-3">
+            <h4 class="font-mono font-semibold text-gray-900 dark:text-gray-100 mb-1.5 text-xs">Metadata Properties (<code>metadata</code>)</h4>
+            <div class="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950">
+              <table class="w-full text-left text-xs border-collapse">
+                <thead>
+                  <tr class="border-b border-gray-200 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-900/50">
+                    <th class="p-2 font-mono text-gray-700 dark:text-gray-300">Field</th>
+                    <th class="p-2 font-mono text-gray-700 dark:text-gray-300">Type</th>
+                    <th class="p-2 text-gray-700 dark:text-gray-300">Required</th>
+                    <th class="p-2 text-gray-700 dark:text-gray-300">Description</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100 dark:divide-gray-800/60">
+                  {metadataProps.map(prop => (
+                    <tr>
+                      <td class="p-2 font-mono font-semibold text-primary-600 dark:text-primary-400">{prop.name}</td>
+                      <td class="p-2 font-mono text-gray-600 dark:text-gray-400">{prop.type}</td>
+                      <td class="p-2">
+                        {prop.required ? (
+                          <span class="rounded bg-rose-500/10 px-1.5 py-0.5 text-[10px] font-semibold text-rose-600 dark:text-rose-400">Yes</span>
+                        ) : (
+                          <span class="text-gray-400 text-[10px]">No</span>
+                        )}
+                      </td>
+                      <td class="p-2 text-gray-600 dark:text-gray-300">{prop.description}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {specProps.length > 0 && (
+          <div class="mt-4">
+            <h4 class="font-mono font-semibold text-gray-900 dark:text-gray-100 mb-1.5 text-xs">Specification Body (<code>spec</code>)</h4>
+            <div class="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950">
+              <table class="w-full text-left text-xs border-collapse">
+                <thead>
+                  <tr class="border-b border-gray-200 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-900/50">
+                    <th class="p-2 font-mono text-gray-700 dark:text-gray-300">Field</th>
+                    <th class="p-2 font-mono text-gray-700 dark:text-gray-300">Type</th>
+                    <th class="p-2 text-gray-700 dark:text-gray-300">Required</th>
+                    <th class="p-2 text-gray-700 dark:text-gray-300">Description</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100 dark:divide-gray-800/60">
+                  {specProps.map(prop => (
+                    <tr>
+                      <td class="p-2 font-mono font-semibold text-indigo-600 dark:text-indigo-400">{prop.name}</td>
+                      <td class="p-2 font-mono text-gray-600 dark:text-gray-400">{prop.type}</td>
+                      <td class="p-2">
+                        {prop.required ? (
+                          <span class="rounded bg-rose-500/10 px-1.5 py-0.5 text-[10px] font-semibold text-rose-600 dark:text-rose-400">Yes</span>
+                        ) : (
+                          <span class="text-gray-400 text-[10px]">No</span>
+                        )}
+                      </td>
+                      <td class="p-2 text-gray-600 dark:text-gray-300">{prop.description}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+      </details>
+    </div>
+  )}
+
+  {showExample && canonicalExampleYaml && (
+    <div class="mt-4 border-t border-gray-200/80 pt-3 dark:border-gray-800">
+      <details open class="group text-xs">
+        <summary class="cursor-pointer font-semibold text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100 select-none flex items-center justify-between pb-1">
+          <span>📦 Canonical YAML Example (Auto-synced from <code>{canonicalExampleRelPath}</code>)</span>
+          <span class="text-gray-400 group-open:rotate-180 transition-transform">▼</span>
+        </summary>
+        <div class="mt-3 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-800">
+          <Code code={canonicalExampleYaml} lang="yaml" />
+        </div>
+      </details>
+    </div>
+  )}
+</div>

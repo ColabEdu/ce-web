@@ -1,0 +1,33 @@
+---
+title: "PathwayTemplate"
+description: "Technical reference documentation for PathwayTemplate (Official Curriculum Framework) in OPS."
+sidebar:
+  order: 4
+  badge:
+    text: Standard
+    variant: tip
+---
+
+import { Badge } from '@astrojs/starlight/components';
+import SpecVersionViewer from '../../../../components/SpecVersionViewer.astro';
+
+<SpecVersionViewer 
+  specKind="PathwayTemplate" 
+  version="0.9.4" 
+  status="ACTIVE" 
+  schemaPath="schemas/meta/pathway_template.schema.yaml" 
+/>
+
+The **`PathwayTemplate`** resource represents the **official curriculum framework** of a subject under an educational standard (e.g., *IB Spanish B SL*, *AP Spanish Language*, or *LOMLOE Spanish Literature*).
+
+---
+
+## Pedagogical Concept
+
+Within the **Pedagogy as Code (OPS)** architecture, `PathwayTemplate` bridges the gap between statutory standards and classroom operations:
+
+1. **Thematic Structuring:** Defines mandatory teaching units, core topics, and prescribed subtopics established by educational bodies (State Ministries, College Board, International Baccalaureate).
+2. **Official Assessment Weighting:** Encapsulates instructional hour allocations and official examination weights (e.g., Paper 1: 25%, Paper 2: 50%, Individual Oral: 25%).
+3. **Foundation for Course Instances:** Educators and schools do not construct curricula from scratch; they instantiate a [`CourseSpec`](/en/reference/course-spec/) that inherits from an official `PathwayTemplate` and specializes it into specific delivery modalities (Full Year, Intensive, or Remediation).
+
+

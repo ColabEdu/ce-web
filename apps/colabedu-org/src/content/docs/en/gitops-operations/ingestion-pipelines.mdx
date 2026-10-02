@@ -5,7 +5,7 @@ description: "ColabEdu's global expansion: AP, IB, United States, and Mexico."
 
 # Automated Ingestion Pipelines: Global Expansion
 
-**Architecture:** Open Assessment Standard (OAS v1beta1)
+**Architecture:** Open Pedagogy Standard (OPS v1beta1)
 
 To scale the platform beyond Spain, the "Content Flywheel" must be fed with the most demanded international standards and the regulations of key US states (California, Texas) and Mexico (NEM, CENEVAL). The ability to generate hyper-personalized curriculum from authentic materials (Realia) becomes an insurmountable competitive advantage.
 
@@ -19,7 +19,7 @@ This document details the automation strategy (RPA + LLMs) to ingest regulations
 
 Unlike the LOMLOE system in Spain, US and International curricula have a strong emphasis on Data-Driven Assessment.
 
-- **Advanced Placement (AP):** Ingestion of *Course and Exam Descriptions* and rubrics (1-5 points) for *Free Response* (FRQ) tasks. Global themes are mapped as `BLOCK_COMPETENCY`. The LLM must penalize cultural or register transition failures in the OAS architecture.
+- **Advanced Placement (AP):** Ingestion of *Course and Exam Descriptions* and rubrics (1-5 points) for *Free Response* (FRQ) tasks. Global themes are mapped as `BLOCK_COMPETENCY`. The LLM must penalize cultural or register transition failures in the OPS architecture.
 - **International Baccalaureate (IB):** Ingestion of Spanish A and B guides. Evaluation matrices for *Paper 1* and *Paper 2* with their grading bands and qualitatively broken-down criteria.
 - **California (Common Core & World Languages):** Mapping CDE multidimensional proficiency levels and Common Core State Standards in Spanish (CCSS-S) as `BLOCK_GOAL`.
 - **Texas (TEKS - LOTE & SLAR):** The *Curator Agent* will extract exact alphanumeric TEKS codes (e.g., TEKS.SLAR.110.53.b.1.A). Strict alignment is legally mandatory in Texas.

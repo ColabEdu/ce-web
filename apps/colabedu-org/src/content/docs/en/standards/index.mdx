@@ -1,11 +1,11 @@
 ---
-title: "Crosswalk Global: Educational Concept Mapping (OAS V2)"
+title: "Crosswalk Global: Educational Concept Mapping (OPS V2)"
 description: "The Rosetta Stone of the ColabEdu platform, translating educational frameworks into immutable architectural primitives."
 sidebar:
   order: 2
 ---
 
-**Architecture:** Open Assessment Standard (OAS v1beta1)
+**Architecture:** Open Pedagogy Standard (OPS v1beta1)
 
 **Purpose:** This document acts as the **Rosetta Stone** of the ColabEdu platform. It translates the bureaucratic, legal, and pedagogical jargon of the five main educational frameworks (Spain, Mexico, US, AP, and IB) into the immutable architectural primitives of our database.
 
@@ -17,7 +17,7 @@ At ColabEdu, we resolve the **Semantic Gap** through this standard. This allows 
 
 How does each country call the rules of the game? Each ministry of education invents its own terms to describe the hierarchy of knowledge. This table maps concepts from the macro law down to the microscopic criterion that the AI must evaluate at runtime.
 
-| **OAS Architecture (ColabEdu)** | **Spain (LOMLOE)** | **Mexico (NEM / MCCEMS)** | **US (Common Core / WL)** | **Advanced Placement (AP)** | **International Baccalaureate (IB)** |
+| **OPS Architecture (ColabEdu)** | **Spain (LOMLOE)** | **Mexico (NEM / MCCEMS)** | **US (Common Core / WL)** | **Advanced Placement (AP)** | **International Baccalaureate (IB)** |
 | --- | --- | --- | --- | --- | --- |
 | **Master Document (The Law)** | Royal Decree / Autonomous Decree | Synthetic Program / MCCEMS | State Standards / Framework | Course and Exam Description (CED) | Subject Guide |
 | **Macro Domain (category)** | Subject (e.g., Spanish Language and Literature) | Sociocognitive Resource (e.g., Language and Communication) | Strand / Domain (e.g., Reading) | Modality (e.g., Interpersonal Writing) | Component (e.g., Paper 1) |
@@ -27,7 +27,7 @@ How does each country call the rules of the game? Each ministry of education inv
 
 ### **Architectural and Database Implications**
 
-- **Tree Depth:** While the US system (Common Core) tends to be very flat and broad (hundreds of granular *Performance Expectations*), European and Ibero-American systems (LOMLOE, NEM) are deeply hierarchical. The `category` and `subcategories` fields (array of strings) in OAS absorb this variance without requiring SQL schema migrations in PostgreSQL.
+- **Tree Depth:** While the US system (Common Core) tends to be very flat and broad (hundreds of granular *Performance Expectations*), European and Ibero-American systems (LOMLOE, NEM) are deeply hierarchical. The `category` and `subcategories` fields (array of strings) in OPS absorb this variance without requiring SQL schema migrations in PostgreSQL.
 - **Score Mapping:** The L0-L4 levels do not always represent grades from 0 to 10. In AP, a holistic level 5 can equal 100%. In IB, a markband of "10-12" equals the maximum score of a criterion. The *Spec Manager* normalizes these floating values in the backend before presenting them on the interface.
 
 ## 2. Transversal Axes and B2G Audits (Taxonomy Crosswalks)
@@ -36,7 +36,7 @@ Almost all modern educational systems require a subject (e.g., Literature) to as
 
 This is our **biggest B2B/B2G selling point (Killer Feature)**: it allows a private school to assess its own way, but automatically report the results to government audit dashboards without double effort.
 
-| **OAS Architecture (ColabEdu)** | **Spain (LOMLOE)** | **Mexico (NEM / MCCEMS)** | **US (Common Core / WL)** | **Advanced Placement (AP)** | **International Baccalaureate (IB)** |
+| **OPS Architecture (ColabEdu)** | **Spain (LOMLOE)** | **Mexico (NEM / MCCEMS)** | **US (Common Core / WL)** | **Advanced Placement (AP)** | **International Baccalaureate (IB)** |
 | --- | --- | --- | --- | --- | --- |
 | **Transversal Skills (taxonomy_ref)** | Key Competencies (e.g., CCL, CD, CPSAA) | Articulating Axes (e.g., Critical Thinking) | Cross-Disciplinary Skills / 21st Century Skills | The 6 Themes (e.g., Global Challenges) | Concepts (e.g., Identity, Perspective) |
 | **Graduate Profile (taxonomy_ref)** | Student Exit Profile | Graduate Profile | College and Career Readiness | AP Scholar Profile | IB Learner Profile |

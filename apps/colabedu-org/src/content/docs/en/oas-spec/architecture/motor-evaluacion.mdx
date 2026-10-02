@@ -9,7 +9,7 @@ In the ColabEdu ecosystem, the **Spec Manager** and **Recipe Compiler** act as t
 
 ## Architectural Magic: Late Binding
 
-One of the invisible problems of scaling EdTech platforms is the "combinatorial explosion" (each teacher assigning dozens of different texts for the same rubric). OAS v1beta1 solves this with **Late Binding**:
+One of the invisible problems of scaling EdTech platforms is the "combinatorial explosion" (each teacher assigning dozens of different texts for the same rubric). OPS v1beta1 solves this with **Late Binding**:
 
 1. **The Hollow Mold:** The C1 template (e.g., "Argumentative Essay") is saved in Git completely empty of contextual content (`requires_dynamic_context: true`).
 2. **The Trigger:** When the teacher assigns the task, they simply select or attach the context article (C2 Layer).
@@ -33,7 +33,7 @@ When Layer C2 injects a complete article into the context, the LLM does not suff
 
 ## Separation of Presentation and Data (Server-Driven UI)
 
-OAS frees the AI from Frontend design by strictly applying the *Server-Driven UI* pattern through the **A2UI (Agent-to-UI)** protocol. The AI returns a structured JSON, and the backend deterministically maps those variables into Flutter Widgets.
+OPS frees the AI from Frontend design by strictly applying the *Server-Driven UI* pattern through the **A2UI (Agent-to-UI)** protocol. The AI returns a structured JSON, and the backend deterministically maps those variables into Flutter Widgets.
 
 - **Primitives and Components:** `pdf_viewer`, `markdown_editor`, `forms_mcq`, etc.
 - **The Chatbot Companion:** A "Sidecar" attachable to any widget to offer real-time Socratic tutoring.

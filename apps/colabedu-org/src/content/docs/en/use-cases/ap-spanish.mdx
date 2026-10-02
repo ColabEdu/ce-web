@@ -1,17 +1,17 @@
 ---
-title: "AP Spanish Practical Cases (OAS V2)"
-description: "Implementation of the Advanced Placement (AP) ecosystem under the OAS specification."
+title: "AP Spanish Practical Cases (OPS V2)"
+description: "Implementation of the Advanced Placement (AP) ecosystem under the OPS specification."
 ---
 
-# Use Cases Catalog: AP Spanish Ecosystem under OAS V2
+# Use Cases Catalog: AP Spanish Ecosystem under OPS V2
 
-**Architecture:** Open Assessment Standard (OAS v1beta1)
+**Architecture:** Open Pedagogy Standard (OPS v1beta1)
 
 **Educational Scope:** Advanced Placement (AP) - College Board. Spanish Language and Culture (L2) & Spanish Literature and Culture (L1).
 
 The **Advanced Placement (AP)** ecosystem is characterized by being a high-impact standardized assessment (High-Stakes Testing). Unlike the IB curriculum (which is more conceptual and open), the AP exam is designed in **Free Response Questions (FRQs)** formats with exact time limits, hyper-specific tasks (replying to an email, speaking for 5 turns of 20 seconds), and highly deterministic rubrics.
 
-This document details the implementation in **Assessment as Code** of the 5 free-response assessment pillars of the AP, demonstrating the power of modular ExerciseTypes in Flutter and preprocessing directives (C3).
+This document details the implementation in **Pedagogy as Code** of the 5 free-response assessment pillars of the AP, demonstrating the power of modular ExerciseTypes in Flutter and preprocessing directives (C3).
 
 ## 1. AP Language FRQ 1: Email Reply (Interpersonal Writing)
 
@@ -377,6 +377,6 @@ spec:
 
 ## 6. Strategic Conclusion
 
-The implementation of the **AP** ecosystem demonstrates that the OAS architecture and the *Server-Driven UI* model serve not only to grade texts.
+The implementation of the **AP** ecosystem demonstrates that the OPS architecture and the *Server-Driven UI* model serve not only to grade texts.
 
 By parameterizing the ExerciseTypes with strict logic (limits on audio replays, preparation vs. recording timers, and algorithmic pre-evaluators for missing sources), ColabEdu successfully emulates the restrictive and high-pressure environment of the real AP exam. This provides schools in the United States with the only comprehensive tool to practice and accurately diagnose their students' level before the College Board exam in May.

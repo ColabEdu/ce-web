@@ -1,17 +1,17 @@
 ---
-title: "IB Spanish Practical Cases (OAS V2)"
-description: "Implementation of the International Baccalaureate (IB) under the OAS specification."
+title: "IB Spanish Practical Cases (OPS V2)"
+description: "Implementation of the International Baccalaureate (IB) under the OPS specification."
 ---
 
-# Use Cases Catalog: IB Spanish Ecosystem under OAS V2
+# Use Cases Catalog: IB Spanish Ecosystem under OPS V2
 
-**Architecture:** Open Assessment Standard (OAS v1beta1)
+**Architecture:** Open Pedagogy Standard (OPS v1beta1)
 
 **Educational Scope:** International Baccalaureate (IB) - Spanish A (Literature) and Spanish B (Language Acquisition).
 
 The International Baccalaureate (IB) curriculum is distinguished by its holistic and conceptual approach. Unlike other systems that assess isolated knowledge, the IB evaluates "how the student thinks" through multiple modalities: written critical analysis, production of specific text formats (blogs, brochures), listening comprehension, and interactive oral defense.
 
-This document details the complete implementation in **Assessment as Code** of all IB assessment pillars (SL and HL), demonstrating how the UI engine (ExerciseType) and pedagogical layers (C0, C1, C2, and C3) intertwine.
+This document details the complete implementation in **Pedagogy as Code** of all IB assessment pillars (SL and HL), demonstrating how the UI engine (ExerciseType) and pedagogical layers (C0, C1, C2, and C3) intertwine.
 
 ## 1. Paper 1 (Spanish A: Literature) - Guided Literary Analysis
 
@@ -375,6 +375,6 @@ spec:
 
 ## 6. Conclusion
 
-This catalog demonstrates that the OAS V2 architecture has the necessary granularity to accurately simulate any component of the rigorous International Baccalaureate ecosystem.
+This catalog demonstrates that the OPS V2 architecture has the necessary granularity to accurately simulate any component of the rigorous International Baccalaureate ecosystem.
 
 From disabling visual components for a **Closed Book Exam (Paper 2 Literature)**, to injecting limiting variables for **Listening Comprehension (Paper 2 Language B)**, or dynamically adapting a visual stimulus to a literary one for the **HL vs SL Oral**, the combination of modular ExerciseTypes in Flutter and directives in YAML allows recreating 100% of the IB ecosystem without developing custom software for each exam.

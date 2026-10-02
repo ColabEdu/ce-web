@@ -1,9 +1,9 @@
 ---
 title: Arquitectura y Motor UI
-description: Análisis global del ecosistema OAS v1beta1, el protocolo A2UI y los motores de generación de informes.
+description: Análisis global del ecosistema OPS v1beta1, el protocolo A2UI y los motores de generación de informes.
 ---
 
-Dentro del ecosistema ColabEdu, el **Recipe Compiler** es el motor central responsable de traducir un estándar legal (como LOMLOE en España o las directrices AP/IB) en un artefacto de evaluación ejecutable por IA. Bajo la arquitectura **Open Assessment Standard (OAS)**, abandonamos los "prompts" monolíticos en favor de un modelo de "Grafo de Componentes por Capas" (*Assessment as Code*).
+Dentro del ecosistema ColabEdu, el **Recipe Compiler** es el motor central responsable de traducir un estándar legal (como LOMLOE en España o las directrices AP/IB) en un artefacto de evaluación ejecutable por IA. Bajo la arquitectura **Open Pedagogy Standard (OPS)**, abandonamos los "prompts" monolíticos en favor de un modelo de "Grafo de Componentes por Capas" (*Pedagogy as Code*).
 
 Este modelo se apoya en la **Separación de Responsabilidades** y la **Máxima Reutilización mediante Late Binding**, garantizando tanto el rigor legal auditable como la autonomía del profesor.
 
@@ -17,7 +17,7 @@ En el modelo tradicional (Legacy V1), se enviaba al LLM un único fichero Markdo
 
 ## 2. La Magia del "Late Binding" (Plantillas de Contexto Cero)
 
-La arquitectura OAS fragmenta la evaluación en bloques (C0, C1, C2, C3). Para evitar crear una base de datos masiva, usamos **Late Binding**:
+La arquitectura OPS fragmenta la evaluación en bloques (C0, C1, C2, C3). Para evitar crear una base de datos masiva, usamos **Late Binding**:
 
 1. **El Molde Vacío:** La receta (C1) existe en el servidor completamente vacía de contexto (`requires_dynamic_context: true`).
 2. **El Disparador:** El profesor selecciona la plantilla y adjunta un texto o PDF (C2).
@@ -42,7 +42,7 @@ El ingeniero declara el `configuration_schema` en el ExerciseType, y el pedagogo
 
 ## 5. El Motor de Informes: Convención sobre Configuración
 
-En OAS v1beta1, aplicamos la **Separación de Presentación y Datos**: el LLM solo genera JSON, y el backend orquesta el formato visual usando Widgets.
+En OPS v1beta1, aplicamos la **Separación de Presentación y Datos**: el LLM solo genera JSON, y el backend orquesta el formato visual usando Widgets.
 
 ### Layouts por Defecto (Informe de Configuración Cero)
 Los profesores no programan interfaces. El protocolo A2UI tiene plantillas predeterminadas. Un creador simplemente apunta al `exerciseTypeRef`, y el backend ensambla automáticamente el informe.
@@ -67,7 +67,7 @@ El *Spec Manager* genera un JSON estricto para el modelo evaluador, validando es
 
 ## 8. Casos de Estudio: Ecosistemas Globales
 
-La arquitectura OAS soporta polimorfismo educativo:
+La arquitectura OPS soporta polimorfismo educativo:
 - **LOMLOE (España):** Rigor analítico y punitivo.
 - **AP Spanish (EE.UU.):** Orquestación multimodal (textos, gráficos, audio).
 - **IB Spanish (Global):** Holístico y descriptivo, anulación de reglas vía C3.

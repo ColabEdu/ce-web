@@ -3,7 +3,7 @@ title: "Rubric (Layer C0): Compulsory Secondary Education (ESO) Spanish Language
 description: "Detailed evaluation matrix for ESO Language and Literature based on the LOMLOE framework."
 ---
 
-**Architecture:** Open Assessment Standard (OAS v1beta1)
+**Architecture:** Open Pedagogy Standard (OPS v1beta1)
 
 **Scope:** LOMLOE Compulsory Secondary Education (ESO) - Spain (Baseline Canary Islands)
 
@@ -17,7 +17,7 @@ This catalog uses as a baseline the detailed evaluation matrices published by th
 
 ## 1. Algorithmic Logic: Points or Probabilities?
 
-In the OAS architecture, the AI **does not evaluate using probabilities**, but acts as a deterministic mathematical engine. To achieve this, the rubric imposes strict rules on how final points are calculated.
+In the OPS architecture, the AI **does not evaluate using probabilities**, but acts as a deterministic mathematical engine. To achieve this, the rubric imposes strict rules on how final points are calculated.
 
 ### Weights and the Point Scale
 
@@ -39,7 +39,7 @@ The standard mathematical translation is as follows:
 
 ## 2. The 5-Level Architecture: Why not eliminate L0?
 
-Although the official Canary Islands PDF shows only 4 columns (*Insufficient, Sufficient/Good, Notable, Outstanding*), the OAS standard unfolds them into 5 levels (L0-L4). **It is algorithmically vital not to eliminate L0.**
+Although the official Canary Islands PDF shows only 4 columns (*Insufficient, Sufficient/Good, Notable, Outstanding*), the OPS standard unfolds them into 5 levels (L0-L4). **It is algorithmically vital not to eliminate L0.**
 
 1.  **The Mathematical Zero (Absence of Evidence):** If a student turns in a blank exam, or answers on a completely unrelated topic, the AI needs a level that represents absolute zero (0%). That is L0.
 
@@ -51,7 +51,7 @@ Although the official Canary Islands PDF shows only 4 columns (*Insufficient, Su
 
 If we eliminated L0, the AI would be forced to use L1 as the minimum base, "giving away" 25% of the points to a student who has not demonstrated any competence.
 
-## 3. Mapping Guide: From the Canary Islands PDF to Layer C0 (OAS)
+## 3. Mapping Guide: From the Canary Islands PDF to Layer C0 (OPS)
 
 | **Element in Canary Islands PDF**           | **Mapping in Layer C0 (YAML)**                               | **Extraction Example**                     |
 |---------------------------------------------|--------------------------------------------------------------|--------------------------------------------|
@@ -202,7 +202,7 @@ The level of precision and rigor of the rubrics published by the Government of t
 
 ## 6. The Competency Dictionary: GitOps and the `goals` Table
 
-For the ecosystem to be a true **Assessment as Code** model, Git must be the single source of truth. We cannot allow competencies (like CCL1 or CD1) to be created manually in the database or exist only as free text in the rubric.
+For the ecosystem to be a true **Pedagogy as Code** model, Git must be the single source of truth. We cannot allow competencies (like CCL1 or CD1) to be created manually in the database or exist only as free text in the rubric.
 
 ### The "Curator Agent" Flow
 
@@ -268,7 +268,7 @@ Once the YAML is in Gitea, the **Spec Manager** orchestrates the rest of the val
 
 3.  **RAG Injection at Evaluation Time:** When the LLM is about to grade Criterion 5.1 (which has the `CCL1` tag), the system uses the ID relationship to extract the exact text of the Goal from the database and inject it into the prompt. The LLM evaluates based on the exact legal definition, reducing the risk of semantic hallucination to zero.
 
-## 7. From YAML to Dashboard: Traceability and Global Analytics (OAS Analytics)
+## 7. From YAML to Dashboard: Traceability and Global Analytics (OPS Analytics)
 
 The main reason we structure the rubric and tags so rigorously is to enable **analytical intelligence**. The goal is that a grade does not simply end up as a static "7/10" on a report card, but becomes actionable data for Dashboards at different scales.
 

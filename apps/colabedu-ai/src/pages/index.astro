@@ -2,7 +2,28 @@
 import CommercialLayout from "../layouts/CommercialLayout.astro";
 ---
 
-<CommercialLayout title="ColabEdu - Recupera tu tiempo">
+<CommercialLayout title="ColabEdu.net - Plataforma Pedagógica y Evaluación">
+	<script is:inline>
+		(function () {
+			var saved = localStorage.getItem('colabedu_locale');
+			if (saved && window.location.pathname === '/') {
+				window.location.replace('/' + saved + '/');
+				return;
+			}
+			if (!saved && window.location.pathname === '/') {
+				var lang = (navigator.languages && navigator.languages[0]) || navigator.language || 'es';
+				if (lang.startsWith('en')) {
+					window.location.replace('/en_US/');
+				} else if (lang.startsWith('es-MX')) {
+					window.location.replace('/es_MX/');
+				} else if (lang.startsWith('es-US')) {
+					window.location.replace('/es_US/');
+				} else {
+					window.location.replace('/es_ES/');
+				}
+			}
+		})();
+	</script>
 	<!-- 1. Hero Section -->
 	<section
 		class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-gradient-to-br from-indigo-50 via-white to-emerald-50"

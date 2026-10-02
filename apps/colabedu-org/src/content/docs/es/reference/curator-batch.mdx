@@ -2,8 +2,11 @@
 title: "Batch YAML — Referencia"
 description: "Schema completo de los ficheros YAML de batch del Curator (ce-specs/batches/). Define pipelines declarativos de ingesta con etapas: taxonomy, discover, fetch, parse, approval, ingest."
 sidebar:
-  label: "Curator Batch YAML"
+  label: "CuratorBatch"
   order: 50
+  badge:
+    text: Solo Partners
+    variant: caution
 ---
 
 import { Badge, Aside, Tabs, TabItem } from '@astrojs/starlight/components';
@@ -39,7 +42,7 @@ context:
   level:         string   # Nivel educativo: "9-12" | "2 BACH" | "HL" | "SL"
   authority:     string   # Autoridad educativa (opcional): "Comunidad de Madrid"
   program:       string   # Programa específico (opcional): "AP Spanish Language"
-  referenceCode: string   # Código base OAS para las specs generadas
+  referenceCode: string   # Código base OPS para las specs generadas
 
 # ── Etapas a ejecutar (en orden) ─────────────────────────────────────
 operations:
@@ -48,7 +51,7 @@ operations:
   - fetch       # Descargar documentos al staging local
   - parse       # Extraer specs YAML vía AI (Curator)
   - approval    # Esperar revisión humana (HITL)
-  - ingest      # Ingestar specs aprobadas en el catálogo OAS
+  - ingest      # Ingestar specs aprobadas en el catálogo OPS
 
 # ── Configuración por etapa (solo incluir las etapas usadas) ──────────
 
@@ -93,9 +96,9 @@ ingest:
 | `taxonomy` | Asegura que los nodos de taxonomía (standard → level → subject) existen en el backend antes de procesar contenido | `POST /api/v1/curator/taxonomy/ensure` |
 | `discover` | Busca en fuentes educativas (portales de exámenes, repositorios OER) y construye una lista de URLs de documentos | `POST /api/v1/curator/discover` |
 | `fetch` | Descarga los documentos descubiertos a un directorio local de staging con progreso | `POST /api/v1/curator/fetch` |
-| `parse` | Envía los documentos al servicio Curator AI para extracción de specs OAS vía multimodal | `POST /api/v1/curator/parse` |
+| `parse` | Envía los documentos al servicio Curator AI para extracción de specs OPS vía multimodal | `POST /api/v1/curator/parse` |
 | `approval` | Bloquea el pipeline hasta que un humano aprueba las specs en la UI de aprobación | `POST /api/v1/curator/approval/submit` + polling |
-| `ingest` | Empuja las specs aprobadas al spec-manager vía la API de ingesta OAS | `POST /api/v1/curator/ingest` |
+| `ingest` | Empuja las specs aprobadas al spec-manager vía la API de ingesta OPS | `POST /api/v1/curator/ingest` |
 
 <Aside type="tip">
 **Puedes combinar cualquier subconjunto.** Si ya tienes los PDFs descargados, usa solo `[parse, ingest]`. Si quieres descubrimiento automático completo, usa `[discover, fetch, parse, approval, ingest]`.
@@ -282,7 +285,7 @@ El state file guarda:
 
 ## Tipos de spec válidos (`specTypes`)
 
-| Valor | Capa OAS | Descripción |
+| Valor | Capa OPS | Descripción |
 |---|---|---|
 | `C0_STANDARDS` | C0 | Estándares normativos ingestados desde documentos oficiales |
 | `BLOCK_RUBRIC` | C0 | Rúbricas de evaluación inmutables |

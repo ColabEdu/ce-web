@@ -1,13 +1,13 @@
 ---
 title: Technical Architecture (Overview)
-description: Introduction to the technical architecture of OAS v1beta1 and its design principles.
+description: Introduction to the technical architecture of OPS v1beta1 and its design principles.
 sidebar:
   order: 1
 ---
 
-**Architecture:** Open Assessment Standard (OAS v1beta1)
+**Architecture:** Open Pedagogy Standard (OPS v1beta1)
 
-**Purpose:** To explain the technical operation of the LLM orchestration engine, demonstrating how the separation of responsibilities (*Assessment as Code*) allows evaluating any Spanish-speaking educational paradigm without requiring additional model training (*Fine-Tuning*).
+**Purpose:** To explain the technical operation of the LLM orchestration engine, demonstrating how the separation of responsibilities (*Pedagogy as Code*) allows evaluating any Spanish-speaking educational paradigm without requiring additional model training (*Fine-Tuning*).
 
 ## The Problem: The "Prompt Engineering" Monolith
 
@@ -21,11 +21,11 @@ The language model was forced to act simultaneously as a pedagogical evaluator, 
 
 ## The Modular Solution
 
-To solve this chaos, the OAS architecture breaks down the problem into specialized components, analogous to how microservices architecture revolutionized traditional web development.
+To solve this chaos, the OPS architecture breaks down the problem into specialized components, analogous to how microservices architecture revolutionized traditional web development.
 
 Throughout the following sections of this documentation, we will explore in detail the technical pillars that support the ColabEdu ecosystem:
 
-1.  [**Assessment as Code (The 4 Layers):**](./capas/) How we fragment knowledge using the MVC pattern.
+1.  [**Pedagogy as Code (The 4 Layers):**](./capas/) How we fragment knowledge using the MVC pattern.
 2.  [**Entity Relationships (The Exercise):**](./entidades-ejercicios/) How ExerciseSpec, AssessmentItem, and ExerciseType relate to each other.
 3.  [**The Evaluation Engine (Late Binding and UI):**](./motor-evaluacion/) How we inject context in real-time and enforce structured JSON schemas.
 4.  [**Agent Ecosystem:**](./agentes/) The network of specialized intelligences operating on the Spec Manager.

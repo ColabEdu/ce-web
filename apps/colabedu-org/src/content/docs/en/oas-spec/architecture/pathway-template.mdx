@@ -1,6 +1,6 @@
 ---
 title: PATHWAY_TEMPLATE — Program Templates
-description: The OAS type that bridges Taxonomies (the law) and pedagogical Recipes (exercises), enabling standardized Pathway creation by geography and educational standard.
+description: The OPS type that bridges Taxonomies (the law) and pedagogical Recipes (exercises), enabling standardized Pathway creation by geography and educational standard.
 sidebar:
   order: 5
 ---
@@ -11,13 +11,13 @@ import { Badge, Card, CardGrid, Tabs, TabItem } from '@astrojs/starlight/compone
 
 <Badge text="New in v0.6.10" variant="tip" />
 
-A **`PATHWAY_TEMPLATE`** is an OAS specification type that acts as a **structured bridge** between Taxonomies (the curricular "law") and pedagogical Recipes (concrete exercises).
+A **`PATHWAY_TEMPLATE`** is an OPS specification type that acts as a **structured bridge** between Taxonomies (the curricular "law") and pedagogical Recipes (concrete exercises).
 
 It defines the **official scaffold** of a specific study program — for example, all the themes, literary texts, and exam requirements of the IB Spanish B SL — in a versionable, Git-traceable YAML format.
 
 ---
 
-## Position in the OAS Hierarchy
+## Position in the OPS Hierarchy
 
 ```mermaid
 graph TD
@@ -39,7 +39,7 @@ graph TD
     style DIR fill:#fef3c7,stroke:#d97706,stroke-width:1px
 ```
 
-| Layer | OAS Type | Description | Mutability |
+| Layer | OPS Type | Description | Mutability |
 |---|---|---|---|
 | C0 | `TAXONOMY` | Educational standards (IB, LOMLOE, AP…) | Immutable |
 | **New** | **`PATHWAY_TEMPLATE`** | **Official program for a specific course** | **Versioned in Git** |

@@ -4,6 +4,9 @@ import starlight from '@astrojs/starlight';
 
 // https://astro.build/config
 export default defineConfig({
+	server: {
+		allowedHosts: true,
+	},
 	integrations: [
 		starlight({
 			title: 'Centro de Ayuda - ColabEdu',
@@ -39,4 +42,9 @@ export default defineConfig({
 			],
 		}),
 	],
+	vite: {
+		server: {
+			allowedHosts: true,
+		},
+	},
 });

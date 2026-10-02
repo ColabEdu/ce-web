@@ -5,22 +5,22 @@ sidebar:
   order: 5
 ---
 
-## The Agent Ecosystem and OAS
+## The Agent Ecosystem and OPS
 
-The OAS standard is not solely designed for evaluating exams. It is conceived as a structured *Data Lake* where a swarm of specialized artificial intelligences (each with a specific role) collaborates to autonomously create, update, and execute the educational lifecycle.
+The OPS standard is not solely designed for evaluating exams. It is conceived as a structured *Data Lake* where a swarm of specialized artificial intelligences (each with a specific role) collaborates to autonomously create, update, and execute the educational lifecycle.
 
 ```mermaid
 graph TD
-    OAS[(OAS Specs Repository\nYAMLs)]
+    OPS[(OPS Specs Repository\nYAMLs)]
     
-    Evaluator[Evaluator Agents\nEvaluate students against C0 Rubrics] -->|Lectura| OAS
-    Curator[Curator Agents\nProcess PDFs/Docs to generate C0/C1/C2 Layers] -->|Lectura/Escritura| OAS
-    Manager[Spec Managers\nOrchestrate and Compile Recipes] -->|Lectura| OAS
-    Modernizer[Modernizer Agents\nMigrate old LMS packages to OAS] -->|Escritura| OAS
-    ExerciseGen["Exercise Creation Agents\nGenerate dynamic exercises (C1)"] -->|Escritura| OAS
-    ResourceGen["Learning Resources Agents\nSynthesize educational material (C2)"] -->|Escritura| OAS
+    Evaluator[Evaluator Agents\nEvaluate students against C0 Rubrics] -->|Lectura| OPS
+    Curator[Curator Agents\nProcess PDFs/Docs to generate C0/C1/C2 Layers] -->|Lectura/Escritura| OPS
+    Manager[Spec Managers\nOrchestrate and Compile Recipes] -->|Lectura| OPS
+    Modernizer[Modernizer Agents\nMigrate old LMS packages to OPS] -->|Escritura| OPS
+    ExerciseGen["Exercise Creation Agents\nGenerate dynamic exercises (C1)"] -->|Escritura| OPS
+    ResourceGen["Learning Resources Agents\nSynthesize educational material (C2)"] -->|Escritura| OPS
     
-    style OAS fill:#f9f,stroke:#333,stroke-width:2px
+    style OPS fill:#f9f,stroke:#333,stroke-width:2px
 ```
 
 *   **Evaluator Agents (Evaluators):** Consume the read-only standard. They cross-reference the `ExerciseSpec` with the student's payload to issue precise mathematical scores and formative *feedback*.

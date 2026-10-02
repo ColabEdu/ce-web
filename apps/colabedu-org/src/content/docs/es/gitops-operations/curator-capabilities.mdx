@@ -21,7 +21,7 @@ El **Agente Curador** es el pipeline de ingesta de contenido con AI de ColabEdu.
 | **Descarga de documentos** | Descarga PDFs y paquetes LMS (`.imscc` Canvas, `.mbz` Moodle) al repositorio local de specs. |
 | **Análisis y generación con AI** | Extrae criterios pedagógicos, genera slides/widgets o rúbricas de calidad usando Gemini. |
 | **Routing de Gems** | `curator_router` clasifica cada input y delega al Gem especializado (`lesson`, `resource`, `c2`…). |
-| **Scaffolding de YAML** | Escribe specs `InteractiveLesson`, `ResourceLearning` o `ExerciseSpec` OAS completas. |
+| **Scaffolding de YAML** | Escribe specs `InteractiveLesson`, `ResourceLearning` o `ExerciseSpec` OPS completas. |
 | **Ingesta de paquetes LMS** | Descomprime `.imscc`/`.mbz`, sube assets a GCS y genera `InteractiveLesson` con slides. |
 | **Indexación OER** | Indexa recursos de fuentes abiertas con qualityScore de 3 dimensiones pedagógicas. |
 | **Ingesta masiva** | Sincronización de specs vía `sync_specs.sh` o `curator batch`. |
@@ -102,7 +102,7 @@ El pipeline de curación de ColabEdu puede generar los siguientes tipos de spec 
 
 ### Tipos de Spec por Pipeline
 
-| Tipo de Spec | OAS Kind | Gem / Modo | Descripción |
+| Tipo de Spec | OPS Kind | Gem / Modo | Descripción |
 |---|---|---|---|
 | `ExerciseSpec` | `BLOCK_CONTENT` | `gem.curator_c2` / Clásico | Ejercicios, FRQ, análisis de texto con bandas de logro |
 | `BlockRubric` | `BLOCK_RUBRIC` | `gem.curator_c0` / Clásico | Rúbricas normativas desde documentos curriculares |
@@ -169,7 +169,7 @@ Generada desde paquetes LMS (Canvas Commons, Moodle Hub). Contiene slides, widge
 Indexa recursos OER con un qualityScore de 3 dimensiones: `alignment`, `pedagogicalRichness`, `accessibility`. Ver [Referencia ResourceLearning](/es/reference/resource-learning).
 
 ### CurriculumRequirement (YAML spec-as-code)
-No es una spec OAS — es un **archivo de definición de requisitos** almacenado en `ce-specs/catalog/requirements/`. Lo lee el `CurriculumGapAnalyzer` para determinar qué specs se necesitan por estándar + país.
+No es una spec OPS — es un **archivo de definición de requisitos** almacenado en `ce-specs/catalog/requirements/`. Lo lee el `CurriculumGapAnalyzer` para determinar qué specs se necesitan por estándar + país.
 
 ```yaml
 # ce-specs/catalog/requirements/lomloe_es.yaml

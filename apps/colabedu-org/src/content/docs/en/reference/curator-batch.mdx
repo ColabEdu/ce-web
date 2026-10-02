@@ -2,8 +2,11 @@
 title: "Batch YAML — Reference"
 description: "Complete schema for Curator batch YAML files (ce-specs/batches/). Defines declarative ingestion pipelines with stages: taxonomy, discover, fetch, parse, approval, ingest."
 sidebar:
-  label: "Curator Batch YAML"
+  label: "CuratorBatch"
   order: 50
+  badge:
+    text: Partners Only
+    variant: caution
 ---
 
 import { Badge, Aside, Tabs, TabItem } from '@astrojs/starlight/components';
@@ -12,7 +15,7 @@ import { Badge, Aside, Tabs, TabItem } from '@astrojs/starlight/components';
 
 **Curator batch YAML files** let you define pedagogical content ingestion pipelines in a fully **declarative** way. They are stored in `ce-specs/batches/` and executed with the `spec batch run` command.
 
-A batch can chain any subset of pipeline stages in whatever order you need — from automatic source discovery to final ingestion into the OAS catalog.
+A batch can chain any subset of pipeline stages in whatever order you need — from automatic source discovery to final ingestion into the OPS catalog.
 
 ---
 
@@ -39,16 +42,16 @@ context:
   level:         string   # Educational level: "9-12" | "2 BACH" | "HL" | "SL"
   authority:     string   # Educational authority (optional): "California Dept. of Education"
   program:       string   # Specific program (optional): "AP Spanish Language"
-  referenceCode: string   # Base OAS code for generated specs
+  referenceCode: string   # Base OPS code for generated specs
 
 # ── Stages to execute (in order) ─────────────────────────────────────
 operations:
   - taxonomy    # Ensure taxonomy nodes exist in the backend
   - discover    # Discover document source URLs
   - fetch       # Download documents to local staging
-  - parse       # Extract OAS YAML specs via AI (Curator)
+  - parse       # Extract OPS YAML specs via AI (Curator)
   - approval    # Wait for human review (HITL)
-  - ingest      # Ingest approved specs into the OAS catalog
+  - ingest      # Ingest approved specs into the OPS catalog
 
 # ── Per-stage configuration (include only the stages you use) ─────────
 
@@ -93,9 +96,9 @@ ingest:
 | `taxonomy` | Ensures taxonomy nodes (standard → level → subject) exist in the backend before processing content | `POST /api/v1/curator/taxonomy/ensure` |
 | `discover` | Searches educational sources (exam portals, OER repositories) and builds a list of document URLs | `POST /api/v1/curator/discover` |
 | `fetch` | Downloads discovered documents to a local staging directory with progress reporting | `POST /api/v1/curator/fetch` |
-| `parse` | Sends documents to the Curator AI service for multimodal OAS spec extraction | `POST /api/v1/curator/parse` |
+| `parse` | Sends documents to the Curator AI service for multimodal OPS spec extraction | `POST /api/v1/curator/parse` |
 | `approval` | Blocks the pipeline until a human approves the specs in the Approval UI | `POST /api/v1/curator/approval/submit` + polling |
-| `ingest` | Pushes approved specs to the spec-manager via the OAS ingestion API | `POST /api/v1/curator/ingest` |
+| `ingest` | Pushes approved specs to the spec-manager via the OPS ingestion API | `POST /api/v1/curator/ingest` |
 
 <Aside type="tip">
 **You can mix any subset of stages.** If you already have the PDFs downloaded, use only `[parse, ingest]`. For full autonomous discovery, use `[discover, fetch, parse, approval, ingest]`.
@@ -282,7 +285,7 @@ The state file stores:
 
 ## Valid `specTypes`
 
-| Value | OAS Layer | Description |
+| Value | OPS Layer | Description |
 |---|---|---|
 | `C0_STANDARDS` | C0 | Regulatory standards ingested from official documents |
 | `BLOCK_RUBRIC` | C0 | Immutable evaluation rubrics |

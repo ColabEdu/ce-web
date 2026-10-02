@@ -1,6 +1,6 @@
 ---
 title: "Gem"
-description: "Documentación de referencia para el recurso Gem en OAS, incluyendo los Gems del Curador para ingesta LMS/OER."
+description: "Documentación de referencia para el recurso Gem en OPS, incluyendo los Gems del Curador para ingesta LMS/OER."
 sidebar:
   order: 42
   badge:
@@ -41,7 +41,7 @@ metadata:
 spec:
   system_prompt: |
     Eres un Diseñador Instruccional experto en crear ejercicios interactivos para ColabEdu
-    utilizando la especificación OAS v1beta1.
+    utilizando la especificación OPS v1beta1.
 
     REGLAS DE GENERACIÓN YAML:
     1. El resultado final debe ser SIEMPRE un recurso de tipo `AssessmentItem`.
@@ -92,7 +92,7 @@ spec:
     2. `learningObjectives[]` — objetivos alineados al CurricularContext
     3. `lmsSource` — metadatos del paquete original (url, platform, packageId)
 
-    OUTPUT: Solo YAML OAS válido. Sin explicaciones adicionales.
+    OUTPUT: Solo YAML OPS válido. Sin explicaciones adicionales.
 ```
 
 ### Ejemplo: `gem.curator_resource`
@@ -120,7 +120,7 @@ spec:
        - `accessibility`: soporte multi-idioma, WCAG, formatos alternativos
     3. `applicableStandards[]` — lista de referenceCode de estándares
 
-    OUTPUT: Solo YAML OAS válido. Sin explicaciones adicionales.
+    OUTPUT: Solo YAML OPS válido. Sin explicaciones adicionales.
 ```
 
 ---

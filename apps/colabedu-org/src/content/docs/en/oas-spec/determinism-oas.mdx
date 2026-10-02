@@ -1,6 +1,6 @@
 ---
-title: "Rubric-bound Assessment with OAS"
-description: "How ColabEdu's architecture and the OAS specification ensure rigorous, structured, and hallucination-resistant pedagogical assessments."
+title: "Rubric-bound Assessment with OPS"
+description: "How ColabEdu's architecture and the OPS specification ensure rigorous, structured, and hallucination-resistant pedagogical assessments."
 sidebar:
   order: 4
 ---
@@ -14,19 +14,19 @@ One of the main problems in adopting Large Language Models (LLMs) in the educati
 -   **Positive Bias (Sycophancy):** The AI's tendency to be excessively lenient to "please" the user, avoiding giving a "Zero" even if the answer is completely incorrect.
 -   **Opacity:** Inability to trace why a specific score was awarded based on legal regulations.
 
-## The Solution: Assessment as Code
+## The Solution: Pedagogy as Code
 
 From a mathematical engineering purist perspective, LLMs are inherently stochastic (probabilistic), not deterministic. Promising "absolute mathematical determinism" in the text generation of a neural network is inaccurate.
 
 However, **ColabEdu manages to transform this stochastic behavior into a process of "Pedagogical Determinism" through software engineering**.
 
-To achieve this, the **OAS (Open Assessment Specification)** specification builds a "code exoskeleton" that encloses the probabilistic model in a very narrow algorithmic corridor, forcing it to behave as a strict execution engine under two fundamental principles:
+To achieve this, the **OPS (Open Pedagogy Specification)** specification builds a "code exoskeleton" that encloses the probabilistic model in a very narrow algorithmic corridor, forcing it to behave as a strict execution engine under two fundamental principles:
 
 ### Structural Determinism (The Data Contract)
-The OAS architecture mandates that all assessment output must strictly comply with JSON schemas (Structured Outputs) validated by our YAML files. This mathematically guarantees that the assessment will always have the same form: an array of criteria, an exact numerical score, and feedback per criterion. If the AI attempts to generate free-form or conversational text, the validation layer rejects the response.
+The OPS architecture mandates that all assessment output must strictly comply with JSON schemas (Structured Outputs) validated by our YAML files. This mathematically guarantees that the assessment will always have the same form: an array of criteria, an exact numerical score, and feedback per criterion. If the AI attempts to generate free-form or conversational text, the validation layer rejects the response.
 
 ### Criterion Determinism (The Immutable Rubrics)
-When a generic model evaluates text, it can be creative and invent criteria on the fly. OAS blocks the LLM's "possibility space" through the mandatory injection of the `Rubric` entity (C0 layer). The model cannot invent what to evaluate; it is algorithmically forced to measure the text solely and exclusively against the immutable matrix of the official rubric (LOMLOE, IB, etc.).
+When a generic model evaluates text, it can be creative and invent criteria on the fly. OPS blocks the LLM's "possibility space" through the mandatory injection of the `Rubric` entity (C0 layer). The model cannot invent what to evaluate; it is algorithmically forced to measure the text solely and exclusively against the immutable matrix of the official rubric (LOMLOE, IB, etc.).
 
 ---
 
@@ -34,11 +34,11 @@ When a generic model evaluates text, it can be creative and invent criteria on t
 
 Our architecture uses a system of standardized levels (typically **L0 to L4** or similar).
 
-The key to success lies in the explicit definition of **L0 (Level 0)**. Artificial intelligences, by design, avoid harsh penalties. To counteract this bias, in OAS, we **algorithmically model ignorance, absence, or critical error** as an explicit state. If the student's answer meets the conditions of the L0 state, the AI is algorithmically forced to assign that value, ensuring that an absolute zero is a valid and predictable output.
+The key to success lies in the explicit definition of **L0 (Level 0)**. Artificial intelligences, by design, avoid harsh penalties. To counteract this bias, in OPS, we **algorithmically model ignorance, absence, or critical error** as an explicit state. If the student's answer meets the conditions of the L0 state, the AI is algorithmically forced to assign that value, ensuring that an absolute zero is a valid and predictable output.
 
-### 2. The Layered Architecture of OAS
+### 2. The Layered Architecture of OPS
 
-OAS ensures determinism by separating logic into strict layers:
+OPS ensures determinism by separating logic into strict layers:
 
 *   **C0 Layer (Immutable Regulations):** This is the "Rosetta Stone." It converts legal PDFs (BOE, SEP, IB) into immutable YAML files. Rubrics and evaluation criteria reside here. The AI cannot modify, invent, or ignore this layer; it can only read and apply it.
 *   **C1 Layer (Recipes and Exercises):** Defines the exercise container (e.g., a literature exam). It connects the student's text with the C0 Layer blocks that must be applied.
@@ -56,4 +56,4 @@ If the AI does not comply with the JSON schema or attempts to output a conversat
 
 ## Summary
 
-Through the OAS specification, the ColabEdu engine manages to isolate the LLM's creativity and leverage its semantic reading comprehension capabilities, subjecting it to an algorithmic and structural harness. This enables institutional-level grading that is fair, auditable, traceable down to the educational law, and above all, **robust**.
+Through the OPS specification, the ColabEdu engine manages to isolate the LLM's creativity and leverage its semantic reading comprehension capabilities, subjecting it to an algorithmic and structural harness. This enables institutional-level grading that is fair, auditable, traceable down to the educational law, and above all, **robust**.

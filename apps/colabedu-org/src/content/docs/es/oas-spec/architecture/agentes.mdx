@@ -5,22 +5,22 @@ sidebar:
   order: 5
 ---
 
-## El Ecosistema de Agentes y OAS
+## El Ecosistema de Agentes y OPS
 
-El estándar OAS no está diseñado únicamente para evaluar exámenes. Está concebido como un *Data Lake* estructurado donde un enjambre de inteligencias artificiales especializadas (cada una con un rol específico) colabora para crear, actualizar y ejecutar el ciclo de vida educativo de forma autónoma.
+El estándar OPS no está diseñado únicamente para evaluar exámenes. Está concebido como un *Data Lake* estructurado donde un enjambre de inteligencias artificiales especializadas (cada una con un rol específico) colabora para crear, actualizar y ejecutar el ciclo de vida educativo de forma autónoma.
 
 ```mermaid
 graph TD
-    OAS[(OAS Specs Repository\nYAMLs)]
+    OPS[(OPS Specs Repository\nYAMLs)]
     
-    Evaluator[Agentes Evaluadores\nEvalúan alumnos contra Rúbricas C0] -->|Lectura| OAS
-    Curator[Agentes Curadores\nProcesan PDFs/Docs para generar Capas C0/C1/C2] -->|Lectura/Escritura| OAS
-    Manager[Spec Managers\nOrquestan y Compilan Recetas] -->|Lectura| OAS
-    Modernizer[Agentes Modernizadores\nMigran paquetes LMS antiguos a OAS] -->|Escritura| OAS
-    ExerciseGen["Agentes Creadores de Ejercicios\nGeneran ejercicios dinámicos (C1)"] -->|Escritura| OAS
-    ResourceGen["Agentes de Recursos de Aprendizaje\nSintetizan material educativo (C2)"] -->|Escritura| OAS
+    Evaluator[Agentes Evaluadores\nEvalúan alumnos contra Rúbricas C0] -->|Lectura| OPS
+    Curator[Agentes Curadores\nProcesan PDFs/Docs para generar Capas C0/C1/C2] -->|Lectura/Escritura| OPS
+    Manager[Spec Managers\nOrquestan y Compilan Recetas] -->|Lectura| OPS
+    Modernizer[Agentes Modernizadores\nMigran paquetes LMS antiguos a OPS] -->|Escritura| OPS
+    ExerciseGen["Agentes Creadores de Ejercicios\nGeneran ejercicios dinámicos (C1)"] -->|Escritura| OPS
+    ResourceGen["Agentes de Recursos de Aprendizaje\nSintetizan material educativo (C2)"] -->|Escritura| OPS
     
-    style OAS fill:#f9f,stroke:#333,stroke-width:2px
+    style OPS fill:#f9f,stroke:#333,stroke-width:2px
 ```
 
 *   **Agentes Evaluadores (Evaluators):** Consumen el estándar de solo lectura. Cruzan el `ExerciseSpec` con el payload del alumno para emitir calificaciones matemáticas precisas y *feedback* formativo.

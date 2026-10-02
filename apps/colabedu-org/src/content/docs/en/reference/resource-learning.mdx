@@ -6,6 +6,14 @@ sidebar:
 ---
 
 import { Aside } from '@astrojs/starlight/components';
+import SpecVersionViewer from '../../../../components/SpecVersionViewer.astro';
+
+<SpecVersionViewer 
+  specKind="ResourceLearning" 
+  version="0.9.4" 
+  status="ACTIVE" 
+  schemaPath="schemas/lms/resource_learning.schema.yaml" 
+/>
 
 # ResourceLearning
 
@@ -26,67 +34,11 @@ import { Aside } from '@astrojs/starlight/components';
 | Procomún / INTEF (MEC) | `docs discover --source mec-procomun` + batch | `ResourceLearning` |
 | Europeana Education | `docs discover --source europeana-edu` + batch | `ResourceLearning` |
 
----
 
-## YAML Schema
-
-```yaml
-apiVersion: core.oas.colabedu.io/v1beta1
-kind: ResourceLearning
-metadata:
-  name: <referenceCode>          # e.g.: global.res.ck12.bio.mitosis.v1
-  displayName: "<Resource title>"
-  description: "<Pedagogical description>"
-  tags:
-    - biology
-    - open-education
-    - ck12
-
-spec:
-  source:
-    url: "https://www.ck12.org/biology/mitosis/"
-    provider: "ck12"             # ck12 | khan-academy | mec-procomun | europeana-edu
-    title: "Mitosis — CK-12 Biology FlexBook"
-    license: "CC BY-NC 3.0"
-    language: "en"
-    contentType: "article"       # article | video | interactive | lesson | quiz
-    importedAt: "2026-06-09T00:00:00Z"
-
-  qualityScore:
-    # Scale 0.0 – 1.0 per dimension
-    alignment: 0.85              # alignment with the provided CurricularContext
-    pedagogicalRichness: 0.70    # variety of activities and content depth
-    accessibility: 0.60          # multilingual support, WCAG, alternative formats
-    # Overall = weighted average (alignment×0.5 + richness×0.3 + accessibility×0.2)
-    overall: 0.76
-
-  applicableStandards:
-    - "es.lomloe.bach.1.bio"
-    - "us.ap.biology"
-
-  curricularContext:
-    standard: LOMLOE
-    level: "1 BACH"
-    subject: "biology"
-    referenceCode: "es.lomloe.bach.1.bio"
-```
 
 ---
 
-## Field Reference
-
-### `spec.source`
-
-| Field | Type | Description |
-|---|---|---|
-| `url` | `string` | Canonical URL of the resource |
-| `provider` | `string` | Provider ID: `ck12`, `khan-academy`, `mec-procomun`, `europeana-edu` |
-| `title` | `string` | Original title of the resource |
-| `license` | `string` | Resource license (e.g., `CC BY-NC 3.0`, `CC BY 4.0`) |
-| `language` | `string` | ISO 639-1 language code |
-| `contentType` | `enum` | `article` \| `video` \| `interactive` \| `lesson` \| `quiz` |
-
-### `spec.qualityScore`
+## Quality Evaluation
 
 The `curator_resource` Gem evaluates each resource using a 3-dimension rubric:
 

@@ -9,7 +9,7 @@ En el ecosistema de ColabEdu, el **Spec Manager** y el **Recipe Compiler** actú
 
 ## La Magia Arquitectónica: Late Binding (Enlace Tardío)
 
-Uno de los problemas invisibles de escalar plataformas EdTech es la "explosión combinatoria" (cada profesor asignando docenas de textos distintos para una misma rúbrica). OAS v1beta1 lo soluciona con **Late Binding**:
+Uno de los problemas invisibles de escalar plataformas EdTech es la "explosión combinatoria" (cada profesor asignando docenas de textos distintos para una misma rúbrica). OPS v1beta1 lo soluciona con **Late Binding**:
 
 1. **El Molde Hueco:** La plantilla C1 (ej. "Ensayo Argumentativo") se guarda en Git completamente vacía de contenido contextual (`requires_dynamic_context: true`).
 2. **El Gatillo:** Cuando el profesor asigna la tarea, simplemente selecciona o adjunta el artículo de contexto (Capa C2).
@@ -33,7 +33,7 @@ Cuando la Capa C2 inyecta un artículo completo en el contexto, el LLM no sufre 
 
 ## Separación de Presentación y Datos (Server-Driven UI)
 
-OAS libera a la IA del diseño Frontend aplicando estrictamente el patrón *Server-Driven UI* a través del protocolo **A2UI (Agent-to-UI)**. La IA devuelve un JSON estructurado y el backend mapea esas variables dentro de los Widgets de Flutter de manera determinista.
+OPS libera a la IA del diseño Frontend aplicando estrictamente el patrón *Server-Driven UI* a través del protocolo **A2UI (Agent-to-UI)**. La IA devuelve un JSON estructurado y el backend mapea esas variables dentro de los Widgets de Flutter de manera determinista.
 
 - **Primitivas y Componentes:** `pdf_viewer`, `markdown_editor`, `forms_mcq`, etc.
 - **El Chatbot Companion:** Un "Sidecar" acoplable a cualquier widget para ofrecer tutoría socrática en tiempo real.

@@ -1,12 +1,21 @@
 ---
 title: "Gem"
-description: "Reference documentation for the Gem resource in OAS, including the Curator Gems for LMS/OER ingestion."
+description: "Reference documentation for the Gem resource in OPS, including the Curator Gems for LMS/OER ingestion."
 sidebar:
   order: 42
   badge:
     text: Partners
     variant: caution
 ---
+
+import SpecVersionViewer from '../../../../components/SpecVersionViewer.astro';
+
+<SpecVersionViewer 
+  specKind="Gem" 
+  version="0.9.4" 
+  status="ACTIVE" 
+  schemaPath="schemas/assessment/recipe.schema.yaml" 
+/>
 
 :::caution[Restricted Resource - Partners Only]
 Access and configuration of ColabEdu **Layer C3 resources (Directives, Personas, and Gems)** is restricted to authorized partner organizations (governments, partner publishers, and consultancies).
@@ -15,42 +24,7 @@ Access and configuration of ColabEdu **Layer C3 resources (Directives, Personas,
 
 The `Gem` resource (AI Module) defines profiles, roles, and core instruction sets (system prompts) for Artificial Intelligence agents within the platform.
 
-## Schema
 
-### Metadata (`metadata`)
-
-| Field | Type | Required | Description |
-|---|---|---|---|
-| `name` | `string` | Yes | Technical name or alias for the Gem (e.g., `instructional_designer`). |
-| `description` | `string` | Yes | Natural language description of this agent's function and capabilities. |
-
-### Specification (`spec`)
-
-| Field | Type | Required | Description |
-|---|---|---|---|
-| `system_prompt` | `string` | Yes | Exact instructions, behavioral rules, and operational directives injected as a system message to the LLM. |
-
-## Usage Example
-
-```yaml
-apiVersion: core.oas.colabedu.io/v1beta1
-kind: Gem
-metadata:
-  name: instructional_designer
-  description: Persona specialized in instructional design and procedural generation of interactive AssessmentItems.
-spec:
-  system_prompt: |
-    You are an expert Instructional Designer for ColabEdu, creating interactive exercises
-    using the OAS v1beta1 specification.
-
-    YAML GENERATION RULES:
-    1. The final result MUST ALWAYS be an `AssessmentItem` resource.
-    2. The exercise MUST use `mixed_quiz` structure or an array of `ui_components`.
-
-    TOOL USAGE:
-    1. If the user references a pedagogical standard, you MUST proactively use
-       `SpecManagerMcpTools` to guide generation.
-```
 
 ---
 
@@ -92,7 +66,7 @@ spec:
     2. `learningObjectives[]` — objectives aligned to the CurricularContext
     3. `lmsSource` — metadata from the original package (url, platform, packageId)
 
-    OUTPUT: Valid OAS YAML only. No additional explanations.
+    OUTPUT: Valid OPS YAML only. No additional explanations.
 ```
 
 ### Example: `gem.curator_resource`
@@ -120,7 +94,7 @@ spec:
        - `accessibility`: multilingual support, WCAG, alternative formats
     3. `applicableStandards[]` — list of applicable standard referenceCodes
 
-    OUTPUT: Valid OAS YAML only. No additional explanations.
+    OUTPUT: Valid OPS YAML only. No additional explanations.
 ```
 
 ---

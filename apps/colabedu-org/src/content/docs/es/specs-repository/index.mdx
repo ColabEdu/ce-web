@@ -1,139 +1,69 @@
 ---
-title: "Repositorio de Especificaciones (OAS YAML)"
-description: "Ejemplos base de los archivos YAML públicos que definen la arquitectura OAS en ColabEdu."
+title: "Repositorio de Especificaciones OPS"
+description: "Estructura, catálogo y fundamentos de los archivos YAML que definen la arquitectura Pedagogy as Code (OPS) en ColabEdu."
 sidebar:
   order: 1
 ---
 
-## Introducción al Repositorio
+import { Card, CardGrid, Badge } from '@astrojs/starlight/components';
 
-La arquitectura **OAS (Open Assessment Specification)** v1beta1 de ColabEdu se basa en archivos YAML fuertemente tipados. Estos archivos actúan como el código fuente legal y pedagógico de la plataforma, convirtiendo normativas abstractas en estructuras de datos ejecutables por la Inteligencia Artificial.
-
-El ecosistema se divide en múltiples "Kinds" (Tipos) de recursos de Kubernetes-style:
-
-1. **Taxonomy:** Define jerarquías geográficas, niveles organizativos y habilidades transversales.
-2. **BlockLibrary (C0):** Contiene la normativa inmutable (rúbricas y objetivos).
-3. **ExerciseSpec (C1/C2):** Define la estructura de un examen o instrumento de evaluación.
-4. **AgentDirective (C3):** Define las reglas de comportamiento duro para el motor LLM.
-
-A continuación, exploramos ejemplos reales de estos archivos extraídos de nuestro repositorio `ce-specs`.
+El **Repositorio de Especificaciones OPS** contiene los archivos YAML que componen el catálogo pedagógico de ColabEdu. Siguiendo el paradigma **Pedagogy as Code**, cada aspecto del aprendizaje —desde la normativa legal hasta la interactividad en pantalla o la corrección de un examen— se expresa en especificaciones legibles por humanos y procesables por agentes de IA.
 
 ---
 
-## 1. Taxonomías (Taxonomy)
+## Organización por Propósito Pedagógico
 
-Las taxonomías organizan el mundo. En lugar de crear bases de datos separadas para cada país, OAS define la geografía y los niveles educativos como código.
+A diferencia de un CMS tradicional donde todo se reduce a "artículos" o "preguntas", OPS categoriza sus recursos según su función en el proceso educativo:
 
-**Ejemplo: Taxonomía Geográfica de España (`taxonomy.loc.es.yaml`)**
+<CardGrid>
+  <Card title="1. Contenido y Aprendizaje" icon="open-book">
+    Lecciones interactivas multimedia (`InteractiveLesson`) con slides y widgets embebidos, y recursos abiertos curados (`ResourceLearning`).
+    
+    [Explorar Contenido →](/reference/interactive-lesson/)
+  </Card>
 
-```yaml
-apiVersion: colabedu.ai/v1beta1
-kind: Taxonomy
-metadata:
-  id: loc.es
-  type: location_country
-  active: true
-  name: España
-  flag: 🇪🇸
-  languages: [es-ES]
-spec:
-  regions:
-    - id: loc.es.mad
-      name: Comunidad de Madrid
-      active: true
-      flagAsset: assets/flags/es/mad.svg
-    - id: loc.es.cat
-      name: Catalunya
-      active: true
-      languages: [ca-ES]
-      flagAsset: assets/flags/es/cat.svg
-    - id: loc.es.and
-      name: Andalucía
-      active: true
-      flagAsset: assets/flags/es/and.svg
-  orgLevels:
-    - id: org.lvl.es.infantil
-      name: Infantil
-    - id: org.lvl.es.primaria
-      name: Primaria
-    - id: org.lvl.es.eso
-      name: ESO
-    - id: org.lvl.es.bachillerato
-      name: Bachillerato
-```
+  <Card title="2. Evaluación y Calificación" icon="pencil">
+    Rúbricas oficiales inmutables (`BlockRubric`), recetas de orquestación (`Recipe`), exámenes (`ExerciseSpec`) y reactivos interactivos (`AssessmentItem`).
+    
+    [Explorar Evaluación →](/reference/rubric/)
+  </Card>
+
+  <Card title="3. Currículo y Gestión" icon="setting">
+    Cursos soberanos (`CourseSpec`), mallas curriculares (`PathwayTemplate`), taxonomías territoriales (`Taxonomy`) y congelamiento de cohortes (`CourseBundle`).
+    
+    [Explorar Currículo →](/reference/course-spec/)
+  </Card>
+
+  <Card title="4. Gobernanza y Roles (C3)" icon="shield">
+    Directivas pedagógicas de aula (`Directive`) y personalidades de tutoría o examinador (`Persona`) para delimitar el comportamiento ético de la IA.
+    
+    [Explorar Gobernanza →](/reference/directive/)
+  </Card>
+</CardGrid>
 
 ---
 
-## 2. Especificación de Ejercicios (ExerciseSpec)
+## Principio de Soberanía y GitOps
 
-Un `ExerciseSpec` combina un contexto (el estímulo o lectura) con preguntas específicas y apunta a las competencias (objetivos de aprendizaje) que deben evaluarse.
-
-**Ejemplo: Ejercicio Narrativo ELPAC - California (`us.ca.c2.elpac.ccss.narrative.v1.yaml`)**
-
-```yaml
-apiVersion: colabedu.ai/v1beta1
-kind: ExerciseSpec
-metadata:
-  type: external_assessment
-  organization: CDE
-  year: 2024
-  targetCourseRef: us.ca.c0.ccss.writing.v1
-  id: us.ca.c2.elpac.ccss.narrative.v1
-  title: 'ELPAC Mock - CCSS Narrative: A Change of Mind'
-spec:
-  context: '# Narrativo
-
-    Todos tenemos momentos en la vida que cambian nuestra forma de ver el mundo.'
-  exercises:
-  - id: q1
-    type: free_text
-    prompt: Narra una experiencia personal que haya cambiado tu forma de pensar sobre
-      algo importante.
-    expectedOutputFormat: markdown
-    maxScore: 5.0
-    targetCompetencies:
-    - w.9-10.1
-    - w.9-10.1.a
-    - w.9-10.1.b
-    - w.9-10.1.c
-    - w.9-10.1.d
-    - w.9-10.1.e
-```
-
-En este ejemplo, la IA recibe la instrucción de que esta pregunta de texto libre (`free_text`) evalúa el subconjunto de competencias `w.9-10.1` a `w.9-10.1.e` del Common Core (CCSS). 
+1. **Versionado Atómico:** Cada especificación reside en repositorios Git versionados semánticamente (`1.0.0`). Cualquier cambio curricular requiere una Pull Request con trazabilidad total.
+2. **Desacoplamiento entre Definición y Ejecución:** Una rúbrica o un examen se definen una única vez en YAML y pueden ejecutarse en múltiples plataformas LMS (Canvas, Moodle, Google Classroom) mediante LTI Advantage v1.3.
+3. **Inmutabilidad en Tiempo de Examen:** Cuando un estudiante inicia una actividad, el motor compila un *Snapshot* inmutable de las especificaciones vigentes. Ningún cambio posterior en las leyes o rúbricas altera retroactivamente las calificaciones emitidas.
 
 ---
 
-## 3. Bibliotecas de Bloques y Rúbricas (BlockLibrary - C0)
+## ¿Qué es Estándar Abierto vs. Herramientas de Partner?
 
-*Nota: Para ver ejemplos completos de la Capa C0 (Rúbricas), visita la sección de [Taxonomías](/docs/es/taxonomies/language-literature) o la documentación específica por país en la sección de [Estándares](/docs/es/standards/index).*
-
-La estructura YAML de la Capa C0 mapea las leyes educativas en nodos evaluables (`BLOCK_RUBRIC`). El motor `SpecManager` lee estos archivos y los ingresa en una base de datos PostgreSQL vectorizada para realizar evaluaciones RAG (Retrieval-Augmented Generation).
-
-```yaml
-# Estructura conceptual de un BLOCK_RUBRIC
-type: BLOCK_RUBRIC
-id: es.c0.lomloe.lcl.eso.1.v1.ce.2.1
-content: Comprender el sentido global...
-metadata:
-  levels:
-    l0: "No comprende..."
-    l1: "Comprende parcialmente..."
-    l2: "Comprende..."
-    l3: "Comprende con detalle..."
-    l4: "Comprende de forma excepcional..."
-```
-
-## Conclusión
-
-Al tratar el marco pedagógico como código (`Assessment as Code`), ColabEdu elimina la ambigüedad en el proceso de calificación de la IA. El uso de YAML garantiza que los currículos sean versionables (GitOps), auditables por humanos y directamente consumibles por los sistemas de inferencia.
+| Ámbito | Estándar Abierto OPS (`colabedu.org`) | Plataforma & Partners (`colabedu.net`) |
+|---|---|---|
+| **Definiciones y Esquemas** | Todos los esquemas YAML públicos (C0, C1, C2, Contenedores). | Extensiones privadas de analítica avanzada y telemetría escolar. |
+| **Taxonomías Oficiales** | LOMLOE (España), CDE (California), College Board (AP), IB Diploma. | Taxonomías curriculares propietarias de academias o distritos. |
+| **Generación de Contenido** | Documentación de esquemas y ejemplos de validación. | **Factoría de Contenido Completa (ACA)**, CLI `ce-cli`, pipelines batch y parsing de `.imscc` / `.mbz`. |
+| **Calificación IA** | Interfaces y contratos abiertos para evaluación y feedback. | Modelos calibrados de scoring multicriterio y detección de fraude. |
 
 ---
 
-## 📚 Referencia Técnica Detallada
+## Enlaces Rápidos de Referencia
 
-Para consultar todos los esquemas, campos obligatorios y ejemplos estructurados de los *Kinds* de OAS, consulta nuestra **[Referencia YAML Detallada](/es/specs-repository/oas-yaml-reference/)**. AllÍ encontrarás páginas especializadas para:
-
-- **Taxonomy**, **SubjectArea** y **Rubric** (C0)
-- **Recipe**, **ExerciseSpec**, **ExerciseType** y **AssessmentItem** (C1/C2)
-- **Directive**, **Persona** y **Gem** (C3)
+- [Referencia y Mapa Conceptual YAML OPS](/specs-repository/oas-yaml-reference/)
+- [Catálogo de Tipos de Ejercicio](/specs-repository/spec-catalog/exercise-types/)
+- [Catálogo Completo de IDs Canónicos](/reference/catalog/)

@@ -1,0 +1,113 @@
+---
+title: "PathwayTemplate"
+description: "Documentación de referencia técnica para el recurso PathwayTemplate (Malla Curricular Oficial) en OPS."
+sidebar:
+  order: 4
+  badge:
+    text: Estándar
+    variant: tip
+---
+
+import { Badge } from '@astrojs/starlight/components';
+
+El recurso **`PathwayTemplate`** representa el **esqueleto o malla curricular oficial** de una asignatura dentro de un estándar educativo (por ejemplo, *IB Spanish B SL*, *AP Spanish Language*, o *Lengua Castellana y Literatura LOMLOE*).
+
+---
+
+## Concepto Pedagógico
+
+Dentro de la arquitectura **Pedagogy as Code (OPS)**, `PathwayTemplate` resuelve la brecha entre la ley abstracta y el día a día del aula:
+
+1. **Estructuración Temática:** Define las unidades didácticas obligatorias, temas troncales y subtemas prescritos por los organismos educativos (Ministerio de Educación, College Board, International Baccalaureate).
+2. **Ponderaciones Oficiales:** Asigna la distribución temporal estimada (horas lectivas) y las ponderaciones de evaluación (por ejemplo, Paper 1: 25%, Paper 2: 50%, Oral Individual: 25%).
+3. **Punto de Anclaje para Cursos:** Los docentes o centros no inventan la estructura desde cero; crean un [`CourseSpec`](/reference/course-spec/) que hereda de un `PathwayTemplate` oficial y lo adapta a su modalidad (anual, intensivo o refuerzo).
+
+---
+
+## Esquema YAML Canónico (`colabedu/v1`)
+
+```yaml
+# --- ENVELOPE UNIVERSAL OPS ---
+api_version: "colabedu/v1"
+kind: "PathwayTemplate"
+
+metadata:
+  reference_code: "tmpl.ib.spanish_b.sl.v1"
+  title: "IB Spanish B SL — Official Pathway Template"
+  version: "1.0.0"
+  authority: "GLOBAL"
+  tags: ["ib", "dp", "spanish_b", "sl", "curriculum"]
+
+spec:
+  standard_ref: "global.standard.ib.dp"
+  subject_ref: "subj.world_languages.spanish"
+  education_level: "High School (11-12)"
+  total_recommended_hours: 150
+
+  # Ponderaciones oficiales de evaluación
+  assessment_components:
+    - code: "paper_1"
+      title: "Paper 1: Comprensión Escrita y Auditiva"
+      weight_percentage: 25
+    - code: "paper_2"
+      title: "Paper 2: Producción Escrita"
+      weight_percentage: 50
+    - code: "internal_oral"
+      title: "Evaluación Interna: Expresión Oral Individual"
+      weight_percentage: 25
+
+  # Estructura de Unidades y Temas Prescritos
+  units:
+    - id: "unit_1_identidades"
+      title: "Identidades (Identities)"
+      recommended_hours: 30
+      topics:
+        - id: "estilos_vida"
+          title: "Estilos de vida y bienestar personal"
+          competency_refs: ["ib.lang_b.receptive.text", "ib.lang_b.productive.writing"]
+        - id: "subculturas"
+          title: "Subculturas y tribus urbanas en el mundo hispanohablante"
+          competency_refs: ["ib.lang_b.intercultural.awareness"]
+
+    - id: "unit_2_experiencias"
+      title: "Experiencias (Experiences)"
+      recommended_hours: 30
+      topics:
+        - id: "ritos_paso"
+          title: "Ritos de paso y celebraciones culturales"
+        - id: "migraciones"
+          title: "Viajes, migraciones y vivencias"
+```
+
+---
+
+## Campos de la Especificación
+
+### Metadatos (`metadata`)
+
+| Campo | Tipo | Requerido | Descripción |
+|---|---|---|---|
+| `reference_code` | `string` | Sí | Identificador canónico del template (ej. `tmpl.ib.spanish_b.sl.v1`). |
+| `title` | `string` | Sí | Nombre oficial descriptivo. |
+| `version` | `string` | Sí | Versión semántica (`1.0.0`). |
+| `authority` | `string` | Sí | Ámbito de soberanía (`GLOBAL`, `NATIONAL`, `DISTRICT`). |
+
+### Cuerpo de la Malla (`spec`)
+
+| Campo | Tipo | Requerido | Descripción |
+|---|---|---|---|
+| `standard_ref` | `string` | Sí | ID del estándar de referencia (`StandardSpec` o `Taxonomy`). |
+| `subject_ref` | `string` | Sí | ID del área o materia (`SubjectArea`). |
+| `total_recommended_hours` | `number` | No | Total de horas lectivas prescritas. |
+| `assessment_components` | `array` | No | Lista de componentes oficiales de examen con sus porcentajes de ponderación. |
+| `units` | `array` | Sí | Bloques o unidades temáticas que componen el curso. |
+| `units[].topics` | `array` | Sí | Lista de temas específicos incluidos en cada unidad. |
+| `units[].topics[].competency_refs` | `string[]` | No | Competencias curriculares evaluadas en este tema. |
+
+---
+
+## Relación con otras Specs
+
+- **Hereda de:** [`Taxonomy`](/reference/taxonomy/) y [`StandardSpec`](/reference/standard-spec/) (la normativa y el estándar).
+- **Es consumido por:** [`CourseSpec`](/reference/course-spec/) para instanciar el curso adaptado a cada centro educativo.
+- **Orienta a:** [`Recipe`](/reference/recipe/) y [`InteractiveLesson`](/reference/interactive-lesson/) para la creación de actividades alineadas a los temas.

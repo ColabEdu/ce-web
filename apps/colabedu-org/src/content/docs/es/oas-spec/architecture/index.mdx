@@ -1,13 +1,13 @@
 ---
 title: Arquitectura Técnica (Overview)
-description: Introducción a la arquitectura técnica de OAS v1beta1 y sus principios de diseño.
+description: Introducción a la arquitectura técnica de OPS v1beta1 y sus principios de diseño.
 sidebar:
   order: 1
 ---
 
-**Arquitectura:** Open Assessment Standard (OAS v1beta1)
+**Arquitectura:** Open Pedagogy Standard (OPS v1beta1)
 
-**Propósito:** Explicar el funcionamiento técnico del motor de orquestación de LLMs, demostrando cómo la separación de responsabilidades (*Assessment as Code*) permite evaluar cualquier paradigma educativo hispanohablante sin requerir entrenamiento adicional de modelos (*Fine-Tuning*).
+**Propósito:** Explicar el funcionamiento técnico del motor de orquestación de LLMs, demostrando cómo la separación de responsabilidades (*Pedagogy as Code*) permite evaluar cualquier paradigma educativo hispanohablante sin requerir entrenamiento adicional de modelos (*Fine-Tuning*).
 
 ## El Problema: El Monolito de "Prompt Engineering"
 
@@ -21,11 +21,11 @@ El modelo de lenguaje era forzado a actuar simultáneamente como evaluador pedag
 
 ## La Solución Modular
 
-Para solucionar este caos, la arquitectura de OAS descompone el problema en componentes especializados, de forma análoga a como la arquitectura de microservicios revolucionó el desarrollo web tradicional.
+Para solucionar este caos, la arquitectura de OPS descompone el problema en componentes especializados, de forma análoga a como la arquitectura de microservicios revolucionó el desarrollo web tradicional.
 
 A lo largo de las siguientes secciones de esta documentación, exploraremos en detalle los pilares técnicos que sostienen el ecosistema ColabEdu:
 
-1. [**Assessment as Code (Las 4 Capas):**](./capas/) Cómo fragmentamos el conocimiento usando el patrón MVC.
+1. [**Pedagogy as Code (Las 4 Capas):**](./capas/) Cómo fragmentamos el conocimiento usando el patrón MVC.
 2. [**Relación de Entidades (El Ejercicio):**](./entidades-ejercicios/) Cómo se relacionan ExerciseSpec, AssessmentItem y ExerciseType.
 3. [**El Motor de Evaluación (Late Binding y UI):**](./motor-evaluacion/) Cómo inyectamos el contexto en tiempo real e imponemos esquemas JSON estructurados.
 4. [**Ecosistema de Agentes:**](./agentes/) La red de inteligencias especializadas operando sobre el Spec Manager.

@@ -4,6 +4,9 @@ description: "Schema completo del recurso CuratorPlan: el plan de ingesta persis
 sidebar:
   label: "CuratorPlan"
   order: 51
+  badge:
+    text: Solo Partners
+    variant: caution
 ---
 
 import { Badge, Aside } from '@astrojs/starlight/components';
@@ -13,7 +16,7 @@ import { Badge, Aside } from '@astrojs/starlight/components';
 Un **`CuratorPlan`** representa una campaña de ingesta curricular de larga duración y recuperable ante fallos. No es un fichero YAML de `ce-specs` — es un **recurso de base de datos** creado por el CLI o la API REST para orquestar el pipeline del Agente Curador Autónomo (ACA).
 
 <Aside type="note">
-A diferencia de los otros tipos OAS (`Recipe`, `Taxonomy`…), `CuratorPlan` y `CuratorPlanItem` **no se almacenan en `ce-specs`**: viven en la tabla `curator_plans` de PostgreSQL y son gestionados por el motor ACA.
+A diferencia de los otros tipos OPS (`Recipe`, `Taxonomy`…), `CuratorPlan` y `CuratorPlanItem` **no se almacenan en `ce-specs`**: viven en la tabla `curator_plans` de PostgreSQL y son gestionados por el motor ACA.
 </Aside>
 
 ---
@@ -74,7 +77,7 @@ Cada documento fuente descubierto crea un `CuratorPlanItem` dentro de un plan.
 id:                  uuid      # Generado automáticamente
 plan_id:             uuid      # FK → curator_plans.id
 source_url:          string    # URI del documento fuente: http://, gs://, drive://
-spec_type:           string    # Tipo OAS a producir: C0_STANDARDS | C1_RECIPES | C2_EXERCISES
+spec_type:           string    # Tipo OPS a producir: C0_STANDARDS | C1_RECIPES | C2_EXERCISES
 status:              enum      # Ver tabla de estados abajo
 confidence_score:    float     # 0.0–1.0 — puntuación del nodo de evaluación del Curador
 attempts:            integer   # Número de intentos realizados
@@ -96,7 +99,7 @@ created_at:          timestamp
 
 ### `spec_type` — Valores válidos
 
-| Valor | Descripción | Capa OAS |
+| Valor | Descripción | Capa OPS |
 |---|---|---|
 | `C0_STANDARDS` | Rúbricas y estándares normativos | C0 |
 | `BLOCK_RUBRIC` | Alias para C0 — rúbrica de evaluación | C0 |

@@ -1,17 +1,17 @@
 ---
-title: "EBAU Practical Cases (OAS V2)"
-description: "Implementation of the University Access Exam (Spain) under the OAS specification."
+title: "EBAU Practical Cases (OPS V2)"
+description: "Implementation of the University Access Exam (Spain) under the OPS specification."
 ---
 
-# Use Cases Catalog: EBAU Ecosystem under OAS V2
+# Use Cases Catalog: EBAU Ecosystem under OPS V2
 
-**Architecture:** Open Assessment Standard (OAS v1beta1)
+**Architecture:** Open Pedagogy Standard (OPS v1beta1)
 
 **Educational Scope:** Baccalaureate (LOMLOE) and Baccalaureate Evaluation for University Access (EBAU) - Spanish Language and Literature II (Spain).
 
 The **EBAU (Selectividad)** ecosystem is the paradigmatic model of punitive "High-Stakes" assessment. Unlike the holistic approach of the IB, the EBAU focuses on technical precision, rigorous syntactic analysis, and strict penalization for spelling and grammatical errors (which can subtract up to 3 points from the final grade).
 
-This document details the implementation in **Assessment as Code** of the key questions of the Spanish Language and Literature II exam, demonstrating how OAS V2 handles ruthless spelling correction and the drawing of syntax trees.
+This document details the implementation in **Pedagogy as Code** of the key questions of the Spanish Language and Literature II exam, demonstrating how OPS V2 handles ruthless spelling correction and the drawing of syntax trees.
 
 ## 1. Question 1: Summary and Theme (Precision and Conciseness)
 
@@ -190,4 +190,4 @@ It is implemented as a `BLOCK_DIRECTIVE` injected into *all* EBAU recipes.
 
 The EBAU ecosystem forces the AI to behave in a **hyper-deterministic and punitive** manner.
 
-While in the IB the AI acts as a mentor that values the "attempt" and "understanding", in the EBAU the AI acts as a **Syntactic and Spelling Auditor**. Thanks to the layer separation in OAS v1beta1, we can use the *same base LLM* (Gemini), but drastically altering its behavior through the `BLOCK_DIRECTIVE` of Layer C3 and the rigid rubrics of Layer C0.
+While in the IB the AI acts as a mentor that values the "attempt" and "understanding", in the EBAU the AI acts as a **Syntactic and Spelling Auditor**. Thanks to the layer separation in OPS v1beta1, we can use the *same base LLM* (Gemini), but drastically altering its behavior through the `BLOCK_DIRECTIVE` of Layer C3 and the rigid rubrics of Layer C0.

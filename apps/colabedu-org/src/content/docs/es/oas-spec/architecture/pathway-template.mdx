@@ -1,6 +1,6 @@
 ---
 title: PATHWAY_TEMPLATE — Plantillas de Programa
-description: El nuevo tipo OAS que actúa de puente entre las Taxonomías (la ley) y las Recetas pedagógicas (el ejercicio), permitiendo estandarizar la creación de Pathways por geografía y estándar educativo.
+description: El nuevo tipo OPS que actúa de puente entre las Taxonomías (la ley) y las Recetas pedagógicas (el ejercicio), permitiendo estandarizar la creación de Pathways por geografía y estándar educativo.
 sidebar:
   order: 5
 ---
@@ -11,13 +11,13 @@ import { Badge, Card, CardGrid, Tabs, TabItem } from '@astrojs/starlight/compone
 
 <Badge text="Nuevo en v0.6.10" variant="tip" />
 
-Un **`PATHWAY_TEMPLATE`** es un tipo de especificación OAS que actúa de **puente estructurado** entre las Taxonomías (la "ley" del currículo) y las Recetas pedagógicas (los ejercicios concretos).
+Un **`PATHWAY_TEMPLATE`** es un tipo de especificación OPS que actúa de **puente estructurado** entre las Taxonomías (la "ley" del currículo) y las Recetas pedagógicas (los ejercicios concretos).
 
 Define el **andamio oficial** de un programa de estudios específico — por ejemplo, todos los temas, textos literarios y requisitos de examen del IB Spanish B SL — en un formato YAML versionable y trazable en Git.
 
 ---
 
-## Posición en la Jerarquía OAS
+## Posición en la Jerarquía OPS
 
 ```mermaid
 graph TD
@@ -39,7 +39,7 @@ graph TD
     style DIR fill:#fef3c7,stroke:#d97706,stroke-width:1px
 ```
 
-| Capa | Tipo OAS | Descripción | Mutabilidad |
+| Capa | Tipo OPS | Descripción | Mutabilidad |
 |---|---|---|---|
 | C0 | `TAXONOMY` | Estándares educativos (IB, LOMLOE, AP…) | Inmutable |
 | **Nueva** | **`PATHWAY_TEMPLATE`** | **Programa oficial de un curso concreto** | **Versionada en Git** |
