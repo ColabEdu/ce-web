@@ -1,7 +1,6 @@
 ---
 import fs from 'node:fs';
 import path from 'node:path';
-import { Code } from 'astro:components';
 
 interface Props {
   specKind: string;
@@ -239,8 +238,8 @@ if (showExample) {
           <span>📦 Canonical YAML Example (Auto-synced from <code>{canonicalExampleRelPath}</code>)</span>
           <span class="text-gray-400 group-open:rotate-180 transition-transform">▼</span>
         </summary>
-        <div class="mt-3 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-800">
-          <Code code={canonicalExampleYaml} lang="yaml" />
+        <div class="mt-3 rounded-lg overflow-x-auto bg-slate-900 dark:bg-slate-950 p-4 border border-gray-200 dark:border-gray-800 text-slate-100 font-mono text-xs">
+          <pre class="m-0 leading-relaxed font-mono"><code>{canonicalExampleYaml}</code></pre>
         </div>
       </details>
     </div>
