@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.9] - 2026-10-17
+
+### Added
+- **CLI & Curator Complete Reference Documentation**:
+  - `docs/cli-complete-reference-es.md` and `docs/cli-complete-reference-en.md`: Comprehensive documentation covering `./ce-cli.sh` syntax for grading, OER ingestion, and course readiness.
+  - Updated Curator tutorials (`tutorial-cli-curator-es.md`, `tutorial-cli-curator-en.md`).
+
 ## [0.9.2] - 2026-09-10
 
 ### Changed
