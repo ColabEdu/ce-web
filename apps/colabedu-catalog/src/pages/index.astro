@@ -1,0 +1,236 @@
+---
+import CatalogLayout from '@/layouts/CatalogLayout.astro';
+import RecentAdditionsSection from '@/components/catalog/RecentAdditionsSection.astro';
+import { loadCatalog } from '@/lib/catalogLoader';
+
+const { courses, coursesByCountry, recentAdditions, stats } = loadCatalog();
+
+const countryMeta = [
+  {
+    id: "es",
+    name: "España",
+    flag: "🇪🇸",
+    standard: "LOMLOE / EBAU",
+    description: "Cursos de Educación Secundaria (ESO), Bachillerato y modelos oficiales de exámenes de acceso universitario (EBAU/PAU) con rúbricas autonómicas.",
+    href: "/catalog/es",
+    count: coursesByCountry['es']?.length || 0,
+    accentColor: "from-amber-500/20 to-red-500/10",
+    badgeColor: "border-amber-500/30 text-amber-300 bg-amber-500/10",
+  },
+  {
+    id: "us",
+    name: "Estados Unidos",
+    flag: "🇺🇸",
+    standard: "College Board AP",
+    description: "Cursos avanzados preuniversitarios AP (Chemistry, Spanish Language, History) con rúbricas analíticas oficiales y preparación intensiva FRQ.",
+    href: "/catalog/us",
+    count: coursesByCountry['us']?.length || 0,
+    accentColor: "from-blue-500/20 to-red-500/10",
+    badgeColor: "border-sky-500/30 text-sky-300 bg-sky-500/10",
+  },
+  {
+    id: "intl",
+    name: "Internacional",
+    flag: "🌐",
+    standard: "Bachillerato Internacional (IB)",
+    description: "Programas de Diploma IB (Spanish B HL/SL) con evaluación por criterios, preparación de Paper 1 y destrezas orales individuales.",
+    href: "/catalog/intl",
+    count: coursesByCountry['intl']?.length || 0,
+    accentColor: "from-cyan-500/20 to-emerald-500/10",
+    badgeColor: "border-cyan-500/30 text-cyan-300 bg-cyan-500/10",
+  },
+];
+---
+
+<CatalogLayout
+  title="Catálogo Curricular Abierto y Lecciones Interactivas con IA — ColabEdu"
+  description="Explora cursos soberanos alineados a LOMLOE, AP e IB con lecciones interactivas, práctica guiada socrática y bancos de ejercicios oficiales."
+>
+  <!-- Hero Section -->
+  <section class="relative pt-24 pb-20 px-4 sm:px-6 lg:px-8 text-center overflow-hidden">
+    <div class="max-w-4xl mx-auto relative z-10">
+      <!-- Top Announcement Pill -->
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white/[0.04] border border-white/[0.1] text-cyan-300 backdrop-blur-md mb-8 shadow-sm">
+        <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+        <span data-i18n="home.badge">Catálogo Curricular Soberano OPS v0.9.6 · Acceso Libre Sin Registro</span>
+      </div>
+
+      <!-- Main Headline -->
+      <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight text-white mb-6 leading-[1.12]">
+        <span data-i18n="home.title">Catálogo Curricular y</span> <br />
+        <span class="bg-gradient-to-r from-cyan-400 via-sky-300 to-indigo-400 bg-clip-text text-transparent" data-i18n="home.title_highlight">
+          Lecciones Interactivas con IA
+        </span>
+      </h1>
+
+      <p class="text-lg sm:text-xl text-slate-300 max-w-2xl mx-auto mb-10 leading-relaxed font-normal" data-i18n="home.subtitle">
+        Aprende, practica y supera tus exámenes con temarios completos, axiomas didácticos y miles de reactivos con corrección socrática oficial.
+      </p>
+
+      <!-- Search Input Container -->
+      <div class="max-w-2xl mx-auto relative group mb-4">
+        <div class="absolute -inset-1 rounded-3xl bg-gradient-to-r from-cyan-500/30 to-blue-600/30 blur-lg opacity-40 group-hover:opacity-75 transition-opacity pointer-events-none"></div>
+        <div class="relative flex items-center bg-[#070b16] border border-white/[0.12] rounded-2xl shadow-2xl p-2 pl-4 group-hover:border-cyan-500/40 transition-colors">
+          <span class="text-slate-400 text-lg mr-3">🔍</span>
+          <input
+            type="search"
+            placeholder="Busca por tema o error: Ej. 'coma criminal', 'sintaxis', 'ap chemistry'..."
+            data-i18n-placeholder="home.search_placeholder"
+            class="w-full bg-transparent text-white placeholder-slate-500 focus:outline-none text-sm sm:text-base py-2"
+          />
+          <kbd class="hidden sm:inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white/[0.06] border border-white/[0.1] text-[11px] font-mono text-slate-400" data-i18n="home.search_enter">
+            ↵ Enter
+          </kbd>
+        </div>
+      </div>
+
+      <p class="text-xs text-slate-500 font-medium mb-12" data-i18n="home.search_subtext">
+        Indexación semántica optimizada para estudiantes y profesores en Google Search
+      </p>
+
+      <!-- Pedagogical Rigor Trust Indicators (Academic Social Proof) -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 max-w-4xl mx-auto pt-6 border-t border-white/[0.08]">
+        <div class="p-3.5 rounded-2xl bg-slate-900/60 border border-slate-800/80 backdrop-blur-sm text-left">
+          <div class="text-xl sm:text-2xl font-black text-cyan-400 font-mono tracking-tight">
+            +{stats.totalQuestions}
+          </div>
+          <div class="text-[11px] text-slate-400 leading-snug mt-0.5" data-i18n="trust.calibrated_items">
+            Reactivos oficiales calibrados
+          </div>
+        </div>
+
+        <div class="p-3.5 rounded-2xl bg-slate-900/60 border border-slate-800/80 backdrop-blur-sm text-left">
+          <div class="text-xl sm:text-2xl font-black text-emerald-400 font-mono tracking-tight">
+            100%
+          </div>
+          <div class="text-[11px] text-slate-400 leading-snug mt-0.5" data-i18n="trust.standards_aligned">
+            Alineado con BOE RD 534/2024 y AP
+          </div>
+        </div>
+
+        <div class="p-3.5 rounded-2xl bg-slate-900/60 border border-slate-800/80 backdrop-blur-sm text-left">
+          <div class="text-xl sm:text-2xl font-black text-indigo-400 font-mono tracking-tight">
+            +{stats.totalSources}
+          </div>
+          <div class="text-[11px] text-slate-400 leading-snug mt-0.5" data-i18n="trust.canonical_sources">
+            Fuentes canónicas OER auditadas
+          </div>
+        </div>
+
+        <div class="p-3.5 rounded-2xl bg-slate-900/60 border border-slate-800/80 backdrop-blur-sm text-left">
+          <div class="text-xl sm:text-2xl font-black text-sky-400 font-mono tracking-tight">
+            90s
+          </div>
+          <div class="text-[11px] text-slate-400 leading-snug mt-0.5" data-i18n="trust.socratic_response">
+            Feedback socrático sin registro
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Frameworks / Country Grid -->
+  <section class="py-14 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
+      <div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight" data-i18n="home.explore_frameworks">
+          Explora por Marco Educativo Oficial
+        </h2>
+        <p class="text-sm text-slate-400 mt-1" data-i18n="home.explore_frameworks_sub">
+          Planes de estudio normalizados con alineación a decretos ministeriales y estándares internacionales.
+        </p>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-20">
+      {countryMeta.map((c) => (
+        <a
+          href={c.href}
+          class="relative p-[1.5px] rounded-3xl bg-gradient-to-b from-white/[0.12] to-white/[0.02] hover:from-cyan-500/40 hover:to-indigo-500/30 transition-all duration-300 group shadow-lg flex flex-col"
+        >
+          <div class="w-full h-full bg-[#070b16] rounded-[23px] p-7 sm:p-8 flex flex-col justify-between overflow-hidden relative">
+            <!-- Subtle glow background on hover -->
+            <div class={`absolute top-0 right-0 w-36 h-36 bg-gradient-to-bl ${c.accentColor} blur-2xl rounded-full opacity-60 group-hover:opacity-100 transition-opacity pointer-events-none`}></div>
+
+            <div class="relative z-10">
+              <div class="flex items-center justify-between gap-3 mb-6">
+                <span class="text-4xl filter drop-shadow">{c.flag}</span>
+                <span class={`text-xs font-semibold px-3 py-1 rounded-full border ${c.badgeColor}`} data-i18n={`country.${c.id}.framework`}>
+                  {c.standard}
+                </span>
+              </div>
+
+              <h3 class="text-2xl font-bold text-white group-hover:text-cyan-400 transition-colors mb-3 tracking-tight" data-i18n={`country.${c.id}.name`}>
+                {c.name}
+              </h3>
+
+              <p class="text-sm text-slate-300 leading-relaxed mb-6 font-normal" data-i18n={`country.${c.id}.description`}>
+                {c.description}
+              </p>
+            </div>
+
+            <div class="relative z-10 pt-5 border-t border-white/[0.08] flex items-center justify-between text-xs font-semibold text-slate-400">
+              <span class="text-slate-300"><span data-count={c.count}>{c.count}</span> <span data-i18n="stats.courses_complete">cursos completos</span></span>
+              <span class="text-cyan-400 group-hover:translate-x-1 transition-transform flex items-center gap-1">
+                <span data-i18n="home.explore_subjects">Explorar materias</span> <span>→</span>
+              </span>
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+
+    <!-- Recent Additions Section -->
+    <RecentAdditionsSection items={recentAdditions.slice(0, 6)} isGlobal={true} />
+
+    <!-- Featured Courses Grid -->
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
+      <div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight" data-i18n="home.featured_courses">
+          Cursos y Asignaturas Soberanas
+        </h2>
+        <p class="text-sm text-slate-400 mt-1" data-i18n="home.featured_sub">
+          Temarios completos estructurados en unidades didácticas y lecciones interactivas.
+        </p>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {courses.map((course) => (
+        <a
+          href={course.canonicalPath}
+          class="relative p-[1.5px] rounded-3xl bg-white/[0.06] hover:bg-gradient-to-b hover:from-cyan-500/30 hover:to-transparent transition-all duration-300 group shadow-md"
+        >
+          <div class="w-full h-full bg-[#070b16] rounded-[23px] p-6 sm:p-7 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center gap-2 mb-3.5">
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-sky-500/10 text-sky-300 border border-sky-500/25">
+                  {course.country.toUpperCase()} · {course.level}
+                </span>
+                <span class="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold uppercase bg-slate-800/90 text-slate-300 border border-slate-700/60">
+                  {course.language}
+                </span>
+                <span class="text-[11px] text-slate-400 font-mono truncate max-w-[120px]">
+                  {course.standard}
+                </span>
+              </div>
+
+              <h3 class="text-lg sm:text-xl font-bold text-white group-hover:text-cyan-400 transition-colors mb-2.5 tracking-tight">
+                {course.name}
+              </h3>
+
+              <p class="text-xs sm:text-sm text-slate-400 line-clamp-3 leading-relaxed mb-6 font-normal">
+                {course.description}
+              </p>
+            </div>
+
+            <div class="pt-4 border-t border-white/[0.08] flex items-center justify-between text-xs text-slate-400 font-medium">
+              <span class="text-slate-300">{course.units.length} <span data-i18n="stats.units_label">unidades</span></span>
+              <span class="text-cyan-400 group-hover:translate-x-1 transition-transform font-semibold" data-i18n="course.view_syllabus">Ver temario →</span>
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+  </section>
+</CatalogLayout>

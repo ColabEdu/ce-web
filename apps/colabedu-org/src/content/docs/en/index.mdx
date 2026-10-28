@@ -1,20 +1,39 @@
 ---
 title: ColabEdu Documentation
-description: Official documentation portal for ColabEdu and the Open Pedagogy Standard (OPS).
+description: Official documentation portal for ColabEdu and the Open Pedagogy Specification (OPS).
 template: splash
 hero:
-  tagline: Explore the pedagogical standard, GitOps workflows, and AI use cases.
+  tagline: The open pedagogical standard for AI (OPS) and its interactive live curricular catalog.
   actions:
-    - text: Read the Whitepaper
+    - text: Read the Whitepaper (OPS)
       link: /en/oas-spec/
       icon: right-arrow
       variant: primary
+    - text: Explore Live Catalog (500+ Lessons)
+      link: /catalog
+      icon: external
+      variant: secondary
     - text: View Educational Standards
       link: /en/standards/
-      icon: external
+      icon: document
 ---
 
 import { CardGrid, LinkCard, Card } from '@astrojs/starlight/components';
+
+<br/>
+
+<CardGrid>
+  <Card title="1. Open Specification (OPS)" icon="open-book">
+    Declarative GitOps standard for encoding official curriculum competencies, socratic scaffolding, and deterministic rubrics without vendor lock-in.
+    <br/><br/>
+    <a href="/en/oas-spec/" style="font-weight: 600; color: var(--sl-color-accent-high); text-decoration: none;">Explore the OPS Specification →</a>
+  </Card>
+  <Card title="2. Curricular Catalog in Action" icon="laptop">
+    Over 500 interactive lessons and official exams (LOMLOE, EBAU/EvAU, College Board AP) generated, calibrated, and executable under the OPS standard.
+    <br/><br/>
+    <a href="/catalog" style="font-weight: 600; color: var(--sl-color-accent-high); text-decoration: none;">Explore Courses & Exams →</a>
+  </Card>
+</CardGrid>
 
 <br/>
 
@@ -54,7 +73,7 @@ import { CardGrid, LinkCard, Card } from '@astrojs/starlight/components';
 
 ## An Open and Collaborative Ecosystem
 
-ColabEdu structures its educational technology around two distinct pillars: the **Open Pedagogy Standard (OPS)** as an open infrastructure for the community, and the **ColabEdu Agents Platform** as a commercial, deterministic, and sovereign suite for governments, institutions, and publishers:
+ColabEdu structures its educational technology around two distinct pillars: the **Open Pedagogy Specification (OPS)** as an open infrastructure for the community, and the **ColabEdu Agents Platform** as a commercial, deterministic, and sovereign suite for governments, institutions, and publishers:
 
 <CardGrid stagger>
   <Card title="For Educators & Students" icon="open-book">
@@ -84,6 +103,6 @@ ColabEdu structures its educational technology around two distinct pillars: the 
     🌍 Built in California & Spain
   </div>
   <div style="font-size: var(--sl-text-xs); color: var(--sl-color-gray-4); letter-spacing: 0.05em;">
-    San Jose | Madrid | Ciudad de México
+    Cupertino | Madrid | Ciudad de México
   </div>
 </div>

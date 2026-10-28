@@ -1,0 +1,64 @@
+---
+interface Props {
+  title?: string;
+  axiomText: string;
+  sourceAuthority?: string;
+}
+
+const {
+  title = "Axioma Didáctico y Regla Canónica",
+  axiomText,
+  sourceAuthority,
+} = Astro.props;
+---
+
+<aside class="my-10 relative group">
+  <!-- Glowing border gradient container -->
+  <div class="relative p-[1.5px] rounded-3xl bg-gradient-to-r from-amber-500/40 via-amber-400/20 to-orange-500/40 shadow-[0_0_35px_-8px_rgba(245,158,11,0.2)]">
+    <div class="rounded-[23px] bg-[#070b16] p-7 sm:p-9 relative overflow-hidden">
+      <!-- Decorative giant quote symbol watermark in background -->
+      <span class="absolute -right-3 -bottom-8 text-8xl font-serif font-black text-amber-500/[0.07] select-none pointer-events-none" aria-hidden="true">
+        ”
+      </span>
+
+      <div class="relative z-10">
+        <!-- Header Tag -->
+        <div class="flex items-center gap-2 mb-3.5">
+          <span class="w-6 h-6 rounded-lg bg-amber-500/15 text-amber-400 flex items-center justify-center text-xs font-bold border border-amber-500/30">
+            ★
+          </span>
+          <span class="text-xs font-bold uppercase tracking-wider text-amber-400/90 font-mono">
+            {title}
+          </span>
+        </div>
+
+        <!-- Axiom Text -->
+        <blockquote class="text-xl sm:text-2xl font-semibold text-slate-50 leading-relaxed tracking-tight">
+          «{axiomText}»
+        </blockquote>
+
+        <!-- Footer / Source and Challenge Hook -->
+        <div class="mt-5 pt-4 border-t border-white/[0.08] flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+          {sourceAuthority ? (
+            <div class="flex items-center gap-2 text-slate-400">
+              <span class="text-amber-400/80">🏛️</span>
+              <span>Alineación oficial: <strong class="text-slate-300 font-medium">{sourceAuthority}</strong></span>
+            </div>
+          ) : (
+            <div class="flex items-center gap-2 text-slate-400">
+              <span class="text-amber-400/80">⚡</span>
+              <span class="font-mono text-[11px] text-slate-400">OPS v0.9.6 Didactic Rule</span>
+            </div>
+          )}
+
+          <a
+            href="#desafio-practica"
+            class="inline-flex items-center gap-1.5 text-cyan-400 hover:text-cyan-300 font-semibold group/link transition-colors"
+          >
+            <span data-i18n="axiom.explore_challenge">Practicar este concepto en el simulador interactivo (90s) →</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</aside>

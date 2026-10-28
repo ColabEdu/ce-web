@@ -6,11 +6,18 @@ import type { Props } from '@astrojs/starlight/props';
 <Default {...Astro.props} />
 
 <div class="colabedu-custom-footer">
+  <div class="footer-links">
+    <a href="/catalog/terms">Términos de Servicio (Beta)</a>
+    <span class="separator">·</span>
+    <a href="/catalog">Catálogo Curricular</a>
+    <span class="separator">·</span>
+    <a href="https://github.com/colabedu" target="_blank" rel="noopener">GitHub</a>
+  </div>
   <div class="footer-primary">
     🌍 Built in California & Spain
   </div>
   <div class="footer-secondary">
-    San Jose | Madrid | Ciudad de México
+    Cupertino | Madrid | Ciudad de México
   </div>
 </div>
 
@@ -25,6 +32,30 @@ import type { Props } from '@astrojs/starlight/props';
     gap: 0.5rem;
   }
   
+  .footer-links {
+    font-size: var(--sl-text-xs);
+    color: var(--sl-color-gray-3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .footer-links a {
+    color: var(--sl-color-gray-3);
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+
+  .footer-links a:hover {
+    color: var(--sl-color-accent-high);
+  }
+
+  .footer-links .separator {
+    color: var(--sl-color-gray-5);
+  }
+
   .footer-primary {
     font-size: var(--sl-text-sm);
     font-weight: 600;

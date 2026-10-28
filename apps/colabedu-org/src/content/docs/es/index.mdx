@@ -1,20 +1,39 @@
 ---
 title: Documentación de ColabEdu
-description: Portal oficial de documentación de ColabEdu y Open Pedagogy Standard (OPS).
+description: Portal oficial de documentación de ColabEdu y Open Pedagogy Specification (OPS).
 template: splash
 hero:
-  tagline: Explora el estándar pedagógico, flujos de GitOps y casos de uso de IA.
+  tagline: El estándar abierto de pedagogía con IA (OPS) y su catálogo curricular interactivo.
   actions:
-    - text: Leer el Libro Blanco
+    - text: Leer el Libro Blanco (OPS)
       link: /es/oas-spec/
       icon: right-arrow
       variant: primary
+    - text: Explorar Catálogo en Vivo (500+ Lecciones)
+      link: /catalog
+      icon: external
+      variant: secondary
     - text: Ver Estándares Educativos
       link: /es/standards/
-      icon: external
+      icon: document
 ---
 
 import { CardGrid, LinkCard, Card } from '@astrojs/starlight/components';
+
+<br/>
+
+<CardGrid>
+  <Card title="1. Especificación Abierta (OPS)" icon="open-book">
+    Estándar declarativo GitOps para codificar competencias oficiales, saberes básicos, andamiaje socrático y rúbricas deterministas sin dependencia de proveedor.
+    <br/><br/>
+    <a href="/es/oas-spec/" style="font-weight: 600; color: var(--sl-color-accent-high); text-decoration: none;">Conocer la Especificación OPS →</a>
+  </Card>
+  <Card title="2. Catálogo Curricular en Acción" icon="laptop">
+    Más de 500 lecciones y exámenes interactivos (LOMLOE, EBAU/EvAU, College Board AP) generados, calibrados y ejecutables bajo el estándar OPS.
+    <br/><br/>
+    <a href="/catalog" style="font-weight: 600; color: var(--sl-color-accent-high); text-decoration: none;">Explorar Cursos y Simulacros →</a>
+  </Card>
+</CardGrid>
 
 <br/>
 
@@ -89,6 +108,6 @@ El proyecto ColabEdu separa claramente el ecosistema abierto de su oferta comerc
     🌍 Built in California & Spain
   </div>
   <div style="font-size: var(--sl-text-xs); color: var(--sl-color-gray-4); letter-spacing: 0.05em;">
-    San Jose | Madrid | Ciudad de México
+    Cupertino | Madrid | Ciudad de México
   </div>
 </div>

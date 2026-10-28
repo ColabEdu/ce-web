@@ -1,0 +1,325 @@
+---
+import CatalogLayout from '@/layouts/CatalogLayout.astro';
+import CourseHero from '@/components/catalog/CourseHero.astro';
+import OerAttributionPanel from '@/components/catalog/OerAttributionPanel.astro';
+import CourseJsonLd from '@/components/seo/CourseJsonLd.astro';
+import BreadcrumbJsonLd from '@/components/seo/BreadcrumbJsonLd.astro';
+import { loadCatalog, BASE_APP_URL } from '@/lib/catalogLoader';
+import type { CourseSpecItem } from '@/lib/types';
+
+export function getStaticPaths() {
+  const { courses, examsBySubject } = loadCatalog();
+
+  return courses.map((course) => {
+    const key = `${course.country}/${course.level}/${course.computedSlug}`;
+    const subjectExams = examsBySubject[key] || [];
+    return {
+      params: {
+        country: course.country,
+        level: course.level,
+        subject: course.computedSlug,
+      },
+      props: { course, exams: subjectExams },
+    };
+  });
+}
+
+interface Props {
+  course: CourseSpecItem;
+  exams?: any[];
+}
+
+const { course, exams = [] } = Astro.props;
+
+
+const canonicalUrl = `https://colabedu.org${course.canonicalPath}`;
+
+const breadcrumbs = [
+  { label: "Catálogo", href: "/catalog" },
+  { label: course.country.toUpperCase(), href: `/catalog/${course.country}` },
+  { label: course.level, href: `/catalog/${course.country}` },
+  { label: course.name, href: course.canonicalPath },
+];
+
+const breadcrumbSchema = [
+  { name: "Catálogo", url: "https://colabedu.org/catalog" },
+  { name: course.country.toUpperCase(), url: `https://colabedu.org/catalog/${course.country}` },
+  { name: course.level, url: `https://colabedu.org/catalog/${course.country}` },
+  { name: course.name, url: canonicalUrl },
+];
+
+const totalLessonsCount = course.units.reduce((acc, u) => acc + (u.lessons?.length || 0), 0);
+---
+
+<CatalogLayout
+  title={course.computedMetaTitle}
+  description={course.computedMetaDescription}
+  canonicalUrl={canonicalUrl}
+>
+  <CourseJsonLd slot="head" course={course} canonicalUrl={canonicalUrl} />
+  <BreadcrumbJsonLd slot="head" items={breadcrumbSchema} />
+
+  <!-- Course Hero -->
+  <CourseHero
+    title={course.name}
+    subtitle={course.description}
+    standard={course.standard}
+    level={course.level}
+    subject={course.subject}
+    language={course.language}
+    breadcrumbs={breadcrumbs}
+  />
+
+  <main class="py-12 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
+    <!-- Course Statistics: 4 Frosted Glass Metric Cards -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-14">
+      <div class="p-5 rounded-2xl bg-gradient-to-b from-[#111726]/80 to-[#0A0E1A]/80 border border-slate-800/80 shadow-sm relative overflow-hidden group hover:border-cyan-500/40 transition-colors">
+        <div class="absolute -top-6 -right-6 w-20 h-20 bg-cyan-500/10 rounded-full blur-xl group-hover:bg-cyan-500/20 transition-colors"></div>
+        <span class="text-xs uppercase tracking-wider font-semibold text-slate-400 block mb-1" data-i18n="stats.structure">
+          Estructura
+        </span>
+        <div class="flex items-baseline gap-1.5">
+          <span class="text-3xl font-black text-cyan-400 tracking-tight">{course.units.length}</span>
+          <span class="text-xs text-slate-400 font-medium" data-i18n="stats.blocks">bloques</span>
+        </div>
+        <p class="text-[11px] text-slate-500 mt-2">
+          {totalLessonsCount} lecciones interactivas
+        </p>
+      </div>
+
+      <div class="p-5 rounded-2xl bg-gradient-to-b from-[#111726]/80 to-[#0A0E1A]/80 border border-slate-800/80 shadow-sm relative overflow-hidden group hover:border-blue-500/40 transition-colors">
+        <div class="absolute -top-6 -right-6 w-20 h-20 bg-blue-500/10 rounded-full blur-xl group-hover:bg-blue-500/20 transition-colors"></div>
+        <span class="text-xs uppercase tracking-wider font-semibold text-slate-400 block mb-1" data-i18n="stats.calendar">
+          Calendario
+        </span>
+        <div class="flex items-baseline gap-1.5">
+          <span class="text-3xl font-black text-blue-400 tracking-tight">{course.target_weeks || 35}</span>
+          <span class="text-xs text-slate-400 font-medium" data-i18n="stats.weeks">semanas</span>
+        </div>
+        <p class="text-[11px] text-slate-500 mt-2">
+          Planificación académica completa
+        </p>
+      </div>
+
+      <div class="p-5 rounded-2xl bg-gradient-to-b from-[#111726]/80 to-[#0A0E1A]/80 border border-slate-800/80 shadow-sm relative overflow-hidden group hover:border-indigo-500/40 transition-colors">
+        <div class="absolute -top-6 -right-6 w-20 h-20 bg-indigo-500/10 rounded-full blur-xl group-hover:bg-indigo-500/20 transition-colors"></div>
+        <span class="text-xs uppercase tracking-wider font-semibold text-slate-400 block mb-1" data-i18n="stats.workload">
+          Carga Lectiva
+        </span>
+        <div class="flex items-baseline gap-1.5">
+          <span class="text-3xl font-black text-indigo-400 tracking-tight">{course.weekly_sessions || 4}</span>
+          <span class="text-xs text-slate-400 font-medium" data-i18n="stats.sessions_week">sesiones/sem</span>
+        </div>
+        <p class="text-[11px] text-slate-500 mt-2">
+          50 min por sesión de aprendizaje
+        </p>
+      </div>
+
+      <div class="p-5 rounded-2xl bg-gradient-to-b from-[#111726]/80 to-[#0A0E1A]/80 border border-slate-800/80 shadow-sm relative overflow-hidden group hover:border-emerald-500/40 transition-colors">
+        <div class="absolute -top-6 -right-6 w-20 h-20 bg-emerald-500/10 rounded-full blur-xl group-hover:bg-emerald-500/20 transition-colors"></div>
+        <span class="text-xs uppercase tracking-wider font-semibold text-slate-400 block mb-1" data-i18n="stats.total_volume">
+          Volumen Total
+        </span>
+        <div class="flex items-baseline gap-1.5">
+          <span class="text-3xl font-black text-emerald-400 tracking-tight">{course.total_annual_sessions || 140}</span>
+          <span class="text-xs text-slate-400 font-medium" data-i18n="stats.sessions">sesiones</span>
+        </div>
+        <p class="text-[11px] text-slate-500 mt-2">
+          Acreditado por normativa oficial
+        </p>
+      </div>
+    </div>
+
+    <!-- Exam Practice Banner (SEO High-Intent Hub) -->
+    {exams && exams.length > 0 && (
+      <div class="mb-14 p-6 sm:p-7 rounded-2xl bg-gradient-to-r from-cyan-950/40 via-blue-950/30 to-indigo-950/40 border border-cyan-500/30 shadow-md relative overflow-hidden flex flex-col sm:flex-row sm:items-center justify-between gap-6 group hover:border-cyan-500/50 transition-all">
+        <div class="space-y-1.5 max-w-xl">
+          <div class="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
+            <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
+            <span>Bancos Oficiales de Exámenes y Simulacros</span>
+          </div>
+          <h3 class="text-xl sm:text-2xl font-bold text-white tracking-tight">
+            Practica con {exams.length} {exams.length === 1 ? 'modelo de examen resuelto' : 'modelos de examen resueltos'}
+          </h3>
+          <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+            Convocatorias oficiales, enunciados canónicos, criterios de calificación y simulador cronometrado interactivo.
+          </p>
+        </div>
+
+        <a
+          href={`${course.canonicalPath}/examenes`}
+          class="px-5 py-3 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs uppercase tracking-wider transition-all shadow-[0_0_20px_rgba(6,182,212,0.3)] hover:scale-102 shrink-0 inline-flex items-center justify-center gap-2"
+        >
+          <span>Explorar Exámenes →</span>
+        </a>
+      </div>
+    )}
+
+    <!-- Units & Syllabus Breakdown -->
+    <section class="mb-16">
+
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-8 pb-4 border-b border-slate-800/80">
+        <div>
+          <span class="text-xs uppercase tracking-wider font-bold text-cyan-400 block mb-1">
+            Plan Curricular Desglosado
+          </span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight" data-i18n="course.syllabus_title">
+            Unidades Didácticas y Temario Oficial
+          </h2>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-400 max-w-md" data-i18n="course.syllabus_sub">
+          Haz clic en cualquier lección interactiva para realizar una práctica de prueba con corrección inmediata.
+        </p>
+      </div>
+
+      <div class="space-y-6">
+        {course.units.map((unit, uIdx) => (
+          <div id={unit.slug} class="rounded-2xl bg-[#0E131F]/90 border border-slate-800/80 overflow-hidden shadow-sm hover:border-slate-700/80 transition-colors">
+            <!-- Unit Header -->
+            <div class="p-5 sm:p-6 bg-gradient-to-r from-slate-900/90 to-slate-950/80 border-b border-slate-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div class="flex items-center gap-3.5">
+                <span class="px-2.5 py-1 rounded-lg text-xs font-black bg-cyan-500/10 text-cyan-300 border border-cyan-500/20 tracking-wider">
+                  BLOQUE {String(uIdx + 1).padStart(2, '0')}
+                </span>
+                <h3 class="text-lg sm:text-xl font-bold text-white tracking-tight">
+                  {unit.name}
+                </h3>
+              </div>
+              <div class="flex items-center gap-2.5 self-start sm:self-auto">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-slate-800/60 text-slate-300 border border-slate-700/50">
+                  <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
+                  {unit.lessons.length} {unit.lessons.length === 1 ? 'lección' : 'lecciones'}
+                </span>
+                <a
+                  href={`${BASE_APP_URL}/course?id=${encodeURIComponent(course.id)}&unit=${encodeURIComponent(unit.id)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold bg-cyan-500/10 hover:bg-cyan-500 text-cyan-300 hover:text-slate-950 border border-cyan-500/25 transition-all shadow-xs"
+                >
+                  <span data-i18n="course.open_unit_app">Abrir unidad en App ↗</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- Lessons List -->
+            <div class="p-4 sm:p-6 divide-y divide-slate-800/60">
+              {unit.resolvedLessons && unit.resolvedLessons.length > 0 ? (
+                unit.resolvedLessons.map((les) => (
+                  <a
+                    href={les.canonicalPath}
+                    class="py-4 first:pt-1 last:pb-1 flex flex-col sm:flex-row sm:items-center justify-between gap-4 group hover:bg-slate-850/40 -mx-2 px-3 rounded-xl transition-all"
+                  >
+                    <div class="flex items-start gap-3.5">
+                      <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-cyan-500/15 to-blue-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shrink-0 group-hover:border-cyan-400 group-hover:scale-105 transition-all shadow-[0_0_15px_rgba(6,182,212,0.1)]">
+                        <svg class="w-4 h-4 translate-x-0.5" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M8 5v14l11-7z" />
+                        </svg>
+                      </div>
+                      <div>
+                        <div class="flex items-center gap-2">
+                          <h4 class="text-sm sm:text-base font-semibold text-slate-100 group-hover:text-cyan-300 transition-colors">
+                            {les.title}
+                          </h4>
+                          {les.isNew && (
+                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 uppercase tracking-wider shrink-0 shadow-[0_0_10px_rgba(6,182,212,0.25)]">
+                              <span class="w-1 h-1 rounded-full bg-cyan-400 animate-pulse"></span>
+                              <span data-i18n="recent.new_badge">NUEVO</span>
+                            </span>
+                          )}
+                        </div>
+                        <p class="text-xs text-slate-400 mt-1 line-clamp-1 max-w-xl font-normal leading-relaxed">
+                          {les.computedMetaDescription}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div class="flex items-center gap-3 sm:gap-4 text-xs font-medium shrink-0 self-end sm:self-center">
+                      <span class="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold uppercase bg-slate-850 text-slate-300 border border-slate-700/60">
+                        {les.language}
+                      </span>
+                      <span class="text-slate-400 flex items-center gap-1 font-mono text-[11px]">
+                        <svg class="w-3.5 h-3.5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        {les.estimatedMinutes || 50} min
+                      </span>
+                      <span class="px-3 py-1 rounded-lg bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 group-hover:bg-cyan-500 group-hover:text-slate-950 font-semibold transition-all inline-flex items-center gap-1">
+                        <span data-i18n="course.explore_lesson">Explorar</span>
+                        <svg class="w-3 h-3 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                      </span>
+                    </div>
+                  </a>
+                ))
+              ) : (
+                <div class="space-y-3 py-2">
+                  {unit.lessons.map((ul) => (
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 py-2 text-sm text-slate-300 border-b border-slate-800/40 last:border-0">
+                      <div class="flex items-center gap-2">
+                        <span class="text-cyan-500 text-xs font-mono">•</span>
+                        <span class="font-medium text-slate-200">{ul.title}</span>
+                      </div>
+                      <div class="flex items-center gap-2.5 self-end sm:self-auto">
+                        <span class="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold uppercase bg-slate-850 text-slate-300 border border-slate-700/60">
+                          {course.language}
+                        </span>
+                        <span class="text-xs text-slate-500 font-mono">{ul.estimatedDurationMinutes || 50} min</span>
+                        <a
+                          href={`${BASE_APP_URL}/lesson?course=${encodeURIComponent(course.id)}&lesson=${encodeURIComponent(ul.lessonSpecRef || ul.title)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          class="px-2.5 py-0.5 rounded-md bg-cyan-500/10 hover:bg-cyan-500 text-cyan-300 hover:text-slate-950 border border-cyan-500/25 text-xs font-semibold transition-all inline-flex items-center gap-1"
+                        >
+                          <span data-i18n="course.practice_in_app">Practicar en App ↗</span>
+                        </a>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Official Rubrics & Standards Inspector -->
+    {course.rubric_refs && course.rubric_refs.length > 0 && (
+      <section class="p-6 sm:p-8 rounded-3xl bg-gradient-to-b from-[#0E131F]/90 to-[#090C14]/90 border border-slate-800/80 relative overflow-hidden">
+        <div class="absolute -top-10 -right-10 w-48 h-48 bg-cyan-500/5 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="flex items-center gap-3 mb-3">
+          <div class="w-8 h-8 rounded-lg bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 text-sm">
+            ⚖️
+          </div>
+          <div>
+            <h3 class="text-lg font-bold text-white tracking-tight" data-i18n="rubrics.title">
+              Acreditación y Rúbricas Oficiales ({course.standard})
+            </h3>
+            <span class="text-xs text-cyan-400 font-mono" data-i18n="rubrics.sub">
+              Resolución autoritativa de competencias y criterios de corrección
+            </span>
+          </div>
+        </div>
+
+        <p class="text-xs sm:text-sm text-slate-400 mb-6 leading-relaxed" data-i18n="rubrics.description">
+          Las evaluaciones y ejercicios prácticos de este curso están vinculados a los descriptores operativos y criterios de calificación publicados oficialmente en el marco normativo de referencia:
+        </p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {course.rubric_refs.map((r) => (
+            <div class="flex items-center gap-2.5 p-3 rounded-xl bg-slate-900/80 border border-slate-800/80 text-xs font-mono text-slate-300">
+              <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
+              <span class="truncate">{r}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <!-- OER Open Educational Resources Attribution & Copyright Panel -->
+    <OerAttributionPanel sources={course.resolvedSources} />
+  </main>
+</CatalogLayout>
+

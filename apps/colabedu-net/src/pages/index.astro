@@ -1,4 +1,53 @@
 ---
-return Astro.redirect('/es/');
+// Redirección inteligente de idioma para colabedu.net
 ---
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ColabEdu.net — Redirigiendo...</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <script is:inline>
+        (function () {
+            var urlParams = new URLSearchParams(window.location.search);
+            var urlLang = urlParams.get('lang') || urlParams.get('locale');
+            var cookieMatch = document.cookie.match(/(^|;\s*)colabedu_preferred_locale=([^;]*)/);
+            var cookieLang = cookieMatch ? decodeURIComponent(cookieMatch[2]) : null;
+            var localSaved = localStorage.getItem('colabedu_preferred_locale') 
+                || localStorage.getItem('colabedu_locale') 
+                || localStorage.getItem('colabedu_lang');
+
+            var navLangs = navigator.languages || (navigator.language ? [navigator.language] : []);
+            var browserLang = null;
+            for (var i = 0; i < navLangs.length; i++) {
+                if (!navLangs[i]) continue;
+                var code = navLangs[i].toLowerCase().split(/[-_]/)[0];
+                if (code === 'en' || code === 'es') {
+                    browserLang = code;
+                    break;
+                }
+            }
+
+            var chosen = (urlLang && (urlLang === 'en' || urlLang === 'es') ? urlLang : null)
+                || (cookieLang && (cookieLang === 'en' || cookieLang === 'es') ? cookieLang : null)
+                || (localSaved && (localSaved === 'en' || localSaved === 'es') ? localSaved : null)
+                || browserLang
+                || 'es';
+
+            try {
+                localStorage.setItem('colabedu_preferred_locale', chosen);
+                var domainAttr = window.location.hostname.endsWith('colabedu.net') ? '; domain=.colabedu.net' : '';
+                document.cookie = 'colabedu_preferred_locale=' + chosen + domainAttr + '; path=/; max-age=31536000; SameSite=Lax';
+            } catch(e) {}
+
+            var dest = chosen === 'en' ? '/en/' : '/es/';
+            window.location.replace(dest);
+        })();
+    </script>
+</head>
+<body style="background: #0f172a; color: #94a3b8; font-family: system-ui, sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0;">
+    <p>Redirigiendo a ColabEdu.net…</p>
+</body>
+</html>
 

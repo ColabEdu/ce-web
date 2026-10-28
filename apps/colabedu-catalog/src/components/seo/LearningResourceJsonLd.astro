@@ -1,0 +1,79 @@
+---
+import type { InteractiveLessonItem } from '@/lib/types';
+
+interface Props {
+  lesson: InteractiveLessonItem;
+  canonicalUrl: string;
+  courseName?: string;
+}
+
+const { lesson, canonicalUrl, courseName } = Astro.props;
+
+// Extract questions from slides
+const questions: any[] = [];
+if (lesson.slides) {
+  for (const s of lesson.slides) {
+    if (s.embeddedWidget?.props?.questions) {
+      for (const q of s.embeddedWidget.props.questions) {
+        questions.push({
+          "@type": "Question",
+          "name": s.title || "Pregunta de Práctica",
+          "text": q.text,
+          "suggestedAnswer": q.options && typeof q.correct === "number" && q.options[q.correct] ? {
+            "@type": "Answer",
+            "text": q.options[q.correct],
+            "comment": q.explanation || "Respuesta canónica oficial con corrección socrática"
+          } : undefined
+        });
+      }
+    }
+  }
+}
+
+const graph: any[] = [
+  {
+    "@type": "LearningResource",
+    "@id": `${canonicalUrl}#lesson`,
+    "name": lesson.title,
+    "description": lesson.computedMetaDescription,
+    "learningResourceType": "Practice Problem",
+    "educationalLevel": lesson.educationLevel || "Secundaria",
+    "isAccessibleForFree": true,
+    "inLanguage": lesson.standardRef?.includes('us') ? "en" : "es",
+    "provider": {
+      "@type": "Organization",
+      "name": "ColabEdu",
+      "url": "https://colabedu.org"
+    },
+    "educationalAlignment": [
+      {
+        "@type": "AlignmentObject",
+        "alignmentType": "educationalSubject",
+        "targetName": lesson.subject
+      },
+      {
+        "@type": "AlignmentObject",
+        "alignmentType": "educationalFramework",
+        "targetName": lesson.standardRef || "LOMLOE RD 534/2024"
+      }
+    ],
+    "teaches": lesson.learningObjectives?.length ? lesson.learningObjectives : [lesson.title]
+  }
+];
+
+if (questions.length > 0) {
+  graph.push({
+    "@type": "Quiz",
+    "@id": `${canonicalUrl}#quiz`,
+    "name": `Test Interactivo: ${lesson.title}`,
+    "hasPart": questions
+  });
+}
+
+const schemaData = {
+  "@context": "https://schema.org",
+  "@graph": graph
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(schemaData, null, 2)} />

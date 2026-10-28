@@ -23,7 +23,12 @@
     </style>
     <script is:inline>
         (function () {
-            var saved = localStorage.getItem('colabedu_lang');
+            var cookieMatch = document.cookie.match(/(^|;\s*)colabedu_preferred_locale=([^;]*)/);
+            var saved = (cookieMatch ? decodeURIComponent(cookieMatch[2]) : null)
+                || localStorage.getItem('colabedu_preferred_locale')
+                || localStorage.getItem('colabedu_locale')
+                || localStorage.getItem('colabedu_lang');
+
             var lang = saved
                 || (navigator.languages && navigator.languages[0])
                 || navigator.language
@@ -31,10 +36,11 @@
 
             var dest = lang.startsWith('en') ? '/en/' : '/es/';
 
-            // Guardar preferencia si es la primera vez
-            if (!saved) {
-                localStorage.setItem('colabedu_lang', lang.startsWith('en') ? 'en' : 'es');
-            }
+            // Persistir preferencia unificada
+            var chosen = lang.startsWith('en') ? 'en' : 'es';
+            localStorage.setItem('colabedu_preferred_locale', chosen);
+            var domainAttr = window.location.hostname.endsWith('colabedu.org') ? '; domain=.colabedu.org' : '';
+            document.cookie = 'colabedu_preferred_locale=' + chosen + domainAttr + '; path=/; max-age=31536000; SameSite=Lax';
 
             window.location.replace(dest);
         })();

@@ -24,23 +24,29 @@ El recurso `ExerciseSpec` (Especificación de Ejercicio) define la estructura pe
 
 | Campo | Tipo | Requerido | Descripción |
 |---|---|---|---|
-| `context` | `string` | Sí | Texto en formato Markdown que sirve como estímulo común (lectura, planteamiento de problema) para los ejercicios subsecuentes. |
-| `exercises` | `array` | Sí | Lista de ejercicios o preguntas asociadas a este contexto. |
+| `context` | `string` | No | Texto en formato Markdown que sirve como estímulo común (lectura, planteamiento de problema) para los ejercicios subsecuentes. |
+| `exercises` / `items` | `array` | Sí | Lista de ejercicios o preguntas asociadas a este contexto. |
+| `solutionProvenance` | `string` | No | Origen de la solución (`OFFICIAL_OER_MARKSCHEME`, `TEACHER_PROVIDED`, `SYNTHETIC_AUDITED`). |
+| `sourceSolutionRef` | `string` | No | Identificador canónico del solucionario oficial en `sources_manifest.json`. |
+| `sourceSolutionLocator` | `object` | No | Localizador granular de la solución (`page`, `pages`, `section`, `exerciseNumber`, `itemKey`). |
+| `confidenceScore` | `number` | No | Coeficiente de fiabilidad pedagógica (1.0 oficial, 0.85 sintético auditado). |
 
-#### Estructura de `exercises`
+#### Estructura de `exercises` / `items`
 
 | Campo | Tipo | Requerido | Descripción |
 |---|---|---|---|
-| `id` | `string` | Sí | Identificador de la pregunta (ej. `q1`). |
-| `type` | `string` | Sí | Tipo de interacción o input requerido (ej. `audio_response`, `free_text`). |
-| `prompt` | `string` | Sí | El enunciado exacto de la pregunta. |
-| `expectedOutputFormat` | `string` | No | Formato esperado (ej. `audio`, `markdown`). |
-| `maxScore` | `number` | No | Puntuación máxima alcanzable en esta pregunta específica. |
-| `targetCompetencies` | `string[]` | Sí | Array con los IDs de las competencias o nodos C0 (`BLOCK_RUBRIC`) que evalúa esta pregunta. |
+| `id` / `part` | `string` | Sí | Identificador de la pregunta o apartado (ej. `q1`, `a`). |
+| `type` | `string` | No | Tipo de interacción o input requerido (ej. `audio_response`, `free_text`, `stem_calculator`). |
+| `prompt` | `string` \| `object` | Sí | El enunciado exacto de la pregunta. |
+| `expectedOutputFormat` | `string` | No | Formato esperado (ej. `audio`, `markdown`, `short_answer`). |
+| `maxScore` / `points` | `number` | No | Puntuación máxima alcanzable en esta pregunta específica. |
+| `targetCompetencies` | `string[]` | No | Array con los IDs de las competencias o nodos C0 (`BLOCK_RUBRIC`) que evalúa esta pregunta. |
+| `sourceSolutionLocator` | `object` | No | Localizador granular específico del ítem en el solucionario. |
+| `answerKey` | `object` | No | Clave de corrección polimórfica (`QUALITATIVE_CRITERIA`, `NUMERIC_OR_CAS`, `GRAMMAR_SYNTAX`, `CLOSED_DETERMINISTIC`). |
 
 ## Ejemplo de Uso
 
-A continuación se muestra un ejemplo de un `ExerciseSpec` para una prueba oral AAPPL en Texas:
+A continuación se muestra un ejemplo canónico de un `ExerciseSpec` bi-cefálico con localizador granular y clave cualitativa:
 
 ```yaml
 apiVersion: colabedu.ai/v1beta1
@@ -58,12 +64,24 @@ spec:
 
     Tu profesor quiere que hables sobre una tradición importante que se celebra en
     Texas o en un país hispanohablante (como el Cinco de Mayo o el Rodeo).
+  solutionProvenance: "OFFICIAL_OER_MARKSCHEME"
+  sourceSolutionRef: "src.us.actfl.aappl.2024.scoring_guide"
+  sourceSolutionLocator:
+    page: 14
+    section: "Presentational Speaking Rubric & Sample Criteria"
   exercises:
-  - id: q1
-    type: audio_response
-    prompt: Graba una presentación de 1 minuto describiendo la celebración, por qué es importante y qué actividades se realizan.
-    expectedOutputFormat: audio
-    maxScore: 4.0
-    targetCompetencies:
-    - lote-presentational
+    - id: q1
+      type: audio_response
+      prompt: Graba una presentación de 1 minuto describiendo la celebración, por qué es importante y qué actividades se realizan.
+      expectedOutputFormat: audio
+      maxScore: 4.0
+      targetCompetencies:
+        - lote-presentational
+      answerKey:
+        format: "QUALITATIVE_CRITERIA"
+        scoringRule: "Award 4.0 for sustained presentation with rich cultural detail, clear pronunciation, and varied vocabulary."
+        acceptableCriteria:
+          - "Identifica tradición específica y contexto cultural."
+          - "Describe al menos dos actividades realizadas."
+          - "Muestra competencia oral correspondiente a Novice-High / Intermediate-Low."
 ```

@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.9.10] - 2026-10-28
+
+### Added
+- **Catalog Multilingual Switcher & Regional Flags**:
+  - Restored dynamic locale negotiation and language selector across `colabedu.org` and course catalog pages.
+  - Added SVG and PNG regional flag icons for Catalan (`flag_ca.png`), Basque (`flag_eu.png`), and Galician (`flag_gl.png`).
+- **SEO Static Generation & Canary Sitemaps**:
+  - Configured deterministic Astro 5 SSG sitemap generation with partitioned sitemaps (Canary Pilot, Spain, US AP).
+- **Multi-Standard Curriculum & Readiness Documentation**:
+  - Updated documentation portal with references for the 6-layer OPS readiness radar, national EBAU/PAU certification, and multi-standard assessment frameworks (US AP, California CDE, Mexico SEP, and IB DP).
+
+### Changed
+- **Ecosystem Alignment**: Bumped web platform documentation to version `0.9.10`.
+
 ## [0.9.9] - 2026-10-17
 
 ### Added

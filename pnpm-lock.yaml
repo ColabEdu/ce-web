@@ -64,8 +64,54 @@ importers:
         specifier: ^0.5.19
         version: 0.5.19(tailwindcss@4.1.17)
 
+  apps/colabedu-catalog:
+    dependencies:
+      '@astrojs/check':
+        specifier: ^0.9.6
+        version: 0.9.6(prettier-plugin-astro@0.14.1)(prettier@3.8.1)(typescript@5.9.3)
+      '@astrojs/react':
+        specifier: ^4.4.2
+        version: 4.4.2(@types/node@24.12.4)(@types/react-dom@19.2.3(@types/react@19.2.13))(@types/react@19.2.13)(jiti@2.6.1)(lightningcss@1.30.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(yaml@2.8.2)
+      '@colabedu/ui-core':
+        specifier: workspace:*
+        version: link:../../packages/ui-core
+      '@iconify-json/tabler':
+        specifier: ^1.0.0
+        version: 1.2.26
+      '@tailwindcss/vite':
+        specifier: ^4.1.17
+        version: 4.1.18(vite@7.3.3(@types/node@24.12.4)(jiti@2.6.1)(lightningcss@1.30.2)(yaml@2.8.2))
+      astro:
+        specifier: ^5.1.0
+        version: 5.17.1(@types/node@24.12.4)(jiti@2.6.1)(lightningcss@1.30.2)(rollup@4.57.1)(typescript@5.9.3)(yaml@2.8.2)
+      astro-icon:
+        specifier: ^1.1.0
+        version: 1.1.5
+      js-yaml:
+        specifier: ^4.1.0
+        version: 4.1.1
+      react:
+        specifier: ^19.0.0
+        version: 19.2.4
+      react-dom:
+        specifier: ^19.0.0
+        version: 19.2.4(react@19.2.4)
+      tailwindcss:
+        specifier: ^4.1.17
+        version: 4.3.0
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+    devDependencies:
+      '@types/js-yaml':
+        specifier: ^4.0.9
+        version: 4.0.9
+
   apps/colabedu-net:
     dependencies:
+      '@colabedu/ui-core':
+        specifier: workspace:*
+        version: link:../../packages/ui-core
       astro:
         specifier: ^6.3.1
         version: 6.3.1(@types/node@24.12.4)(jiti@2.6.1)(lightningcss@1.30.2)(rollup@4.57.1)(yaml@2.8.2)

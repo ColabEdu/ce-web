@@ -1,0 +1,205 @@
+---
+import CatalogLayout from '@/layouts/CatalogLayout.astro';
+import BreadcrumbJsonLd from '@/components/seo/BreadcrumbJsonLd.astro';
+import { loadCatalog, BASE_APP_URL } from '@/lib/catalogLoader';
+import type { ExamSpecItem, CourseSpecItem } from '@/lib/types';
+
+export function getStaticPaths() {
+  const { courses, examsBySubject } = loadCatalog();
+
+  const paths: any[] = [];
+  for (const course of courses) {
+    const key = `${course.country}/${course.level}/${course.computedSlug}`;
+    const subjectExams = examsBySubject[key] || [];
+    paths.push({
+      params: {
+        country: course.country,
+        level: course.level,
+        subject: course.computedSlug,
+      },
+      props: {
+        course,
+        exams: subjectExams,
+      },
+    });
+  }
+
+  return paths;
+}
+
+interface Props {
+  course: CourseSpecItem;
+  exams: ExamSpecItem[];
+}
+
+const { course, exams } = Astro.props;
+
+const canonicalUrl = `https://colabedu.org${course.canonicalPath}/examenes`;
+
+const breadcrumbs = [
+  { label: "Catálogo", href: "/catalog" },
+  { label: course.country.toUpperCase(), href: `/catalog/${course.country}` },
+  { label: course.name, href: course.canonicalPath },
+  { label: "Exámenes y Simulacros", href: `${course.canonicalPath}/examenes` },
+];
+
+const breadcrumbSchema = [
+  { name: "Catálogo", url: "https://colabedu.org/catalog" },
+  { name: course.country.toUpperCase(), url: `https://colabedu.org/catalog/${course.country}` },
+  { name: course.name, url: `https://colabedu.org${course.canonicalPath}` },
+  { name: "Exámenes Oficiales y Simulacros", url: canonicalUrl },
+];
+
+const pageTitle = `Exámenes y Simulacros Oficiales de ${course.name} | ColabEdu`;
+const pageDescription = `Banco oficial de exámenes resueltos, modelos de prueba y simulacros cronometrados de ${course.name} (${course.level}). Preparación intensiva con rúbricas oficiales.`;
+---
+
+<CatalogLayout
+  title={pageTitle}
+  description={pageDescription}
+  canonicalUrl={canonicalUrl}
+>
+  <BreadcrumbJsonLd slot="head" items={breadcrumbSchema} />
+
+  <!-- Hero Header -->
+  <header class="relative pt-12 pb-16 px-4 sm:px-6 lg:px-8 border-b border-slate-800/80 bg-gradient-to-b from-[#0F172A] via-[#0A0E1A] to-[#070A12] overflow-hidden">
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(6,182,212,0.15),transparent)] pointer-events-none"></div>
+
+    <div class="max-w-5xl mx-auto relative z-10">
+      <!-- Breadcrumbs -->
+      <nav class="flex items-center gap-2 text-xs text-slate-400 mb-6 flex-wrap">
+        {breadcrumbs.map((b, idx) => (
+          <div class="flex items-center gap-2">
+            {idx > 0 && <span class="text-slate-600">/</span>}
+            <a href={b.href} class="hover:text-cyan-400 transition-colors">
+              {b.label}
+            </a>
+          </div>
+        ))}
+      </nav>
+
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 mb-4 shadow-[0_0_15px_rgba(6,182,212,0.15)]">
+        <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+        <span>Banco Oficial de Pruebas y Simulacros</span>
+      </div>
+
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight mb-4">
+        Exámenes Oficiales y Simulacros de <span class="bg-gradient-to-r from-cyan-400 via-blue-400 to-indigo-400 bg-clip-text text-transparent">{course.name}</span>
+      </h1>
+
+      <p class="text-base sm:text-lg text-slate-300 max-w-3xl leading-relaxed">
+        Practica con convocatorias reales, modelos oficiales de examen y baterías de ejercicios cronometrados con feedback socrático y rúbricas de corrección oficiales.
+      </p>
+
+      <!-- Stats Bar -->
+      <div class="flex items-center gap-6 mt-8 pt-6 border-t border-slate-800/60 text-xs sm:text-sm text-slate-400">
+        <div class="flex items-center gap-2">
+          <span class="font-bold text-white text-base">{exams.length}</span>
+          <span>{exams.length === 1 ? 'modelo disponible' : 'modelos disponibles'}</span>
+        </div>
+        <span class="text-slate-700">•</span>
+        <div class="flex items-center gap-2">
+          <span class="font-bold text-cyan-400 text-base">{course.standard || 'Estándar Oficial'}</span>
+        </div>
+        <span class="text-slate-700">•</span>
+        <div class="flex items-center gap-2">
+          <span class="text-emerald-400 font-semibold">100% Criterios Calibrados</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Exams List -->
+  <main class="py-12 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
+    {exams.length > 0 ? (
+      <div class="space-y-6">
+        {exams.map((ex) => (
+          <article class="p-6 sm:p-7 rounded-2xl bg-gradient-to-b from-[#111726]/80 to-[#0A0E1A]/80 border border-slate-800/80 hover:border-cyan-500/40 transition-all shadow-sm group">
+            <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+              <div class="space-y-2 max-w-2xl">
+                <div class="flex items-center gap-2 flex-wrap text-xs">
+                  {ex.year && (
+                    <span class="px-2 py-0.5 rounded font-mono font-bold bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">
+                      Convocatoria {ex.year}
+                    </span>
+                  )}
+                  {ex.organization && (
+                    <span class="px-2 py-0.5 rounded font-medium bg-slate-800 text-slate-300 border border-slate-700">
+                      {ex.organization}
+                    </span>
+                  )}
+                  <span class="px-2 py-0.5 rounded font-mono text-slate-400 bg-slate-850 border border-slate-800">
+                    {ex.estimatedMinutes} min
+                  </span>
+                  <span class="px-2 py-0.5 rounded font-mono text-slate-400 bg-slate-850 border border-slate-800">
+                    Máx: {ex.totalMaxScore} pts
+                  </span>
+                </div>
+
+                <h2 class="text-xl sm:text-2xl font-bold text-white group-hover:text-cyan-300 transition-colors">
+                  <a href={ex.canonicalPath}>
+                    {ex.title}
+                  </a>
+                </h2>
+
+                <p class="text-sm text-slate-400 leading-relaxed line-clamp-2">
+                  {ex.computedMetaDescription}
+                </p>
+
+                <div class="flex items-center gap-4 pt-2 text-xs text-slate-500 font-mono">
+                  <span>{ex.tasks.length} cuestiones estructuradas</span>
+                  {ex.rubricRefs && ex.rubricRefs.length > 0 && (
+                    <>
+                      <span>•</span>
+                      <span class="text-cyan-400/80">Rúbrica oficial vinculada</span>
+                    </>
+                  )}
+                </div>
+              </div>
+
+              <!-- CTAs -->
+              <div class="flex sm:flex-col items-center sm:items-end gap-3 shrink-0 self-end sm:self-center">
+                <a
+                  href={ex.canonicalPath}
+                  class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold border border-slate-700 transition-all inline-flex items-center gap-1.5"
+                >
+                  <span>Ver Criterios y Enunciados</span>
+                  <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                  </svg>
+                </a>
+
+                <a
+                  href={ex.appPracticeUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="px-4 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 text-xs font-bold transition-all shadow-[0_0_15px_rgba(6,182,212,0.25)] hover:scale-102 inline-flex items-center gap-1.5"
+                >
+                  <span>Simulador Cronometrado ↗</span>
+                </a>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    ) : (
+      <div class="text-center py-16 px-4 rounded-2xl border border-dashed border-slate-800 bg-[#0B0F19]/40">
+        <div class="w-12 h-12 rounded-full bg-cyan-500/10 text-cyan-400 flex items-center justify-center mx-auto mb-4">
+          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+        </div>
+        <h3 class="text-lg font-bold text-white mb-2">Simulacros en Proceso de Calibración</h3>
+        <p class="text-sm text-slate-400 max-w-md mx-auto mb-6">
+          Los exámenes oficiales para {course.name} se están indexando con sus criterios de corrección calibrados. Puedes practicar con las lecciones interactivas del curso.
+        </p>
+        <a
+          href={course.canonicalPath}
+          class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-cyan-500/15 text-cyan-300 hover:bg-cyan-500/25 border border-cyan-500/30 text-xs font-semibold transition-all"
+        >
+          <span>← Volver al Temario del Curso</span>
+        </a>
+      </div>
+    )}
+  </main>
+</CatalogLayout>

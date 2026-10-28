@@ -5,6 +5,8 @@ import tailwindcss from '@tailwindcss/vite';
 import icon from 'astro-icon';
 import mermaid from 'astro-mermaid';
 
+const GA_MEASUREMENT_ID = process.env.PUBLIC_GA_MEASUREMENT_ID || 'G-NP3RNJE5BF';
+
 // https://astro.build/config
 export default defineConfig({
     server: {
@@ -25,6 +27,49 @@ export default defineConfig({
                 '../../packages/ui-core/src/styles/starlight-overrides.css',
             ],
             head: [
+                ...(GA_MEASUREMENT_ID ? [
+                    {
+                        tag: 'script',
+                        attrs: {
+                            async: true,
+                            src: `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`
+                        }
+                    },
+                    {
+                        tag: 'script',
+                        content: `
+                            window.dataLayer = window.dataLayer || [];
+                            function gtag(){dataLayer.push(arguments);}
+                            gtag('js', new Date());
+                            gtag('consent', 'default', {
+                                'analytics_storage': 'granted',
+                                'ad_storage': 'denied',
+                                'ad_user_data': 'denied',
+                                'ad_personalization': 'denied'
+                            });
+                            gtag('config', '${GA_MEASUREMENT_ID}', {
+                                cookie_domain: 'colabedu.org',
+                                cookie_flags: 'SameSite=None;Secure',
+                                anonymize_ip: true,
+                                send_page_view: true
+                            });
+                        `
+                    }
+                ] : []),
+                {
+                    tag: 'script',
+                    content: `
+                        (function() {
+                            var path = window.location.pathname;
+                            var lang = path.startsWith('/en/') ? 'en' : 'es';
+                            try {
+                                localStorage.setItem('colabedu_preferred_locale', lang);
+                                var domainAttr = window.location.hostname.endsWith('colabedu.org') ? '; domain=.colabedu.org' : '';
+                                document.cookie = 'colabedu_preferred_locale=' + lang + domainAttr + '; path=/; max-age=31536000; SameSite=Lax';
+                            } catch(e) {}
+                        })();
+                    `
+                },
                 {
                     tag: 'script',
                     attrs: { type: 'module' },
@@ -34,12 +79,22 @@ export default defineConfig({
                     tag: 'script',
                     content: `
                         const injectLink = () => {
-                            if (!document.getElementById('custom-blog-link')) {
-                                const target = document.querySelector('.social-icons') || document.querySelector('theme-select');
-                                if (target && target.parentNode) {
+                            const target = document.querySelector('.social-icons') || document.querySelector('theme-select');
+                            if (target && target.parentNode) {
+                                if (!document.getElementById('custom-catalog-link')) {
+                                    const catLink = document.createElement('a');
+                                    catLink.id = 'custom-catalog-link';
+                                    catLink.href = '/catalog';
+                                    const isEn = window.location.pathname.startsWith('/en/');
+                                    catLink.textContent = isEn ? 'Curricular Catalog' : 'Catálogo Curricular';
+                                    catLink.style.cssText = 'margin-right: 1.25rem; font-weight: 600; color: var(--sl-color-accent); text-decoration: none; display: inline-flex; align-items: center; gap: 0.25rem;';
+                                    target.parentNode.insertBefore(catLink, target);
+                                }
+                                if (!document.getElementById('custom-blog-link')) {
                                     const link = document.createElement('a');
                                     link.id = 'custom-blog-link';
-                                    link.href = '/es/news';
+                                    const isEn = window.location.pathname.startsWith('/en/');
+                                    link.href = isEn ? '/en/news' : '/es/news';
                                     link.textContent = 'Blog / News';
                                     link.style.cssText = 'margin-right: 1.5rem; font-weight: 600; color: var(--sl-color-accent-high); text-decoration: none;';
                                     target.parentNode.insertBefore(link, target);
@@ -71,6 +126,7 @@ export default defineConfig({
                         { label: 'Visión General', translations: { en: 'Overview' }, link: '/oas-spec/' },
                         { label: 'Vacío Tecnológico', translations: { en: 'Technological Gap' }, link: '/oas-spec/why-open-specs/' },
                         { label: 'Ecosistema y Comunidad', translations: { en: 'Ecosystem and Community' }, link: '/oas-spec/ecosistema-comunidad/' },
+                        { label: 'Catálogo Curricular (OPS en Acción)', translations: { en: 'Curricular Catalog (OPS in Action)' }, link: '/catalog/' },
                         { label: 'Nomenclatura GitOps', translations: { en: 'GitOps Nomenclature' }, link: '/oas-spec/architecture/nomenclatura-gitops/' },
                         { label: 'Contenido Interactivo AI', translations: { en: 'Interactive AI Content' }, link: '/oas-spec/architecture/contenido-interactivo-ai/' },
                         {
@@ -210,6 +266,12 @@ export default defineConfig({
         plugins: [tailwindcss()],
         server: {
             allowedHosts: true,
+            proxy: {
+                '/catalog': {
+                    target: 'http://127.0.0.1:4323',
+                    changeOrigin: true,
+                },
+            },
         },
     },
 });

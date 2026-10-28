@@ -1,0 +1,47 @@
+---
+import type { ExamSpecItem } from '@/lib/types';
+
+interface Props {
+  exam: ExamSpecItem;
+  canonicalUrl: string;
+}
+
+const { exam, canonicalUrl } = Astro.props;
+
+const questionsSchema = exam.tasks.map((t, idx) => ({
+  "@type": "Question",
+  "position": idx + 1,
+  "name": t.title || `Cuestión ${idx + 1}`,
+  "text": t.prompt,
+  "suggestedAnswer": {
+    "@type": "Answer",
+    "text": `Resolución socrática y rúbrica oficial disponible en el simulador interactivo de ColabEdu.`
+  }
+}));
+
+const schemaData = {
+  "@context": "https://schema.org",
+  "@type": "Quiz",
+  "@id": `${canonicalUrl}#quiz`,
+  "name": exam.title,
+  "description": exam.computedMetaDescription,
+  "educationalLevel": exam.level,
+  "educationalUse": "Assessment",
+  "assesses": exam.subject,
+  "learningResourceType": "Exam Practice",
+  "timeRequired": `PT${exam.estimatedMinutes || 90}M`,
+  "provider": {
+    "@type": "Organization",
+    "name": "ColabEdu",
+    "url": "https://colabedu.org"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": exam.organization || "Autoridad Educativa Oficial"
+  },
+  "inLanguage": exam.language || "es",
+  "hasPart": questionsSchema
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(schemaData, null, 2)} />

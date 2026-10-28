@@ -1,0 +1,32 @@
+---
+import type { CourseSpecItem } from '@/lib/types';
+
+interface Props {
+  course: CourseSpecItem;
+  canonicalUrl: string;
+}
+
+const { course, canonicalUrl } = Astro.props;
+
+const schemaData = {
+  "@context": "https://schema.org",
+  "@type": "Course",
+  "@id": `${canonicalUrl}#course`,
+  "name": course.name,
+  "description": course.computedMetaDescription,
+  "provider": {
+    "@type": "Organization",
+    "name": "ColabEdu",
+    "url": "https://colabedu.org"
+  },
+  "educationalCredentialAwarded": course.standard || "Oficial",
+  "inLanguage": course.country === "us" ? "en" : "es",
+  "hasCourseInstance": {
+    "@type": "CourseInstance",
+    "courseMode": "Online",
+    "courseWorkload": course.total_annual_sessions ? `${course.total_annual_sessions} sesiones` : undefined
+  }
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(schemaData, null, 2)} />

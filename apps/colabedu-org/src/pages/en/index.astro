@@ -1,16 +1,28 @@
 ---
 import "@colabedu/ui-core/styles/global.css";
+import { appLink } from "@colabedu/ui-core/navigation";
+
+const netPlatformUrl = appLink('net', '/');
 ---
 
 <!doctype html>
 <html lang="en" class="scroll-smooth">
     <head>
         <meta charset="UTF-8" />
+        <script is:inline>
+            (function () {
+                try {
+                    localStorage.setItem('colabedu_preferred_locale', 'en');
+                    var domainAttr = window.location.hostname.endsWith('colabedu.org') ? '; domain=.colabedu.org' : '';
+                    document.cookie = 'colabedu_preferred_locale=en' + domainAttr + '; path=/; max-age=31536000; SameSite=Lax';
+                } catch(e) {}
+            })();
+        </script>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>ColabEdu.org - Open Pedagogy Specification (OPS) | Pedagogy as Code</title>
         <meta
             name="description"
-            content="The open standard for AI-powered curriculum, instruction, and assessment (Pedagogy as Code)."
+            content="The open specification for AI-powered curriculum, instruction, and assessment (Pedagogy as Code)."
         />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -34,12 +46,19 @@ import "@colabedu/ui-core/styles/global.css";
                         <span class="text-2xl font-black text-slate-900 tracking-tighter">Colab<span class="text-indigo-600">Edu</span>.org</span>
                     </div>
                     <nav class="hidden md:flex space-x-8 items-center">
-                        <a href="/en/oas-spec/" class="text-sm font-medium text-slate-600 hover:text-indigo-600 transition-colors">The OPS Standard</a>
-                        <a href="/en/oas-spec/ecosystem-community/" class="text-sm font-medium text-slate-600 hover:text-indigo-600 transition-colors">Community</a>
+                        <a href="/catalog" class="text-sm font-bold text-indigo-600 hover:text-indigo-700 transition-colors flex items-center gap-1">
+                            <span>Curricular Catalog</span>
+                            <span class="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded-full bg-indigo-50 border border-indigo-200">500+</span>
+                        </a>
+                        <a href="/en/oas-spec/" class="text-sm font-medium text-slate-600 hover:text-indigo-600 transition-colors">The OPS Specification</a>
+                        <a href="/en/demos" class="text-sm font-medium text-slate-700 hover:text-indigo-600 transition-colors flex items-center gap-1">
+                            <span>Demos & Sandbox</span>
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                        </a>
                         <a href="/en/news/" class="text-sm font-medium text-slate-600 hover:text-indigo-600 transition-colors">News</a>
                         <a href="https://github.com/colabedu" class="text-sm font-medium text-slate-600 hover:text-indigo-600 transition-colors">GitHub</a>
                         <div class="h-4 w-px bg-slate-300"></div>
-                        <a href="/" class="text-sm font-bold text-slate-400 hover:text-indigo-600 transition-colors" title="Cambiar a Español">ES</a>
+                        <a id="lang-switch-es" href="/?lang=es" class="text-sm font-bold text-slate-400 hover:text-indigo-600 transition-colors" title="Cambiar a Español" onclick="try{localStorage.setItem('colabedu_preferred_locale','es');localStorage.setItem('colabedu_lang','es');var d=window.location.hostname.endsWith('colabedu.org')?'; domain=.colabedu.org':'';document.cookie='colabedu_preferred_locale=es'+d+'; path=/; max-age=31536000; SameSite=Lax';}catch(e){}">ES</a>
                     </nav>
                     <div class="flex items-center space-x-4">
                         <a href="/en/" class="bg-slate-900 text-white px-5 py-2 rounded-lg text-sm font-semibold hover:bg-slate-800 transition-all shadow-sm">
@@ -70,49 +89,56 @@ import "@colabedu/ui-core/styles/global.css";
                         ColabEdu is the open-source initiative that standardizes Artificial Intelligence-powered curriculum, instruction, and assessment (<strong>Pedagogy as Code</strong>). Write your criteria and pathways once, audit them always, and run them in any LMS.
                     </p>
                     <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-                        <a href="/en/oas-spec/" class="w-full sm:w-auto px-8 py-3.5 bg-indigo-600 text-white rounded-xl text-lg font-semibold hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-200">
+                        <a href="/catalog" class="w-full sm:w-auto px-8 py-3.5 bg-indigo-600 text-white rounded-xl text-lg font-semibold hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-200 flex items-center justify-center gap-2">
+                            <span>Explore Curricular Catalog</span>
+                            <span class="text-xs bg-indigo-500 text-white px-2 py-0.5 rounded-full font-bold">500+ Lessons</span>
+                        </a>
+                        <a href="/en/oas-spec/" class="w-full sm:w-auto px-8 py-3.5 bg-white text-slate-700 rounded-xl text-lg font-semibold border border-slate-200 hover:border-slate-300 hover:bg-slate-50 transition-all">
                             Read the Manifesto
                         </a>
-                        <a href="https://github.com/colabedu" class="w-full sm:w-auto px-8 py-3.5 bg-white text-slate-700 rounded-xl text-lg font-semibold border border-slate-200 hover:border-slate-300 hover:bg-slate-50 transition-all">
-                            View Source Code
+                        <a href="https://github.com/colabedu" class="w-full sm:w-auto px-6 py-3.5 text-slate-500 rounded-xl text-base font-semibold hover:text-slate-800 transition-all">
+                            GitHub
                         </a>
                     </div>
                 </div>
             </section>
 
-            <!-- Showcase: LOMLOE to Receta -->
+            <!-- Showcase: AP Spanish Language & CCSS to Spec -->
             <section class="py-24 bg-slate-900 text-white overflow-hidden relative">
                 <!-- Abstract Background -->
                 <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#4f46e5 1px, transparent 1px); background-size: 32px 32px;"></div>
                 
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                     <div class="text-center mb-16">
-                        <h2 class="text-3xl md:text-4xl font-bold mb-4">From Bureaucracy to Source Code</h2>
+                        <h2 class="text-3xl md:text-4xl font-bold mb-4">From Regulatory Frameworks to Source Code</h2>
                         <p class="text-slate-400 max-w-2xl mx-auto text-lg">
-                            The OPS standard transforms the complexity of official regulations (LOMLOE, NEM, TEKS) into structured "Recipes," human-readable and optimized for LLMs.
+                            The OPS specification transforms complex educational frameworks (College Board AP, Common Core CCSS, LOMLOE) into executable, deterministic YAML specifications optimized for LLMs.
                         </p>
                     </div>
 
                     <div class="grid lg:grid-cols-2 gap-8 items-stretch">
-                        <!-- Left Pane: LOMLOE Text -->
+                        <!-- Left Pane: College Board AP Spanish Guideline -->
                         <div class="bg-white rounded-2xl p-8 shadow-2xl flex flex-col justify-center transform transition-transform hover:-translate-y-1 duration-300">
                             <div class="flex items-center gap-3 mb-6">
-                                <span class="bg-red-100 text-red-700 p-2 rounded-lg">
+                                <span class="bg-blue-100 text-blue-700 p-2 rounded-lg">
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
                                 </span>
-                                <h3 class="text-slate-900 font-bold text-xl">1. Organic Law (LOMLOE)</h3>
-                            </div>
-                            <div class="border-l-4 border-slate-200 pl-4 space-y-4">
                                 <div>
-                                    <h4 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-1">Specific Competence 2</h4>
+                                    <h3 class="text-slate-900 font-bold text-xl">1. College Board AP® & CCSS</h3>
+                                    <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">AP Spanish Language & Culture · Task 2</span>
+                                </div>
+                            </div>
+                            <div class="border-l-4 border-blue-500 pl-4 space-y-4">
+                                <div>
+                                    <h4 class="text-sm font-bold text-slate-600 uppercase tracking-wider mb-1">Argumentative Essay (FRQ Task 2)</h4>
                                     <p class="text-slate-700 font-serif leading-relaxed">
-                                        Understand and interpret oral and multimodal texts, grasping the general meaning and the most relevant information...
+                                        "Present and defend a position on a topic by integrating viewpoints from three authentic sources (article, chart/infographic, and audio)..."
                                     </p>
                                 </div>
                                 <div class="bg-slate-50 p-4 rounded-lg border border-slate-100">
-                                    <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Operational Descriptor CCL2</h4>
+                                    <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Scoring Criteria: Score 5 (Sobresaliente)</h4>
                                     <p class="text-slate-600 text-sm font-serif">
-                                        "The student understands, values, and analyzes complex information transmitted orally..."
+                                        "Effective treatment of topic. Integrates content from all three sources in support of argument. Paragraph-length discourse with accurate syntax and cohesive devices."
                                     </p>
                                 </div>
                             </div>
@@ -126,27 +152,129 @@ import "@colabedu/ui-core/styles/global.css";
                                     <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
                                     <div class="w-3 h-3 rounded-full bg-green-500"></div>
                                 </div>
-                                <span class="text-slate-400 text-xs font-mono">recipe-ccl2.yaml</span>
+                                <span class="text-slate-400 text-xs font-mono">ap.spanish.argumentative_essay.rubric.yaml</span>
                             </div>
                             <div class="p-6 overflow-x-auto relative">
                                 <div class="absolute right-4 top-4 bg-indigo-500/20 text-indigo-300 text-xs px-2 py-1 rounded font-bold uppercase tracking-wider">OPS v1.0</div>
-                                <pre class="font-mono text-sm leading-relaxed text-slate-300"><code><span class="text-pink-400">apiVersion</span>: <span class="text-green-300">colabedu.ai/v1beta1</span>
-<span class="text-pink-400">kind</span>: <span class="text-green-300">Rubric</span>
+                                <pre class="font-mono text-sm leading-relaxed text-slate-300"><code><span class="text-pink-400">apiVersion</span>: <span class="text-green-300">oas/v1beta1</span>
+<span class="text-pink-400">kind</span>: <span class="text-green-300">BlockRubric</span>
 <span class="text-pink-400">metadata</span>:
-  <span class="text-indigo-300">name</span>: <span class="text-green-300">lomloe.ccl2.expresion-oral</span>
+  <span class="text-indigo-300">referenceCode</span>: <span class="text-green-300">global.c0.ap.spanish_language.argumentative_essay</span>
+  <span class="text-indigo-300">standard</span>: <span class="text-green-300">AP</span>
+  <span class="text-indigo-300">subject</span>: <span class="text-green-300">spanish_language_and_culture</span>
 
 <span class="text-pink-400">spec</span>:
-  <span class="text-indigo-300">criteria</span>:
-    - <span class="text-blue-300">id</span>: <span class="text-green-300">ccl2</span>
-      <span class="text-blue-300">weight</span>: <span class="text-orange-300">40</span>
-      <span class="text-blue-300">name</span>: <span class="text-green-300">Desarrollo Argumentativo</span>
-      <span class="text-blue-300">levels</span>:
-        - <span class="text-teal-300">level</span>: <span class="text-green-300">excellent</span>
-          <span class="text-slate-400">description: "Enlaza conceptos fluidamente"</span>
-        - <span class="text-teal-300">level</span>: <span class="text-green-300">needsWork</span>
-          <span class="text-slate-400">description: "Pausas constantes"</span></code></pre>
+  <span class="text-indigo-300">evaluationType</span>: <span class="text-green-300">HOLISTIC</span>
+  <span class="text-indigo-300">scale</span>: &#123; <span class="text-blue-300">min</span>: <span class="text-orange-300">0</span>, <span class="text-blue-300">max</span>: <span class="text-orange-300">5</span> &#125;
+  <span class="text-indigo-300">levels</span>:
+    - <span class="text-blue-300">score</span>: <span class="text-orange-300">5</span>
+      <span class="text-blue-300">label</span>: <span class="text-green-300">"Sobresaliente"</span>
+      <span class="text-slate-400">description: "Integrates content from all 3 sources in support of argument"</span>
+    - <span class="text-blue-300">score</span>: <span class="text-orange-300">4</span>
+      <span class="text-blue-300">label</span>: <span class="text-green-300">"Notable"</span>
+      <span class="text-slate-400">description: "Summarizes, with limited integration, content from sources"</span></code></pre>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Platform Capabilities in Action (Features Showcase) -->
+            <section class="py-24 bg-slate-900/60 border-y border-slate-800 text-white relative">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                    <div class="text-center mb-16">
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-500/10 text-indigo-400 text-xs font-bold uppercase tracking-wider border border-indigo-500/20 mb-3">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                            Executable Pedagogical Engine
+                        </span>
+                        <h2 class="text-3xl md:text-5xl font-extrabold tracking-tight mb-4">
+                            Capabilities in Action: From Standard to Experience
+                        </h2>
+                        <p class="text-slate-400 max-w-2xl mx-auto text-lg">
+                            OPS is not a theoretical framework buried in bureaucratic PDFs. It is the dynamic engine powering multimodal evaluation, adaptive interactivity, and diagnostic analytics.
+                        </p>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch mb-12">
+                        <!-- Feature 1: Multimodal Grading -->
+                        <div class="p-6 rounded-2xl bg-slate-800/80 border border-slate-700 hover:border-indigo-400/60 transition-all flex flex-col justify-between group">
+                            <div>
+                                <div class="w-12 h-12 rounded-xl bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                </div>
+                                <h3 class="text-lg font-bold text-white mb-2">Multimodal Evaluation</h3>
+                                <p class="text-slate-400 text-sm leading-relaxed mb-4">
+                                    Grade handwritten test photos or typed essays directly against official analytical rubrics (College Board AP, CCSS, IB) with zero hallucination.
+                                </p>
+                            </div>
+                            <a href="/en/demos#multimodal-grading" class="inline-flex items-center text-xs font-bold text-indigo-400 group-hover:text-indigo-300">
+                                Test Grading Demo ➔
+                            </a>
+                        </div>
+
+                        <!-- Feature 2: Interactive Lessons -->
+                        <div class="p-6 rounded-2xl bg-slate-800/80 border border-slate-700 hover:border-indigo-400/60 transition-all flex flex-col justify-between group">
+                            <div>
+                                <div class="w-12 h-12 rounded-xl bg-sky-500/10 text-sky-400 border border-sky-500/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                                </div>
+                                <h3 class="text-lg font-bold text-white mb-2">Interactive Lessons</h3>
+                                <p class="text-slate-400 text-sm leading-relaxed mb-4">
+                                    Server-Driven A2UI sequences with socratic scaffolding, micro-readings, formative checks, and step-by-step reasoning support.
+                                </p>
+                            </div>
+                            <a href="/en/demos#interactive-lessons" class="inline-flex items-center text-xs font-bold text-sky-400 group-hover:text-sky-300">
+                                Test Lesson Demo ➔
+                            </a>
+                        </div>
+
+                        <!-- Feature 3: Open Sandbox -->
+                        <div class="p-6 rounded-2xl bg-slate-800/80 border border-slate-700 hover:border-indigo-400/60 transition-all flex flex-col justify-between group">
+                            <div>
+                                <div class="w-12 h-12 rounded-xl bg-teal-500/10 text-teal-400 border border-teal-500/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                                </div>
+                                <h3 class="text-lg font-bold text-white mb-2">Sandbox & Generation</h3>
+                                <p class="text-slate-400 text-sm leading-relaxed mb-4">
+                                    Instant ingestion of raw curriculum documents and PDFs. Simulate synthetic student cohort submissions across proficiency tiers.
+                                </p>
+                            </div>
+                            <a href="/en/demos#cohort-simulation" class="inline-flex items-center text-xs font-bold text-teal-400 group-hover:text-teal-300">
+                                Test Sandbox Demo ➔
+                            </a>
+                        </div>
+
+                        <!-- Feature 4: Calibration Benchmarks -->
+                        <div class="p-6 rounded-2xl bg-slate-800/80 border border-slate-700 hover:border-indigo-400/60 transition-all flex flex-col justify-between group">
+                            <div>
+                                <div class="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                                </div>
+                                <h3 class="text-lg font-bold text-white mb-2">Calibration & Audit</h3>
+                                <p class="text-slate-400 text-sm leading-relaxed mb-4">
+                                    Synthetic inter-rater calibration matrices to ensure strict alignment with AP guidelines, scoring fairness, and reliability.
+                                </p>
+                            </div>
+                            <a href="/en/demos#calibration-benchmarks" class="inline-flex items-center text-xs font-bold text-emerald-400 group-hover:text-emerald-300">
+                                View Calibration Matrix ➔
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Large CTA Banner to Demos -->
+                    <div class="p-8 rounded-3xl bg-gradient-to-r from-indigo-900/60 via-slate-800 to-indigo-950/60 border border-indigo-500/30 text-center sm:text-left flex flex-col sm:flex-row items-center justify-between gap-6 shadow-2xl">
+                        <div>
+                            <h3 class="text-xl sm:text-2xl font-black text-white mb-2">
+                                Ready to explore the interactive lab?
+                            </h3>
+                            <p class="text-slate-300 text-sm max-w-xl">
+                                Access the live demo suite to interact with dynamic assessment forms, exam simulators, and the A2UI scaffolding engine.
+                            </p>
+                        </div>
+                        <a href="/en/demos" class="shrink-0 px-8 py-3.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-base font-bold shadow-lg shadow-indigo-600/30 transition-all flex items-center gap-2">
+                            <span>Open Interactive Demos Lab</span>
+                            <span class="text-xs bg-indigo-500 text-white px-2 py-0.5 rounded-full font-bold">Live</span>
+                        </a>
                     </div>
                 </div>
             </section>
@@ -191,7 +319,7 @@ import "@colabedu/ui-core/styles/global.css";
                             </div>
                             <h3 class="text-lg font-bold text-slate-900 mb-2">For Publishers</h3>
                             <p class="text-slate-600 text-sm leading-relaxed">
-                                Mass modernization tools. Transform PDFs, textbooks, and legacy repositories to the new AI-powered OPS structured standard.
+                                Mass modernization tools. Transform PDFs, textbooks, and legacy repositories to the new AI-powered OPS structured specification.
                             </p>
                         </div>
 
@@ -202,7 +330,7 @@ import "@colabedu/ui-core/styles/global.css";
                             </div>
                             <h3 class="text-lg font-bold text-slate-900 mb-2">For Engineers</h3>
                             <p class="text-slate-600 text-sm leading-relaxed">
-                                We invite you to build on OPS. Create your own implementations, integrate the standard into your LMS, or design new Agents under the GitOps architecture.
+                                We invite you to build on OPS. Create your own implementations, integrate the specification into your LMS, or design new Agents under the GitOps architecture.
                             </p>
                         </div>
                     </div>
@@ -311,20 +439,25 @@ import "@colabedu/ui-core/styles/global.css";
                 </div>
             </section>
 
-            <!-- Call to Actions -->
+            <!-- Call to Actions: Demos & Open Collaboration -->
             <section class="border-t border-slate-200 py-20 bg-white">
                 <div class="max-w-4xl mx-auto px-4 text-center">
-                    <h2 class="text-3xl font-bold text-slate-900 mb-6">Help standardize the education of the future</h2>
-                    <p class="text-slate-600 mb-10 text-lg">
-                        We are looking for foundational educators to map the curricula of Mexico (NEM), USA (TEKS/Common Core), and Spain (LOMLOE) to the OPS format.
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 text-xs font-bold uppercase tracking-wider border border-indigo-100 mb-4">
+                        Zero-Friction Open Access
+                    </span>
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4">
+                        Experience the future of pedagogy as code
+                    </h2>
+                    <p class="text-slate-600 mb-10 text-lg max-w-2xl mx-auto leading-relaxed">
+                        Explore official exams, interactive lessons with Socratic scaffolding, and calibration matrices live without creating an account.
                     </p>
-                    <div class="flex justify-center gap-4">
-                        <a href="https://discord.gg/colabedu" class="px-6 py-3 bg-[#5865F2] text-white rounded-lg font-bold hover:bg-[#4752C4] transition-colors flex items-center gap-2">
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>
-                            Join on Discord
+                    <div class="flex flex-col sm:flex-row justify-center gap-4">
+                        <a href="/en/demos" class="px-8 py-3.5 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-200 flex items-center justify-center gap-2">
+                            <span>Interactive Demos Sandbox</span>
+                            <span class="text-xs bg-indigo-500 text-white px-2 py-0.5 rounded-full font-bold">4 Live Modules</span>
                         </a>
-                        <a href="/en/" class="px-6 py-3 bg-slate-100 text-slate-700 rounded-lg font-bold hover:bg-slate-200 transition-colors">
-                            Create a Recipe
+                        <a href="/catalog" class="px-8 py-3.5 bg-white text-slate-800 border border-slate-300 rounded-xl font-bold hover:bg-slate-50 transition-all">
+                            Explore Curricular Catalog
                         </a>
                     </div>
                 </div>
@@ -346,13 +479,21 @@ import "@colabedu/ui-core/styles/global.css";
                         Spanish as a Strategic Pillar
                     </a>
                     <span class="text-slate-600 hidden sm:inline">|</span>
-                    <a href="https://colabedu.net" class="text-sm font-bold text-indigo-400 hover:text-indigo-300 transition-colors">
+                    <a href="/catalog/terms" class="text-sm font-bold text-slate-300 hover:text-white transition-colors">
+                        Terms of Service (Beta)
+                    </a>
+                    <span class="text-slate-600 hidden sm:inline">|</span>
+                    <a href="/catalog" class="text-sm font-bold text-slate-300 hover:text-white transition-colors">
+                        Curricular Catalog
+                    </a>
+                    <span class="text-slate-600 hidden sm:inline">|</span>
+                    <a href={netPlatformUrl} class="text-sm font-bold text-indigo-400 hover:text-indigo-300 transition-colors">
                         Go to ColabEdu.net Platform &rarr;
                     </a>
                 </div>
                 <div class="mt-8 pt-8 border-t border-slate-800 w-full text-center">
                     <p class="text-slate-300 font-semibold text-sm">🌍 Built in California & Spain</p>
-                    <p class="text-slate-500 text-xs mt-1 tracking-wider">San Jose | Madrid | Mexico City</p>
+                    <p class="text-slate-500 text-xs mt-1 tracking-wider">Cupertino | Madrid | Mexico City</p>
                 </div>
             </div>
         </footer>

@@ -1,0 +1,128 @@
+---
+interface Props {
+  standard?: string;
+  competencyTags?: string[];
+  cognitiveDomains?: string[];
+  scaffoldingStrategy?: string;
+  targetAudience?: string;
+}
+
+const {
+  standard = "Estándar Oficial LOMLOE / AP",
+  competencyTags = [],
+  cognitiveDomains = [],
+  scaffoldingStrategy,
+  targetAudience,
+} = Astro.props;
+---
+
+<section class="my-14 rounded-3xl bg-[#070b16] border border-white/[0.08] p-7 sm:p-9 shadow-xl relative overflow-hidden">
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-7 pb-6 border-b border-white/[0.08]">
+    <div class="flex items-center gap-3.5">
+      <div class="w-10 h-10 rounded-2xl bg-indigo-500/10 text-indigo-400 border border-indigo-500/25 flex items-center justify-center text-xl shadow-sm">
+        👩‍🏫
+      </div>
+      <div>
+        <h2 class="text-xl font-bold text-white tracking-tight">
+          Ficha Técnica y Acreditación Curricular Docente
+        </h2>
+        <p class="text-xs text-slate-400">
+          Alineación con directivas ministeriales y especificación abierta OPS v0.9.6
+        </p>
+      </div>
+    </div>
+
+    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/25 self-start sm:self-auto">
+      <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+      Acreditación Certificada
+    </span>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <!-- Framework & Audience -->
+    <div class="space-y-5">
+      <div>
+        <span class="text-xs uppercase font-mono tracking-wider text-slate-400 font-semibold block mb-1.5">
+          Marco Normativo Oficial de Referencia
+        </span>
+        <span class="text-xs font-mono text-cyan-300 bg-cyan-950/40 px-3 py-1.5 rounded-xl border border-cyan-800/40 inline-block shadow-sm">
+          {standard}
+        </span>
+      </div>
+
+      {targetAudience && (
+        <div>
+          <span class="text-xs uppercase font-mono tracking-wider text-slate-400 font-semibold block mb-1.5">
+            Población y Nivel Educativo
+          </span>
+          <p class="text-sm text-slate-200 leading-relaxed">
+            {targetAudience}
+          </p>
+        </div>
+      )}
+
+      {scaffoldingStrategy && (
+        <div>
+          <span class="text-xs uppercase font-mono tracking-wider text-slate-400 font-semibold block mb-1.5">
+            Estrategia de Andamiaje Socrático
+          </span>
+          <p class="text-xs text-slate-300 font-mono bg-white/[0.02] p-2.5 rounded-xl border border-white/[0.06]">
+            {scaffoldingStrategy}
+          </p>
+        </div>
+      )}
+    </div>
+
+    <!-- Competencies & Cognitive Domains -->
+    <div class="space-y-5">
+      {competencyTags.length > 0 && (
+        <div>
+          <span class="text-xs uppercase font-mono tracking-wider text-slate-400 font-semibold block mb-2.5">
+            Competencias Clave y Descriptores Operativos
+          </span>
+          <div class="flex flex-wrap gap-2">
+            {competencyTags.map((tag) => (
+              <span class="px-3 py-1 rounded-xl text-xs font-semibold bg-emerald-500/10 text-emerald-300 border border-emerald-500/25">
+                {tag}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {cognitiveDomains.length > 0 && (
+        <div>
+          <span class="text-xs uppercase font-mono tracking-wider text-slate-400 font-semibold block mb-2.5">
+            Dominios Cognitivos Evaluables (Bloom / DOK)
+          </span>
+          <div class="flex flex-wrap gap-2">
+            {cognitiveDomains.map((dom) => (
+              <span class="px-3 py-1 rounded-xl text-xs font-medium bg-sky-500/10 text-sky-300 border border-sky-500/25">
+                {dom.replace(/_/g, ' ')}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  </div>
+
+  <!-- Bottom Interoperability Callout -->
+  <div class="mt-8 pt-6 border-t border-white/[0.08] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs text-slate-400">
+    <div class="flex items-center gap-2">
+      <span class="text-slate-200 font-medium">Interoperabilidad LTI / LMS:</span>
+      <span class="px-2 py-0.5 rounded bg-white/[0.04] border border-white/[0.08]">Google Classroom</span>
+      <span class="px-2 py-0.5 rounded bg-white/[0.04] border border-white/[0.08]">Canvas LTI 1.3</span>
+      <span class="px-2 py-0.5 rounded bg-white/[0.04] border border-white/[0.08]">Moodle LTI 1.3</span>
+    </div>
+
+    <a
+      href="https://colabedu.org/docs"
+      target="_blank"
+      class="text-cyan-400 hover:text-cyan-300 transition-colors flex items-center gap-1 font-semibold"
+    >
+      <span>Especificaciones Técnicas OPS</span>
+      <span>→</span>
+    </a>
+  </div>
+</section>

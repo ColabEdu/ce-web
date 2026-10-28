@@ -6,7 +6,8 @@
         ".": "./src/index.ts",
         "./components/*": "./src/components/*",
         "./layouts/*": "./src/layouts/*",
-        "./styles/*": "./src/styles/*"
+        "./styles/*": "./src/styles/*",
+        "./navigation": "./src/navigation/routes.ts"
     },
     "dependencies": {
         "@astrojs/react": "^4.4.2",

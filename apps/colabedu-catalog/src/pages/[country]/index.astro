@@ -1,0 +1,262 @@
+---
+import CatalogLayout from '@/layouts/CatalogLayout.astro';
+import BreadcrumbJsonLd from '@/components/seo/BreadcrumbJsonLd.astro';
+import RecentAdditionsSection from '@/components/catalog/RecentAdditionsSection.astro';
+import { loadCatalog } from '@/lib/catalogLoader';
+import type { CourseSpecItem, RecentAdditionItem } from '@/lib/types';
+
+export function getStaticPaths() {
+  const { coursesByCountry, recentAdditionsByCountry } = loadCatalog();
+  const countries = Object.keys(coursesByCountry);
+
+  const uniqueCountries = countries.length > 0 ? countries : ['es', 'us', 'intl'];
+
+  return uniqueCountries.map((c) => ({
+    params: { country: c },
+    props: {
+      country: c,
+      courses: coursesByCountry[c] || [],
+      recentAdditions: recentAdditionsByCountry[c] || [],
+    },
+  }));
+}
+
+interface Props {
+  country: string;
+  courses: CourseSpecItem[];
+  recentAdditions: RecentAdditionItem[];
+}
+
+const { country, courses, recentAdditions } = Astro.props;
+
+const countryNames: Record<string, { name: string; flag: string; framework: string; description: string }> = {
+  es: { 
+    name: "España", 
+    flag: "🇪🇸", 
+    framework: "LOMLOE / EBAU (RD 534/2024)",
+    description: "Currículo nacional oficial de Educación Secundaria Obligatoria (ESO) y Bachillerato. Banco de reactivos adaptado a las pruebas de acceso a la universidad (EBAU/PAU)."
+  },
+  us: { 
+    name: "Estados Unidos", 
+    flag: "🇺🇸", 
+    framework: "College Board Advanced Placement (AP)",
+    description: "Planes de estudio alineados con los estándares de Advanced Placement (AP) y Common Core. Preparación intensiva para exámenes oficiales de nivel universitario."
+  },
+  intl: { 
+    name: "Internacional", 
+    flag: "🌐", 
+    framework: "Bachillerato Internacional (IB Diploma)",
+    description: "Programas del Diploma del Bachillerato Internacional (IB). Foco en indagación crítica, rigor conceptual y evaluación con criterios analíticos transversales."
+  },
+  mx: { 
+    name: "México", 
+    flag: "🇲🇽", 
+    framework: "SEP / Marco Curricular Común (MCC)",
+    description: "Planes de estudio de Educación Media Superior según los lineamientos de la Nueva Escuela Mexicana (NEM)."
+  },
+  global: { 
+    name: "Global / OER", 
+    flag: "🌍", 
+    framework: "Recursos Educativos Abiertos Universales",
+    description: "Cursos y lecciones abiertas creadas a partir de fuentes de dominio público y licencias Creative Commons."
+  },
+};
+
+const meta = countryNames[country] || { 
+  name: country.toUpperCase(), 
+  flag: "🏛️", 
+  framework: "Estándar Oficial",
+  description: "Cursos y especificaciones curriculares oficiales."
+};
+
+const totalUnits = courses.reduce((acc, c) => acc + (c.units?.length || 0), 0);
+const totalLessons = courses.reduce((acc, c) => {
+  return acc + (c.units?.reduce((uAcc, u) => uAcc + (u.lessons?.length || 0), 0) || 0);
+}, 0);
+
+const breadcrumbs = [
+  { label: "Catálogo", href: "/catalog" },
+  { label: meta.name, href: `/catalog/${country}` },
+];
+
+const breadcrumbSchema = [
+  { name: "Catálogo", url: "https://colabedu.org/catalog" },
+  { name: meta.name, url: `https://colabedu.org/catalog/${country}` },
+];
+---
+
+<CatalogLayout
+  title={`Cursos y Asignaturas de ${meta.name} (${meta.framework}) — ColabEdu`}
+  description={meta.description}
+>
+  <BreadcrumbJsonLd slot="head" items={breadcrumbSchema} />
+
+  <!-- Hero Header with Ambient Glow -->
+  <section class="relative pt-12 pb-16 px-4 sm:px-6 lg:px-8 border-b border-slate-800/80 overflow-hidden">
+    <!-- Ambient Radial Glows -->
+    <div class="absolute top-0 left-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none -z-10"></div>
+    <div class="absolute top-10 right-1/4 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none -z-10"></div>
+
+    <div class="max-w-7xl mx-auto">
+      <!-- Breadcrumb Navigation -->
+      <nav aria-label="Breadcrumb" class="mb-6">
+        <ol class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-900/60 border border-slate-800/80 text-xs text-slate-400 backdrop-blur-sm">
+          <li class="flex items-center gap-1.5">
+            <a href="/catalog" class="hover:text-white transition-colors" data-i18n="nav.catalog">
+              Catálogo
+            </a>
+          </li>
+          <li class="flex items-center gap-1.5">
+            <span class="text-slate-600">/</span>
+            <span class="text-cyan-300 font-medium" data-i18n={`country.${country}.name`}>{meta.name}</span>
+          </li>
+        </ol>
+      </nav>
+
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div class="flex items-start gap-5">
+          <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-slate-900/90 border border-slate-700/60 flex items-center justify-center text-4xl sm:text-5xl shadow-[0_0_30px_rgba(6,182,212,0.12)] shrink-0">
+            {meta.flag}
+          </div>
+          <div>
+            <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full text-xs font-semibold bg-cyan-500/10 text-cyan-400 border border-cyan-500/25 mb-2">
+              <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
+              <span data-i18n={`country.${country}.framework`}>{meta.framework}</span>
+            </div>
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight">
+              <span data-i18n="country.hero_prefix">Planes de Estudio de</span> <span data-i18n={`country.${country}.name`}>{meta.name}</span>
+            </h1>
+            <p class="text-slate-400 text-sm sm:text-base mt-2 max-w-2xl leading-relaxed" data-i18n={`country.${country}.description`}>
+              {meta.description}
+            </p>
+          </div>
+        </div>
+
+        <!-- Quick Summary Stats -->
+        <div class="flex items-center gap-3 sm:gap-4 shrink-0 bg-slate-900/70 border border-slate-800/80 p-3 sm:p-4 rounded-2xl backdrop-blur-sm self-start md:self-auto">
+          <div class="text-center px-3 py-1">
+            <span class="block text-2xl font-black text-white">{courses.length}</span>
+            <span class="text-[11px] text-slate-400 uppercase tracking-wider font-medium" data-i18n="stats.subjects">Asignaturas</span>
+          </div>
+          <div class="w-px h-8 bg-slate-800"></div>
+          <div class="text-center px-3 py-1">
+            <span class="block text-2xl font-black text-cyan-400">{totalUnits}</span>
+            <span class="text-[11px] text-slate-400 uppercase tracking-wider font-medium" data-i18n="stats.units">Unidades</span>
+          </div>
+          <div class="w-px h-8 bg-slate-800"></div>
+          <div class="text-center px-3 py-1">
+            <span class="block text-2xl font-black text-emerald-400">{totalLessons}</span>
+            <span class="text-[11px] text-slate-400 uppercase tracking-wider font-medium" data-i18n="stats.lessons">Lecciones</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Recent Country Additions (if any) -->
+  {recentAdditions && recentAdditions.length > 0 && (
+    <RecentAdditionsSection items={recentAdditions.slice(0, 3)} isGlobal={false} country={country} />
+  )}
+
+  <!-- Courses Grid Section -->
+  <main class="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <!-- Filter Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+      <div>
+        <h2 class="text-xl sm:text-2xl font-bold text-white tracking-tight" data-i18n="country.section_title">
+          Asignaturas y Cursos Curriculares
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-400 mt-0.5" data-i18n="country.section_sub">
+          Selecciona un temario para acceder a los bloques didácticos, lecciones interactivas y rúbricas.
+        </p>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <span class="text-xs text-slate-400 font-medium bg-slate-900/80 border border-slate-800 px-3 py-1.5 rounded-lg">
+          <span data-i18n="country.showing">Mostrando</span> {courses.length} <span data-i18n="stats.subjects">asignaturas</span>
+        </span>
+      </div>
+    </div>
+
+    {courses.length > 0 ? (
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {courses.map((course) => (
+          <a
+            href={course.canonicalPath}
+            class="group relative rounded-2xl bg-gradient-to-b from-[#111726]/80 to-[#0A0E1A]/80 border border-slate-800/80 p-6 sm:p-7 hover:border-cyan-500/50 hover:bg-[#131B2E] hover:shadow-[0_0_35px_rgba(6,182,212,0.12)] transition-all flex flex-col justify-between"
+          >
+            <!-- Top Card Header -->
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-4">
+                <div class="flex items-center gap-2">
+                  <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-cyan-500/10 text-cyan-300 border border-cyan-500/25">
+                    <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
+                    {course.level}
+                  </span>
+                  <span class="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold uppercase bg-slate-800/90 text-slate-300 border border-slate-700/60">
+                    {course.language}
+                  </span>
+                </div>
+                <span class="text-[11px] text-slate-500 font-mono tracking-tight">
+                  {course.standard}
+                </span>
+              </div>
+
+              <h3 class="text-xl font-bold text-white group-hover:text-cyan-300 transition-colors mb-2.5 tracking-tight leading-snug">
+                {course.name}
+              </h3>
+              
+              <p class="text-sm text-slate-400 line-clamp-3 leading-relaxed mb-6 font-normal">
+                {course.description}
+              </p>
+            </div>
+
+            <!-- Card Bottom Metadata -->
+            <div>
+              <div class="pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400">
+                <div class="flex items-center gap-3">
+                  <span class="flex items-center gap-1.5">
+                    <svg class="w-3.5 h-3.5 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                    </svg>
+                    {course.units.length} <span data-i18n="stats.units_label">unidades</span>
+                  </span>
+                  {course.target_weeks && (
+                    <span class="flex items-center gap-1.5">
+                      <svg class="w-3.5 h-3.5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                      {course.target_weeks} <span data-i18n="stats.weeks_abbr">sem.</span>
+                    </span>
+                  )}
+                </div>
+
+                <span class="text-cyan-400 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
+                  <span data-i18n="course.view_syllabus">Ver temario</span>
+                  <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                  </svg>
+                </span>
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+    ) : (
+      <div class="py-20 text-center rounded-3xl bg-slate-900/40 border border-dashed border-slate-800 text-slate-400 max-w-xl mx-auto">
+        <span class="text-4xl block mb-3">🔍</span>
+        <h3 class="text-lg font-bold text-white mb-1">Sin asignaturas registradas</h3>
+        <p class="text-sm text-slate-400 mb-6">
+          Actualmente estamos digitalizando las especificaciones curriculares para este marco normativo.
+        </p>
+        <a 
+          href="/catalog" 
+          class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-cyan-400 text-sm font-semibold transition-colors"
+        >
+          ← Explorar otros marcos y países
+        </a>
+      </div>
+    )}
+  </main>
+</CatalogLayout>
+

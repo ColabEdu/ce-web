@@ -1,0 +1,134 @@
+---
+import type { OerSourceItem } from '@/lib/types';
+
+interface Props {
+  sources?: OerSourceItem[];
+  title?: string;
+  subtitle?: string;
+}
+
+const {
+  sources = [],
+  title = "Derechos de Autor y Licencias de Fuentes OER",
+  subtitle = "Transparencia de autoría, licencias Creative Commons y fuentes canónicas abiertas.",
+} = Astro.props;
+
+if (!sources || sources.length === 0) {
+  return null;
+}
+---
+
+<section class="mt-14 pt-10 border-t border-white/[0.08]" aria-labelledby="oer-attribution-heading">
+  <!-- Section Header -->
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+    <div class="flex items-center gap-3">
+      <div class="w-9 h-9 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+        </svg>
+      </div>
+      <div>
+        <h2 id="oer-attribution-heading" class="text-base sm:text-lg font-bold text-white tracking-tight" data-i18n="oer.section_title">
+          {title}
+        </h2>
+        <p class="text-xs text-slate-400 mt-0.5" data-i18n="oer.section_sub">
+          {subtitle}
+        </p>
+      </div>
+    </div>
+
+    <!-- Global CC Badge -->
+    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900 border border-white/[0.08] text-[11px] font-mono text-slate-300 self-start sm:self-auto">
+      <span class="text-emerald-400 font-bold">CC</span>
+      <span>Open Educational Resources</span>
+    </div>
+  </div>
+
+  <!-- Sources Grid -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    {sources.map((src) => {
+      const baseAppUrl = import.meta.env.PUBLIC_COLABEDU_APP_URL || 'https://app.colabedu.org';
+      const oerParams = new URLSearchParams();
+      oerParams.set('source', src.id);
+      if (src.title) oerParams.set('title', src.title);
+      if (src.sourceUrl) oerParams.set('url', src.sourceUrl);
+      if (src.license) oerParams.set('license', src.license);
+      if (src.format) oerParams.set('format', src.format);
+      if (src.type) oerParams.set('type', src.type);
+      if (src.filePath) oerParams.set('filePath', src.filePath);
+      const appUrl = src.appColabEduUrl || `${baseAppUrl}/oer/view?${oerParams.toString()}`;
+      const roleLabel = src.role === 'WORKSHOP_LAB' 
+        ? 'Taller / Laboratorio Abierto' 
+        : (src.role === 'EXAM_BANK' ? 'Banco de Pruebas y Exámenes' : 'Manual Teórico Canónico');
+      const roleI18n = src.role === 'WORKSHOP_LAB' 
+        ? 'oer.role_workshop' 
+        : (src.role === 'EXAM_BANK' ? 'oer.role_exam' : 'oer.role_core');
+
+      return (
+        <div class="group relative rounded-2xl bg-slate-900/60 hover:bg-slate-900/90 border border-white/[0.07] hover:border-emerald-500/30 p-5 transition-all duration-300 flex flex-col justify-between">
+          <div>
+            <!-- Header badges -->
+            <div class="flex items-center justify-between gap-2 mb-3">
+              <span class="inline-flex items-center gap-1.5 text-[10px] font-mono uppercase tracking-wider font-semibold px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/25">
+                <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z" />
+                </svg>
+                {src.license}
+              </span>
+
+              <span class="text-[11px] font-medium text-slate-400 bg-white/[0.04] px-2 py-0.5 rounded-md border border-white/[0.05]" data-i18n={roleI18n}>
+                {roleLabel}
+              </span>
+            </div>
+
+            <!-- Title & Institution -->
+            <h3 class="text-sm font-bold text-white group-hover:text-emerald-300 transition-colors leading-snug">
+              {src.title}
+            </h3>
+
+            <div class="mt-2 text-xs text-slate-400 space-y-1">
+              <p class="flex items-center gap-1.5">
+                <span class="text-slate-400 font-semibold" data-i18n="oer.authorship">Autoría / Institución:</span>
+                <span class="text-slate-300">{src.authority}</span>
+              </p>
+              {src.authors && src.authors.length > 0 && (
+                <p class="text-[11px] text-slate-400">
+                  <span class="font-medium">Autores:</span> {src.authors.join(', ')}
+                </p>
+              )}
+            </div>
+          </div>
+
+          <!-- Dual Links: ColabEdu Platform + External Canonical -->
+          <div class="mt-4 pt-3.5 border-t border-white/[0.06] flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-xs">
+            <!-- ColabEdu App Deep Link (Traffic Driver) -->
+            <a
+              href={appUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 hover:from-emerald-500/30 hover:to-cyan-500/30 text-emerald-300 hover:text-emerald-200 border border-emerald-500/30 font-semibold transition-all shadow-xs"
+            >
+              <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              </svg>
+              <span data-i18n="oer.open_in_app">Explorar fuente OER en ColabEdu App ↗</span>
+            </a>
+
+            <!-- Canonical external publisher link -->
+            {src.sourceUrl && (
+              <a
+                href={src.sourceUrl}
+                target="_blank"
+                rel="noopener noreferrer nofollow"
+                class="inline-flex items-center gap-1 text-[11px] text-slate-400 hover:text-slate-200 transition-colors"
+              >
+                <span data-i18n="oer.canonical_source">Fuente editorial canónica</span>
+                <span class="text-xs">↗</span>
+              </a>
+            )}
+          </div>
+        </div>
+      );
+    })}
+  </div>
+</section>

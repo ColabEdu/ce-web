@@ -1,0 +1,122 @@
+---
+import type { RecentAdditionItem } from '@/lib/types';
+
+interface Props {
+  items: RecentAdditionItem[];
+  isGlobal?: boolean;
+  country?: string;
+}
+
+const { items, isGlobal = true, country } = Astro.props;
+
+if (!items || items.length === 0) {
+  return null;
+}
+
+const countryFlags: Record<string, string> = {
+  es: "🇪🇸",
+  us: "🇺🇸",
+  intl: "🌐",
+  mx: "🇲🇽",
+  global: "🌍",
+};
+---
+
+<section class="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+  <!-- Section Header -->
+  <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
+    <div>
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-cyan-500/10 text-cyan-400 border border-cyan-500/25 mb-2">
+        <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
+        <span data-i18n="recent.new_badge">NUEVO</span>
+      </div>
+      <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight" data-i18n="recent.title">
+        Nuevas Incorporaciones al Catálogo
+      </h2>
+      <p class="text-sm text-slate-400 mt-1 max-w-2xl" data-i18n="recent.subtitle">
+        Cursos oficiales, lecciones interactivas y bancos de reactivos incorporados en las últimas semanas.
+      </p>
+    </div>
+  </div>
+
+  <!-- Items Grid -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    {items.map((item) => (
+      <a
+        href={item.canonicalPath}
+        class="relative p-[1.5px] rounded-3xl bg-gradient-to-b from-white/[0.12] to-white/[0.02] hover:from-cyan-500/40 hover:to-indigo-500/30 transition-all duration-300 group shadow-md flex flex-col justify-between overflow-hidden"
+      >
+        <div class="w-full h-full bg-[#070b16] rounded-[23px] p-6 sm:p-7 flex flex-col justify-between relative overflow-hidden">
+          <!-- Subtle glow on hover -->
+          <div class="absolute top-0 right-0 w-32 h-32 bg-cyan-500/10 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+
+          <div>
+            <!-- Top Badges -->
+            <div class="flex items-center justify-between gap-2 mb-3.5">
+              <div class="flex items-center gap-1.5">
+                {isGlobal && (
+                  <span class="text-sm mr-1 filter drop-shadow">
+                    {countryFlags[item.country] || "🏛️"}
+                  </span>
+                )}
+                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">
+                  {item.type === 'lesson' ? (
+                    <span data-i18n="recent.lesson_badge">Lección interactiva</span>
+                  ) : (
+                    <span data-i18n="recent.course_badge">Curso curricular</span>
+                  )}
+                </span>
+              </div>
+
+              <!-- Time Ago / New Badge -->
+              <span class="inline-flex items-center gap-1 text-[11px] font-medium text-slate-400">
+                {item.daysAgo === 0 ? (
+                  <span class="text-emerald-400 font-semibold" data-i18n="recent.today">Hoy</span>
+                ) : item.daysAgo < 7 ? (
+                  <span class="text-emerald-400 font-semibold">{item.daysAgo}d</span>
+                ) : (
+                  <span>{Math.floor(item.daysAgo / 7)}w</span>
+                )}
+              </span>
+            </div>
+
+            <!-- Title -->
+            <h3 class="text-base sm:text-lg font-bold text-white group-hover:text-cyan-300 transition-colors mb-2 tracking-tight leading-snug line-clamp-2">
+              {item.title}
+            </h3>
+
+            <!-- Description -->
+            <p class="text-xs sm:text-sm text-slate-400 line-clamp-2 leading-relaxed mb-6 font-normal">
+              {item.description}
+            </p>
+          </div>
+
+          <!-- Bottom Metadata -->
+          <div class="pt-4 border-t border-white/[0.08] flex items-center justify-between text-xs text-slate-400">
+            <div class="flex items-center gap-2 font-mono text-[11px] text-slate-400">
+              <span class="px-1.5 py-0.5 rounded bg-slate-800/90 border border-slate-700/60 uppercase font-bold text-slate-300">
+                {item.language}
+              </span>
+              <span class="px-1.5 py-0.5 rounded bg-slate-800/80 border border-slate-700/60 uppercase">
+                {item.level}
+              </span>
+              {item.type === 'lesson' && item.durationMinutes && (
+                <span>{item.durationMinutes} min</span>
+              )}
+              {item.type === 'course' && item.unitsCount && (
+                <span>{item.unitsCount} <span data-i18n="stats.units_label">unidades</span></span>
+              )}
+            </div>
+
+            <span class="text-cyan-400 group-hover:translate-x-1 transition-transform font-semibold inline-flex items-center gap-1">
+              <span data-i18n="recent.explore">Explorar</span>
+              <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+              </svg>
+            </span>
+          </div>
+        </div>
+      </a>
+    ))}
+  </div>
+</section>

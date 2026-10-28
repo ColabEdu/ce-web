@@ -1,0 +1,35 @@
+---
+interface Props {
+  measurementId?: string;
+}
+
+const {
+  measurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID || 'G-NP3RNJE5BF',
+} = Astro.props;
+---
+
+{measurementId && (
+  <!-- Global site tag (gtag.js) - Google Analytics 4 -->
+  <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${measurementId}`}></script>
+  <script is:inline define:vars={{ measurementId }}>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    // 1. Google Consent Mode v2 por Defecto (Privacidad K-12 / RGPD / COPPA)
+    gtag('consent', 'default', {
+      'analytics_storage': 'granted',
+      'ad_storage': 'denied',
+      'ad_user_data': 'denied',
+      'ad_personalization': 'denied'
+    });
+
+    // 2. Configuración Cross-Subdomain y Anonimización
+    gtag('config', measurementId, {
+      cookie_domain: 'colabedu.org',
+      cookie_flags: 'SameSite=None;Secure',
+      anonymize_ip: true,
+      send_page_view: true
+    });
+  </script>
+)}

@@ -12,6 +12,13 @@
     {
       "target": "colabedu-ai",
       "public": "apps/colabedu-ai/dist",
+      "redirects": [
+        {
+          "source": "/**",
+          "destination": "https://colabedu.net/:splat",
+          "type": 301
+        }
+      ],
       "ignore": [
         "firebase.json",
         "**/.*",

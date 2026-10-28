@@ -1,0 +1,426 @@
+---
+import { SUPPORTED_LANGUAGES, DEFAULT_LOCALE, TRANSLATIONS } from '@/lib/i18n/translations';
+
+const REGIONAL_MODE = import.meta.env.PUBLIC_REGIONAL_LANGS_MODE || 'auto';
+---
+
+<div class="relative inline-block text-left" id="lang-selector-root">
+  <!-- Trigger Button -->
+  <button
+    type="button"
+    id="lang-selector-btn"
+    aria-expanded="false"
+    aria-haspopup="true"
+    onclick="window.__colabeduToggleDropdown && window.__colabeduToggleDropdown(event)"
+    class="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-semibold text-slate-300 bg-slate-900/80 hover:bg-slate-800/90 border border-white/[0.08] hover:border-cyan-500/30 rounded-xl transition-all shadow-sm cursor-pointer focus:outline-none focus:ring-2 focus:ring-cyan-500/40 select-none"
+    title="Cambiar idioma / Switch language"
+  >
+    <!-- Flag placeholder (updated dynamically) -->
+    <span id="current-lang-flag" class="flex items-center text-sm leading-none pointer-events-none">
+      🇪🇸
+    </span>
+    <span id="current-lang-code" class="uppercase font-mono text-[11px] tracking-wider text-slate-200 pointer-events-none">
+      ES
+    </span>
+    <svg class="w-3.5 h-3.5 text-slate-400 transition-transform duration-200 pointer-events-none" id="lang-chevron" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+    </svg>
+  </button>
+
+  <!-- Dropdown Menu -->
+  <div
+    id="lang-dropdown"
+    class="hidden absolute right-0 mt-2 w-52 rounded-2xl bg-slate-950/95 backdrop-blur-xl border border-white/[0.12] shadow-[0_12px_36px_rgba(0,0,0,0.6)] py-1.5 z-50 focus:outline-none animate-in fade-in zoom-in-95 duration-150"
+    role="menu"
+    aria-orientation="vertical"
+    tabindex="-1"
+    data-regional-mode={REGIONAL_MODE}
+  >
+    <div class="px-3 py-1.5 border-b border-white/[0.06] text-[10px] font-semibold uppercase tracking-wider text-slate-400" data-i18n="nav.switch_language">
+      Idioma de navegación
+    </div>
+
+    <!-- Global Languages Group -->
+    <div class="py-1" id="global-langs-group">
+      {SUPPORTED_LANGUAGES.filter(lang => lang.category === 'global').map((lang) => (
+        <button
+          type="button"
+          class="lang-option w-full flex items-center justify-between px-3 py-2 text-xs text-slate-200 hover:text-white hover:bg-white/[0.08] transition-colors cursor-pointer group text-left"
+          data-lang={lang.code}
+          data-name={lang.name}
+          data-flag={lang.flag || ''}
+          data-asset={lang.asset || ''}
+          data-category="global"
+          onclick="window.__colabeduSelectLang && window.__colabeduSelectLang(this, event)"
+          role="menuitem"
+        >
+          <div class="flex items-center gap-2.5">
+            <span class="text-sm leading-none">{lang.flag}</span>
+            <span class="font-medium group-hover:text-cyan-300 transition-colors">{lang.name}</span>
+          </div>
+          <span class="font-mono text-[10px] text-slate-400 uppercase tracking-wider">{lang.code}</span>
+        </button>
+      ))}
+    </div>
+
+    <!-- Regional Languages Section (España LOMLOE) -->
+    <div id="regional-section-container" class="border-t border-white/[0.06] pt-1">
+      <div 
+        id="regional-toggle-header"
+        onclick="window.__colabeduToggleRegional && window.__colabeduToggleRegional(event)"
+        class="flex items-center justify-between px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-slate-400 cursor-pointer hover:text-cyan-300 transition-colors select-none group"
+        title="Mostrar / Ocultar lenguas autonómicas de España"
+      >
+        <span data-i18n="nav.regional_languages" class="group-hover:text-slate-200 transition-colors">Lenguas autonómicas (España)</span>
+        <svg id="regional-chevron" class="w-3 h-3 text-slate-400 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+        </svg>
+      </div>
+
+      <!-- Regional Languages Group -->
+      <div id="regional-langs-group" class="py-1">
+        {SUPPORTED_LANGUAGES.filter(lang => lang.category === 'regional').map((lang) => (
+          <button
+            type="button"
+            class="lang-option w-full flex items-center justify-between px-3 py-2 text-xs text-slate-200 hover:text-white hover:bg-white/[0.08] transition-colors cursor-pointer group text-left"
+            data-lang={lang.code}
+            data-name={lang.name}
+            data-flag={lang.flag || ''}
+            data-asset={lang.asset || ''}
+            data-category="regional"
+            onclick="window.__colabeduSelectLang && window.__colabeduSelectLang(this, event)"
+            role="menuitem"
+          >
+            <div class="flex items-center gap-2.5">
+              <img
+                src={lang.asset}
+                alt={lang.name}
+                class="w-4 h-3 rounded-[2px] object-cover shadow-xs border border-white/20"
+                loading="lazy"
+              />
+              <span class="font-medium group-hover:text-cyan-300 transition-colors">{lang.name}</span>
+            </div>
+            <span class="font-mono text-[10px] text-slate-400 uppercase tracking-wider">{lang.code}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  </div>
+</div>
+
+<script is:inline define:vars={{ translationsData: TRANSLATIONS, defaultLocale: DEFAULT_LOCALE }}>
+  (function() {
+    window.__COLABEDU_TRANSLATIONS__ = translationsData;
+    window.__COLABEDU_DEFAULT_LOCALE__ = defaultLocale;
+
+    var STORAGE_KEY = 'colabedu_preferred_locale';
+    var COOKIE_NAME = 'colabedu_preferred_locale';
+
+    function setCookie(name, value) {
+      try {
+        var hostname = window.location.hostname;
+        var domainAttr = '';
+        if (hostname.endsWith('colabedu.org')) {
+          domainAttr = '; domain=.colabedu.org';
+        } else if (hostname.endsWith('colabedu.net')) {
+          domainAttr = '; domain=.colabedu.net';
+        }
+        document.cookie = name + '=' + encodeURIComponent(value) + domainAttr + '; path=/; max-age=31536000; SameSite=Lax';
+      } catch (e) {}
+    }
+
+    function getCookie(name) {
+      try {
+        var match = document.cookie.match(new RegExp('(?:^|;\\s*)' + name + '=([^;]*)'));
+        return match ? decodeURIComponent(match[1]) : null;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function getSavedLocale() {
+      try {
+        var params = new URLSearchParams(window.location.search);
+        var urlLang = params.get('lang') || params.get('locale');
+        if (urlLang && translationsData[urlLang.toLowerCase()]) {
+          return urlLang.toLowerCase();
+        }
+
+        var cookieLang = getCookie(COOKIE_NAME);
+        if (cookieLang && translationsData[cookieLang]) {
+          return cookieLang;
+        }
+
+        var stored = localStorage.getItem(STORAGE_KEY)
+          || localStorage.getItem('colabedu_locale')
+          || localStorage.getItem('colabedu_lang');
+        if (stored && translationsData[stored]) {
+          return stored;
+        }
+
+        var navLangs = navigator.languages || (navigator.language ? [navigator.language] : []);
+        for (var i = 0; i < navLangs.length; i++) {
+          var code = (navLangs[i] || '').toLowerCase().split(/[-_]/)[0];
+          if (translationsData[code]) {
+            return code;
+          }
+        }
+
+        var path = window.location.pathname.toLowerCase();
+        if (path.includes('/catalog/us') || path.startsWith('/us/')) {
+          return 'en';
+        }
+
+        return defaultLocale;
+      } catch (e) {
+        return defaultLocale;
+      }
+    }
+
+    function setSavedLocale(locale) {
+      try {
+        localStorage.setItem(STORAGE_KEY, locale);
+        localStorage.setItem('colabedu_locale', locale);
+        localStorage.setItem('colabedu_lang', locale);
+        setCookie(COOKIE_NAME, locale);
+      } catch (e) {}
+    }
+
+    function updateUiLanguage(locale) {
+      try {
+        var activeOption = document.querySelector('.lang-option[data-lang="' + locale + '"]');
+        var flagEl = document.getElementById('current-lang-flag');
+        var codeEl = document.getElementById('current-lang-code');
+
+        if (activeOption && flagEl && codeEl) {
+          var flag = activeOption.getAttribute('data-flag');
+          var asset = activeOption.getAttribute('data-asset');
+          if (asset) {
+            flagEl.innerHTML = '<img src="' + asset + '" alt="' + locale + '" class="w-4 h-3 rounded-[2px] object-cover border border-white/20 pointer-events-none" />';
+          } else if (flag) {
+            flagEl.innerHTML = '<span class="text-sm leading-none pointer-events-none">' + flag + '</span>';
+          }
+          codeEl.textContent = locale.toUpperCase();
+        }
+
+        document.documentElement.lang = locale;
+
+        var dict = translationsData[locale] || translationsData[defaultLocale] || {};
+        var fallback = translationsData[defaultLocale] || {};
+
+        document.querySelectorAll('[data-i18n]').forEach(function(el) {
+          try {
+            var key = el.getAttribute('data-i18n');
+            if (key) {
+              var text = dict[key] || fallback[key];
+              if (text) {
+                if (el.getAttribute('data-i18n-attr')) {
+                  var attr = el.getAttribute('data-i18n-attr');
+                  el.setAttribute(attr, text);
+                } else if (el.querySelector('svg, img')) {
+                  // Element contains an icon or image: only replace the first non-empty text node
+                  var nodes = el.childNodes;
+                  var updated = false;
+                  for (var n = 0; n < nodes.length; n++) {
+                    if (nodes[n].nodeType === Node.TEXT_NODE && nodes[n].textContent.trim().length > 0) {
+                      nodes[n].textContent = ' ' + text.trim() + ' ';
+                      updated = true;
+                      break;
+                    }
+                  }
+                  if (!updated) {
+                    var span = el.querySelector('span:not([class*="w-"]):not([class*="h-"])');
+                    if (span) {
+                      span.textContent = text;
+                    }
+                  }
+                } else {
+                  el.textContent = text;
+                }
+              }
+            }
+          } catch (e) {}
+        });
+
+        document.querySelectorAll('[data-i18n-placeholder]').forEach(function(el) {
+          try {
+            var key = el.getAttribute('data-i18n-placeholder');
+            if (key) {
+              var text = dict[key] || fallback[key];
+              if (text && el instanceof HTMLInputElement) {
+                el.placeholder = text;
+              }
+            }
+          } catch (e) {}
+        });
+
+        // Sincronizar enlaces externos a app.colabedu.org
+        document.querySelectorAll('a[href*="app.colabedu.org"], a[href*="colabedu-prod.web.app"]').forEach(function(link) {
+          try {
+            var url = new URL(link.href);
+            url.searchParams.set('lang', locale);
+            link.href = url.toString();
+          } catch (e) {}
+        });
+
+        // Actualizar visualización de la sección regional
+        var regionalContainer = document.getElementById('regional-section-container');
+        var regionalGroup = document.getElementById('regional-langs-group');
+        var regionalChevron = document.getElementById('regional-chevron');
+        var dropdownEl = document.getElementById('lang-dropdown');
+        var regionalMode = (dropdownEl && dropdownEl.getAttribute('data-regional-mode')) || 'auto';
+
+        var shouldShowRegional = true;
+        var shouldExpandRegional = false;
+        if (regionalMode === 'always') {
+          shouldShowRegional = true;
+          shouldExpandRegional = true;
+        } else if (regionalMode === 'off') {
+          var isReg = ['ca', 'gl', 'eu'].indexOf(locale) !== -1;
+          shouldShowRegional = isReg;
+          shouldExpandRegional = isReg;
+        } else {
+          var isReg = ['ca', 'gl', 'eu'].indexOf(locale) !== -1;
+          var path = window.location.pathname.toLowerCase();
+          var isSpain = path.includes('/catalog/es') || path.startsWith('/es/') || path === '/catalog' || path === '/catalog/';
+          shouldShowRegional = isReg || isSpain || regionalMode !== 'es_only';
+          shouldExpandRegional = isReg || isSpain;
+        }
+
+        if (regionalContainer) {
+          if (shouldShowRegional) {
+            regionalContainer.classList.remove('hidden');
+            regionalContainer.style.display = '';
+          } else {
+            regionalContainer.classList.add('hidden');
+            regionalContainer.style.display = 'none';
+          }
+        }
+        if (regionalGroup) {
+          if (shouldExpandRegional) {
+            regionalGroup.classList.remove('hidden');
+            regionalGroup.style.display = '';
+            if (regionalChevron) regionalChevron.classList.add('rotate-180');
+          } else {
+            regionalGroup.classList.add('hidden');
+            regionalGroup.style.display = 'none';
+            if (regionalChevron) regionalChevron.classList.remove('rotate-180');
+          }
+        }
+
+        window.dispatchEvent(new CustomEvent('colabedu:locale-changed', { detail: { locale: locale } }));
+      } catch (err) {
+        console.error('Error updating UI language:', err);
+      }
+    }
+
+    // Toggle dropdown
+    window.__colabeduToggleDropdown = function(event) {
+      if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+      var dropdown = document.getElementById('lang-dropdown');
+      var btn = document.getElementById('lang-selector-btn');
+      var chevron = document.getElementById('lang-chevron');
+      if (!dropdown) return;
+      
+      var isHidden = dropdown.classList.contains('hidden') || dropdown.style.display === 'none';
+      if (isHidden) {
+        dropdown.classList.remove('hidden');
+        dropdown.style.display = 'block';
+        if (btn) btn.setAttribute('aria-expanded', 'true');
+        if (chevron) chevron.classList.add('rotate-180');
+      } else {
+        dropdown.classList.add('hidden');
+        dropdown.style.display = 'none';
+        if (btn) btn.setAttribute('aria-expanded', 'false');
+        if (chevron) chevron.classList.remove('rotate-180');
+      }
+    };
+
+    window.__colabeduToggleRegional = function(event) {
+      if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+      var regionalGroup = document.getElementById('regional-langs-group');
+      var regionalChevron = document.getElementById('regional-chevron');
+      if (!regionalGroup) return;
+      var isHidden = regionalGroup.classList.contains('hidden') || regionalGroup.style.display === 'none';
+      if (isHidden) {
+        regionalGroup.classList.remove('hidden');
+        regionalGroup.style.display = '';
+        if (regionalChevron) regionalChevron.classList.add('rotate-180');
+      } else {
+        regionalGroup.classList.add('hidden');
+        regionalGroup.style.display = 'none';
+        if (regionalChevron) regionalChevron.classList.remove('rotate-180');
+      }
+    };
+
+    // Selección de idioma al pulsar una opción
+    window.__colabeduSelectLang = function(btnEl, event) {
+      if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+      var lang = btnEl ? btnEl.getAttribute('data-lang') : null;
+      if (!lang) return;
+
+      setSavedLocale(lang);
+
+      try {
+        var currentUrl = new URL(window.location.href);
+        currentUrl.searchParams.set('lang', lang);
+        window.history.replaceState({}, '', currentUrl.toString());
+      } catch (e) {}
+
+      updateUiLanguage(lang);
+
+      // Cerrar dropdown
+      var dropdown = document.getElementById('lang-dropdown');
+      var btn = document.getElementById('lang-selector-btn');
+      var chevron = document.getElementById('lang-chevron');
+      if (dropdown) {
+        dropdown.classList.add('hidden');
+        dropdown.style.display = 'none';
+      }
+      if (btn) btn.setAttribute('aria-expanded', 'false');
+      if (chevron) chevron.classList.remove('rotate-180');
+    };
+
+    // Cerrar al hacer clic fuera
+    document.addEventListener('click', function(e) {
+      var dropdown = document.getElementById('lang-dropdown');
+      var btn = document.getElementById('lang-selector-btn');
+      var chevron = document.getElementById('lang-chevron');
+      if (!dropdown || !btn) return;
+      var target = e.target;
+      if (!dropdown.contains(target) && !btn.contains(target)) {
+        dropdown.classList.add('hidden');
+        dropdown.style.display = 'none';
+        btn.setAttribute('aria-expanded', 'false');
+        if (chevron) chevron.classList.remove('rotate-180');
+      }
+    });
+
+    // Inicialización del idioma activo al cargar la página
+    function init() {
+      var initial = getSavedLocale();
+      updateUiLanguage(initial || defaultLocale);
+
+      var params = new URLSearchParams(window.location.search);
+      if (params.get('lang_menu') === '1' || params.get('menu') === 'open') {
+        window.__colabeduToggleDropdown();
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+    document.addEventListener('astro:page-load', init);
+  })();
+</script>

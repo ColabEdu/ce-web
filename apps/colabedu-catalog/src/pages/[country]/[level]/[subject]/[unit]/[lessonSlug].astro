@@ -1,0 +1,312 @@
+---
+import CatalogLayout from '@/layouts/CatalogLayout.astro';
+import CourseHero from '@/components/catalog/CourseHero.astro';
+import AxiomCallout from '@/components/catalog/AxiomCallout.astro';
+import LessonObjectives from '@/components/catalog/LessonObjectives.astro';
+import ExerciseTeaserCard from '@/components/catalog/ExerciseTeaserCard.astro';
+import InteractiveCtaButton from '@/components/catalog/InteractiveCtaButton.astro';
+import TeacherRubricPanel from '@/components/catalog/TeacherRubricPanel.astro';
+import OerAttributionPanel from '@/components/catalog/OerAttributionPanel.astro';
+import LearningResourceJsonLd from '@/components/seo/LearningResourceJsonLd.astro';
+import BreadcrumbJsonLd from '@/components/seo/BreadcrumbJsonLd.astro';
+import { loadCatalog, slugify } from '@/lib/catalogLoader';
+import type { CourseSpecItem, CourseUnitItem, InteractiveLessonItem, SlideQuestion } from '@/lib/types';
+
+export function getStaticPaths() {
+  const { courses, lessons } = loadCatalog();
+  const paths: any[] = [];
+  const visitedLessons = new Set<string>();
+
+  // 1. Map lessons attached to courses & units
+  for (const course of courses) {
+    for (const unit of course.units) {
+      if (unit.resolvedLessons) {
+        for (const lesson of unit.resolvedLessons) {
+          visitedLessons.add(lesson.id);
+          paths.push({
+            params: {
+              country: course.country,
+              level: course.level,
+              subject: course.computedSlug,
+              unit: unit.slug,
+              lessonSlug: lesson.computedSlug,
+            },
+            props: { course, unit, lesson },
+          });
+        }
+      }
+    }
+  }
+
+  // 2. Map any remaining standalone lessons (e.g. remediation clinics)
+  for (const lesson of lessons) {
+    if (!visitedLessons.has(lesson.id)) {
+      const country = lesson.country || (lesson.standardRef?.includes('us') ? 'us' : 'es');
+      const level = slugify(lesson.educationLevel || 'general');
+      const subject = slugify(lesson.subject || 'general');
+      const unitSlug = slugify(lesson.targetUnitRef || 'general');
+
+      const dummyCourse: CourseSpecItem = {
+        id: lesson.targetCourseRef || 'course.standalone',
+        referenceCode: lesson.targetCourseRef || 'course.standalone',
+        name: lesson.subject.replace(/_/g, ' '),
+        description: 'Lección independiente de práctica y remediación clínica.',
+        standard: lesson.standardRef || 'LOMLOE RD 534/2024',
+        country,
+        level,
+        subject,
+        units: [],
+        computedSlug: subject,
+        computedMetaTitle: `${lesson.title} | ColabEdu`,
+        computedMetaDescription: lesson.computedMetaDescription,
+        canonicalPath: `/catalog/${country}/${level}/${subject}`,
+      };
+
+      const dummyUnit: CourseUnitItem = {
+        id: unitSlug,
+        name: 'Unidad de Remediación y Práctica',
+        slug: unitSlug,
+        lessons: [],
+      };
+
+      paths.push({
+        params: {
+          country,
+          level,
+          subject,
+          unit: unitSlug,
+          lessonSlug: lesson.computedSlug,
+        },
+        props: { course: dummyCourse, unit: dummyUnit, lesson },
+      });
+    }
+  }
+
+  return paths;
+}
+
+interface Props {
+  course: CourseSpecItem;
+  unit: CourseUnitItem;
+  lesson: InteractiveLessonItem;
+}
+
+const { course, unit, lesson } = Astro.props;
+
+const canonicalUrl = `https://colabedu.org/catalog/${course.country}/${course.level}/${course.computedSlug}/${unit.slug}/${lesson.computedSlug}`;
+
+const breadcrumbs = [
+  { label: "Catálogo", href: "/catalog" },
+  { label: course.country.toUpperCase(), href: `/catalog/${course.country}` },
+  { label: course.name, href: course.canonicalPath },
+  { label: unit.name, href: `${course.canonicalPath}#${unit.slug}` },
+  { label: lesson.title, href: canonicalUrl },
+];
+
+const breadcrumbSchema = [
+  { name: "Catálogo", url: "https://colabedu.org/catalog" },
+  { name: course.country.toUpperCase(), url: `https://colabedu.org/catalog/${course.country}` },
+  { name: course.name, url: `https://colabedu.org${course.canonicalPath}` },
+  { name: unit.name, url: `https://colabedu.org${course.canonicalPath}#${unit.slug}` },
+  { name: lesson.title, url: canonicalUrl },
+];
+
+// Extract axiom if present (from slide 2 or seo block)
+let axiomText = lesson.seo?.featured_axiom || "";
+if (!axiomText && lesson.slides) {
+  const quoteSlide = lesson.slides.find((s) => s.layout === 'quote' || s.id?.includes('axioma'));
+  if (quoteSlide && quoteSlide.content) {
+    let raw = typeof quoteSlide.content === 'string' ? quoteSlide.content : String(quoteSlide.content);
+    // Strip markdown images: ![alt](url)
+    raw = raw.replace(/!\[.*?\]\(.*?\)/g, '');
+    // Strip "Fuente visual: ..." lines
+    raw = raw.replace(/Fuente visual:.*?\n/gi, '').replace(/\(Fuente visual.*?\)/gi, '');
+    axiomText = raw.replace(/^>\s*/gm, '').replace(/[*_#]/g, '').trim();
+    // If enclosed in outer quotes, unwrap
+    axiomText = axiomText.replace(/^["'«“]/, '').replace(/["'»”]$/, '').trim();
+  }
+}
+
+// Extract quiz questions from slides
+const quizQuestions: { q: SlideQuestion; slideTitle: string; slideIndex: number; slideId?: string }[] = [];
+if (lesson.slides) {
+  for (const [idx, s] of lesson.slides.entries()) {
+    if (s.embeddedWidget?.props?.questions) {
+      for (const q of s.embeddedWidget.props.questions) {
+        quizQuestions.push({ q, slideTitle: s.title || "Ejercicio", slideIndex: idx, slideId: s.id });
+      }
+    }
+  }
+}
+---
+
+<CatalogLayout
+  title={lesson.computedMetaTitle}
+  description={lesson.computedMetaDescription}
+  canonicalUrl={canonicalUrl}
+>
+  <LearningResourceJsonLd slot="head" lesson={lesson} canonicalUrl={canonicalUrl} courseName={course.name} />
+  <BreadcrumbJsonLd slot="head" items={breadcrumbSchema} />
+
+  <!-- Hero -->
+  <CourseHero
+    title={lesson.title}
+    subtitle={lesson.computedMetaDescription}
+    standard={lesson.standardRef || course.standard}
+    level={lesson.educationLevel || course.level}
+    subject={lesson.subject}
+    language={lesson.language}
+    estimatedMinutes={lesson.estimatedMinutes}
+    breadcrumbs={breadcrumbs}
+  />
+
+  <main class="py-12 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
+    <!-- Axiom / Gold Rule for Google Featured Snippets -->
+    {axiomText && (
+      <AxiomCallout
+        axiomText={axiomText}
+        sourceAuthority={lesson.pedagogical_metadata?.target_audience}
+      />
+    )}
+
+    <!-- Learning Objectives -->
+    {lesson.learningObjectives && lesson.learningObjectives.length > 0 && (
+      <LessonObjectives objectives={lesson.learningObjectives} />
+    )}
+
+    <!-- Interactive Quick Challenge Callout Banner -->
+    <div id="desafio-practica" class="my-10 p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-[#0C1527] via-[#0E1A33] to-[#0A0E1A] border border-cyan-500/30 flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-[0_0_50px_rgba(6,182,212,0.12)] relative overflow-hidden">
+      <!-- Ambient background flare -->
+      <div class="absolute -top-12 -left-12 w-40 h-40 bg-cyan-500/20 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="relative z-10">
+        <div class="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-cyan-500/10 text-cyan-300 border border-cyan-500/25 mb-2.5">
+          <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping"></span>
+          <span data-i18n="lesson.challenge_badge">⚡ Desafío Táctil de 90 Segundos</span>
+        </div>
+        <h3 class="text-xl sm:text-2xl font-black text-white tracking-tight" data-i18n="lesson.challenge_title">
+          ¿Dominas los conceptos clave de esta lección?
+        </h3>
+        <p class="text-sm text-slate-300 mt-1.5 max-w-xl leading-relaxed" data-i18n="lesson.challenge_sub">
+          Pon a prueba tu comprensión con ejercicios adaptados al estándar oficial. Corrección diagnóstica instantánea y sin registro.
+        </p>
+
+        <div class="flex items-center gap-4 mt-3 text-xs text-slate-400">
+          <span class="flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span data-i18n="lesson.90_seconds">90 segundos</span>
+          </span>
+          <span class="flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span data-i18n="lesson.socratic_feedback">Feedback socrático</span>
+          </span>
+          <span class="flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+            <span data-i18n="lesson.free_access">Acceso libre</span>
+          </span>
+        </div>
+      </div>
+
+      <div class="shrink-0 relative z-10">
+        <InteractiveCtaButton
+          lessonId={lesson.id}
+          text="Comenzar reto (90s) →"
+          dataI18n="lesson.start_challenge"
+          size="md"
+        />
+      </div>
+    </div>
+
+    <!-- Questions & Exercises Teasers -->
+    {quizQuestions.length > 0 && (
+      <section class="my-12">
+        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-6 pb-3 border-b border-slate-800/80">
+          <div>
+            <span class="text-xs uppercase tracking-wider font-bold text-cyan-400 block mb-1" data-i18n="lesson.exam_questions_badge">
+              Reactivos de Examen
+            </span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight" data-i18n="lesson.practice_questions">
+              Preguntas de Práctica Oficial
+            </h2>
+          </div>
+          <span class="text-xs text-slate-400 bg-slate-900/80 border border-slate-800 px-3 py-1 rounded-full self-start sm:self-auto">
+            {quizQuestions.length} {quizQuestions.length === 1 ? 'pregunta indexada' : 'preguntas indexadas'}
+          </span>
+        </div>
+
+        <div class="space-y-6">
+          {quizQuestions.map((item, idx) => (
+            <div id={`slide-question-${idx + 1}`}>
+              <ExerciseTeaserCard
+                question={item.q}
+                index={idx + 1}
+                lessonId={lesson.id}
+                slideIndex={item.slideIndex}
+                slideId={item.slideId}
+              />
+            </div>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <!-- Large High-Converting Banner -->
+    <section class="my-16 p-8 sm:p-12 rounded-3xl bg-gradient-to-b from-[#111726]/90 via-[#0C121F]/90 to-[#070A12]/95 border border-slate-800/80 text-center relative overflow-hidden shadow-2xl">
+      <!-- Glow behind badge -->
+      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="max-w-2xl mx-auto relative z-10">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/10 text-indigo-300 border border-indigo-500/25 mb-5">
+          <span>✨</span>
+          <span data-i18n="lesson.conversion_badge">Experiencia Completa de Aprendizaje Socrático</span>
+        </div>
+
+        <h2 class="text-2xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight mb-4" data-i18n="lesson.conversion_title">
+          Resuelve la lección completa en el entorno táctil ColabEdu
+        </h2>
+        
+        <p class="text-slate-300 text-sm sm:text-base mb-8 leading-relaxed">
+          Accede a todas las diapositivas interactivas, soporte socrático paso a paso y evaluación diagnóstica adaptada a <strong class="text-white font-semibold">{lesson.standardRef || course.standard}</strong>.
+        </p>
+
+        <!-- Feature pills -->
+        <div class="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mb-8 text-xs font-medium text-slate-300">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-900/80 border border-slate-800" data-i18n="lesson.no_install">
+            <span class="text-emerald-400">✓</span> Sin instalación ni registro
+          </span>
+          <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-900/80 border border-slate-800" data-i18n="lesson.ai_tutor">
+            <span class="text-emerald-400">✓</span> Tutor IA Socrático guiado
+          </span>
+          <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-900/80 border border-slate-800" data-i18n="lesson.official_rubrics">
+            <span class="text-emerald-400">✓</span> Rúbricas y competencias oficiales
+          </span>
+        </div>
+
+        <InteractiveCtaButton
+          lessonId={lesson.id}
+          text="Abrir Lección Completa en ColabEdu [Sin Registro] →"
+          dataI18n="lesson.open_full_lesson"
+          size="lg"
+        />
+      </div>
+    </section>
+
+    <!-- Teacher Technical Details -->
+    <TeacherRubricPanel
+      standard={lesson.standardRef || course.standard}
+      competencyTags={lesson.tags}
+      cognitiveDomains={lesson.pedagogical_metadata?.cognitive_domains}
+      scaffoldingStrategy={lesson.pedagogical_metadata?.scaffolding_strategy}
+      targetAudience={lesson.pedagogical_metadata?.target_audience}
+    />
+
+    <!-- OER Open Educational Resources Attribution & Copyright Panel -->
+    <OerAttributionPanel sources={lesson.resolvedSources} />
+  </main>
+</CatalogLayout>

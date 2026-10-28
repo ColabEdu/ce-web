@@ -1,0 +1,50 @@
+---
+import CatalogLayout from '@/layouts/CatalogLayout.astro';
+---
+
+<CatalogLayout
+  title="404 — Página No Encontrada | ColabEdu"
+  description="La página que buscas no existe o ha sido movida dentro del catálogo curricular de ColabEdu."
+>
+  <main class="min-h-[70vh] flex items-center justify-center py-20 px-4 sm:px-6 lg:px-8 text-center relative overflow-hidden">
+    <!-- Subtle Background Glow -->
+    <div class="absolute inset-0 bg-gradient-to-b from-cyan-950/20 via-slate-950/40 to-transparent pointer-events-none" aria-hidden="true"></div>
+    <div class="absolute -top-32 left-1/2 -translate-x-1/2 w-[500px] h-[300px] bg-cyan-500/10 blur-3xl pointer-events-none rounded-full" aria-hidden="true"></div>
+
+    <div class="max-w-xl mx-auto relative z-10">
+      <!-- 404 Badge -->
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-rose-500/10 text-rose-300 border border-rose-500/25 mb-6">
+        <span class="w-1.5 h-1.5 rounded-full bg-rose-400 animate-pulse"></span>
+        <span>Error 404 · Recurso no encontrado</span>
+      </div>
+
+      <h1 class="text-6xl sm:text-7xl font-extrabold text-white tracking-tight mb-4 font-mono">
+        404
+      </h1>
+
+      <p class="text-lg sm:text-xl text-slate-300 font-medium mb-3">
+        La lección, examen o ruta que buscas no existe o ha sido reubicada.
+      </p>
+
+      <p class="text-sm text-slate-400 mb-8 max-w-md mx-auto leading-relaxed">
+        Explora nuestro catálogo abierto de recursos curriculares alineados con estándares oficiales LOMLOE, College Board AP y Bachillerato Internacional (IB).
+      </p>
+
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+        <a
+          href="/catalog"
+          class="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 shadow-[0_0_20px_-3px_rgba(6,182,212,0.4)] hover:brightness-110 active:scale-[0.98] transition-all"
+        >
+          <span>← Volver al Catálogo Principal</span>
+        </a>
+
+        <a
+          href="/catalog/terms"
+          class="w-full sm:w-auto inline-flex items-center justify-center px-5 py-3 rounded-xl text-sm font-semibold text-slate-300 hover:text-white bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] transition-all"
+        >
+          <span>Términos y Condiciones</span>
+        </a>
+      </div>
+    </div>
+  </main>
+</CatalogLayout>

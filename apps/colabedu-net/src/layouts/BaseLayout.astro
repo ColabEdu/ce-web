@@ -2,6 +2,7 @@
 // src/layouts/BaseLayout.astro
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import GoogleAnalytics from '../components/GoogleAnalytics.astro';
 import "../styles/global.css";
 
 const { title = 'ColabEdu - Recupera tu tiempo', lang = 'es' } = Astro.props;
@@ -67,6 +68,8 @@ const { title = 'ColabEdu - Recupera tu tiempo', lang = 'es' } = Astro.props;
     </style>
     <!-- Chart.js for Visualization -->
     <script is:inline src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Google Analytics 4 (Cross-Domain B2B Linker) -->
+    <GoogleAnalytics />
 </head>
 <body class="bg-light text-slate-800 antialiased selection:bg-primary selection:text-white">
 
@@ -89,10 +92,20 @@ const { title = 'ColabEdu - Recupera tu tiempo', lang = 'es' } = Astro.props;
         }
 
         function setLang(lang) {
-            localStorage.setItem('colabedu_lang', lang);
-            const pathParts = window.location.pathname.split('/');
-            const filename = pathParts.pop() || 'index.html';
-            window.location.href = `../${lang}/${filename}`;
+            try {
+                localStorage.setItem('colabedu_preferred_locale', lang);
+                localStorage.setItem('colabedu_lang', lang);
+                var domainAttr = window.location.hostname.endsWith('colabedu.net') ? '; domain=.colabedu.net' : '';
+                document.cookie = 'colabedu_preferred_locale=' + lang + domainAttr + '; path=/; max-age=31536000; SameSite=Lax';
+            } catch(e) {}
+            var path = window.location.pathname;
+            var segments = path.split('/').filter(Boolean);
+            if (segments.length > 0 && (segments[0] === 'es' || segments[0] === 'en')) {
+                segments[0] = lang;
+                window.location.href = '/' + segments.join('/') + (path.endsWith('/') ? '/' : '') + window.location.search;
+            } else {
+                window.location.href = '/' + lang + '/';
+            }
         }
     </script>
 </body>

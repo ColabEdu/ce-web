@@ -6,6 +6,8 @@
     "build": "pnpm -r build",
     "dev:all": "pnpm -r --parallel dev",
     "dev:org": "pnpm --filter colabedu-org dev",
+    "dev:catalog": "pnpm --filter colabedu-catalog dev",
+    "build:catalog": "pnpm --filter colabedu-catalog build",
     "dev:ai": "pnpm --filter colabedu-ai dev",
     "dev:support": "pnpm --filter colabedu-support dev",
     "dev:net": "pnpm --filter colabedu-net dev"

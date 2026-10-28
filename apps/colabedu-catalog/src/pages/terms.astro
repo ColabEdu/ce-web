@@ -1,0 +1,130 @@
+---
+import CatalogLayout from '@/layouts/CatalogLayout.astro';
+
+const isEmbed = Astro.url.searchParams.get('embed') === 'true' || Astro.url.searchParams.get('minimal') === 'true';
+---
+
+<CatalogLayout
+  title="Términos y Condiciones de Uso (Fase Beta) — ColabEdu"
+  description="Términos del Servicio, condiciones de prueba pública, exención de responsabilidad educativa y política para Early Adopters del ecosistema ColabEdu."
+  minimal={isEmbed}
+>
+  <div class="terms-container py-16 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
+    <!-- Header -->
+    <header class="terms-article-header mb-12 border-b border-white/[0.08] pb-8">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-cyan-500/10 text-cyan-300 border border-cyan-500/25 mb-4">
+        <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
+        <span data-i18n="terms.version_badge">Versión Canónica v0.9.1-beta · Octubre 2026</span>
+      </div>
+      <h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-4" data-i18n="terms.title">
+        Términos y Condiciones de Uso
+      </h1>
+      <p class="text-base text-slate-400 leading-relaxed" data-i18n="terms.subtitle">
+        Marco legal unificado para el Catálogo Web de Recursos Educativos Abiertos y la Plataforma Interactiva de Práctica y Simulación con Inteligencia Artificial.
+      </p>
+    </header>
+
+    <!-- Plain Language Summary Card -->
+    <section class="p-6 sm:p-8 rounded-2xl bg-gradient-to-b from-[#111726]/90 to-[#0A0E1A]/90 border border-cyan-500/30 mb-12 shadow-[0_0_30px_-10px_rgba(6,182,212,0.15)]">
+      <div class="flex items-center gap-2 text-cyan-400 font-bold text-sm uppercase tracking-wider mb-4">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <span data-i18n="terms.summary_title">Resumen en Lenguaje Llano (Plain Language)</span>
+      </div>
+      <ul class="space-y-3 text-sm text-slate-300 leading-relaxed">
+        <li class="flex items-start gap-2.5">
+          <span class="text-cyan-400 font-bold">•</span>
+          <span data-i18n="terms.point_1"><strong>Fase Experimental Activa:</strong> ColabEdu está en fase Alpha / Beta pública. Puedes encontrar errores, mejoras continuas y cambios en la interfaz.</span>
+        </li>
+        <li class="flex items-start gap-2.5">
+          <span class="text-cyan-400 font-bold">•</span>
+          <span data-i18n="terms.point_2"><strong>Orientación Pedagógica, No Certificación Oficial:</strong> Las correcciones, notas y rúbricas de IA asisten tu estudio personal; no garantizan calificaciones en tribunales examinadores (EvAU, EBAU, PAU, IB, AP).</span>
+        </li>
+        <li class="flex items-start gap-2.5">
+          <span class="text-cyan-400 font-bold">•</span>
+          <span data-i18n="terms.point_3"><strong>Garantía de Reembolso Early Adopter (14 Días):</strong> Si participas en fases de pago en Beta o Preventa, tienes 14 días para solicitar el reembolso total del 100% sin preguntas.</span>
+        </li>
+        <li class="flex items-start gap-2.5">
+          <span class="text-cyan-400 font-bold">•</span>
+          <span data-i18n="terms.point_4"><strong>Tus Respuestas son Tuyas:</strong> Protegemos tu privacidad y no vendemos tus datos académicos ni los usamos para entrenar modelos públicos.</span>
+        </li>
+      </ul>
+    </section>
+
+    <!-- Detailed Legal Articles -->
+    <article class="prose prose-invert prose-cyan max-w-none space-y-10 text-slate-300 text-sm sm:text-base leading-relaxed">
+      <section>
+        <h2 class="text-xl font-bold text-white mb-3 flex items-center gap-2" data-i18n="terms.sec1_title">
+          <span class="text-cyan-400 font-mono text-base">1.</span> Naturaleza del Servicio y Estado Alpha / Beta
+        </h2>
+        <p data-i18n="terms.sec1_p1">
+          El usuario reconoce expresamente que tanto el catálogo web como la plataforma interactiva de simuladores de ColabEdu se encuentran en período de prueba y desarrollo tecnológico continuo.
+        </p>
+        <p class="mt-2" data-i18n="terms.sec1_p2">
+          El servicio se proporciona <strong>"TAL CUAL" ("AS IS")</strong> y <strong>"SEGÚN DISPONIBILIDAD" ("AS AVAILABLE")</strong>, sin acuerdos formales de nivel de servicio (SLAs) ni compromiso de disponibilidad ininterrumpida. ColabEdu se reserva el derecho de actualizar esquemas, corregir fallos o reiniciar estados de prueba comunicándolo oportunamente.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="text-xl font-bold text-white mb-3 flex items-center gap-2" data-i18n="terms.sec2_title">
+          <span class="text-cyan-400 font-mono text-base">2.</span> Exención de Responsabilidad por Resultados Académicos Oficiales
+        </h2>
+        <p data-i18n="terms.sec2_p1">
+          Los algoritmos de evaluación, rúbricas analíticas, feedback socrático y estimaciones de puntuación (p.ej. sobre 10.0 en EvAU o escala 1-7 en IB) constituyen simulaciones con fines de autoevaluación formativa.
+        </p>
+        <p class="mt-2" data-i18n="terms.sec2_p2">
+          ColabEdu no es una entidad examinadora oficial ni está vinculada formalmente a las comisiones interuniversitarias de la EBAU/PAU, la Organización del Bachillerato Internacional (IBO) o College Board (AP). La plataforma no se responsabiliza de discrepancias de criterio entre la IA y tribunales calificadores humanos.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="text-xl font-bold text-white mb-3 flex items-center gap-2" data-i18n="terms.sec3_title">
+          <span class="text-cyan-400 font-mono text-base">3.</span> Condiciones de Pago en Fase Beta ("Early Adopter / Founder")
+        </h2>
+        <p data-i18n="terms.sec3_p1">
+          En caso de habilitarse suscripciones o pases de acceso durante la fase Beta, estos tienen la consideración de apoyo anticipado al proyecto a cambio de ventajas exclusivas (descuentos permanentes y acceso ilimitado).
+        </p>
+        <div class="mt-4 p-4 rounded-xl bg-white/[0.03] border border-white/[0.08] text-sm text-slate-300" data-i18n="terms.sec3_guarantee">
+          <strong class="text-emerald-400">🛡️ Garantía de Satisfacción 14 Días:</strong> Cualquier usuario que adquiera un plan en fase Beta puede solicitar la devolución íntegra de su dinero en un plazo de catorce (14) días naturales desde el cobro, dirigiéndose a <code class="text-cyan-300">soporte@colabedu.org</code>.
+        </div>
+      </section>
+
+      <section>
+        <h2 class="text-xl font-bold text-white mb-3 flex items-center gap-2" data-i18n="terms.sec4_title">
+          <span class="text-cyan-400 font-mono text-base">4.</span> Licencias Abiertas de Contenidos (OER) y Software
+        </h2>
+        <p data-i18n="terms.sec4_p1">
+          Los textos curriculares, unidades didácticas y enunciados de examen mostrados en el catálogo proceden de fuentes abiertas oficiales y recursos educativos abiertos (OER) bajo licencias Creative Commons (CC BY, CC BY-SA, CC BY-NC-SA) y dominio público oficial.
+        </p>
+        <p class="mt-2" data-i18n="terms.sec4_p2">
+          La plataforma informática, especificaciones pedagógicas OPS (Open Pedagogy Specification) y diseño de la interfaz interactiva pertenecen a ColabEdu Inc.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="text-xl font-bold text-white mb-3 flex items-center gap-2" data-i18n="terms.sec5_title">
+          <span class="text-cyan-400 font-mono text-base">5.</span> Privacidad, Tratamiento de Respuestas y Menores
+        </h2>
+        <p data-i18n="terms.sec5_p1">
+          En cumplimiento del RGPD (UE 2016/679), LOPDGDD y normativas aplicables de privacidad educativa, las respuestas remitidas para corrección se procesan mediante llamadas anonimizadas a modelos de lenguaje con cláusula de no-entrenamiento público de terceros.
+        </p>
+        <p class="mt-2" data-i18n="terms.sec5_p2">
+          ColabEdu no comercializa datos de estudiantes ni perfila a los usuarios con fines comerciales publicitarios.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="text-xl font-bold text-white mb-3 flex items-center gap-2" data-i18n="terms.sec6_title">
+          <span class="text-cyan-400 font-mono text-base">6.</span> Actualización y Contacto
+        </h2>
+        <p data-i18n="terms.sec6_p1">
+          Cuando la plataforma alcance la fase de Disponibilidad General (v1.0 GA), los usuarios serán informados debidamente de la actualización de condiciones.
+        </p>
+        <p class="mt-2" data-i18n="terms.sec6_p2">
+          Para cualquier duda o solicitud legal: <a href="mailto:legal@colabedu.org" class="text-cyan-400 hover:underline">legal@colabedu.org</a>.
+        </p>
+      </section>
+    </article>
+  </div>
+</CatalogLayout>
