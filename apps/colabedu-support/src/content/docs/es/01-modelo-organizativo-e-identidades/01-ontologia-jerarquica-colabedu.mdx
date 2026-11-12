@@ -1,0 +1,71 @@
+---
+title: "Ontología Jerárquica de ColabEdu"
+description: "El grafo de entidades: Organización -> Cursos -> Clases -> Docentes/Alumnos -> Asignaciones."
+---
+
+import { Steps, Tabs, TabItem, Aside } from '@astrojs/starlight/components';
+
+## 1. Visión General y Propósito
+
+ColabEdu organiza su operativa académica en un grafo de entidades relacionales estricto que modela con fidelidad la realidad de colegios, institutos y distritos educativos:
+
+- **Organización (`Organization`)**: La entidad raíz o tenant (ej. *Colegio San Ignacio* o *Distrito Unificado de Los Ángeles*). Centraliza licencias, claves de facturación Chargebee y políticas de privacidad RGPD.
+- **Curso Académico (`Course`)**: El contenedor de una asignatura impartida en el centro durante un año escolar (ej. *Biología y Geología 3º ESO*). Adopta una especificación curricular inmutable (`CourseSpec`).
+- **Clase o Sección (`Class`)**: El grupo real de estudiantes que asisten a la materia (ej. *3º ESO A*, *3º ESO B*).
+- **Docentes y Alumnado (`Teachers` / `Students`)**: Usuarios vinculados a la clase con roles específicos (titulares, cotutores y estudiantes matriculados).
+- **Asignaciones Vivas (`Assignments`)**: Las tareas, exámenes o retos evaluativos programados para una clase específica, portadoras de las directivas de aula (`AssignmentOverrides`).
+
+---
+
+## 2. Paso a Paso Visual: Navegación por la Jerarquía
+
+<Steps>
+1. **Selector de Organización y Centro**:
+   En la esquina superior izquierda del menú lateral, despliega el selector de organización si tu usuario administra más de una sede o colegio.
+
+2. **Acceso al Catálogo de Cursos de Centro**:
+   Haz clic en **Mis Cursos** para ver las asignaturas configuradas para el año académico actual.
+
+   <figure>
+     <img src="/images/screenshots/es/ui-ontologia-grafo-entidades.webp" alt="Ontología Jerárquica de ColabEdu" />
+     <figcaption>Esquema visual de la jerarquía Organizativa de ColabEdu en la app de gestión.</figcaption>
+   </figure>
+
+3. **Inspección de Clases y Alumnos**:
+   Entra en una clase específica para ver la lista de alumnos matriculados y el histórico de asignaciones activas.
+</Steps>
+
+---
+
+## 3. Principios Clave de Aislamiento y Privacidad
+
+- **Multi-Tenant Estricto**: Ningún dato de calificaciones, alumnos o directivas es visible fuera del tenant de la organización.
+- **Identidad Soberana**: Los alumnos pueden autenticarse con sus cuentas institucionales (Google Workspace o Microsoft 365) sin necesidad de contraseñas separadas.
+
+---
+
+<Aside type="tip" title="💻 ¿Prefieres automatizarlo por Terminal? (Equivalente CLI)">
+
+Puedes inspeccionar y gestionar la jerarquía organizativa desde `./ce-cli.sh`:
+
+<Tabs>
+  <TabItem label="Comando Directo">
+  ```bash
+  ./ce-cli.sh instance live --tenant=colegio_san_ignacio
+  ```
+  </TabItem>
+
+  <TabItem label="Manifiesto Declarativo">
+  ```yaml
+  # Despliegue o consulta de tenant
+  apiVersion: ops/v0.9.6
+  kind: OrganizationDeployment
+  metadata:
+    organization_id: "org_madrid_01"
+    name: "IES Cervantes"
+  ```
+  </TabItem>
+</Tabs>
+
+> **Nota de Gobernanza**: Toda llamada CLI utiliza internamente el Dev-Bypass o credenciales seguras, garantizando las mismas reglas de validación y seguridad que la interfaz gráfica.
+</Aside>

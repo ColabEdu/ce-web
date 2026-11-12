@@ -1,0 +1,361 @@
+---
+// src/pages/en/data-sovereignty-privacy.astro
+// Data Sovereignty, Strict GDPR/FERPA Compliance and Zero Tolerance for Advertising
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import { appLink } from "@colabedu/ui-core/navigation";
+import "../../styles/global.css";
+
+const orgUrl = appLink('org', '/');
+---
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate icon" type="image/png" href="/favicon.png" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Sovereignty, GDPR/FERPA Compliance & Zero Ads | ColabEdu.net</title>
+    <meta name="description" content="Our immutable privacy doctrine: strict GDPR and FERPA compliance, sovereign territorial data hosting in EU and US regions, zero LLM model training on student work, and zero tolerance for advertising.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+
+    <style is:global>
+        :root {
+            --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+        body {
+            font-family: var(--font-sans);
+            background-color: #FAF9F6;
+            color: #0F172A;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+        .precision-card {
+            background-color: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            border-radius: 1.25rem;
+            box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.03);
+            transition: all 0.2s ease-in-out;
+        }
+        .precision-card:hover {
+            border-color: #CBD5E1;
+            box-shadow: 0 10px 20px -4px rgba(15, 23, 42, 0.05);
+        }
+        .hero-privacy {
+            background: linear-gradient(135deg, rgba(238, 242, 255, 0.6) 0%, rgba(240, 253, 250, 0.5) 50%, rgba(224, 231, 255, 0.5) 100%);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 2rem;
+        }
+    </style>
+</head>
+<body class="selection:bg-blue-600 selection:text-white">
+
+    <Header lang="en" />
+
+    <main class="py-12 sm:py-16">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- Hero Title -->
+            <div class="hero-privacy p-8 sm:p-14 text-center mb-16">
+                <span class="inline-block text-xs font-mono font-bold tracking-widest uppercase text-blue-900 bg-white/80 px-4 py-1.5 rounded-full border border-blue-300 mb-6">
+                    <i class="fas fa-shield-halved mr-1.5 text-blue-600"></i> Institutional Trust & Sovereignty Framework
+                </span>
+                <h1 class="text-4xl sm:text-6xl font-black text-slate-950 tracking-tight leading-tight mb-6">
+                    Uncompromising privacy.<br/>
+                    <span class="text-blue-600">Classrooms are not commercial products.</span>
+                </h1>
+                <p class="text-lg sm:text-xl text-slate-700 font-normal leading-relaxed max-w-3xl mx-auto mb-8">
+                    Educational artificial intelligence is only legitimate if schools retain sovereign control over student data. At ColabEdu, we do not sell advertising, we do not track minors, and we protect district territorial boundaries under European GDPR and United States FERPA statutes.
+                </p>
+                
+                <div class="flex flex-wrap items-center justify-center gap-4">
+                    <a href="#los-tres-pilares" class="px-6 py-3.5 rounded-xl bg-blue-600 text-white font-bold text-sm shadow-md hover:bg-blue-700 transition flex items-center gap-2">
+                        <i class="fas fa-file-shield text-xs"></i>
+                        <span>Explore the 3 Core Commitments</span>
+                    </a>
+                    <a href="mailto:dpo@colabedu.net?subject=GDPR%20FERPA%20Audit%20Inquiry" class="px-6 py-3.5 rounded-xl bg-white text-slate-800 font-bold text-sm border border-slate-300 hover:bg-slate-50 transition flex items-center gap-2">
+                        <i class="fas fa-envelope text-blue-600"></i>
+                        <span>Contact Data Protection Officer (DPO)</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- THE 3 CANONICAL COMMITMENTS -->
+            <div id="los-tres-pilares" class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16 scroll-mt-24">
+                
+                <!-- Pillar 1: GDPR / FERPA Compliance -->
+                <div class="precision-card p-8 bg-white border-blue-200 flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-2xl bg-blue-100 text-blue-700 flex items-center justify-center text-xl mb-6">
+                            <i class="fas fa-scale-balanced"></i>
+                        </div>
+                        <span class="text-[11px] font-mono font-bold uppercase tracking-wider text-blue-700 block mb-1">Legal Baseline</span>
+                        <h3 class="text-xl font-black text-slate-900 mb-3">Strict GDPR & FERPA</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                            Student and educator records receive maximum statutory legal safeguards:
+                        </p>
+                        <ul class="space-y-2 text-xs text-slate-700 font-mono">
+                            <li class="flex items-start gap-2">
+                                <i class="fas fa-check text-blue-600 mt-0.5"></i>
+                                <span>Immediate cryptographic pseudonymization (SHA-256 hashing).</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fas fa-check text-blue-600 mt-0.5"></i>
+                                <span>Binding Data Processing Addendums (DPA) for all institutions.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fas fa-check text-blue-600 mt-0.5"></i>
+                                <span>Right to erasure, data revocation, and open JSON/OPS portability.</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-100 text-[11px] font-mono text-blue-800">
+                        Permanent Data Protection Impact Assessments (DPIA).
+                    </div>
+                </div>
+
+                <!-- Pillar 2: EU / US Territorial Sovereignty -->
+                <div class="precision-card p-8 bg-white border-teal-200 flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-2xl bg-teal-100 text-teal-700 flex items-center justify-center text-xl mb-6">
+                            <i class="fas fa-earth-americas"></i>
+                        </div>
+                        <span class="text-[11px] font-mono font-bold uppercase tracking-wider text-teal-700 block mb-1">Territorial Isolation</span>
+                        <h3 class="text-xl font-black text-slate-900 mb-3">EU / US Data Sovereignty</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                            Data never traverses international borders without explicit authorization:
+                        </p>
+                        <ul class="space-y-2 text-xs text-slate-700 font-mono">
+                            <li class="flex items-start gap-2">
+                                <i class="fas fa-check text-teal-700 mt-0.5"></i>
+                                <span><strong>EU Institutions:</strong> 100% cloud hosting and compute inside the European Union (Frankfurt, Madrid).</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fas fa-check text-teal-700 mt-0.5"></i>
+                                <span><strong>US Districts:</strong> Isolated US cloud regions fully compliant with FERPA and COPPA.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fas fa-check text-teal-700 mt-0.5"></i>
+                                <span>Zero unvetted transatlantic personal data transfers.</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-100 text-[11px] font-mono text-teal-800">
+                        Cryptographically segregated multi-tenant infrastructure.
+                    </div>
+                </div>
+
+                <!-- Pillar 3: Zero Tolerance for Ads -->
+                <div class="precision-card p-8 bg-white border-amber-200 flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center text-xl mb-6">
+                            <i class="fas fa-ban"></i>
+                        </div>
+                        <span class="text-[11px] font-mono font-bold uppercase tracking-wider text-amber-800 block mb-1">Ethical Independence</span>
+                        <h3 class="text-xl font-black text-slate-900 mb-3">Zero Ads Tolerance</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                            Our business model is pure software, never attention auctioning:
+                        </p>
+                        <ul class="space-y-2 text-xs text-slate-700 font-mono">
+                            <li class="flex items-start gap-2">
+                                <i class="fas fa-check text-amber-800 mt-0.5"></i>
+                                <span><strong>Zero ad banners, trackers, or commercial pixels</strong> across all apps and lessons.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fas fa-check text-amber-800 mt-0.5"></i>
+                                <span><strong>No behavioral profiling</strong> or commercial fingerprinting of minor students.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fas fa-check text-amber-800 mt-0.5"></i>
+                                <span>Sustained transparently by memberships and school grants.</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-100 text-[11px] font-mono text-amber-900">
+                        100% detoxified learning environment.
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- CRITICAL CLAUSE: AI INFERENCE ISOLATION -->
+            <div class="precision-card p-8 sm:p-12 mb-16 bg-slate-900 text-white shadow-xl">
+                <div class="flex items-center gap-3 text-amber-400 font-bold text-xs font-mono uppercase tracking-widest mb-3">
+                    <i class="fas fa-lock"></i>
+                    <span>Agentic Inference Shield</span>
+                </div>
+                <h2 class="text-2xl sm:text-3xl font-black tracking-tight mb-4">
+                    Immutable Guarantee: Student work never trains AI models
+                </h2>
+                <p class="text-sm text-slate-300 leading-relaxed mb-6">
+                    Unlike consumer-grade AI services, ColabEdu operates strictly under enterprise Zero-Data Retention agreements and dedicated local inference containers:
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 font-mono text-xs">
+                    <div class="p-5 rounded-2xl bg-slate-800/80 border border-slate-700">
+                        <div class="text-emerald-400 font-bold mb-2 flex items-center gap-2">
+                            <i class="fas fa-circle-check"></i>
+                            <span>What ColabEdu DOES:</span>
+                        </div>
+                        <ul class="space-y-2 text-slate-300">
+                            <li>&bull; Evaluates submissions strictly in ephemeral volatile memory.</li>
+                            <li>&bull; Returns rubric reports exclusively to the teacher's gradebook.</li>
+                            <li>&bull; Flushes inference payloads immediately upon response completion.</li>
+                            <li>&bull; Enables school-managed local persistence in relational & vector DB.</li>
+                        </ul>
+                    </div>
+
+                    <div class="p-5 rounded-2xl bg-slate-800/80 border border-slate-700">
+                        <div class="text-red-400 font-bold mb-2 flex items-center gap-2">
+                            <i class="fas fa-circle-xmark"></i>
+                            <span>What ColabEdu NEVER does:</span>
+                        </div>
+                        <ul class="space-y-2 text-slate-300">
+                            <li>&bull; Strictly forbidden to train or fine-tune LLMs with student data.</li>
+                            <li>&bull; Strictly forbidden to sell or share logs with data brokers.</li>
+                            <li>&bull; Strictly forbidden to store student voice in external databases.</li>
+                            <li>&bull; Strictly forbidden to monetize classroom content for ad targeting.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ON-PREMISE, AIR-GAPPED & REGIONAL GOVERNMENTS DEPLOYMENT -->
+            <div id="on-premise-gov" class="precision-card p-8 sm:p-12 mb-16 border-indigo-200 bg-indigo-50/20 scroll-mt-24">
+                <div class="flex items-center gap-3 text-indigo-700 font-bold text-xs font-mono uppercase tracking-widest mb-3">
+                    <i class="fas fa-server"></i>
+                    <span>Maximum B2G Sovereignty</span>
+                </div>
+                <h2 class="text-2xl sm:text-3xl font-black text-slate-950 tracking-tight mb-4">
+                    Large-Scale Regional Deployments: On-Premise, Air-Gapped & Audited Source Code
+                </h2>
+                <p class="text-sm text-slate-600 leading-relaxed mb-8">
+                    For Ministries of Education, Regional School Boards, and Metropolitan Districts serving hundreds of thousands of students, ColabEdu delivers complete sovereign deployments within public agency infrastructure:
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <div class="p-6 rounded-2xl bg-white border border-slate-200 shadow-xs flex flex-col justify-between">
+                        <div>
+                            <div class="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-lg mb-3">
+                                <i class="fas fa-hard-drive"></i>
+                            </div>
+                            <h4 class="font-black text-slate-900 text-base mb-2">On-Premise & Sovereign Clusters</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                                Shipped as a turnkey appliance on Kubernetes (MicroK8s, OpenShift, Rancher) or bare-metal servers in public data centers. Local agentic inference with sovereign model weights and pgvector operating 100% offline (Air-Gapped).
+                            </p>
+                        </div>
+                        <div class="pt-3 border-t border-slate-100 text-[11px] font-mono text-indigo-700 font-bold">
+                            Zero dependency on foreign commercial clouds
+                        </div>
+                    </div>
+
+                    <div class="p-6 rounded-2xl bg-white border border-slate-200 shadow-xs flex flex-col justify-between">
+                        <div>
+                            <div class="w-10 h-10 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center font-bold text-lg mb-3">
+                                <i class="fas fa-code-branch"></i>
+                            </div>
+                            <h4 class="font-black text-slate-900 text-base mb-2">Restricted Gov Source-Available License</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                                Complete 100% access to platform source code (Java Spring Boot, OPS schemas, OCR engines, and Grading V2 pipelines) for state cybersecurity audits (CCN-CERT / CISA) and custom SIS integration development.
+                            </p>
+                        </div>
+                        <div class="pt-3 border-t border-slate-100 text-[11px] font-mono text-teal-800 font-bold">
+                            Gov Source-Available with commercial anti-fork protection
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-5 rounded-2xl bg-slate-900 text-white font-mono text-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div class="flex items-center gap-3">
+                        <i class="fas fa-vault text-amber-400 text-xl shrink-0"></i>
+                        <span><strong>Technological Escrow Guarantee:</strong> Public administrations retain perpetual execution and maintenance rights for their school system, completely eliminating Vendor Lock-In.</span>
+                    </div>
+                    <a href="mailto:governments@colabedu.net?subject=Technical%20RFP%20On%20Premise%20Gov" class="px-4 py-2 rounded-xl bg-amber-400 text-slate-950 font-bold text-xs hover:bg-amber-300 transition shrink-0 whitespace-nowrap">
+                        Request Government RFP &rarr;
+                    </a>
+                </div>
+            </div>
+
+            <!-- REGULATORY COMPLIANCE TILES -->
+            <div class="precision-card p-8 sm:p-12 mb-16 bg-white border-slate-200">
+                <div class="text-center max-w-2xl mx-auto mb-10">
+                    <span class="text-xs font-mono font-bold text-slate-400 uppercase tracking-widest block mb-2">
+                        International Legal Framework
+                    </span>
+                    <h2 class="text-3xl font-black text-slate-900 tracking-tight">
+                        Certified Standards & Directives
+                    </h2>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 text-left">
+                        <div class="font-black text-slate-900 text-sm mb-1">GDPR / RGPD</div>
+                        <span class="text-[10px] font-mono text-blue-700 uppercase font-bold block mb-2">European Union</span>
+                        <p class="text-xs text-slate-500 leading-relaxed">
+                            Regulation (EU) 2016/679. Strict protection for minors' consent (Art. 8), Privacy by Design & Default (Art. 25).
+                        </p>
+                    </div>
+
+                    <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 text-left">
+                        <div class="font-black text-slate-900 text-sm mb-1">FERPA</div>
+                        <span class="text-[10px] font-mono text-teal-700 uppercase font-bold block mb-2">United States</span>
+                        <p class="text-xs text-slate-500 leading-relaxed">
+                            Family Educational Rights and Privacy Act. School record confidentiality and strict restriction of non-consensual disclosures.
+                        </p>
+                    </div>
+
+                    <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 text-left">
+                        <div class="font-black text-slate-900 text-sm mb-1">COPPA</div>
+                        <span class="text-[10px] font-mono text-purple-700 uppercase font-bold block mb-2">United States</span>
+                        <p class="text-xs text-slate-500 leading-relaxed">
+                            Children's Online Privacy Protection Act. Strict isolation of personal information under 13 with verified school consent.
+                        </p>
+                    </div>
+
+                    <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 text-left">
+                        <div class="font-black text-slate-900 text-sm mb-1">LOPDGDD</div>
+                        <span class="text-[10px] font-mono text-amber-700 uppercase font-bold block mb-2">Spain</span>
+                        <p class="text-xs text-slate-500 leading-relaxed">
+                            Organic Law 3/2018. Comprehensive protection of digital rights for minors and statutory educational safety guarantees.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FINAL CALL TO ACTION -->
+            <div class="p-8 sm:p-12 rounded-3xl bg-slate-900 text-white flex flex-col md:flex-row items-center justify-between gap-8 shadow-xl">
+                <div class="max-w-xl">
+                    <span class="text-xs font-mono font-bold text-teal-400 uppercase tracking-widest block mb-2">
+                        Institutional Compliance
+                    </span>
+                    <h3 class="text-2xl sm:text-3xl font-black tracking-tight mb-3">
+                        Need a Data Processing Addendum (DPA) for Your District?
+                    </h3>
+                    <p class="text-sm text-slate-300 leading-relaxed">
+                        We provide district superintendents and compliance officers with verified standard contractual clauses, technical security addendums, and compliance kits.
+                    </p>
+                </div>
+                <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto shrink-0">
+                    <a href="mailto:dpo@colabedu.net?subject=District%20DPA%20Request" class="px-6 py-3.5 rounded-xl bg-teal-500 text-slate-950 font-extrabold text-sm text-center shadow-md hover:bg-teal-400 transition">
+                        Request DPA Template &rarr;
+                    </a>
+                    <a href="/en/institutions" class="px-6 py-3.5 rounded-xl bg-white/10 text-white font-bold text-sm text-center hover:bg-white/20 transition border border-white/20">
+                        School Partnerships
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Unified Footer -->
+    <Footer lang="en" />
+
+</body>
+</html>

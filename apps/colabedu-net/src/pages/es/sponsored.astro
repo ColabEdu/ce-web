@@ -1,0 +1,336 @@
+---
+// src/pages/es/sponsored.astro
+// Membresías Esponsorizadas, Becas de Equidad y Convenios de Mecenazgo Institucional
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { sponsoredGrantsCatalog } from "../../data/grants";
+import { appLink } from "@colabedu/ui-core/navigation";
+
+const appUrl = appLink('app', '/');
+const supportUrl = appLink('support', '/');
+---
+<BaseLayout 
+    title="Membresías Esponsorizadas & Becas de Equidad | ColabEdu"
+    description="Acceso a la plataforma ColabEdu financiado al 100% mediante convenios de distrito, fondos de mecenazgo y becas solidarias. Activa tu acceso institucional o financia una cohorte escolar."
+    lang="es"
+>
+    <!-- HERO PRINCIPAL -->
+    <section class="relative pt-32 pb-16 lg:pt-40 lg:pb-20 overflow-hidden bg-gradient-to-b from-amber-50/60 via-slate-50 to-white border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center max-w-4xl mx-auto">
+                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-100/80 border border-amber-300 text-amber-900 text-xs font-mono font-bold uppercase tracking-wider mb-6">
+                    <i class="fas fa-hand-holding-dollar text-amber-600"></i>
+                    <span>Acceso Financiado & Compromiso Solidario</span>
+                </div>
+                <h1 class="text-4xl sm:text-6xl font-black text-slate-900 tracking-tight leading-tight mb-6">
+                    Membresías Esponsorizadas.<br/>
+                    <span class="text-amber-600">Ningún estudiante se queda atrás.</span>
+                </h1>
+                <p class="text-lg sm:text-xl text-slate-600 font-normal leading-relaxed max-w-3xl mx-auto mb-8">
+                    La educación pública de calidad no debe depender de la capacidad de pago individual. A través de convenios de distrito B2G, fondos de mecenazgo filantrópico y el fondo solidario de las suscripciones familiares, cubrimos al 100% las cuentas de estudiantes y docentes de centros públicos.
+                </p>
+
+                <!-- Dual CTA: Para Beneficiarios vs Para Financiadores -->
+                <div class="flex flex-wrap items-center justify-center gap-4">
+                    <a href="#activar-beca" class="px-6 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold text-sm shadow-md transition-all flex items-center gap-2">
+                        <i class="fas fa-key"></i>
+                        <span>Activar mi Beca / Convenio Escolar</span>
+                    </a>
+                    <a href="#financiar" class="px-6 py-3.5 rounded-xl bg-white hover:bg-slate-50 text-slate-800 font-bold text-sm border border-slate-300 shadow-xs transition-all flex items-center gap-2">
+                        <i class="fas fa-building-columns text-blue-600"></i>
+                        <span>Financiar una Cohorte o Distrito</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BLOQUE 1: CÓMO SE FINANCIA EL ACCESO (LOS 3 PILARES DE MECENAZGO) -->
+    <section class="py-16 bg-white border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-12">
+                <span class="text-xs font-mono font-bold text-slate-500 uppercase tracking-widest block mb-1">
+                    Arquitectura de Sostenimiento
+                </span>
+                <h2 class="text-2xl sm:text-3xl font-black text-slate-900">
+                    ¿De dónde proceden los fondos de las becas?
+                </h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Pilar 1: B2G Convenios de Administración -->
+                <div class="p-8 rounded-3xl bg-slate-50 border border-slate-200 shadow-xs flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-2xl bg-blue-100 text-blue-700 flex items-center justify-center text-xl mb-6">
+                            <i class="fas fa-landmark"></i>
+                        </div>
+                        <span class="text-[11px] font-mono font-bold uppercase tracking-wider text-blue-700 block mb-1">Pilar Institucional B2G</span>
+                        <h3 class="text-lg font-black text-slate-900 mb-2">Consejerías & Distritos Escolares</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Contratos marco y convenios públicos que financian la inferencia de IA y el acceso a rúbricas oficiales para todos los institutos públicos de su demarcación.
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-200 text-xs text-slate-500 font-mono">
+                        Ejemplo: Cobertura PAU Comunidad de Madrid y Andalucía STEM.
+                    </div>
+                </div>
+
+                <!-- Pilar 2: Fondo Solidario 1-for-1 Familiar -->
+                <div class="p-8 rounded-3xl bg-slate-50 border border-slate-200 shadow-xs flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-2xl bg-teal-100 text-teal-700 flex items-center justify-center text-xl mb-6">
+                            <i class="fas fa-hand-holding-heart"></i>
+                        </div>
+                        <span class="text-[11px] font-mono font-bold uppercase tracking-wider text-teal-700 block mb-1">Fondo Solidario 1-for-1</span>
+                        <h3 class="text-lg font-black text-slate-900 mb-2">Comunidad Familiar & Escuelas Privadas</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Cada membresía individual contratada por una familia financia automáticamente un cupo mensual de consultas y evaluaciones para centros públicos sin recursos.
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-200 text-xs text-slate-500 font-mono">
+                        Redistribución transparente auditada en blockchain/Git.
+                    </div>
+                </div>
+
+                <!-- Pilar 3: Fundaciones Filantrópicas & RSC -->
+                <div class="p-8 rounded-3xl bg-slate-50 border border-slate-200 shadow-xs flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center text-xl mb-6">
+                            <i class="fas fa-seedling"></i>
+                        </div>
+                        <span class="text-[11px] font-mono font-bold uppercase tracking-wider text-amber-800 block mb-1">Mecenazgo & Filantropía</span>
+                        <h3 class="text-lg font-black text-slate-900 mb-2">Donaciones de Fundaciones OER</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Organizaciones comprometidas con la educación abierta financian supercómputo y laboratorios orales (Voice Lab) para colectivos de especial vulnerabilidad o Newcomers.
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-200 text-xs text-slate-500 font-mono">
+                        Becas nominativas y cuotas de inferencia reservadas.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BLOQUE 2: PARA INSTITUCIONES: CÓMO FINANCIAR O ACTIVAR CONVENIOS DE CENTRO -->
+    <section id="activar-convenio" class="py-20 bg-slate-50 border-b border-slate-200 scroll-mt-20">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="text-center max-w-2xl mx-auto mb-12">
+                <span class="text-xs font-mono font-bold text-teal-700 uppercase tracking-widest block mb-2">
+                    Para Centros, Distritos y Fundaciones
+                </span>
+                <h2 class="text-3xl font-black text-slate-900">
+                    Modelos de Cobertura y Activación Institucional
+                </h2>
+                <p class="text-xs sm:text-sm text-slate-600 mt-2">
+                    Despliegue desatendido para cientos o miles de alumnos sin contraseñas individuales ni fricción administrativa.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+                
+                <!-- Modelo A: Convenio de Dominio Institucional -->
+                <div class="p-8 rounded-3xl bg-white border border-slate-300 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="w-10 h-10 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center text-lg mb-4">
+                            <i class="fas fa-network-wired"></i>
+                        </div>
+                        <h4 class="font-black text-slate-900 text-lg mb-1">A. Habilitación por Dominio Escolar</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                            Todo el alumnado y profesorado de la red o distrito (ej. <code class="bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200">@educa.madrid.org</code>, <code class="bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200">@lausd.net</code>) accede automáticamente al iniciar sesión con Google Workspace o Microsoft 365.
+                        </p>
+                        <ul class="text-xs text-slate-600 space-y-2 mb-4">
+                            <li class="flex items-center gap-2">✓ Integración SSO nativa sin alta manual</li>
+                            <li class="flex items-center gap-2">✓ Cuota de supercómputo reservada para el curso lectivo</li>
+                            <li class="flex items-center gap-2">✓ Informes globales agregados para la consejería o distrito</li>
+                        </ul>
+                    </div>
+                    <a href="#financiar" class="w-full py-2.5 rounded-xl bg-teal-700 hover:bg-teal-800 text-white font-bold text-xs text-center transition-colors shadow-xs">
+                        Solicitar Convenio de Dominio &rarr;
+                    </a>
+                </div>
+
+                <!-- Modelo B: Lotes de Tickets Voucher para Cohortes Específicas -->
+                <div class="p-8 rounded-3xl bg-white border border-slate-300 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center text-lg mb-4">
+                            <i class="fas fa-ticket"></i>
+                        </div>
+                        <h4 class="font-black text-slate-900 text-lg mb-1">B. Lotes de Vouchers Nominativos</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                            Para fundaciones, programas de refuerzo extracurricular o materias optativas: entregue códigos de beca precargados (ej. <code class="bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200 font-mono">MADRID-XXXX-YYYY</code>) para que los alumnos los canjeen al instante.
+                        </p>
+                        <ul class="text-xs text-slate-600 space-y-2 mb-4">
+                            <li class="flex items-center gap-2">✓ Control presupuestario cerrado por lote</li>
+                            <li class="flex items-center gap-2">✓ Válido para cohortes de refuerzo o Newcomers</li>
+                            <li class="flex items-center gap-2">✓ Facturación electrónica B2G (Face / Peppol)</li>
+                        </ul>
+                    </div>
+                    <a href="#financiar" class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold text-xs text-center transition-colors shadow-xs">
+                        Cotizar Lote de Vouchers &rarr;
+                    </a>
+                </div>
+
+            </div>
+
+            <!-- Callout para alumnos o docentes que ya tienen código o dominio y buscan activarlo -->
+            <div class="p-6 rounded-2xl bg-teal-50 border border-teal-200 text-center flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="text-left">
+                    <span class="text-xs font-bold text-teal-950 block">¿Eres un estudiante o docente individual y tienes un código voucher o correo escolar?</span>
+                    <span class="text-xs text-teal-800">Activa tu acceso de forma inmediata y sin tarjeta en la sección de activación de Membresías.</span>
+                </div>
+                <a href="/es/memberships#activar-beca" class="px-5 py-2.5 rounded-xl bg-teal-800 text-white font-bold text-xs hover:bg-teal-900 transition-colors whitespace-nowrap shrink-0">
+                    Canjear en Membresías &rarr;
+                </a>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- BLOQUE 3: DIRECTORIO DINÁMICO DE CONVENIOS Y FONDOS ACTIVOS -->
+    <section class="py-20 bg-white border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="text-center max-w-3xl mx-auto mb-14">
+                <span class="text-xs font-mono font-bold text-blue-700 uppercase tracking-widest block mb-2">
+                    Transparencia y Trazabilidad Pública
+                </span>
+                <h2 class="text-3xl sm:text-4xl font-black text-slate-900">
+                    Directorio de Convenios y Fondos Registrados
+                </h2>
+                <p class="text-slate-600 text-sm mt-3">
+                    Relación de programas de mecenazgo y convenios B2G actualmente activos en la plataforma.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+                {sponsoredGrantsCatalog.map((grant) => (
+                    <div class="p-6 rounded-3xl bg-slate-50/70 border border-slate-200 hover:border-slate-300 transition-all shadow-xs flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-[10px] font-mono font-bold uppercase px-2.5 py-1 rounded-md bg-white border border-slate-200 text-slate-800">
+                                    <i class="fas fa-location-dot mr-1 text-slate-400"></i>
+                                    {grant.regionBadge}
+                                </span>
+                                <span class="text-[10px] font-mono font-bold px-2.5 py-1 rounded-md bg-emerald-50 text-emerald-800 border border-emerald-300">
+                                    {grant.status === 'ACTIVE_DEMO' ? 'Convenio Activo' : grant.status === 'OPEN_APPLY' ? 'Convocatoria Abierta' : 'Piloto Experimental'}
+                                </span>
+                            </div>
+                            <h4 class="font-black text-slate-900 text-base mb-1">{grant.name}</h4>
+                            <div class="text-xs text-slate-500 mb-3">
+                                Financiado por: <strong class="text-slate-800">{grant.funderName}</strong>
+                            </div>
+                            <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                                {grant.scopeDescription}
+                            </p>
+                        </div>
+                        
+                        <div class="pt-4 border-t border-slate-200/80 flex items-center justify-between text-[11px] font-mono text-slate-600">
+                            <div>
+                                Cobertura: <strong class="text-blue-700">{grant.tierProvided.split(' ')[0]}</strong>
+                            </div>
+                            <div class="text-emerald-700 font-bold">
+                                {grant.currentBeneficiaries.toLocaleString()} alumnos beneficiarios
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+        </div>
+    </section>
+
+    <!-- BLOQUE 4: ZONA PARA MECENAS, EMPRESAS Y ADMINISTRACIONES -->
+    <section id="financiar" class="py-20 bg-slate-900 text-white scroll-mt-20">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="text-center max-w-3xl mx-auto mb-14">
+                <span class="text-xs font-mono font-bold text-amber-400 uppercase tracking-widest block mb-2">
+                    Para Distritos, Fundaciones y Empresas Mecenas
+                </span>
+                <h2 class="text-3xl sm:text-4xl font-black text-white">
+                    Financie un Lote de Becas o un Distrito Completo
+                </h2>
+                <p class="text-slate-300 text-sm mt-3 leading-relaxed">
+                    Personalice su programa de impacto educativo: elija qué materia reforzar (Matemáticas PAU, Laboratorio Oral de Inglés o Apoyo Lingüístico), el ámbito geográfico y la modalidad de activación desatendida.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-12">
+                <div class="p-6 rounded-2xl bg-slate-800/80 border border-slate-700">
+                    <div class="text-amber-400 font-black text-2xl mb-1">100%</div>
+                    <div class="text-xs font-bold text-white mb-1">Destinado a Inferencia Didáctica</div>
+                    <p class="text-[11px] text-slate-400">Cada euro aportado cubre cómputo directo de tutoría socrática para estudiantes sin recursos.</p>
+                </div>
+                <div class="p-6 rounded-2xl bg-slate-800/80 border border-slate-700">
+                    <div class="text-teal-400 font-black text-2xl mb-1">Sin Fricción</div>
+                    <div class="text-xs font-bold text-white mb-1">Activación por Dominio o Voucher</div>
+                    <p class="text-[11px] text-slate-400">Los institutos no tienen que gestionar contraseñas ni registrar tarjetas bancarias.</p>
+                </div>
+                <div class="p-6 rounded-2xl bg-slate-800/80 border border-slate-700">
+                    <div class="text-blue-400 font-black text-2xl mb-1">Auditable</div>
+                    <div class="text-xs font-bold text-white mb-1">Métricas Agregadas RGPD</div>
+                    <p class="text-[11px] text-slate-400">Informes de uso e impacto de aprendizaje sin invadir la privacidad de los menores.</p>
+                </div>
+            </div>
+
+            <!-- Formulario / Contacto Directo de Mecenazgo -->
+            <div class="p-8 rounded-3xl bg-slate-800 border border-slate-700 text-center max-w-2xl mx-auto">
+                <h3 class="text-xl font-bold text-white mb-2">Solicitar Convenio de Esponsorización</h3>
+                <p class="text-xs text-slate-300 mb-6 leading-relaxed">
+                    Nuestro equipo institucional le preparará una propuesta adaptada a su presupuesto y pliegos de contratación pública o filantrópica.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center gap-3">
+                    <a href="mailto:instituciones@colabedu.net?subject=Convenio%20de%20Esponsorizacion%20y%20Becas" class="px-6 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-xs transition-colors">
+                        Contactar con Dirección de Convenios &rarr;
+                    </a>
+                    <a href="/es/institutions" class="px-6 py-3.5 rounded-xl bg-slate-700 hover:bg-slate-600 text-white font-bold text-xs transition-colors">
+                        Ver Planes para Centros
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- CLIENT SCRIPT PARA REACTIVIDAD DE DOMINIO Y VOUCHER -->
+    <script define:vars={{ appUrl }}>
+        const memInputDomain = document.getElementById('sp-input-domain');
+        const memBtnCheck = document.getElementById('sp-btn-check-domain');
+        const memDomainResult = document.getElementById('sp-domain-result');
+
+        const knownDomains = ['@educa.madrid.org', '@madrid.org', '@g.educaand.es', '@xtec.cat', '@educa.jcyl.es', '@lausd.net', '@sfusd.edu', '@colabedu.org'];
+
+        memBtnCheck?.addEventListener('click', () => {
+            const val = (memInputDomain?.value || '').trim().toLowerCase();
+            if (!val || !val.includes('@')) {
+                memDomainResult.className = "p-3 rounded-xl text-xs font-semibold bg-red-50 text-red-700 border border-red-200 block";
+                memDomainResult.textContent = "Introduce un correo escolar válido (ej. @educa.madrid.org).";
+                return;
+            }
+            const domain = '@' + val.split('@')[1];
+            if (knownDomains.includes(domain)) {
+                memDomainResult.className = "p-3 rounded-xl text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-300 block";
+                memDomainResult.innerHTML = `🎉 <strong>¡Convenio Activo!</strong> El dominio <code>${domain}</code> está financiado. Entra con tu cuenta institucional: <a href="${appUrl}" class="underline font-bold text-emerald-950 ml-1">Entrar a la App &rarr;</a>`;
+            } else {
+                memDomainResult.className = "p-3 rounded-xl text-xs font-semibold bg-amber-50 text-amber-900 border border-amber-300 block";
+                memDomainResult.innerHTML = `ℹ️ El dominio <code>${domain}</code> no tiene un convenio global preactivado. Consulta con tu centro o explora los planes individuales.`;
+            }
+        });
+
+        const memInputVoucher = document.getElementById('sp-input-voucher');
+        const memBtnVoucher = document.getElementById('sp-btn-redeem-voucher');
+        const memVoucherResult = document.getElementById('sp-voucher-result');
+
+        memBtnVoucher?.addEventListener('click', () => {
+            const code = (memInputVoucher?.value || '').trim().toUpperCase();
+            if (code.length < 6) {
+                memVoucherResult.className = "p-3 rounded-xl text-xs font-semibold bg-red-50 text-red-700 border border-red-200 block";
+                memVoucherResult.textContent = "Código demasiado corto. Revisa el ticket entregado por tu centro.";
+                return;
+            }
+            memVoucherResult.className = "p-3 rounded-xl text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-300 block";
+            memVoucherResult.innerHTML = `✅ <strong>Voucher verificado.</strong> <a href="${appUrl}?voucher=${encodeURIComponent(code)}" class="underline font-bold text-emerald-950 ml-1">Activar en mi cuenta &rarr;</a>`;
+        });
+    </script>
+</BaseLayout>

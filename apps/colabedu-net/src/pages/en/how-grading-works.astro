@@ -1,0 +1,573 @@
+---
+// src/pages/en/how-grading-works.astro
+// Complete guide to AI-assisted grading workflow (Grading V2):
+// 1. Discovery/Authoring in OER Catalog
+// 2. Multimodal Student Submissions (Multi-page OCR, Audio, Interactive)
+// 3. Forensic Pre-grading, Teacher Sovereign Editing, and 1-Click LMS Sync
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import { appLink } from "@colabedu/ui-core/navigation";
+import "../../styles/global.css";
+
+const catalogUrl = appLink('catalog', '/');
+const appUrl = appLink('app', '/');
+---
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate icon" type="image/png" href="/favicon.png" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Assisted Grading Workflow | ColabEdu.net</title>
+    <meta name="description" content="Discover ColabEdu's end-to-end AI-assisted grading lifecycle: OER exercise discovery or authoring, multimodal student submissions, and sovereign teacher review before LMS sync.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+
+    <style is:global>
+        :root {
+            --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+        body {
+            font-family: var(--font-sans);
+            background-color: #FAF9F6;
+            color: #0F172A;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+        .precision-card {
+            background-color: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            border-radius: 1.25rem;
+            box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.03);
+            transition: all 0.2s ease-in-out;
+        }
+        .precision-card:hover {
+            border-color: #CBD5E1;
+            box-shadow: 0 10px 20px -4px rgba(15, 23, 42, 0.05);
+        }
+        .hero-grading {
+            background: linear-gradient(135deg, rgba(238, 242, 255, 0.7) 0%, rgba(240, 253, 250, 0.6) 50%, rgba(254, 243, 199, 0.4) 100%);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            border-radius: 2rem;
+        }
+        /* Chromatic subtle backgrounds for each phase */
+        .phase-card-1 {
+            background: linear-gradient(180deg, #FFFFFF 0%, rgba(239, 246, 255, 0.45) 100%);
+            border: 1px solid #DBEAFE;
+        }
+        .phase-card-2 {
+            background: linear-gradient(180deg, #FFFFFF 0%, rgba(204, 251, 241, 0.4) 100%);
+            border: 1px solid #99F6E4;
+        }
+        .phase-card-3 {
+            background: linear-gradient(180deg, #FFFFFF 0%, rgba(238, 242, 255, 0.5) 100%);
+            border: 1px solid #E0E7FF;
+        }
+        .ruled-paper {
+            background-color: #FFFDF9;
+            background-image: 
+                linear-gradient(to right, rgba(203, 213, 225, 0.2) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(203, 213, 225, 0.2) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+    </style>
+</head>
+<body class="selection:bg-blue-600 selection:text-white">
+
+    <Header lang="en" />
+
+    <main class="py-12 sm:py-16">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- Hero Title -->
+            <div class="hero-grading p-8 sm:p-14 text-center mb-16">
+                <span class="inline-block text-xs font-mono font-bold tracking-widest uppercase text-blue-900 bg-white/80 px-4 py-1.5 rounded-full border border-blue-300 mb-6">
+                    <i class="fas fa-route mr-1.5 text-blue-600"></i> Formative & Competency-Based Assessment Lifecycle
+                </span>
+                <h1 class="text-4xl sm:text-6xl font-black text-slate-950 tracking-tight leading-tight mb-6">
+                    AI-Assisted Grading.<br/>
+                    From OER catalog to LMS gradebook.
+                </h1>
+                <p class="text-base sm:text-xl text-slate-700 max-w-3xl mx-auto leading-relaxed">
+                    A transparent, rigorous 3-stage lifecycle: exercise discovery or authoring, multi-modal student evidence collection, and sovereign teacher review with 1-click publishing.
+                </p>
+
+                <!-- 3-Step Flow Pills -->
+                <div class="mt-10 grid grid-cols-1 md:grid-cols-3 gap-4 text-left max-w-4xl mx-auto">
+                    <a href="#stage-1" class="p-4 rounded-xl bg-white/90 border border-blue-200 shadow-xs hover:border-blue-400 transition flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-lg bg-blue-600 text-white font-mono font-bold flex items-center justify-center text-sm shrink-0">1</span>
+                        <div>
+                            <div class="text-xs font-bold text-slate-900">Choose or Create</div>
+                            <div class="text-[11px] text-slate-500">OER Catalog or Curator Assistant</div>
+                        </div>
+                    </a>
+                    <a href="#stage-2" class="p-4 rounded-xl bg-white/90 border border-teal-200 shadow-xs hover:border-teal-400 transition flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-lg bg-teal-600 text-white font-mono font-bold flex items-center justify-center text-sm shrink-0">2</span>
+                        <div>
+                            <div class="text-xs font-bold text-slate-900">Student Submission</div>
+                            <div class="text-[11px] text-slate-500">Mobile OCR, audio or app</div>
+                        </div>
+                    </a>
+                    <a href="#stage-3" class="p-4 rounded-xl bg-white/90 border border-indigo-200 shadow-xs hover:border-indigo-400 transition flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-lg bg-indigo-600 text-white font-mono font-bold flex items-center justify-center text-sm shrink-0">3</span>
+                        <div>
+                            <div class="text-xs font-bold text-slate-900">Review & Publish</div>
+                            <div class="text-[11px] text-slate-500">Sovereign editing to LMS</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- STAGE 1: DISCOVER OR CREATE EXERCISE -->
+            <div id="stage-1" class="precision-card phase-card-1 p-8 sm:p-12 mb-16 shadow-sm scroll-mt-24">
+                <div class="flex items-center gap-4 mb-6">
+                    <span class="w-12 h-12 rounded-2xl bg-blue-600 text-white font-mono font-black text-xl flex items-center justify-center shadow-md">
+                        1
+                    </span>
+                    <div>
+                        <span class="text-xs font-mono font-bold text-blue-700 uppercase tracking-widest block">Stage 1 · Pedagogical Selection</span>
+                        <h2 class="text-2xl sm:text-3xl font-black text-slate-900">
+                            Discover in OER Catalog or Author with AI Assistance
+                        </h2>
+                    </div>
+                </div>
+
+                <p class="text-sm text-slate-600 leading-relaxed mb-8">
+                    Every exercise or interactive lesson stems from a declarative curriculum specification (C2) bound to an exam recipe (C1) and official normative framework (C0/L0). Teachers have two swift paths to assign tasks:
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <!-- Path A: Catalog Search -->
+                    <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-2.5 text-blue-700 font-bold text-sm mb-3">
+                                <i class="fas fa-search"></i>
+                                <span>Option A: Explore Canonical OER Catalog</span>
+                            </div>
+                            <h4 class="font-black text-slate-900 text-base mb-2">
+                                +65 Federated Official Repositories
+                            </h4>
+                            <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                                Filter by country, legal framework (Common Core, Texas TEKS, LOMLOE, EBAU/PAU, CDE California, AP College Board), subject, and grade level. Every lesson already includes official evaluation criteria, model reference answers, and analyzed misconceptions.
+                            </p>
+                            <div class="p-3 bg-white rounded-xl border border-slate-200 font-mono text-[11px] text-slate-700">
+                                <div><span class="text-blue-600 font-bold">Filter:</span> AP Spanish Literature · College Board</div>
+                                <div><span class="text-slate-400">Recipe:</span> Textual Analysis & Poetic Structure (C1)</div>
+                            </div>
+                        </div>
+                        <div class="mt-6 pt-4 border-t border-slate-200">
+                            <a href={catalogUrl} target="_blank" rel="noopener noreferrer" class="text-xs font-bold text-blue-600 hover:text-blue-800 flex items-center gap-1.5">
+                                <span>Open OER Lesson Catalog</span>
+                                <i class="fas fa-external-link-alt text-[10px]"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Path B: Curator Authoring -->
+                    <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-2.5 text-indigo-700 font-bold text-sm mb-3">
+                                <i class="fas fa-magic"></i>
+                                <span>Option B: Author or Ingest with Curator</span>
+                            </div>
+                            <h4 class="font-black text-slate-900 text-base mb-2">
+                                From PDF or Exam Text to Spec in Minutes
+                            </h4>
+                            <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                                Have your own departmental exam in PDF or notes? The <strong>Curator</strong> assistant extracts prompts, maps official competencies, and generates the C1/C2 evaluative recipe without hallucination, ready for validation.
+                            </p>
+                            <div class="p-3 bg-white rounded-xl border border-slate-200 font-mono text-[11px] text-slate-700">
+                                <div><span class="text-indigo-600 font-bold">Authoring Mode:</span> Visual Web Assistant / District Batch</div>
+                                <div><span class="text-slate-400">Verification:</span> Dual-Audit (White-box + LLM-as-a-Judge)</div>
+                            </div>
+                        </div>
+                        <div class="mt-6 pt-4 border-t border-slate-200">
+                            <a href="/en/grounding" class="text-xs font-bold text-indigo-600 hover:text-indigo-800 flex items-center gap-1.5">
+                                <span>Explore OPS Spec Governance</span>
+                                <i class="fas fa-arrow-right text-[10px]"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Classroom Directives in Stage 1 -->
+                <div class="bg-amber-50/70 p-5 rounded-xl border border-amber-200">
+                    <div class="flex items-start gap-3">
+                        <i class="fas fa-sliders text-amber-600 text-lg mt-0.5"></i>
+                        <div>
+                            <h5 class="text-xs font-bold text-amber-950 uppercase tracking-wide">Classroom Dynamic Directives (`EvaluationOverrides`)</h5>
+                            <p class="text-xs text-amber-900 mt-1 leading-relaxed">
+                                Before publishing the assignment to students, teachers can tune group-specific parameters in seconds: bonus credit for regional linguistic variants, adjusted spelling tolerance for dyslexic/IEP students, or strict minimum oral exposure times.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STAGE 2: STUDENT SUBMISSIONS -->
+            <div id="stage-2" class="precision-card phase-card-2 p-8 sm:p-12 mb-16 shadow-sm scroll-mt-24">
+                <div class="flex items-center gap-4 mb-6">
+                    <span class="w-12 h-12 rounded-2xl bg-teal-600 text-white font-mono font-black text-xl flex items-center justify-center shadow-md">
+                        2
+                    </span>
+                    <div>
+                        <span class="text-xs font-mono font-bold text-teal-700 uppercase tracking-widest block">Stage 2 · Learning Evidence</span>
+                        <h2 class="text-2xl sm:text-3xl font-black text-slate-900">
+                            How Students Complete and Submit (C3)
+                        </h2>
+                    </div>
+                </div>
+
+                <p class="text-sm text-slate-600 leading-relaxed mb-8">
+                    ColabEdu does not force paperless replacement nor impose rigid desktop interfaces. Student submissions (C3) honor authentic classroom modalities:
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <!-- Modality 1: Handwritten Exam + Mobile OCR -->
+                    <div class="p-6 rounded-2xl ruled-paper border border-slate-300 flex flex-col justify-between">
+                        <div>
+                            <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center text-lg mb-4">
+                                <i class="fas fa-pen-nib"></i>
+                            </div>
+                            <span class="text-[10px] font-mono font-bold text-blue-700 uppercase tracking-wider block mb-1">
+                                Traditional Modality
+                            </span>
+                            <h4 class="font-black text-slate-900 text-base mb-2">Handwritten Exam & Mobile OCR</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                Students write by hand on standard lined exam paper. With a classroom tablet or mobile device, pages are captured in high resolution. The computer vision engine segments pages, mathematical symbols, diagrams, and handwriting.
+                            </p>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-200 text-[11px] font-mono text-slate-500">
+                            Multi-page · Auto-dewarping & deskewing
+                        </div>
+                    </div>
+
+                    <!-- Modality 2: Oral Language & Voice Lab -->
+                    <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col justify-between">
+                        <div>
+                            <div class="w-10 h-10 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center text-lg mb-4">
+                                <i class="fas fa-microphone"></i>
+                            </div>
+                            <span class="text-[10px] font-mono font-bold text-purple-700 uppercase tracking-wider block mb-1">
+                                Languages & Oratory
+                            </span>
+                            <h4 class="font-black text-slate-900 text-base mb-2">Voice Recording & Oral Tests</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                In world language or debate classes, students record their spoken response. The system transcribes with phonetic timestamps, assessing fluency, register, and discursive coherence.
+                            </p>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-200 text-[11px] font-mono text-slate-500">
+                            Uncompressed audio · Phonetic alignment
+                        </div>
+                    </div>
+
+                    <!-- Modality 3: Interactive Lesson in App/LMS -->
+                    <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col justify-between">
+                        <div>
+                            <div class="w-10 h-10 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center text-lg mb-4">
+                                <i class="fas fa-laptop-code"></i>
+                            </div>
+                            <span class="text-[10px] font-mono font-bold text-teal-700 uppercase tracking-wider block mb-1">
+                                Digital Practice
+                            </span>
+                            <h4 class="font-black text-slate-900 text-base mb-2">A2UI Interactive Lessons</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                Directly embedded in Canvas/Moodle via LTI 1.3 or in the web/mobile app: reasoned multiple choice, KaTeX formula editor, chronological ordering, and 9-step Socratic scaffolding.
+                            </p>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-200 text-[11px] font-mono text-slate-500">
+                            100% interactive · Zero distractions
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-100 border border-slate-200 text-xs text-slate-600 flex items-center justify-between">
+                    <span><i class="fas fa-shield-alt text-teal-600 mr-2"></i><strong>Confidential Safe Space:</strong> Student drafts and practice attempts never generate punitive grades or permanent marks.</span>
+                    <a href="/en/safe-space" class="text-teal-700 font-bold hover:underline shrink-0 ml-4">Explore Safe Space &rarr;</a>
+                </div>
+            </div>
+
+            <!-- STAGE 3: TEACHER REVIEW, EDITING AND LMS SYNC -->
+            <div id="stage-3" class="precision-card phase-card-3 p-8 sm:p-12 mb-16 shadow-sm scroll-mt-24">
+                <div class="flex items-center gap-4 mb-6">
+                    <span class="w-12 h-12 rounded-2xl bg-indigo-600 text-white font-mono font-black text-xl flex items-center justify-center shadow-md">
+                        3
+                    </span>
+                    <div>
+                        <span class="text-xs font-mono font-bold text-indigo-700 uppercase tracking-widest block">Stage 3 · Supervision & Approval</span>
+                        <h2 class="text-2xl sm:text-3xl font-black text-slate-900">
+                            Pre-Grading, Sovereign Editing, and 1-Click LMS Publishing
+                        </h2>
+                    </div>
+                </div>
+
+                <p class="text-sm text-slate-600 leading-relaxed mb-8">
+                    Artificial intelligence <strong>never finalizes grades autonomously</strong>. The teacher retains 100% pedagogical authority. Here is the workflow inside Canvas SpeedGrader, Moodle Gradebook, or the ColabEdu dashboard:
+                </p>
+
+                <!-- Interactive / Visual Review Panel -->
+                <div class="p-6 rounded-2xl bg-slate-900 text-white mb-8 border border-slate-800">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-4 mb-6">
+                        <div class="flex items-center gap-3">
+                            <span class="w-3 h-3 rounded-full bg-red-500"></span>
+                            <span class="w-3 h-3 rounded-full bg-amber-500"></span>
+                            <span class="w-3 h-3 rounded-full bg-green-500"></span>
+                            <span class="font-mono text-xs text-slate-400 ml-2">Teacher Cockpit · Forensic Pre-Evaluation Review</span>
+                        </div>
+                        <span class="text-xs font-mono px-2.5 py-1 rounded bg-indigo-950 text-indigo-300 border border-indigo-800">
+                            Draft Pending Teacher Signature
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Left side: Student evidence + OCR recognition -->
+                        <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                            <div class="flex items-center justify-between text-xs text-slate-400 font-mono mb-2">
+                                <span>Student Evidence (OCR)</span>
+                                <span class="text-teal-400">Confidence: 99.2%</span>
+                            </div>
+                            <div class="p-3 bg-slate-900/90 rounded-lg font-mono text-xs text-slate-300 leading-relaxed">
+                                "The subject of the sentence is the noun phrase <em>'the northern winds'</em>. The verb is <em>'lashed'</em>, acting as the syntactic head of the predicate..."
+                            </div>
+                            <div class="mt-3 flex items-center gap-2 text-[11px] text-slate-400">
+                                <i class="fas fa-check-circle text-emerald-400"></i>
+                                <span>Text citations recognized and aligned with rubric</span>
+                            </div>
+                        </div>
+
+                        <!-- Right side: Teacher editable score breakdown -->
+                        <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between text-xs text-slate-400 font-mono mb-2">
+                                    <span>Proposed Copilot Draft</span>
+                                    <span class="text-amber-400 font-bold">8.75 / 10</span>
+                                </div>
+                                <div class="space-y-2 text-xs">
+                                    <div class="flex items-center justify-between p-2 rounded bg-slate-900 text-slate-300">
+                                        <span>Syntactic Rigor (C2.1):</span>
+                                        <span class="font-mono text-emerald-400 font-bold">4.0 / 4.0</span>
+                                    </div>
+                                    <div class="flex items-center justify-between p-2 rounded bg-slate-900 text-slate-300">
+                                        <span>Theoretical Justification (C2.2):</span>
+                                        <span class="font-mono text-emerald-400 font-bold">3.0 / 3.0</span>
+                                    </div>
+                                    <div class="flex items-center justify-between p-2 rounded bg-slate-900 text-slate-300">
+                                        <span>Spelling / Mechanics (C1):</span>
+                                        <span class="font-mono text-amber-400 font-bold">-0.25 (1 accent)</span>
+                                    </div>
+                                    <!-- Real-time competency and PISA mapping -->
+                                    <div class="p-2 rounded bg-indigo-950/60 border border-indigo-900/60 text-[11px] text-slate-300 flex items-center justify-between">
+                                        <span class="text-indigo-300 font-mono font-semibold">Competency: CCL2 / CCEC1</span>
+                                        <span class="font-mono text-teal-300 font-bold">PISA Level: 5 (Advanced)</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-4 pt-3 border-t border-slate-800 text-[11px] text-teal-300 flex items-center justify-between">
+                                <span class="flex items-center gap-1.5">
+                                    <i class="fas fa-book-bookmark"></i>
+                                    <span>California CDE / ACTFL Criterion 2.3</span>
+                                </span>
+                                <span class="font-mono text-[10px] text-slate-400">Rubric C0/C1</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Teacher action buttons -->
+                    <div class="mt-6 pt-4 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <div class="text-xs text-slate-400">
+                            <i class="fas fa-pencil mr-1 text-slate-300"></i>
+                            Teachers can modify scores, adjust rubrics, or add warm encouraging voice comments.
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <button class="px-4 py-2 text-xs font-bold text-slate-300 hover:text-white bg-slate-800 rounded-lg">
+                                Edit Feedback
+                            </button>
+                            <button class="px-5 py-2 text-xs font-black text-white bg-emerald-600 hover:bg-emerald-500 rounded-lg shadow-sm flex items-center gap-1.5">
+                                <i class="fas fa-paper-plane"></i>
+                                <span>Approve & Publish to LMS</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3 Guarantees of supervision -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                    <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+                        <div class="font-black text-slate-900 text-sm mb-1">
+                            <i class="fas fa-edit text-blue-600 mr-1.5"></i> Total Teacher Control
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Any proposed score, deduction, or feedback suggestion can be overridden in one keystroke before publication.
+                        </p>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+                        <div class="font-black text-slate-900 text-sm mb-1">
+                            <i class="fas fa-sync text-teal-600 mr-1.5"></i> Immediate Sync
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Via LTI 1.3 AGS or our browser extension, grades and comments sync instantly to Canvas SpeedGrader or Moodle.
+                        </p>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+                        <div class="font-black text-slate-900 text-sm mb-1">
+                            <i class="fas fa-shield-halved text-indigo-600 mr-1.5"></i> Dispute-Proof Auditing
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            If parents or students request review, the report reveals exact student handwriting snippets, curriculum citations, and objective calculations.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- COMPETENCY PROFILES, PERFORMANCE DESCRIPTORS & PISA LEVELS -->
+                <div class="p-6 sm:p-8 rounded-2xl bg-gradient-to-br from-indigo-50/90 via-blue-50/50 to-teal-50/40 border border-indigo-200">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="w-10 h-10 rounded-xl bg-indigo-700 text-white flex items-center justify-center text-lg shadow-sm">
+                            <i class="fas fa-chart-pie"></i>
+                        </span>
+                        <div>
+                            <span class="text-[11px] font-mono font-bold text-indigo-700 uppercase tracking-widest block">Beyond Numerical Grades</span>
+                            <h3 class="text-xl font-black text-slate-900">Multidimensional Competency Assessment & PISA Levels</h3>
+                        </div>
+                    </div>
+
+                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mb-6">
+                        ColabEdu does not merely score points on a traditional quiz. With every submission, the <strong>Grading V2</strong> engine simultaneously projects student performance against <strong>State & National Competency Descriptors (NGSS, CCSS, LOMLOE)</strong> and the <strong>OECD PISA International Scale (Levels 1 to 6)</strong>:
+                    </p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Transversal Competency Profile -->
+                        <div class="p-4 rounded-xl bg-white border border-indigo-100 shadow-xs">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-xs font-bold text-slate-900 flex items-center gap-1.5">
+                                    <i class="fas fa-brain text-indigo-600"></i> Specific & Transversal Competencies
+                                </span>
+                                <span class="text-[10px] font-mono bg-indigo-100 text-indigo-800 px-2 py-0.5 rounded font-bold">CCSS / IB / LOMLOE</span>
+                            </div>
+                            <p class="text-xs text-slate-600 leading-relaxed mb-3">
+                                Every exercise is mapped to formal exit descriptors (e.g., <em>ELA-LITERACY.RH.11-12.1, STEM1, CPSAA4</em>). The system automatically feeds the student mastery radar over weeks without manual data entry.
+                            </p>
+                            <div class="flex flex-wrap gap-1.5 font-mono text-[10px]">
+                                <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-700">Linguistic Communication</span>
+                                <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-700">Multilingual Competence</span>
+                                <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-700">Cultural Awareness</span>
+                            </div>
+                        </div>
+
+                        <!-- PISA / OECD Levels -->
+                        <div class="p-4 rounded-xl bg-white border border-indigo-100 shadow-xs">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-xs font-bold text-slate-900 flex items-center gap-1.5">
+                                    <i class="fas fa-globe-americas text-teal-600"></i> PISA Performance Levels (OECD)
+                                </span>
+                                <span class="text-[10px] font-mono bg-teal-100 text-teal-800 px-2 py-0.5 rounded font-bold">PISA Level 1 - 6</span>
+                            </div>
+                            <p class="text-xs text-slate-600 leading-relaxed mb-3">
+                                Psychometric diagnosis of higher-order reasoning: whether the student applies contextual critical evaluation (Level 5-6), interprets explicit data with scaffolding (Level 3-4), or requires foundational remediation (Level 1-2).
+                            </p>
+                            <div class="flex flex-wrap gap-1.5 font-mono text-[10px]">
+                                <span class="px-2 py-0.5 rounded bg-teal-50 text-teal-800 border border-teal-200">Critical Reading</span>
+                                <span class="px-2 py-0.5 rounded bg-teal-50 text-teal-800 border border-teal-200">Scientific Reasoning</span>
+                                <span class="px-2 py-0.5 rounded bg-teal-50 text-teal-800 border border-teal-200">Creative Problem Solving</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Teacher Diagnostic Telemetry -->
+                    <div class="mt-4 p-3.5 rounded-xl bg-white/80 border border-indigo-100 text-xs text-slate-600 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-bullseye text-indigo-600"></i>
+                            <span><strong>Early Intervention & Shadow Audits:</strong> Detect cohort competency gaps before high-stakes external exams or state standardized tests.</span>
+                        </div>
+                        <div class="flex items-center gap-3 shrink-0">
+                            <a href="/en/cross-competencies" class="text-teal-700 font-bold hover:underline text-[11px] font-mono flex items-center gap-1">
+                                <i class="fas fa-network-wired text-[10px]"></i>
+                                <span>Cross-Competency Engine &rarr;</span>
+                            </a>
+                            <span class="text-slate-300">|</span>
+                            <a href="/en/grounding" class="text-indigo-700 font-bold hover:underline text-[11px] font-mono">
+                                View C0 & L0 Layers &rarr;
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- COMPARISON: MANUAL GRADING VS. GRADING V2 -->
+            <div class="precision-card p-8 sm:p-10 mb-16 bg-white border-slate-300">
+                <div class="text-center max-w-2xl mx-auto mb-8">
+                    <span class="text-xs font-mono font-bold text-slate-500 uppercase tracking-widest block mb-2">
+                        Impact on Educator Quality of Life
+                    </span>
+                    <h3 class="text-2xl sm:text-3xl font-black text-slate-900">
+                        Traditional Manual Grading vs. ColabEdu Workflow
+                    </h3>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs text-slate-700">
+                        <thead class="bg-slate-100 text-slate-900 font-bold uppercase font-mono text-[11px]">
+                            <tr>
+                                <th class="p-3.5 rounded-l-xl">Aspect</th>
+                                <th class="p-3.5">Traditional Manual Grading</th>
+                                <th class="p-3.5 bg-blue-50/80 text-blue-900 rounded-r-xl">With ColabEdu AI-Assisted Grading</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200">
+                            <tr>
+                                <td class="p-3.5 font-bold">Time per 30-exam batch</td>
+                                <td class="p-3.5 text-slate-500">6 to 8 weekend hours</td>
+                                <td class="p-3.5 bg-blue-50/30 text-blue-950 font-bold">45 minutes of qualitative review</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3.5 font-bold">Student feedback quality</td>
+                                <td class="p-3.5 text-slate-500">Red circle and 2 words due to fatigue</td>
+                                <td class="p-3.5 bg-blue-50/30 text-blue-950 font-bold">Granular rubric criteria + constructive personalized advice</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3.5 font-bold">Legal justification of scores</td>
+                                <td class="p-3.5 text-slate-500">Teacher recollection vulnerable to disputes</td>
+                                <td class="p-3.5 bg-blue-50/30 text-blue-950 font-bold">Cryptographic L0 traceability to official gazettes (BOE/CDE)</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3.5 font-bold">Gradebook record entry</td>
+                                <td class="p-3.5 text-slate-500">Manual typing one by one into LMS</td>
+                                <td class="p-3.5 bg-blue-50/30 text-blue-950 font-bold">1-click LTI 1.3 Advantage or Extension sync</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- FINAL CTA -->
+            <div class="p-8 sm:p-12 rounded-2xl bg-slate-900 text-white text-center">
+                <h3 class="text-2xl sm:text-3xl font-black mb-3">Reclaim Your Weekends Without Sacrificing Rigor</h3>
+                <p class="text-slate-300 text-sm max-w-xl mx-auto mb-6">
+                    Join educators who rely on ColabEdu to evaluate with fairness, psychometric precision, and pedagogical warmth.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <a href="/en/extension" class="px-7 py-4 text-base font-extrabold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-all shadow-md flex items-center justify-center gap-2">
+                        <i class="fas fa-puzzle-piece text-lg"></i>
+                        <span>Try the LMS Extension (Free)</span>
+                    </a>
+                    <a href="/en/grounding" class="px-6 py-4 text-sm font-bold text-slate-300 hover:text-white border border-slate-700 rounded-xl transition-colors flex items-center justify-center">
+                        Explore 5-Layer Architecture
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <Footer lang="en" />
+
+</body>
+</html>

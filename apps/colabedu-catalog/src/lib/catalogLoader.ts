@@ -11,10 +11,11 @@ import type {
   RecentAdditionItem,
   ExamSpecItem,
   ExamTaskItem,
+  CriterionItem,
 } from './types';
+import { getAppBaseUrl } from '@colabedu/ui-core/navigation';
 
-
-export const BASE_APP_URL = process.env.PUBLIC_COLABEDU_APP_URL || 'http://app.colabedu.org:8080';
+export const BASE_APP_URL = getAppBaseUrl('app');
 
 export function slugify(text: any): string {
   if (!text) return 'item';
@@ -175,6 +176,8 @@ export function loadCatalog(): CatalogHierarchy {
   const rawCourses: any[] = [];
   const rawLessons: any[] = [];
   const rawExams: any[] = [];
+  const rawTaxonomies: any[] = [];
+  const rawRubrics: any[] = [];
 
   for (const file of yamlFiles) {
     try {
@@ -183,12 +186,16 @@ export function loadCatalog(): CatalogHierarchy {
       if (!doc || typeof doc !== 'object') continue;
 
       const stats = fs.statSync(file);
-      const itemWithMtime = { ...doc, _mtime: stats.mtimeMs };
+      const itemWithMtime = { ...doc, _mtime: stats.mtimeMs, _filePath: file };
 
-      if (doc.kind === 'CourseSpec') {
+      if (doc.kind === 'CourseSpec' || doc.kind === 'CourseBundle') {
         rawCourses.push(itemWithMtime);
       } else if (doc.kind === 'InteractiveLesson') {
         rawLessons.push(itemWithMtime);
+      } else if (doc.kind === 'Taxonomy') {
+        rawTaxonomies.push(itemWithMtime);
+      } else if (doc.kind === 'Rubric' || doc.kind === 'BlockRubric' || doc.kind === 'RubricSpec') {
+        rawRubrics.push(itemWithMtime);
       } else if (
         doc.kind === 'ExerciseSpec' &&
         (doc.metadata?.type === 'external_assessment' ||
@@ -215,7 +222,17 @@ export function loadCatalog(): CatalogHierarchy {
     const spec = l.spec || {};
     const id = meta.id || meta.referenceCode || meta.reference_code || 'unknown-lesson';
     const title = meta.title || meta.name || id;
-    const country = normalizeCountry(meta.country);
+    let country = normalizeCountry(meta.country);
+    if (country === 'global') {
+      const ref = (meta.targetCourseRef || meta.standardRef || id || '').toLowerCase();
+      if (ref.startsWith('es.') || ref.includes('lomloe') || ref.includes('.es') || ref.includes('ebau') || ref.includes('pau')) {
+        country = 'es';
+      } else if (ref.startsWith('us.') || ref.includes('cde') || ref.includes('.us') || ref.includes('ap_') || ref.includes('ap.')) {
+        country = 'us';
+      } else if (ref.startsWith('intl.') || ref.includes('ib') || ref.includes('spanish_b')) {
+        country = 'intl';
+      }
+    }
     const level = normalizeLevel(meta.educationLevel);
     const subject = normalizeSubject(meta.subject);
 
@@ -251,6 +268,16 @@ export function loadCatalog(): CatalogHierarchy {
 
     const unitSlug = slugify(meta.targetUnitRef || 'general');
 
+    const transversalCompetencies: string[] = [
+      ...(Array.isArray(l.transversal_competency_tags) ? l.transversal_competency_tags : []),
+      ...(Array.isArray(meta.transversal_competency_tags) ? meta.transversal_competency_tags : []),
+      ...(Array.isArray(meta.competency_tags) ? meta.competency_tags : []),
+    ];
+    const criteriaRefs: string[] = [
+      ...(Array.isArray(l.pedagogical_metadata?.rubric_refs) ? l.pedagogical_metadata.rubric_refs : []),
+      ...(Array.isArray(meta.rubric_refs) ? meta.rubric_refs : []),
+    ];
+
     const lessonItem: InteractiveLessonItem = {
       id,
       referenceCode: meta.referenceCode || meta.reference_code || id,
@@ -262,6 +289,8 @@ export function loadCatalog(): CatalogHierarchy {
       educationLevel: meta.educationLevel,
       estimatedMinutes: meta.estimatedMinutes || 50,
       tags: meta.tags || [],
+      transversalCompetencies,
+      criteriaRefs,
       learningObjectives: spec.learningObjectives || [],
       slides: (spec.slides || []).map((s: any): SlideItem => ({
         id: s.id,
@@ -543,6 +572,12 @@ export function loadCatalog(): CatalogHierarchy {
     const canonicalPath = `/catalog/${country}/${level}/${subject}/examenes/${computedSlug}`;
     const appPracticeUrl = `${BASE_APP_URL}/lesson?exam=${encodeURIComponent(id)}`;
 
+    const examTransversal: string[] = [
+      ...(Array.isArray(ex.transversal_competency_tags) ? ex.transversal_competency_tags : []),
+      ...(Array.isArray(meta.transversal_competency_tags) ? meta.transversal_competency_tags : []),
+      ...(Array.isArray(meta.competency_tags) ? meta.competency_tags : []),
+    ];
+
     const examItem: ExamSpecItem = {
       id,
       referenceCode: meta.referenceCode || id,
@@ -563,6 +598,7 @@ export function loadCatalog(): CatalogHierarchy {
       contextText: typeof spec.context === 'string' ? spec.context : '',
       tasks,
       rubricRefs: meta.rubric_refs || spec.rubricRefs || [],
+      transversalCompetencies: examTransversal,
       mtime,
       daysAgo,
       isNew,
@@ -642,7 +678,211 @@ export function loadCatalog(): CatalogHierarchy {
     recentAdditionsByCountry[item.country].push(item);
   }
 
-  // 5. Compute Global Pedagogical Rigor Statistics
+  // 5. Process Criteria & Standards Graph
+  const criteriaMap = new Map<string, CriterionItem>();
+
+  const euCompetencies: Record<string, { title: string; description: string }> = {
+    CCL: {
+      title: 'Competencia en Comunicación Lingüística (CCL)',
+      description: 'Comprender, interpretar y valorar críticamente textos orales, escritos y multimodales, expresando ideas con corrección, coherencia y adecuación discursiva.',
+    },
+    CP: {
+      title: 'Competencia Plurilingüe (CP)',
+      description: 'Utilizar lenguas diferentes a la materna de forma eficaz y adecuada para el aprendizaje y la comunicación intercultural.',
+    },
+    STEM: {
+      title: 'Competencia Matemática y en Ciencia, Tecnología e Ingeniería (STEM)',
+      description: 'Comprender y transformar el entorno de modo responsable aplicando métodos deductivos, modelización matemática e indagación científica.',
+    },
+    CD: {
+      title: 'Competencia Digital (CD)',
+      description: 'Uso seguro, crítico y responsable de las tecnologías digitales para el aprendizaje, la investigación y la comunicación colaborativa.',
+    },
+    CPSAA: {
+      title: 'Competencia Personal, Social y de Aprender a Aprender (CPSAA)',
+      description: 'Reflexionar sobre uno mismo, autorregular los procesos de aprendizaje, gestionar el tiempo y cooperar con los demás de forma constructiva.',
+    },
+    CC: {
+      title: 'Competencia Ciudadana (CC)',
+      description: 'Participar activamente en la vida cívica y social fundamentándose en los valores democráticos, los derechos humanos y la cohesión social.',
+    },
+    CE: {
+      title: 'Competencia Emprendedora (CE)',
+      description: 'Desarrollar iniciativa, creatividad y sentido estratégico para transformar ideas en planes y proyectos formativos sostenibles.',
+    },
+    CCEC: {
+      title: 'Competencia en Conciencia y Expresión Culturales (CCEC)',
+      description: 'Reconocer, apreciar y valorar críticamente las manifestaciones artísticas, literarias y culturales como patrimonio común.',
+    },
+    DIGCOMP: {
+      title: 'Marco de Competencia Digital (DigComp / CD)',
+      description: 'Alfabetización informacional, creación de contenidos digitales, ciberseguridad y resolución de problemas tecnológicos.',
+    },
+  };
+
+  const getOrCreateCriterion = (
+    code: string,
+    defaultCountry: string,
+    meta?: { title?: string; description?: string; standard?: string; bloomLevel?: string }
+  ): CriterionItem => {
+    const normCode = code.trim().toUpperCase();
+    const slug = slugify(normCode);
+    const key = `${defaultCountry}:${slug}`;
+    if (!criteriaMap.has(key)) {
+      const canonicalPath = `/catalog/${defaultCountry}/criterios/${slug}`;
+      criteriaMap.set(key, {
+        code: normCode,
+        slug,
+        title: meta?.title || euCompetencies[normCode]?.title || `Criterio ${normCode}`,
+        description: meta?.description || euCompetencies[normCode]?.description || `Criterio oficial evaluable alineado con los estándares del currículo.`,
+        standard: meta?.standard || (defaultCountry === 'es' ? 'LOMLOE RD 243/2022' : 'World Readiness / AP Framework'),
+        country: defaultCountry,
+        bloomLevel: meta?.bloomLevel,
+        canonicalPath,
+        lessons: [],
+        exams: [],
+      });
+    } else if (meta) {
+      const existing = criteriaMap.get(key)!;
+      if (meta.title && existing.title.startsWith('Criterio ')) existing.title = meta.title;
+      if (meta.description && (!existing.description || existing.description.startsWith('Criterio oficial'))) existing.description = meta.description;
+      if (meta.standard && existing.standard === 'LOMLOE RD 243/2022') existing.standard = meta.standard;
+      if (meta.bloomLevel && !existing.bloomLevel) existing.bloomLevel = meta.bloomLevel;
+    }
+    return criteriaMap.get(key)!;
+  };
+
+  // Seed core competencies for main countries
+  for (const cty of ['es', 'us', 'intl']) {
+    for (const [code, info] of Object.entries(euCompetencies)) {
+      getOrCreateCriterion(code, cty, {
+        title: info.title,
+        description: info.description,
+        standard: cty === 'es' ? 'LOMLOE RD 243/2022 / RD 217/2022' : cty === 'us' ? 'ACTFL / World Readiness Framework' : 'IB Diploma / Marco Internacional',
+      });
+    }
+  }
+
+  // Ingest taxonomies
+  for (const t of rawTaxonomies) {
+    const meta = t.metadata || {};
+    const spec = t.spec || {};
+    let tCountry = normalizeCountry(meta.jurisdiction || meta.country);
+    if (t._filePath) {
+      if (t._filePath.includes('/es/')) tCountry = 'es';
+      else if (t._filePath.includes('/us/')) tCountry = 'us';
+      else if (t._filePath.includes('/intl/')) tCountry = 'intl';
+    }
+
+    if (spec.nodes) {
+      for (const n of spec.nodes) {
+        if (n.code) {
+          getOrCreateCriterion(n.code, tCountry, {
+            title: n.title,
+            description: n.description,
+            bloomLevel: n.bloomLevel,
+            standard: spec.framework || meta.name || meta.standard || 'LOMLOE / PAU',
+          });
+        }
+        if (n.children) {
+          for (const ch of n.children) {
+            if (ch.code) {
+              getOrCreateCriterion(ch.code, tCountry, {
+                title: ch.title,
+                description: ch.description,
+                bloomLevel: ch.bloomLevel,
+                standard: spec.framework || meta.name || meta.standard || 'LOMLOE / PAU',
+              });
+            }
+          }
+        }
+      }
+    }
+    if (spec.domains) {
+      for (const d of spec.domains) {
+        if (d.competencies) {
+          for (const c of d.competencies) {
+            if (c.code) {
+              getOrCreateCriterion(c.code, tCountry, {
+                title: c.description || c.code,
+                description: c.description,
+                standard: meta.standard || 'EBAU Madrid / CCAA',
+              });
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // Collect all official codes from taxonomies
+  const officialCodes = new Set<string>([
+    'CCL', 'CP', 'STEM', 'CD', 'CPSAA', 'CC', 'CE', 'CCEC', 'DIGCOMP',
+    'SCIENTIFIC_INQUIRY', 'LABORATORY_ANALYSIS'
+  ]);
+  for (const c of criteriaMap.values()) {
+    officialCodes.add(c.code);
+  }
+
+  // Associate lessons to criteria
+  for (const l of lessons) {
+    const matchedKeys = new Set<string>();
+    const tagsToMatch = [
+      ...(l.transversalCompetencies || []),
+      ...(l.tags || []).filter(t => officialCodes.has(String(t).trim().toUpperCase())),
+    ];
+
+    for (const rawTag of tagsToMatch) {
+      const tagUpper = String(rawTag).trim().toUpperCase();
+      if (!officialCodes.has(tagUpper)) continue;
+      const crit = getOrCreateCriterion(tagUpper, l.country);
+      if (!matchedKeys.has(crit.canonicalPath)) {
+        matchedKeys.add(crit.canonicalPath);
+        crit.lessons.push(l);
+      }
+    }
+  }
+
+  // Associate exams to criteria
+  for (const ex of exams) {
+    const matchedKeys = new Set<string>();
+    const tagsToMatch = [
+      ...(ex.transversalCompetencies || []),
+      ...(ex.tasks?.map((t) => t.theme).filter(Boolean) as string[]).filter(t => officialCodes.has(String(t).trim().toUpperCase())),
+    ];
+
+    for (const rawTag of tagsToMatch) {
+      const tagUpper = String(rawTag).trim().toUpperCase();
+      if (!officialCodes.has(tagUpper)) continue;
+      const crit = getOrCreateCriterion(tagUpper, ex.country);
+      if (!matchedKeys.has(crit.canonicalPath)) {
+        matchedKeys.add(crit.canonicalPath);
+        crit.exams.push(ex);
+      }
+    }
+  }
+
+  // Filter criteria to those with active content (at least 1 lesson or exam)
+  const allCriteria = Array.from(criteriaMap.values()).filter(
+    (c) => c.lessons.length > 0 || c.exams.length > 0
+  );
+
+  const criteriaByCountry: Record<string, CriterionItem[]> = {};
+  const criteriaBySlug: Record<string, CriterionItem> = {};
+  const criteriaByCode: Record<string, CriterionItem> = {};
+
+  for (const c of allCriteria) {
+    if (!criteriaByCountry[c.country]) {
+      criteriaByCountry[c.country] = [];
+    }
+    criteriaByCountry[c.country].push(c);
+    criteriaBySlug[`${c.country}:${c.slug}`] = c;
+    criteriaByCode[`${c.country}:${c.code}`] = c;
+    if (!criteriaBySlug[c.slug]) criteriaBySlug[c.slug] = c;
+    if (!criteriaByCode[c.code]) criteriaByCode[c.code] = c;
+  }
+
+  // 6. Compute Global Pedagogical Rigor Statistics
   let totalQuestions = 0;
   for (const l of lessons) {
     if (l.slides) {
@@ -663,17 +903,22 @@ export function loadCatalog(): CatalogHierarchy {
     totalQuestions: totalQuestions > 0 ? totalQuestions : 1420,
     totalSources: Object.keys(sourcesById).length || 14,
     totalExams: exams.length,
+    totalCriteria: allCriteria.length,
   };
 
   cachedHierarchy = {
     courses,
     lessons,
     exams,
+    criteria: allCriteria,
     coursesByCountry,
     lessonsById,
     examsById,
     examsByCourseRef,
     examsBySubject,
+    criteriaByCountry,
+    criteriaBySlug,
+    criteriaByCode,
     sourcesById,
     recentAdditions: recentItems,
     recentAdditionsByCountry,

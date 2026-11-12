@@ -9,6 +9,9 @@
         "./styles/*": "./src/styles/*",
         "./navigation": "./src/navigation/routes.ts"
     },
+    "scripts": {
+        "test": "node --experimental-strip-types --test test/routes.test.ts"
+    },
     "dependencies": {
         "@astrojs/react": "^4.4.2",
         "@tabler/icons-react": "^3.2.0",

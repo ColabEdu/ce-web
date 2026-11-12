@@ -1,0 +1,361 @@
+---
+// src/pages/es/data-sovereignty-privacy.astro
+// Soberanía de Datos, Cumplimiento Estricto RGPD/FERPA y Tolerancia Cero a la Publicidad
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import { appLink } from "@colabedu/ui-core/navigation";
+import "../../styles/global.css";
+
+const orgUrl = appLink('org', '/');
+---
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate icon" type="image/png" href="/favicon.png" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soberanía de Datos, Privacidad RGPD/FERPA y Tolerancia Cero a la Publicidad | ColabEdu.net</title>
+    <meta name="description" content="Nuestra doctrina de privacidad inmutable: cumplimiento estricto RGPD y FERPA, soberanía territorial de datos en UE y EE.UU., aislamiento de inferencia de IA sin entrenamiento con datos de menores y tolerancia cero a la publicidad.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+
+    <style is:global>
+        :root {
+            --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+        body {
+            font-family: var(--font-sans);
+            background-color: #FAF9F6;
+            color: #0F172A;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+        .precision-card {
+            background-color: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            border-radius: 1.25rem;
+            box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.03);
+            transition: all 0.2s ease-in-out;
+        }
+        .precision-card:hover {
+            border-color: #CBD5E1;
+            box-shadow: 0 10px 20px -4px rgba(15, 23, 42, 0.05);
+        }
+        .hero-privacy {
+            background: linear-gradient(135deg, rgba(238, 242, 255, 0.6) 0%, rgba(240, 253, 250, 0.5) 50%, rgba(224, 231, 255, 0.5) 100%);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 2rem;
+        }
+    </style>
+</head>
+<body class="selection:bg-blue-600 selection:text-white">
+
+    <Header lang="es" />
+
+    <main class="py-12 sm:py-16">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- Hero Title -->
+            <div class="hero-privacy p-8 sm:p-14 text-center mb-16">
+                <span class="inline-block text-xs font-mono font-bold tracking-widest uppercase text-blue-900 bg-white/80 px-4 py-1.5 rounded-full border border-blue-300 mb-6">
+                    <i class="fas fa-shield-halved mr-1.5 text-blue-600"></i> Marco de Confianza y Soberanía Institucional
+                </span>
+                <h1 class="text-4xl sm:text-6xl font-black text-slate-950 tracking-tight leading-tight mb-6">
+                    Privacidad sin concesiones.<br/>
+                    <span class="text-blue-600">El aula no es un producto comercial.</span>
+                </h1>
+                <p class="text-lg sm:text-xl text-slate-700 font-normal leading-relaxed max-w-3xl mx-auto mb-8">
+                    La inteligencia artificial educativa solo es legítima si garantiza el control absoluto de los datos escolares. En ColabEdu no vendemos publicidad, no rastreamos a menores y blindamos la soberanía territorial de los centros bajo el RGPD europeo y la normativa FERPA estadounidense.
+                </p>
+                
+                <div class="flex flex-wrap items-center justify-center gap-4">
+                    <a href="#los-tres-pilares" class="px-6 py-3.5 rounded-xl bg-blue-600 text-white font-bold text-sm shadow-md hover:bg-blue-700 transition flex items-center gap-2">
+                        <i class="fas fa-file-shield text-xs"></i>
+                        <span>Explorar los 3 Compromisos Inmutables</span>
+                    </a>
+                    <a href="mailto:dpo@colabedu.net?subject=Auditoria%20RGPD%20FERPA" class="px-6 py-3.5 rounded-xl bg-white text-slate-800 font-bold text-sm border border-slate-300 hover:bg-slate-50 transition flex items-center gap-2">
+                        <i class="fas fa-envelope text-blue-600"></i>
+                        <span>Contactar Oficial de Privacidad (DPO)</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- LOS 3 PILARES CANÓNICOS -->
+            <div id="los-tres-pilares" class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16 scroll-mt-24">
+                
+                <!-- Pilar 1: Cumplimiento Estricto RGPD / FERPA -->
+                <div class="precision-card p-8 bg-white border-blue-200 flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-2xl bg-blue-100 text-blue-700 flex items-center justify-center text-xl mb-6">
+                            <i class="fas fa-scale-balanced"></i>
+                        </div>
+                        <span class="text-[11px] font-mono font-bold uppercase tracking-wider text-blue-700 block mb-1">Pilar Jurídico</span>
+                        <h3 class="text-xl font-black text-slate-900 mb-3">Cumplimiento RGPD & FERPA</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                            Los datos de estudiantes y docentes reciben el nivel máximo de protección legal:
+                        </p>
+                        <ul class="space-y-2 text-xs text-slate-700 font-mono">
+                            <li class="flex items-start gap-2">
+                                <i class="fas fa-check text-blue-600 mt-0.5"></i>
+                                <span>Pseudonimización criptográfica inmediata (Hashing SHA-256).</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fas fa-check text-blue-600 mt-0.5"></i>
+                                <span>Contratos de Encargado de Tratamiento (DPA) para centros.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fas fa-check text-blue-600 mt-0.5"></i>
+                                <span>Derecho al olvido, revocación y portabilidad en formato JSON/OPS.</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-100 text-[11px] font-mono text-blue-800">
+                        Auditoría permanente de impacto (EIPD / DPIA).
+                    </div>
+                </div>
+
+                <!-- Pilar 2: Soberanía de Datos UE / EE.UU. -->
+                <div class="precision-card p-8 bg-white border-teal-200 flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-2xl bg-teal-100 text-teal-700 flex items-center justify-center text-xl mb-6">
+                            <i class="fas fa-earth-americas"></i>
+                        </div>
+                        <span class="text-[11px] font-mono font-bold uppercase tracking-wider text-teal-700 block mb-1">Aislamiento Territorial</span>
+                        <h3 class="text-xl font-black text-slate-900 mb-3">Soberanía de Datos UE / EE.UU.</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                            Tus datos jamás cruzan fronteras sin autorización expresa:
+                        </p>
+                        <ul class="space-y-2 text-xs text-slate-700 font-mono">
+                            <li class="flex items-start gap-2">
+                                <i class="fas fa-check text-teal-700 mt-0.5"></i>
+                                <span><strong>Centros UE:</strong> Almacenamiento y cómputo 100% en centros de datos de la Unión Europea (Frankfurt, Madrid).</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fas fa-check text-teal-700 mt-0.5"></i>
+                                <span><strong>Centros EE.UU.:</strong> Regiones aisladas en cumplimiento con FERPA y COPPA.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fas fa-check text-teal-700 mt-0.5"></i>
+                                <span>Cero transferencias transatlánticas no autorizadas.</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-100 text-[11px] font-mono text-teal-800">
+                        Infraestructura multi-tenant segregada.
+                    </div>
+                </div>
+
+                <!-- Pilar 3: Tolerancia Cero a la Publicidad -->
+                <div class="precision-card p-8 bg-white border-amber-200 flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center text-xl mb-6">
+                            <i class="fas fa-ban"></i>
+                        </div>
+                        <span class="text-[11px] font-mono font-bold uppercase tracking-wider text-amber-800 block mb-1">Independencia Ética</span>
+                        <h3 class="text-xl font-black text-slate-900 mb-3">Tolerancia Cero a la Publicidad</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                            Nuestra economía se basa en software, no en subastas de atención:
+                        </p>
+                        <ul class="space-y-2 text-xs text-slate-700 font-mono">
+                            <li class="flex items-start gap-2">
+                                <i class="fas fa-check text-amber-800 mt-0.5"></i>
+                                <span><strong>Cero banners, rastreadores o píxeles de retargeting</strong> en todas las apps y lecciones.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fas fa-check text-amber-800 mt-0.5"></i>
+                                <span><strong>No monetizamos perfiles de aprendizaje</strong> de menores ni creamos huellas comerciales.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fas fa-check text-amber-800 mt-0.5"></i>
+                                <span>Modelo transparente sostenido por membresías e instituciones.</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-100 text-[11px] font-mono text-amber-900">
+                        Espacio de aprendizaje 100% desintoxicado.
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- CLÁUSULA CRÍTICA: AISLAMIENTO DE INFERENCIA IA -->
+            <div class="precision-card p-8 sm:p-12 mb-16 bg-slate-900 text-white shadow-xl">
+                <div class="flex items-center gap-3 text-amber-400 font-bold text-xs font-mono uppercase tracking-widest mb-3">
+                    <i class="fas fa-lock"></i>
+                    <span>Blindaje de Inferencia Agéntica</span>
+                </div>
+                <h2 class="text-2xl sm:text-3xl font-black tracking-tight mb-4">
+                    Garantía Inmutable: Los trabajos del alumno jamás entrenan IA
+                </h2>
+                <p class="text-sm text-slate-300 leading-relaxed mb-6">
+                    A diferencia de herramientas de consumo masivo, ColabEdu opera bajo acuerdos estrictos de Zero-Data Retention (ZDR) y contenedores de inferencia locales dedicados:
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 font-mono text-xs">
+                    <div class="p-5 rounded-2xl bg-slate-800/80 border border-slate-700">
+                        <div class="text-emerald-400 font-bold mb-2 flex items-center gap-2">
+                            <i class="fas fa-circle-check"></i>
+                            <span>Lo que ColabEdu SÍ hace:</span>
+                        </div>
+                        <ul class="space-y-2 text-slate-300">
+                            <li>&bull; Evalúa las entregas estrictamente en memoria volátil efímera.</li>
+                            <li>&bull; Devuelve los informes de rúbrica exclusivamente al cuaderno del docente.</li>
+                            <li>&bull; Purga los payloads de inferencia de forma inmediata tras emitir feedback.</li>
+                            <li>&bull; Facilita la persistencia local bajo control del centro en su BD relacional y vectorial.</li>
+                        </ul>
+                    </div>
+
+                    <div class="p-5 rounded-2xl bg-slate-800/80 border border-slate-700">
+                        <div class="text-red-400 font-bold mb-2 flex items-center gap-2">
+                            <i class="fas fa-circle-xmark"></i>
+                            <span>Lo que ColabEdu JAMÁS hace:</span>
+                        </div>
+                        <ul class="space-y-2 text-slate-300">
+                            <li>&bull; Prohibido terminantemente entrenar o ajustar modelos LLM con datos de alumnos.</li>
+                            <li>&bull; Prohibido ceder, vender o comercializar registros con terceros o intermediarios.</li>
+                            <li>&bull; Prohibido almacenar la voz del alumno en repositorios externos de telemetría.</li>
+                            <li>&bull; Prohibido indexar contenido curricular escolar para publicidad o profiling.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DESPLIEGUE ON-PREMISE, AIR-GAPPED & GOBIERNOS REGIONALES -->
+            <div id="on-premise-gov" class="precision-card p-8 sm:p-12 mb-16 border-indigo-200 bg-indigo-50/20 scroll-mt-24">
+                <div class="flex items-center gap-3 text-indigo-700 font-bold text-xs font-mono uppercase tracking-widest mb-3">
+                    <i class="fas fa-server"></i>
+                    <span>Soberanía Máxima B2G</span>
+                </div>
+                <h2 class="text-2xl sm:text-3xl font-black text-slate-950 tracking-tight mb-4">
+                    Grandes Implantaciones Regionales: On-Premise, Air-Gapped & Código Auditado
+                </h2>
+                <p class="text-sm text-slate-600 leading-relaxed mb-8">
+                    Para Consejerías de Educación, Ministerios y Distritos Escolares Metropolitanos que gestionan cientos de miles de estudiantes, ColabEdu ofrece una modalidad de despliegue soberano completo en su propia infraestructura:
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <div class="p-6 rounded-2xl bg-white border border-slate-200 shadow-xs flex flex-col justify-between">
+                        <div>
+                            <div class="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-lg mb-3">
+                                <i class="fas fa-hard-drive"></i>
+                            </div>
+                            <h4 class="font-black text-slate-900 text-base mb-2">Despliegue On-Premise & Clúster Propio</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                                Instalación como <em>appliance</em> en Kubernetes (MicroK8s, OpenShift, Rancher) o bare-metal en los CPDs de la administración pública. Inferencia agéntica local con pesos soberanos y pgvector sin salida a internet exterior (Air-Gapped).
+                            </p>
+                        </div>
+                        <div class="pt-3 border-t border-slate-100 text-[11px] font-mono text-indigo-700 font-bold">
+                            Cero dependencia de nubes comerciales extranjeras
+                        </div>
+                    </div>
+
+                    <div class="p-6 rounded-2xl bg-white border border-slate-200 shadow-xs flex flex-col justify-between">
+                        <div>
+                            <div class="w-10 h-10 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center font-bold text-lg mb-3">
+                                <i class="fas fa-code-branch"></i>
+                            </div>
+                            <h4 class="font-black text-slate-900 text-base mb-2">Licencia Open Source Restringida para Gobiernos</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                                Acceso al 100% del código fuente (Java Spring Boot, esquemas OPS, algoritmos OCR y Grading V2) para auditorías de ciberseguridad estatales (CCN-CERT / CISA) y desarrollo de conectores autonómicos propios (Séneca, Raíces).
+                            </p>
+                        </div>
+                        <div class="pt-3 border-t border-slate-100 text-[11px] font-mono text-teal-800 font-bold">
+                            Gov Source-Available con cláusula anti-fork comercial
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-5 rounded-2xl bg-slate-900 text-white font-mono text-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div class="flex items-center gap-3">
+                        <i class="fas fa-vault text-amber-400 text-xl shrink-0"></i>
+                        <span><strong>Garantía de Escrow Tecnológico:</strong> La administración pública preserva el derecho de ejecución y mantenimiento indefinido de la plataforma para su sistema escolar, erradicando el secuestro de proveedor (Vendor Lock-In).</span>
+                    </div>
+                    <a href="mailto:gobiernos@colabedu.net?subject=Pliego%20Tecnico%20On%20Premise%20Gov" class="px-4 py-2 rounded-xl bg-amber-400 text-slate-950 font-bold text-xs hover:bg-amber-300 transition shrink-0 whitespace-nowrap">
+                        Solicitar Pliego Técnico &rarr;
+                    </a>
+                </div>
+            </div>
+
+            <!-- CUADRO DE CUMPLIMIENTO REGULATORIO -->
+            <div class="precision-card p-8 sm:p-12 mb-16 bg-white border-slate-200">
+                <div class="text-center max-w-2xl mx-auto mb-10">
+                    <span class="text-xs font-mono font-bold text-slate-400 uppercase tracking-widest block mb-2">
+                        Marco Legal Internacional
+                    </span>
+                    <h2 class="text-3xl font-black text-slate-900 tracking-tight">
+                        Directivas y Estándares Certificados
+                    </h2>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 text-left">
+                        <div class="font-black text-slate-900 text-sm mb-1">RGPD / GDPR</div>
+                        <span class="text-[10px] font-mono text-blue-700 uppercase font-bold block mb-2">Unión Europea</span>
+                        <p class="text-xs text-slate-500 leading-relaxed">
+                            Reglamento (UE) 2016/679. Consentimiento de menores (Art. 8), privacidad desde el diseño y por defecto (Art. 25).
+                        </p>
+                    </div>
+
+                    <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 text-left">
+                        <div class="font-black text-slate-900 text-sm mb-1">FERPA</div>
+                        <span class="text-[10px] font-mono text-teal-700 uppercase font-bold block mb-2">Estados Unidos</span>
+                        <p class="text-xs text-slate-500 leading-relaxed">
+                            Family Educational Rights and Privacy Act. Protección del expediente académico y prohibición de divulgación sin permiso paterno.
+                        </p>
+                    </div>
+
+                    <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 text-left">
+                        <div class="font-black text-slate-900 text-sm mb-1">COPPA</div>
+                        <span class="text-[10px] font-mono text-purple-700 uppercase font-bold block mb-2">Estados Unidos</span>
+                        <p class="text-xs text-slate-500 leading-relaxed">
+                            Children's Online Privacy Protection Act. Aislamiento absoluto de datos en menores de 13 años y verificación docente.
+                        </p>
+                    </div>
+
+                    <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 text-left">
+                        <div class="font-black text-slate-900 text-sm mb-1">LOPDGDD</div>
+                        <span class="text-[10px] font-mono text-amber-700 uppercase font-bold block mb-2">España</span>
+                        <p class="text-xs text-slate-500 leading-relaxed">
+                            Ley Orgánica 3/2018. Garantía de los derechos digitales de los menores y entornos educativos seguros.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CTA FINAL DE CONTACTO JURÍDICO -->
+            <div class="p-8 sm:p-12 rounded-3xl bg-slate-900 text-white flex flex-col md:flex-row items-center justify-between gap-8 shadow-xl">
+                <div class="max-w-xl">
+                    <span class="text-xs font-mono font-bold text-teal-400 uppercase tracking-widest block mb-2">
+                        Seguridad & Cumplimiento Legal
+                    </span>
+                    <h3 class="text-2xl sm:text-3xl font-black tracking-tight mb-3">
+                        ¿Necesita firmar un Acuerdo DPA para su Centro?
+                    </h3>
+                    <p class="text-sm text-slate-300 leading-relaxed">
+                        Proporcionamos a directores y delegados de protección de datos los anexos contractuales oficiales, cláusulas tipo de la UE y certificaciones de seguridad técnica.
+                    </p>
+                </div>
+                <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto shrink-0">
+                    <a href="mailto:dpo@colabedu.net?subject=Solicitud%20Acuerdo%20DPA%20Colegio" class="px-6 py-3.5 rounded-xl bg-teal-500 text-slate-950 font-extrabold text-sm text-center shadow-md hover:bg-teal-400 transition">
+                        Solicitar Modelo DPA &rarr;
+                    </a>
+                    <a href="/es/institutions" class="px-6 py-3.5 rounded-xl bg-white/10 text-white font-bold text-sm text-center hover:bg-white/20 transition border border-white/20">
+                        Convenios Escolares
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Unified Footer -->
+    <Footer lang="es" />
+
+</body>
+</html>

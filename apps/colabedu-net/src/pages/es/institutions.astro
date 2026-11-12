@@ -1,0 +1,264 @@
+---
+// src/pages/es/institutions.astro
+// Soluciones Institucionales, Convenios B2G y Membresías Esponsorizadas por Centros y Distritos
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { appLink } from "@colabedu/ui-core/navigation";
+import { sponsoredGrantsCatalog } from '../../data/grants';
+
+const catalogUrl = appLink('catalog', '/');
+const appUrl = appLink('app', '/');
+---
+<BaseLayout lang="es" title="Para Colegios, Redes y Distritos Educativos | ColabEdu.net">
+    
+    <!-- Hero Section -->
+    <section class="pt-36 pb-20 bg-gradient-to-b from-blue-50/50 via-white to-slate-50 border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="max-w-3xl">
+                <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-100 text-blue-800 text-xs font-bold uppercase tracking-wider mb-6">
+                    Soluciones Institucionales K-12, Bachillerato & Distritos
+                </span>
+                <h1 class="text-4xl sm:text-6xl font-black text-slate-950 tracking-tight leading-[1.1] mb-6">
+                    Proteja a su claustro del burnout.<br/>
+                    <span class="text-blue-600">Financie el éxito en sus materias críticas.</span>
+                </h1>
+                <p class="text-lg sm:text-xl text-slate-600 leading-relaxed mb-8">
+                    La plataforma educativa soberana que devuelve 15 horas semanales a cada docente, acompaña socráticamente a los alumnos y permite a centros y distritos financiar membresías completas o por currículos parciales (Scoped) sin fricción de TI.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <a href="#convenios" class="px-8 py-4 text-base font-extrabold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-all shadow-md text-center">
+                        Modelos de Convenio & Esponsorización &rarr;
+                    </a>
+                    <a href="#auditoria" class="px-8 py-4 text-base font-bold text-slate-700 bg-white border border-slate-300 rounded-xl hover:bg-slate-50 transition-all text-center">
+                        Auditoría Piloto Express (1 Día)
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3 Pilares Institucionales -->
+    <section id="pilares" class="py-20 bg-white border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                
+                <!-- Pilar 1 -->
+                <div class="p-8 rounded-3xl border border-slate-200 bg-slate-50/50 flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-2xl bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-xl mb-6">
+                            <i class="fas fa-heart-pulse"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-3">1. Alivio Radical del Claustro</h3>
+                        <p class="text-sm text-slate-600 leading-relaxed mb-3">
+                            Ante la crisis global de escasez y burnout docente (UNESCO estima un déficit de 44 millones de docentes), no podemos perder a los profesores en tareas burocráticas repetitivas.
+                        </p>
+                        <p class="text-xs text-slate-500 leading-relaxed">
+                            La Extensión Chrome se conecta a Canvas SpeedGrader, Moodle y Classroom para pre-evaluar manuscritos y redacciones en 1 solo clic con control humano soberano.
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-200 text-xs font-bold text-emerald-700 flex items-center gap-1.5">
+                        <i class="fas fa-arrow-down"></i> -80% tiempo de corrección mecánica
+                    </div>
+                </div>
+
+                <!-- Pilar 2: Eliminación de la Deriva Pedagógica -->
+                <div class="p-8 rounded-3xl border border-slate-200 bg-slate-50/50 flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-xl mb-6">
+                            <i class="fas fa-scale-balanced"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-3">2. Eliminación de la Deriva Pedagógica</h3>
+                        <p class="text-sm text-slate-600 leading-relaxed mb-3">
+                            Asegure que cada profesor y cada centro del distrito evalúe bajo los mismos criterios de éxito con las Recetas C1/C2 maestras.
+                        </p>
+                        <p class="text-xs text-slate-500 leading-relaxed">
+                            La varianza subjetiva entre evaluadores se desploma, garantizando equidad académica absoluta tanto en aulas rurales como en grandes centros urbanos.
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-200 text-xs font-bold text-indigo-700 flex items-center gap-1.5">
+                        <i class="fas fa-bullseye"></i> -45% varianza evaluativa inter-docente
+                    </div>
+                </div>
+
+                <!-- Pilar 3: Pruebas Diagnósticas Acotadas y Newcomers -->
+                <div class="p-8 rounded-3xl border border-slate-200 bg-slate-50/50 flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-teal-100 text-teal-800 flex items-center justify-center font-bold text-xl mb-6">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-3">3. Diagnóstico PISA & Newcomers</h3>
+                        <p class="text-sm text-slate-600 leading-relaxed mb-3">
+                            Mapee el nivel competencial real de sus cohortes de ESO y Bachillerato sin sobrecargar al claustro con semanas de corrección ni alterar el ritmo lectivo.
+                        </p>
+                        <p class="text-xs text-slate-500 leading-relaxed">
+                            Acompañamiento socrático bilingüe para estudiantes inmigrantes o recién llegados (Newcomers) eliminando la barrera del idioma en ciencias y matemáticas.
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-200 text-xs font-bold text-teal-800 flex items-center gap-1.5">
+                        <i class="fas fa-shield"></i> Diagnóstico sin sesgos + Inclusión
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- MODELOS DE CONVENIO INSTITUCIONAL & ESPONSORIZACIÓN -->
+    <section id="convenios" class="py-20 bg-slate-50 border-b border-slate-200 scroll-mt-24">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-xs font-mono font-bold text-blue-700 uppercase tracking-widest block mb-2">
+                    Contratación Flexible para Administraciones & Centros
+                </span>
+                <h2 class="text-3xl sm:text-4xl font-black text-slate-900">
+                    Modelos de Financiación Escolar & Esponsorización
+                </h2>
+                <p class="text-slate-600 text-sm mt-3 leading-relaxed">
+                    Las escuelas no tienen por qué asumir el coste completo de una suite cerrada. ColabEdu permite modular exactamente qué financia el centro y qué materias se priorizan.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 max-w-6xl mx-auto mb-16">
+                <!-- Modelo A: Convenio Integral de Centro o Distrito -->
+                <div class="p-7 rounded-3xl bg-white border border-slate-300 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center gap-2 text-blue-700 font-bold text-xs uppercase tracking-wider mb-2 font-mono">
+                            <i class="fas fa-building-columns"></i>
+                            <span>B2G Escolar Cloud</span>
+                        </div>
+                        <h3 class="text-xl font-black text-slate-900 mb-2">Licenciamiento Escolar Integral</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed mb-5">
+                            Cobertura total para todas las materias y niveles del centro. Integración centralizada con LTI 1.3 Advantage en Canvas/Moodle, gestión MDM de tablets y facturación electrónica oficial (FACe / pliegos públicos).
+                        </p>
+                        <ul class="space-y-2 text-xs text-slate-700 font-mono mb-6">
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-blue-600"></i> Activación por dominio (@colegio.edu)</li>
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-blue-600"></i> LTI 1.3 a nivel de subcuenta LMS</li>
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-blue-600"></i> Servidores seguros en la UE / EE.UU.</li>
+                        </ul>
+                    </div>
+                    <a href="mailto:instituciones@colabedu.net?subject=Convenio%20Integral%20Centro" class="w-full py-3 text-center text-xs font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 rounded-xl transition-colors">
+                        Solicitar para Centro &rarr;
+                    </a>
+                </div>
+
+                <!-- Modelo B: Membresías Esponsorizadas por Currículo Parcial (Scoped) -->
+                <div class="p-7 rounded-3xl bg-white border-2 border-teal-600 shadow-md relative flex flex-col justify-between">
+                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-teal-600 text-white text-[10px] font-extrabold uppercase tracking-wider px-3 py-0.5 rounded-full shadow-xs">
+                        Máxima Eficiencia
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2 text-teal-700 font-bold text-xs uppercase tracking-wider mb-2 font-mono">
+                            <i class="fas fa-layer-group"></i>
+                            <span>Scoped Grants</span>
+                        </div>
+                        <h3 class="text-xl font-black text-slate-900 mb-2">Esponsorización Curricular Parcial</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed mb-5">
+                            Financie únicamente materias o hitos estratégicos: <strong>Matemáticas II Selectividad (PAU)</strong>, el <strong>Laboratorio Oral de Idiomas</strong> o el refuerzo de <strong>Newcomers</strong>. Presupuesto ajustado al céntimo.
+                        </p>
+                        <ul class="space-y-2 text-xs text-slate-700 font-mono mb-6">
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-teal-700"></i> Acotado por materia o departamento</li>
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-teal-700"></i> Coste escalable por grupo de aula</li>
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-teal-700"></i> Ampliación flexible para familias</li>
+                        </ul>
+                    </div>
+                    <a href="mailto:instituciones@colabedu.net?subject=Convenio%20Curriculo%20Parcial%20Scoped" class="w-full py-3 text-center text-xs font-extrabold text-white bg-teal-700 hover:bg-teal-800 rounded-xl transition-all shadow-xs">
+                        Configurar Lote Scoped &rarr;
+                    </a>
+                </div>
+
+                <!-- Modelo C: Despliegue On-Premise Soberano & Gov Source-Available -->
+                <div class="p-7 rounded-3xl bg-slate-900 text-white shadow-xl flex flex-col justify-between border border-slate-700">
+                    <div>
+                        <div class="flex items-center gap-2 text-amber-400 font-bold text-xs uppercase tracking-wider mb-2 font-mono">
+                            <i class="fas fa-server"></i>
+                            <span>Soberanía Máxima Gov</span>
+                        </div>
+                        <h3 class="text-xl font-black text-white mb-2">On-Premise & Gov Open Source</h3>
+                        <p class="text-xs text-slate-300 leading-relaxed mb-5">
+                            Para Consejerías de Educación, Ministerios y Grandes Distritos. Despliegue en centros de datos públicos propios con inferencia local de IA y acceso auditado al código fuente bajo licencia pública restringida.
+                        </p>
+                        <ul class="space-y-2 text-xs text-slate-300 font-mono mb-6">
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-amber-400"></i> Clúster Kubernetes / OpenShift propio</li>
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-amber-400"></i> Inferencia local LLM 100% aislada (Air-Gapped)</li>
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-amber-400"></i> Código fuente accesible para auditoría (Gov Escrow)</li>
+                        </ul>
+                    </div>
+                    <a href="mailto:gobiernos@colabedu.net?subject=Pliego%20On%20Premise%20Regional" class="w-full py-3 text-center text-xs font-extrabold text-slate-950 bg-amber-400 hover:bg-amber-300 rounded-xl transition-all shadow-md">
+                        Pliegos On-Premise Regionales &rarr;
+                    </a>
+                </div>
+            </div>
+
+            <!-- DIRECTORIO DINÁMICO DE CONVENIOS INSTITUCIONALES (DEMO / PRUEBA SOCIAL) -->
+            <div class="max-w-5xl mx-auto">
+                <div class="text-center mb-8">
+                    <span class="text-xs font-mono font-bold text-slate-500 uppercase tracking-widest block mb-1">
+                        Convenios y Programas de Referencia
+                    </span>
+                    <h3 class="text-2xl font-black text-slate-900">
+                        Entidades y Fondos Registrados en la Red
+                    </h3>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {sponsoredGrantsCatalog.map((grant) => (
+                        <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-[10px] font-mono font-bold uppercase px-2 py-0.5 rounded bg-slate-100 text-slate-700">
+                                        {grant.regionBadge}
+                                    </span>
+                                    <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                        {grant.status === 'ACTIVE_DEMO' ? 'Convenio Activo' : 'Piloto'}
+                                    </span>
+                                </div>
+                                <h4 class="font-black text-slate-900 text-sm mb-1">{grant.name}</h4>
+                                <div class="text-[11px] text-slate-500 mb-3">Financia: <strong class="text-slate-700">{grant.funderName}</strong></div>
+                                <p class="text-xs text-slate-600 leading-relaxed mb-4">{grant.scopeDescription}</p>
+                            </div>
+                            <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] font-mono text-slate-500">
+                                <span>Tier: <strong class="text-blue-700">{grant.tierProvided.split(' ')[0]}</strong></span>
+                                <span>{grant.currentBeneficiaries.toLocaleString()} plazas cubiertas</span>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- La Puerta de Entrada: Auditoría de 1 Día -->
+    <section id="auditoria" class="py-20 bg-slate-900 text-white">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <span class="text-xs font-mono font-bold uppercase tracking-widest text-amber-400 bg-amber-400/10 px-3.5 py-1.5 rounded-full border border-amber-400/20 mb-6 inline-block">
+                Servicio Express de Entrada
+            </span>
+            <h2 class="text-3xl sm:text-5xl font-black mb-6">
+                Auditoría de Salud Evaluativa en 1 Día
+            </h2>
+            <p class="text-base sm:text-lg text-slate-300 max-w-2xl mx-auto mb-10 leading-relaxed">
+                Analizamos en 24 horas una muestra anónima de 50 entregas de su centro: medimos la discrepancia de notas entre departamentos, detectamos el uso de IA por los alumnos y auditamos la cobertura competencial oficial.
+            </p>
+
+            <div class="bg-slate-800/80 p-8 rounded-2xl border border-slate-700 max-w-xl mx-auto text-left mb-8 space-y-4">
+                <div class="flex items-center gap-3 text-sm">
+                    <span class="text-amber-400 font-bold">1.</span>
+                    <span>Envío de 50 muestras anónimas en PDF (ensayos o problemas).</span>
+                </div>
+                <div class="flex items-center gap-3 text-sm">
+                    <span class="text-amber-400 font-bold">2.</span>
+                    <span>Procesamiento en supercómputo forense con Grading V2.</span>
+                </div>
+                <div class="flex items-center gap-3 text-sm">
+                    <span class="text-amber-400 font-bold">3.</span>
+                    <span>Entrega del Dictamen Directivo con mapa de brechas en 24 horas.</span>
+                </div>
+            </div>
+
+            <a href="mailto:instituciones@colabedu.net?subject=Solicitud%20Auditoria%201%20Dia" class="inline-block px-8 py-4 text-base font-extrabold text-slate-950 bg-amber-400 hover:bg-amber-300 rounded-xl transition-all shadow-lg">
+                Agendar Auditoría Piloto para mi Centro &rarr;
+            </a>
+        </div>
+    </section>
+
+</BaseLayout>

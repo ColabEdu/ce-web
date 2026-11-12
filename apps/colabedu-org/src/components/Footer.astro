@@ -1,15 +1,27 @@
 ---
 import Default from '@astrojs/starlight/components/Footer.astro';
 import type { Props } from '@astrojs/starlight/props';
+import GlobalModalHost from '@colabedu/ui-core/components/GlobalModalHost.astro';
+
+const lang = Astro.props.locale || 'es';
+const isEn = lang === 'en';
 ---
 
 <Default {...Astro.props} />
 
 <div class="colabedu-custom-footer">
   <div class="footer-links">
-    <a href="/catalog/terms">Términos de Servicio (Beta)</a>
+    <button type="button" data-open-catalog-modal class="modal-link-btn">
+      {isEn ? 'OER Catalog (Modal)' : 'Catálogo OER (Modal)'}
+    </button>
     <span class="separator">·</span>
-    <a href="/catalog">Catálogo Curricular</a>
+    <button type="button" data-open-support-modal data-support-tab="chat" data-support-lang={currentLang} class="modal-link-btn">
+      {isEn ? 'Support & Help' : 'Soporte y Ayuda'}
+    </button>
+    <span class="separator">·</span>
+    <a href="/catalog/terms">{isEn ? 'Terms of Service' : 'Términos de Servicio (Beta)'}</a>
+    <span class="separator">·</span>
+    <a href="/catalog">{isEn ? 'Curricular Catalog' : 'Catálogo Curricular'}</a>
     <span class="separator">·</span>
     <a href="https://github.com/colabedu" target="_blank" rel="noopener">GitHub</a>
   </div>
@@ -20,6 +32,8 @@ import type { Props } from '@astrojs/starlight/props';
     Cupertino | Madrid | Ciudad de México
   </div>
 </div>
+
+<GlobalModalHost lang={lang} />
 
 <style>
   .colabedu-custom-footer {
@@ -42,13 +56,21 @@ import type { Props } from '@astrojs/starlight/props';
     margin-bottom: 0.5rem;
   }
 
-  .footer-links a {
+  .footer-links a,
+  .footer-links .modal-link-btn {
     color: var(--sl-color-gray-3);
+    background: transparent;
+    border: none;
+    padding: 0;
+    font: inherit;
+    font-size: var(--sl-text-xs);
+    cursor: pointer;
     text-decoration: none;
     transition: color 0.15s ease;
   }
 
-  .footer-links a:hover {
+  .footer-links a:hover,
+  .footer-links .modal-link-btn:hover {
     color: var(--sl-color-accent-high);
   }
 

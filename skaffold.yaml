@@ -71,3 +71,27 @@ profiles:
                 command: ["pnpm", "run", "build"]
             - host:
                 command: ["firebase", "deploy", "--only", "hosting", "-P", "prod"]
+
+  # ==========================================
+  # ALIBABA CLOUD OSS + DCDN (SUBDOMAIN TESTING)
+  # ==========================================
+  - name: alibaba-demo
+    deploy:
+      kubectl:
+        hooks:
+          before:
+            - host:
+                command: ["pnpm", "run", "build"]
+            - host:
+                command: ["../ce-devops/scripts/deploy-oss-static.sh", "web", "apps/colabedu-org/dist"]
+
+  - name: alibaba-prod
+    deploy:
+      kubectl:
+        hooks:
+          before:
+            - host:
+                command: ["pnpm", "run", "build"]
+            - host:
+                command: ["../ce-devops/scripts/deploy-oss-static.sh", "web", "apps/colabedu-org/dist"]
+

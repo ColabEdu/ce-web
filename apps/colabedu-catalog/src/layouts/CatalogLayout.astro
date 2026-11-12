@@ -2,7 +2,7 @@
 import '@/styles/global.css';
 import LanguageSelector from '@/components/catalog/LanguageSelector.astro';
 import GoogleAnalytics from '@/components/analytics/GoogleAnalytics.astro';
-import { appLink } from '@colabedu/ui-core/navigation';
+import { appLink, getAppBaseUrl } from '@colabedu/ui-core/navigation';
 
 interface Props {
   title: string;
@@ -24,6 +24,8 @@ const isEmbed = minimal || Astro.url.searchParams.get('embed') === 'true' || Ast
 
 const orgHomeUrl = appLink('org', '/');
 const appUrl = appLink('app', '/');
+const appBaseUrl = getAppBaseUrl('app');
+const isExternalApp = appBaseUrl.startsWith('http');
 ---
 
 <!doctype html>
@@ -73,6 +75,17 @@ const appUrl = appLink('app', '/');
       })();
     </script>
 
+    <!-- Flutter Wasm Preconnect & Background Prefetching (Sub-second Instant Launch) -->
+    {isExternalApp && (
+      <>
+        <link rel="preconnect" href={appBaseUrl} crossorigin="anonymous" />
+        <link rel="dns-prefetch" href={appBaseUrl} />
+        <link rel="prefetch" href={`${appBaseUrl}/flutter_bootstrap.js`} as="script" crossorigin="anonymous" />
+        <link rel="prefetch" href={`${appBaseUrl}/main.dart.mjs`} as="script" crossorigin="anonymous" />
+        <link rel="prefetch" href={`${appBaseUrl}/main.dart.wasm`} as="fetch" type="application/wasm" crossorigin="anonymous" />
+      </>
+    )}
+
     <!-- Google Analytics 4 (K-12 Privacy Compliant & Cross-Subdomain) -->
     <GoogleAnalytics />
 
@@ -115,6 +128,9 @@ const appUrl = appLink('app', '/');
             </a>
             <a href="/catalog/us" class="px-3.5 py-1.5 rounded-full hover:text-white hover:bg-white/[0.06] transition-all flex items-center gap-1.5">
               <span>🇺🇸</span> <span data-i18n="nav.usa">EE. UU. (AP)</span>
+            </a>
+            <a href="/catalog/mx" class="px-3.5 py-1.5 rounded-full hover:text-white hover:bg-white/[0.06] transition-all flex items-center gap-1.5">
+              <span>🇲🇽</span> <span data-i18n="nav.mexico">México (SEP)</span>
             </a>
             <a href="/catalog/intl" class="px-3.5 py-1.5 rounded-full hover:text-white hover:bg-white/[0.06] transition-all flex items-center gap-1.5">
               <span>🌐</span> <span data-i18n="nav.intl">Internacional (IB)</span>

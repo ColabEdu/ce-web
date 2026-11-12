@@ -74,6 +74,8 @@ export interface InteractiveLessonItem {
       skills?: string[];
     };
   };
+  transversalCompetencies?: string[];
+  criteriaRefs?: string[];
   seo?: SeoMetadata;
   resolvedSources?: OerSourceItem[];
   country: string;
@@ -183,6 +185,7 @@ export interface ExamSpecItem {
   contextText?: string;
   tasks: ExamTaskItem[];
   rubricRefs?: string[];
+  transversalCompetencies?: string[];
   mtime: number;
   daysAgo: number;
   isNew: boolean;
@@ -193,23 +196,41 @@ export interface ExamSpecItem {
   appPracticeUrl: string;
 }
 
+export interface CriterionItem {
+  code: string;
+  slug: string;
+  title: string;
+  description?: string;
+  standard?: string;
+  country: string;
+  bloomLevel?: string;
+  canonicalPath: string;
+  lessons: InteractiveLessonItem[];
+  exams: ExamSpecItem[];
+}
+
 export interface CatalogGlobalStats {
   totalCourses: number;
   totalLessons: number;
   totalQuestions: number;
   totalSources: number;
   totalExams: number;
+  totalCriteria: number;
 }
 
 export interface CatalogHierarchy {
   courses: CourseSpecItem[];
   lessons: InteractiveLessonItem[];
   exams: ExamSpecItem[];
+  criteria: CriterionItem[];
   coursesByCountry: Record<string, CourseSpecItem[]>;
   lessonsById: Record<string, InteractiveLessonItem>;
   examsById: Record<string, ExamSpecItem>;
   examsByCourseRef: Record<string, ExamSpecItem[]>;
   examsBySubject: Record<string, ExamSpecItem[]>;
+  criteriaByCountry: Record<string, CriterionItem[]>;
+  criteriaBySlug: Record<string, CriterionItem>;
+  criteriaByCode: Record<string, CriterionItem>;
   sourcesById: Record<string, OerSourceItem>;
   recentAdditions: RecentAdditionItem[];
   recentAdditionsByCountry: Record<string, RecentAdditionItem[]>;

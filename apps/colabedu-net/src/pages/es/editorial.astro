@@ -1,362 +1,332 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
+// src/pages/es/editorial.astro
+// Soluciones Editoriales: Activación de Fondo Editorial y Modelo de Referencialidad Ciega
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import { appLink } from "@colabedu/ui-core/navigation";
+import "../../styles/global.css";
+
+const appUrl = appLink('app', '/navigator/spec_root/0');
 ---
-<BaseLayout lang="es">
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate icon" type="image/png" href="/favicon.png" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Editoriales: Activación de Fondo Editorial sin Piratería | ColabEdu.net</title>
+    <meta name="description" content="Proteja y revitalice su propiedad intelectual editorial. El modelo de Referencialidad Ciega de ColabEdu convierte manuales y libros de texto en experiencias socráticas interactivas que validan e incentivan la compra del libro original.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
 
+    <style is:global>
+        :root {
+            --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+        body {
+            font-family: var(--font-sans);
+            background-color: #FAF9F6;
+            color: #0F172A;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+        .precision-card {
+            background-color: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            border-radius: 1.25rem;
+            box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.03);
+            transition: all 0.2s ease-in-out;
+        }
+        .precision-card:hover {
+            border-color: #CBD5E1;
+            box-shadow: 0 10px 20px -4px rgba(15, 23, 42, 0.05);
+        }
+        .hero-editorial {
+            background: linear-gradient(135deg, rgba(254, 243, 199, 0.5) 0%, rgba(253, 230, 138, 0.3) 50%, rgba(254, 249, 195, 0.6) 100%);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            border-radius: 2rem;
+        }
+    </style>
+</head>
+<body class="selection:bg-amber-600 selection:text-white">
 
-    <main>
+    <Header lang="es" />
 
-        <!-- SECTION 1: Strategic Hero -->
-        <section class="max-w-7xl mx-auto pt-40 pb-24 px-4 lg:px-8">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-                <div>
-                    <span class="inline-flex items-center px-3 py-1 rounded-full bg-amber-100 text-amber-700 text-[10px] font-black uppercase tracking-[0.2em] mb-6">
-                        <i class="fas fa-bolt mr-2"></i> Activación de Fondo Editorial
-                    </span>
-                    <h1 class="text-6xl lg:text-8xl font-black text-dark tracking-tighter mb-8 leading-[0.9]">
-                        Revitalice su <br/><span class="gradient-text italic">IP Editorial.</span>
-                    </h1>
-                    <p class="text-xl text-slate-600 max-w-xl leading-relaxed mb-10">
-                        Deje de entregar archivos estáticos. Transforme su catálogo en una red de inteligencia pedagógica que guía al alumno y ahorra tiempo al docente mediante el modelo de <strong>Referencialidad Ciega</strong>.
-                    </p>
-                    <div class="flex flex-col sm:flex-row gap-4">
-                        <button class="px-10 py-5 bg-publisher text-white font-bold rounded-full shadow-2xl hover:scale-105 transition-all">Modernizar mi Catálogo</button>
-                        <button class="px-10 py-5 bg-white text-dark border border-slate-200 font-bold rounded-full hover:bg-slate-50 transition-all text-sm uppercase tracking-widest">Ver White Paper</button>
-                    </div>
-                </div>
-                <div class="relative">
-                    <div class="absolute -top-10 -right-10 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl animate-pulse"></div>
-                    <div class="relative bg-white p-4 rounded-[4rem] shadow-2xl border border-slate-100 overflow-hidden group">
-                        <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200&auto=format&fit=crop" alt="Digital Learning" class="rounded-[3.5rem] object-cover h-[550px] w-full group-hover:scale-105 transition-transform duration-700">
-                        <div class="absolute inset-0 bg-gradient-to-t from-dark/80 via-transparent to-transparent"></div>
-                        <div class="absolute bottom-10 left-10 right-10 p-6 bg-white/10 backdrop-blur-md rounded-3xl border border-white/20">
-                            <div class="text-xs font-black text-amber-400 uppercase tracking-widest mb-2">Estado: Transformación en curso</div>
-                            <div class="flex items-center space-x-3">
-                                <div class="flex-1 bg-white/20 h-1.5 rounded-full overflow-hidden">
-                                    <div class="bg-amber-500 w-[92%] h-full"></div>
-                                </div>
-                                <span class="text-white text-xs font-bold">92%</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION 2: Engagement Dashboard -->
-        <section id="analytics" class="py-24 bg-dark text-white relative overflow-hidden">
-            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-publisher to-primary"></div>
-            <div class="max-w-7xl mx-auto px-4 lg:px-8">
-                <div class="flex flex-col lg:flex-row justify-between items-end mb-20 gap-8">
-                    <div class="max-w-2xl">
-                        <h2 class="text-4xl md:text-5xl font-black mb-6">El Retorno del Engagement</h2>
-                        <p class="text-slate-400 leading-relaxed">Los manuales tradicionales pierden el 80% de la retención tras la primera semana de uso. ColabEdu mantiene al estudiante activo mediante un bucle de interacción constante con su IP.</p>
-                    </div>
-                    <div class="flex space-x-12">
-                        <div class="text-center">
-                            <div class="text-4xl font-black text-publisher">+60%</div>
-                            <div class="text-[10px] text-slate-500 uppercase font-bold mt-1 tracking-widest">Uso Diario</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="text-4xl font-black text-secondary">0%</div>
-                            <div class="text-[10px] text-slate-500 uppercase font-bold mt-1 tracking-widest">Lucro Cesante</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="bg-slate-900 p-10 rounded-[3rem] border border-slate-800 shadow-2xl relative">
-                    <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-10 text-center">Retención en el Catálogo: PDFs vs. Tutoría Socrática Activa</h3>
-                    <div class="chart-container h-[400px]">
-                        <canvas id="engagementChart"></canvas>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION 3: Technical Factory (The "How") -->
-        <section id="transformation" class="py-24 bg-white">
-            <div class="max-w-7xl mx-auto px-4 lg:px-8">
-                <div class="text-center mb-20">
-                    <h2 class="text-4xl font-black text-dark tracking-tight mb-4 text-center">La Factoría de Contenidos.</h2>
-                    <p class="text-slate-500 max-w-2xl mx-auto">De material inerte a grafos de conocimiento estructurados mediante tres capas de inteligencia.</p>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
-                    <div class="workflow-step">
-                        <div class="p-10 bg-slate-50 rounded-[2.5rem] border border-slate-100 h-full">
-                            <div class="text-amber-500 text-4xl mb-6"><i class="fas fa-layer-group"></i></div>
-                            <h3 class="text-xl font-bold mb-4">Atomización RAG</h3>
-                            <p class="text-slate-500 text-sm leading-relaxed">Nuestro <strong>Curator Agent</strong> segmenta sus libros en bloques lógicos inmutables: fragmentos de lectura, criterios de rúbrica e instrucciones de evaluación.</p>
-                        </div>
-                    </div>
-                    <div class="workflow-step">
-                        <div class="p-10 bg-slate-50 rounded-[2.5rem] border border-slate-100 h-full">
-                            <div class="text-primary text-4xl mb-6"><i class="fas fa-dna"></i></div>
-                            <h3 class="text-xl font-bold mb-4">Mutación Instruccional</h3>
-                            <p class="text-slate-500 text-sm leading-relaxed">Transformamos sus textos en desafíos interactivos. La IA genera debates, ensayos y simulaciones basados exclusivamente en su IP propietaria.</p>
-                        </div>
-                    </div>
-                    <div class="workflow-step">
-                        <div class="p-10 bg-slate-50 rounded-[2.5rem] border border-slate-100 h-full">
-                            <div class="text-secondary text-4xl mb-6"><i class="fas fa-tags"></i></div>
-                            <h3 class="text-xl font-bold mb-4">Tagging Curricular</h3>
-                            <p class="text-slate-500 text-sm leading-relaxed">Alineación automática con LOMLOE, TEKS y AP. Su contenido se vuelve compatible con los requisitos estatales instantáneamente.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION 4: The Curator Dashboard (Operational Value) -->
-        <section id="curator" class="py-24 bg-slate-100 border-y border-slate-200">
-            <div class="max-w-7xl mx-auto px-4 lg:px-8">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-                    <div class="order-2 lg:order-1">
-                        <div class="bg-white p-4 rounded-[3rem] shadow-2xl border border-slate-200">
-                            <h4 class="text-xs font-black text-slate-400 p-4 uppercase">Consola del Editor Editorial</h4>
-                            <div class="grid grid-cols-1 gap-2">
-                                <div class="bg-slate-50 p-4 rounded-2xl flex items-center justify-between border border-slate-100">
-                                    <div class="flex items-center">
-                                        <div class="w-8 h-8 bg-amber-500 rounded-lg mr-3"></div>
-                                        <span class="text-xs font-bold">Unidad 4: Bioquímica.pdf</span>
-                                    </div>
-                                    <span class="text-[10px] bg-green-100 text-green-700 px-2 py-1 rounded-full font-bold">PROCESADO</span>
-                                </div>
-                                <div class="bg-slate-50 p-4 rounded-2xl flex items-center justify-between border border-slate-100">
-                                    <div class="flex items-center">
-                                        <div class="w-8 h-8 bg-primary rounded-lg mr-3"></div>
-                                        <span class="text-xs font-bold">Historia S.XX - Cap 1.pdf</span>
-                                    </div>
-                                    <span class="text-[10px] bg-blue-100 text-blue-700 px-2 py-1 rounded-full font-bold">VALIDANDO RÚBRICA</span>
-                                </div>
-                            </div>
-                            <div class="mt-4 p-6 bg-dark rounded-[2rem] text-center">
-                                <div class="chart-container h-48">
-                                    <canvas id="ingestionChart"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="order-1 lg:order-2">
-                        <h2 class="text-4xl font-black text-dark tracking-tight mb-6 leading-tight">Escalabilidad Industrial para sus Editores.</h2>
-                        <p class="text-xl text-slate-600 mb-8 leading-relaxed">No sustituimos a sus editores; les damos superpoderes. Una sola persona puede supervisar la digitalización de miles de páginas diarias, validando el tono pedagógico final.</p>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div class="p-6 bg-white rounded-3xl border border-slate-200">
-                                <h5 class="font-bold text-dark mb-1">Human-in-the-loop</h5>
-                                <p class="text-[10px] text-slate-500 uppercase font-bold tracking-widest">Calidad Garantizada</p>
-                            </div>
-                            <div class="p-6 bg-white rounded-3xl border border-slate-200">
-                                <h5 class="font-bold text-dark mb-1">15 Días</h5>
-                                <p class="text-[10px] text-slate-500 uppercase font-bold tracking-widest">Time-to-market total</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION 5: Global Scale (Multilingual) -->
-        <section id="global" class="py-24 bg-white">
-            <div class="max-w-7xl mx-auto px-4 lg:px-8 text-center">
-                <h2 class="text-4xl md:text-5xl font-black text-dark mb-8 tracking-tighter italic">Su catálogo, <span class="gradient-text">en 60 idiomas.</span></h2>
-                <p class="text-xl text-slate-600 max-w-3xl mx-auto mb-20 leading-relaxed">Nuestra arquitectura multilingüe permite que su IP de alta calidad se localice dinámicamente para mercados internacionales, respetando el rigor pedagógico original.</p>
+    <main class="py-12 sm:py-16">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- Hero Title -->
+            <div class="hero-editorial p-8 sm:p-14 text-center mb-16">
+                <span class="inline-block text-xs font-mono font-bold tracking-widest uppercase text-amber-900 bg-white/80 px-4 py-1.5 rounded-full border border-amber-300 mb-6">
+                    <i class="fas fa-book-bookmark mr-1.5 text-amber-600"></i> Soluciones para Editoriales & Autores
+                </span>
+                <h1 class="text-4xl sm:text-6xl font-black text-slate-950 tracking-tight leading-tight mb-6">
+                    Revitalice su fondo editorial.<br/>
+                    <span class="text-amber-700">Sin canibalizar sus libros.</span>
+                </h1>
+                <p class="text-lg sm:text-xl text-slate-700 font-normal leading-relaxed max-w-3xl mx-auto mb-8">
+                    La inteligencia artificial generativa convencional amenaza con piratear el conocimiento estructurado de los libros de texto. En ColabEdu inventamos el modelo de <strong>Referencialidad Ciega</strong>: convertimos su catálogo en un copiloto socrático que interpela al alumno y valida la compra del manual físico o digital oficial.
+                </p>
                 
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                    <div class="text-left space-y-8">
-                        <div>
-                            <h4 class="text-2xl font-bold mb-2">Scaffolding Newcomers</h4>
-                            <p class="text-slate-500 text-sm">Permite que estudiantes inmigrantes interactúen con su contenido en su lengua materna mientras aprenden el idioma local. Inclusión real sin duplicar costes.</p>
-                        </div>
-                        <div class="p-8 bg-indigo-50 rounded-3xl border border-indigo-100 bento-item">
-                            <div class="flex items-center justify-between mb-4">
-                                <span class="font-bold text-indigo-700">Cobertura Multilingüe</span>
-                                <span class="text-xs font-black text-indigo-400">GCP VERTEX AI POWERED</span>
-                            </div>
-                            <div class="flex flex-wrap gap-2">
-                                <span class="px-3 py-1 bg-white rounded-full text-[10px] font-bold border border-indigo-200">ESPAÑOL</span>
-                                <span class="px-3 py-1 bg-white rounded-full text-[10px] font-bold border border-indigo-200">INGLÉS</span>
-                                <span class="px-3 py-1 bg-white rounded-full text-[10px] font-bold border border-indigo-200">FRANCÉS</span>
-                                <span class="px-3 py-1 bg-white rounded-full text-[10px] font-bold border border-indigo-200">CATALÁN</span>
-                                <span class="px-3 py-1 bg-white rounded-full text-[10px] font-bold border border-indigo-200">MANDARÍN</span>
-                                <span class="px-3 py-1 bg-indigo-200 rounded-full text-[10px] font-bold">+55 MÁS</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="bg-white p-10 rounded-[3rem] shadow-xl border border-slate-100">
-                        <div class="chart-container">
-                            <canvas id="languageChart"></canvas>
-                        </div>
-                    </div>
+                <div class="flex flex-wrap items-center justify-center gap-4">
+                    <a href="#referencialidad-ciega" class="px-6 py-3.5 rounded-xl bg-amber-600 text-white font-bold text-sm shadow-md hover:bg-amber-700 transition flex items-center gap-2">
+                        <i class="fas fa-shield-halved text-xs"></i>
+                        <span>Descubrir la Referencialidad Ciega</span>
+                    </a>
+                    <a href="mailto:editoriales@colabedu.net?subject=Alianza%20Editorial%20ColabEdu" class="px-6 py-3.5 rounded-xl bg-white text-slate-800 font-bold text-sm border border-slate-300 hover:bg-slate-50 transition flex items-center gap-2">
+                        <i class="fas fa-handshake text-amber-600"></i>
+                        <span>Hablar con Alianzas Didácticas</span>
+                    </a>
                 </div>
             </div>
-        </section>
 
-        <!-- SECTION 6: IP Protection (Referencialidad Ciega) -->
-        <section id="ip-protection" class="py-24 bg-dark text-white overflow-hidden relative">
-            <div class="absolute bottom-0 right-0 w-96 h-96 bg-primary/20 rounded-full blur-[100px]"></div>
-            <div class="max-w-7xl mx-auto px-4 lg:px-8 relative z-10">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-                    <div>
-                        <h2 class="text-4xl font-black mb-8 leading-tight">Referencialidad Ciega: <br/><span class="text-publisher italic">Blindaje de su IP.</span></h2>
-                        <p class="text-slate-400 text-lg leading-relaxed mb-10">Entendemos que su contenido es su mayor valor. ColabEdu no reproduce el libro; lo utiliza como fuente de verdad. La IA guía al alumno, pero éste debe poseer el material original para resolver los retos, validando su modelo de negocio tradicional.</p>
-                        <div class="space-y-6">
-                            <div class="flex items-start">
-                                <div class="w-8 h-8 rounded-lg bg-publisher/20 flex items-center justify-center text-publisher mr-4 mt-1"><i class="fas fa-check text-xs"></i></div>
-                                <p class="text-sm text-slate-300 italic">"Incentiva y valida la compra del libro original, eliminando el riesgo de piratería digital total."</p>
+            <!-- El Gran Dilema Editorial: PDFs muertos vs Chatbots Piratas -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+                <div class="precision-card p-8 bg-white border-red-200">
+                    <span class="text-xs font-mono font-bold text-red-600 uppercase tracking-wider block mb-2">El Peligro Actual del Sector</span>
+                    <h3 class="text-xl font-black text-slate-900 mb-3">La Pérdida de Valor del PDF y la Extracción Ilícita</h3>
+                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mb-4">
+                        Los campus virtuales y PDFs de libros se comparten libremente o se suben a chatbots masivos. El alumno recibe el resumen masticado sin abrir el libro, desplomando la retención pedagógica y destruyendo la justificación de compra del manual adoptado.
+                    </p>
+                    <p class="text-xs sm:text-sm text-slate-500 leading-relaxed font-mono">
+                        Impacto: Caída en re-adopciones escolares y devaluación de la inversión editorial original.
+                    </p>
+                </div>
+
+                <div class="precision-card p-8 bg-white border-amber-300 shadow-sm">
+                    <span class="text-xs font-mono font-bold text-amber-700 uppercase tracking-wider block mb-2">La Solución ColabEdu</span>
+                    <h3 class="text-xl font-black text-slate-900 mb-3">Capa de Inteligencia Socrática sobre su IP</h3>
+                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mb-4">
+                        ColabEdu procesa sus manuales a través de nuestro agente <strong>Curator</strong>. En lugar de regurgitar el texto, el motor extrae la malla de objetivos, competencias y gráficos, convirtiendo el libro en un diálogo guiado de 9 pasos A2UI.
+                    </p>
+                    <p class="text-xs sm:text-sm text-amber-800 leading-relaxed font-mono">
+                        Resultado: El libro se vuelve imprescindible en el pupitre del estudiante para resolver los retos.
+                    </p>
+                </div>
+            </div>
+
+            <!-- CÓMO FUNCIONA LA REFERENCIALIDAD CIEGA -->
+            <div id="referencialidad-ciega" class="precision-card p-8 sm:p-12 mb-16 border-amber-200 bg-amber-50/20 scroll-mt-24">
+                <div class="text-center max-w-2xl mx-auto mb-10">
+                    <span class="text-xs font-mono font-bold text-amber-700 uppercase tracking-widest block mb-2">
+                        Doctrina de Protección de Propiedad Intelectual
+                    </span>
+                    <h2 class="text-3xl font-black text-slate-950 tracking-tight">
+                        ¿Cómo funciona la "Referencialidad Ciega"?
+                    </h2>
+                    <p class="text-sm text-slate-600 mt-2">
+                        La IA actúa como un facilitador que apunta hacia la obra física, sin volcar jamás el texto íntegro en pantalla.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center mb-8">
+                    <!-- Ejemplo de Interacción -->
+                    <div class="lg:col-span-7 bg-slate-900 text-white p-6 rounded-2xl border border-slate-800 shadow-lg font-mono text-xs">
+                        <div class="flex items-center justify-between pb-3 border-b border-slate-800 text-slate-400 text-[11px] mb-4">
+                            <span><i class="fas fa-shield text-amber-400 mr-1.5"></i>Sesión Socrática Blindada</span>
+                            <span class="text-emerald-400">IP Protegida: Manual Biología 2º Bach</span>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="p-3 bg-slate-800/80 rounded-xl border border-slate-700">
+                                <span class="text-amber-400 font-bold block mb-1">Copiloto ColabEdu:</span>
+                                <p class="text-slate-200 leading-relaxed">
+                                    "Abre tu manual en la <strong>página 142</strong> y observa el esquema de la membrana mitocondrial. ¿Cuál es el aceptor final de electrones en el Complejo IV según la ilustración?"
+                                </p>
                             </div>
-                            <div class="flex items-start">
-                                <div class="w-8 h-8 rounded-lg bg-publisher/20 flex items-center justify-center text-publisher mr-4 mt-1"><i class="fas fa-check text-xs"></i></div>
-                                <p class="text-sm text-slate-300 italic">"Transforma un centro de costes (almacenamiento) en un activo de entrenamiento pedagógico."</p>
+                            <div class="p-3 bg-blue-950/60 rounded-xl border border-blue-800/60">
+                                <span class="text-blue-300 font-bold block mb-1">Respuesta del Alumno:</span>
+                                <p class="text-slate-300">
+                                    "El oxígeno, que al captar los protones forma agua."
+                                </p>
+                            </div>
+                            <div class="p-3 bg-slate-800/80 rounded-xl border border-slate-700">
+                                <span class="text-amber-400 font-bold block mb-1">Copiloto ColabEdu:</span>
+                                <p class="text-slate-200 leading-relaxed">
+                                    "Exacto. Ahora revisa el cuadro destacado de la <strong>página 143</strong> sobre desacopladores térmicos: ¿por qué los recién nacidos generan calor con la grasa parda?"
+                                </p>
                             </div>
                         </div>
+                        <div class="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between text-[11px] text-slate-400">
+                            <span><i class="fas fa-check text-emerald-400 mr-1"></i>Texto original no reproducido en web</span>
+                            <span class="text-amber-400 font-bold">100% Retención en el Libro</span>
+                        </div>
                     </div>
-                    <div class="bg-slate-800 p-8 rounded-[3rem] border border-slate-700 shadow-2xl">
-                        <div class="p-6 bg-slate-900 rounded-2xl border border-slate-800 mb-6">
-                            <div class="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-4">Ejemplo de Interacción Socrática</div>
-                            <p class="text-xs text-slate-300 italic leading-relaxed">
-                                <span class="text-publisher font-bold">IA:</span> "Analiza el gráfico de la página 142 de tu manual. ¿Cómo se relaciona la tasa de natalidad con el crecimiento económico mencionado en el texto fuente?"
+
+                    <!-- 3 Beneficios para la Editorial -->
+                    <div class="lg:col-span-5 space-y-4">
+                        <div class="precision-card p-5 bg-white border-slate-200">
+                            <div class="font-bold text-slate-900 text-sm mb-1 flex items-center gap-2">
+                                <i class="fas fa-cart-shopping text-amber-600"></i>
+                                <span>Incentiva la Compra del Libro</span>
+                            </div>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                El alumno necesita poseer el libro físico o la licencia activa. Sin el manual, no puede responder al andamiaje socrático.
                             </p>
                         </div>
-                        <div class="text-center">
-                            <span class="text-xs font-bold text-slate-500 uppercase">La IP permanece protegida en el entorno físico del alumno.</span>
+
+                        <div class="precision-card p-5 bg-white border-slate-200">
+                            <div class="font-bold text-slate-900 text-sm mb-1 flex items-center gap-2">
+                                <i class="fas fa-chart-line text-blue-600"></i>
+                                <span>+60% Engagement del Alumnado</span>
+                            </div>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                Frente a la lectura pasiva donde el 80% del temario se olvida tras la primera semana, el bucle socrático mantiene activa la interacción.
+                            </p>
+                        </div>
+
+                        <div class="precision-card p-5 bg-white border-slate-200">
+                            <div class="font-bold text-slate-900 text-sm mb-1 flex items-center gap-2">
+                                <i class="fas fa-bolt text-teal-600"></i>
+                                <span>Time-to-Market en Semanas</span>
+                            </div>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                Su equipo editorial supervisa con control humano (Human-in-the-loop). No necesita programar software desde cero.
+                            </p>
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
 
-        <!-- SECTION 7: Integration Ecosystem (LMS) -->
-        <section id="integration" class="py-24 max-w-7xl mx-auto px-4 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl font-black text-dark tracking-tighter mb-4">Omnicanalidad Pedagógica.</h2>
-                <p class="text-slate-500">Su contenido llega a donde están los usuarios, nativamente.</p>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div class="p-8 bg-white rounded-3xl border border-slate-100 shadow-sm text-center bento-item">
-                    <div class="text-2xl font-black mb-2">Canvas</div>
-                    <p class="text-[10px] text-slate-400 uppercase font-bold tracking-widest">LTI 1.3 Advantage</p>
+            <!-- LA FACTORÍA TÉCNICA CURATOR -->
+            <div class="precision-card p-8 sm:p-12 mb-16 bg-white border-slate-200">
+                <div class="text-center max-w-2xl mx-auto mb-10">
+                    <span class="text-xs font-mono font-bold text-slate-400 uppercase tracking-widest block mb-2">
+                        Pipeline de Transformación
+                    </span>
+                    <h2 class="text-3xl font-black text-slate-900 tracking-tight">
+                        La Factoría de Digitalización Curricular
+                    </h2>
+                    <p class="text-sm text-slate-600 mt-2">
+                        De archivos estáticos de imprenta a grafos de conocimiento pedagógico en 3 etapas automatizadas:
+                    </p>
                 </div>
-                <div class="p-8 bg-white rounded-3xl border border-slate-100 shadow-sm text-center bento-item">
-                    <div class="text-2xl font-black mb-2">Google</div>
-                    <p class="text-[10px] text-slate-400 uppercase font-bold tracking-widest">Classroom Add-ons</p>
-                </div>
-                <div class="p-8 bg-white rounded-3xl border border-slate-100 shadow-sm text-center bento-item">
-                    <div class="text-2xl font-black mb-2">Moodle</div>
-                    <p class="text-[10px] text-slate-400 uppercase font-bold tracking-widest">Web Services Integration</p>
-                </div>
-                <div class="p-8 bg-white rounded-3xl border border-slate-100 shadow-sm text-center bento-item">
-                    <div class="text-2xl font-black mb-2">ColabEdu</div>
-                    <p class="text-[10px] text-slate-400 uppercase font-bold tracking-widest">Native Web / Mobile</p>
-                </div>
-            </div>
-        </section>
 
-        <!-- SECTION 8: Case Study "Remaster" -->
-        <section class="py-24 max-w-7xl mx-auto px-4 lg:px-8">
-            <div class="bg-dark rounded-[3.5rem] p-12 lg:p-24 text-white relative overflow-hidden group">
-                <div class="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-publisher/10 to-transparent"></div>
-                <div class="max-w-2xl relative z-10">
-                    <span class="text-xs font-bold text-amber-500 uppercase tracking-[0.3em] mb-6 block">Caso de Éxito: Proyecto "Remaster"</span>
-                    <h2 class="text-4xl md:text-6xl font-black mb-10 leading-tight">Digitalizando 10 años de Selectividad en <span class="text-publisher">15 días.</span></h2>
-                    <p class="text-lg text-slate-400 mb-12 leading-relaxed">Vea cómo un grupo editorial líder transformó su banco de 12,000 preguntas de examen y lecturas literarias en una plataforma de entrenamiento dinámico que hoy usan 50,000 alumnos en España.</p>
-                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-8 mb-12">
-                        <div><div class="text-3xl font-black text-white">+40k</div><div class="text-[10px] text-slate-500 uppercase font-bold tracking-widest">Bloques RAG</div></div>
-                        <div><div class="text-3xl font-black text-white">92%</div><div class="text-[10px] text-slate-500 uppercase font-bold tracking-widest">Precisión IA</div></div>
-                        <div><div class="text-3xl font-black text-white">60+</div><div class="text-[10px] text-slate-500 uppercase font-bold tracking-widest">Idiomas</div></div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col justify-between">
+                        <div>
+                            <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center font-bold text-lg mb-4">
+                                <i class="fas fa-layer-group"></i>
+                            </div>
+                            <span class="text-[11px] font-mono font-bold text-amber-700 uppercase block mb-1">Paso 1</span>
+                            <h4 class="font-black text-slate-900 text-base mb-2">Atomización RAG</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                El agente <strong>Curator</strong> segmenta el libro en bloques lógicos atómicos: fragmentos de lectura, conceptos clave, fórmulas y descriptores de rúbrica.
+                            </p>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-200 text-[11px] font-mono text-slate-500">
+                            Extracción de grafos sin alucinaciones
+                        </div>
                     </div>
-                    <button class="px-10 py-5 bg-white text-dark font-black rounded-full shadow-2xl hover:bg-slate-200 transition-all uppercase text-xs tracking-widest">Leer Informe Técnico</button>
+
+                    <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col justify-between">
+                        <div>
+                            <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-lg mb-4">
+                                <i class="fas fa-wand-magic-sparkles"></i>
+                            </div>
+                            <span class="text-[11px] font-mono font-bold text-blue-700 uppercase block mb-1">Paso 2</span>
+                            <h4 class="font-black text-slate-900 text-base mb-2">Mutación Instruccional A2UI</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                Los textos se transforman en ejercicios interactivos, preguntas razonadas, simulaciones y debates orales que guían hacia el libro de texto.
+                            </p>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-200 text-[11px] font-mono text-slate-500">
+                            Widgets Flutter A2UI nativos
+                        </div>
+                    </div>
+
+                    <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col justify-between">
+                        <div>
+                            <div class="w-10 h-10 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center font-bold text-lg mb-4">
+                                <i class="fas fa-tags"></i>
+                            </div>
+                            <span class="text-[11px] font-mono font-bold text-teal-700 uppercase block mb-1">Paso 3</span>
+                            <h4 class="font-black text-slate-900 text-base mb-2">Alineación Normativa L0</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                Vinculación automática con las competencias y criterios oficiales de cada marco: <strong>Common Core (EE.UU.), Texas TEKS, AP / College Board, LOMLOE (España) o SEP NEM (México)</strong>.
+                            </p>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-200 text-[11px] font-mono text-slate-500">
+                            Certificación jurídica oficial
+                        </div>
+                    </div>
                 </div>
             </div>
-        </section>
 
-        <!-- SECTION 9: Strategic Closing -->
-        <section class="py-32 bg-neutral text-center border-t border-slate-100">
-            <div class="max-w-4xl mx-auto px-4">
-                <h2 class="text-5xl font-black text-dark mb-8 tracking-tighter leading-none">No permita que otros <br/><span class="text-primary italic">programen su contenido.</span></h2>
-                <p class="text-xl text-slate-600 mb-12 max-w-2xl mx-auto">ColabEdu le ofrece la infraestructura para liderar la era de la IA generativa sin ceder su soberanía de datos ni su valor estratégico.</p>
-                <div class="flex flex-col sm:flex-row justify-center gap-6">
-                    <button class="px-12 py-5 bg-dark text-white font-bold rounded-full shadow-2xl hover:scale-105 transition-all text-sm uppercase tracking-widest">Hablar con Alianzas</button>
-                    <button class="px-12 py-5 bg-white text-dark border border-slate-200 font-bold rounded-full shadow-xl hover:bg-slate-50 transition-all text-sm uppercase tracking-widest">Tour Tecnológico</button>
+            <!-- MODELOS DE CO-DISTRIBUCIÓN Y MONETIZACIÓN -->
+            <div class="precision-card section-tint-amber p-8 sm:p-12 mb-16 border-amber-200">
+                <div class="text-center max-w-2xl mx-auto mb-10">
+                    <span class="text-xs font-mono font-bold text-amber-800 uppercase tracking-widest block mb-2">
+                        Alianzas de Negocio
+                    </span>
+                    <h2 class="text-3xl font-black text-slate-950 tracking-tight">
+                        Modelos de Convenio y Co-Distribución
+                    </h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="p-6 rounded-2xl bg-white border border-slate-200">
+                        <span class="text-xs font-mono font-bold text-amber-700 uppercase block mb-1">Modelo 1</span>
+                        <h4 class="font-black text-slate-900 text-base mb-2">Pack Libro + Licencia IA</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                            Comercialice el libro con un código de acceso a la suite socrática de ColabEdu. Incremente el precio de venta al público ofreciendo valor tecnológico diferencial a los colegios.
+                        </p>
+                        <span class="text-[11px] font-mono text-slate-500">Mayor margen por ejemplar adoptado.</span>
+                    </div>
+
+                    <div class="p-6 rounded-2xl bg-white border border-slate-200">
+                        <span class="text-xs font-mono font-bold text-blue-700 uppercase block mb-1">Modelo 2</span>
+                        <h4 class="font-black text-slate-900 text-base mb-2">Integración LMS (LTI 1.3)</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                            Si su editorial ya cuenta con un aula virtual o portal docente, conectamos ColabEdu como herramienta LTI 1.3 Advantage embebida en Canvas, Moodle o D2L Brightspace.
+                        </p>
+                        <span class="text-[11px] font-mono text-slate-500">Cero fricción de despliegue para colegios.</span>
+                    </div>
+
+                    <div class="p-6 rounded-2xl bg-white border border-slate-200">
+                        <span class="text-xs font-mono font-bold text-teal-700 uppercase block mb-1">Modelo 3</span>
+                        <h4 class="font-black text-slate-900 text-base mb-2">Marca Blanca / Co-Branded</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                            Despliegue un tutor socrático con la identidad visual de su sello editorial. Nosotros aportamos el supercómputo, el motor de grading multimodal y la infraestructura soberana.
+                        </p>
+                        <span class="text-[11px] font-mono text-slate-500">Sello propio con motor de IA garantizado.</span>
+                    </div>
                 </div>
             </div>
-        </section>
 
+            <!-- CTA FINAL HACIA REUNIÓN DE ESTRATEGIA EDITORIAL -->
+            <div class="p-8 sm:p-12 rounded-3xl bg-slate-900 text-white flex flex-col md:flex-row items-center justify-between gap-8 shadow-xl">
+                <div class="max-w-xl">
+                    <span class="text-xs font-mono font-bold text-amber-400 uppercase tracking-widest block mb-2">
+                        Alianzas Estratégicas
+                    </span>
+                    <h3 class="text-2xl sm:text-3xl font-black tracking-tight mb-3">
+                        Agende una Prueba de Concepto con sus Manuales
+                    </h3>
+                    <p class="text-sm text-slate-300 leading-relaxed">
+                        Envíenos una unidad de muestra de su catálogo. En 5 días hábiles le presentaremos un demostrador interactivo en vivo con el modelo de Referencialidad Ciega en acción.
+                    </p>
+                </div>
+                <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto shrink-0">
+                    <a href="mailto:editoriales@colabedu.net?subject=Prueba%20de%20Concepto%20Fondo%20Editorial" class="px-6 py-3.5 rounded-xl bg-amber-400 text-slate-950 font-extrabold text-sm text-center shadow-md hover:bg-amber-300 transition">
+                        Solicitar Demostrador Piloto &rarr;
+                    </a>
+                    <a href="/es/catalogs" class="px-6 py-3.5 rounded-xl bg-white/10 text-white font-bold text-sm text-center hover:bg-white/20 transition border border-white/20">
+                        Ver Catálogos OER
+                    </a>
+                </div>
+            </div>
+
+        </div>
     </main>
 
-    
+    <!-- Unified Footer -->
+    <Footer lang="es" />
 
-    <!-- Interactive Scripts -->
-    <script is:inline>
-        window.onload = function() {
-            // Engagement Chart (Linear)
-            const ctx1 = document.getElementById('engagementChart').getContext('2d');
-            new Chart(ctx1, {
-                type: 'line',
-                data: {
-                    labels: ['Semana 1', 'Semana 2', 'Semana 4', 'Semana 8', 'Semana 12'],
-                    datasets: [{
-                        label: 'Libro Estático (PDF)',
-                        data: [100, 45, 20, 10, 5],
-                        borderColor: '#94A3B8',
-                        borderDash: [5, 5],
-                        tension: 0.4
-                    }, {
-                        label: 'Libro IA Socrático (ColabEdu)',
-                        data: [100, 92, 88, 85, 82],
-                        borderColor: '#F59E0B',
-                        backgroundColor: 'rgba(245, 158, 11, 0.1)',
-                        fill: true,
-                        tension: 0.4
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { position: 'bottom' } },
-                    scales: { y: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%' } } }
-                }
-            });
-
-            // Ingestion Chart (Horizontal Bar)
-            const ctx2 = document.getElementById('ingestionChart').getContext('2d');
-            new Chart(ctx2, {
-                type: 'bar',
-                indexAxis: 'y',
-                data: {
-                    labels: ['Digitalización Manual', 'Curator Agent IA'],
-                    datasets: [{
-                        label: 'Días por catálogo (100 títulos)',
-                        data: [180, 15],
-                        backgroundColor: ['#E2E8F0', '#F59E0B'],
-                        borderRadius: 8
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: { x: { beginAtZero: true } }
-                }
-            });
-
-            // Language Chart (Doughnut)
-            const ctx3 = document.getElementById('languageChart').getContext('2d');
-            new Chart(ctx3, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Español', 'Inglés', 'Francés', 'Alemán', 'Otros (60+)'],
-                    datasets: [{
-                        data: [40, 25, 15, 10, 10],
-                        backgroundColor: ['#F59E0B', '#4F46E5', '#10B981', '#F43F5E', '#94A3B8'],
-                        borderWidth: 0,
-                        hoverOffset: 20
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    cutout: '70%',
-                    plugins: { legend: { position: 'bottom' } }
-                }
-            });
-        };
-    </script>
-</BaseLayout>
+</body>
+</html>

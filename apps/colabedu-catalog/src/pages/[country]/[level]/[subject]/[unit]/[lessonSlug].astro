@@ -299,8 +299,9 @@ if (lesson.slides) {
 
     <!-- Teacher Technical Details -->
     <TeacherRubricPanel
+      country={course.country}
       standard={lesson.standardRef || course.standard}
-      competencyTags={lesson.tags}
+      competencyTags={lesson.transversalCompetencies && lesson.transversalCompetencies.length > 0 ? lesson.transversalCompetencies : lesson.tags}
       cognitiveDomains={lesson.pedagogical_metadata?.cognitive_domains}
       scaffoldingStrategy={lesson.pedagogical_metadata?.scaffolding_strategy}
       targetAudience={lesson.pedagogical_metadata?.target_audience}

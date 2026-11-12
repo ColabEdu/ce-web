@@ -1,0 +1,334 @@
+---
+// src/pages/en/lti.astro
+// Institutional 1EdTech LTI 1.3 Advantage Integration for LMS (Canvas, Moodle, Blackboard, Brightspace)
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import { appLink } from "@colabedu/ui-core/navigation";
+import "../../styles/global.css";
+
+const appUrl = appLink('app', '/');
+const supportUrl = appLink('support', '/');
+---
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate icon" type="image/png" href="/favicon.png" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Institutional LTI 1.3 Advantage Integration (Canvas, Moodle, Blackboard) | ColabEdu.net</title>
+    <meta name="description" content="Certified 1EdTech LTI 1.3 Advantage Complete integration for K-12 school districts, charter networks, and colleges. Centralized deployment in Canvas, Moodle, and Blackboard with Deep Linking 2.0 and automated gradebook sync (AGS).">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+
+    <style is:global>
+        :root {
+            --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+        body {
+            font-family: var(--font-sans);
+            background-color: #FAF9F6;
+            color: #0F172A;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+        .precision-card {
+            background-color: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            border-radius: 1.25rem;
+            box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.03);
+            transition: all 0.2s ease-in-out;
+        }
+        .precision-card:hover {
+            border-color: #CBD5E1;
+            box-shadow: 0 10px 20px -4px rgba(15, 23, 42, 0.05);
+        }
+        .hero-lti {
+            background: linear-gradient(135deg, rgba(238, 242, 255, 0.7) 0%, rgba(240, 253, 250, 0.6) 50%, rgba(224, 231, 255, 0.4) 100%);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            border-radius: 2rem;
+        }
+    </style>
+</head>
+<body class="selection:bg-blue-600 selection:text-white">
+
+    <Header lang="en" />
+
+    <main class="py-12 sm:py-16">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- Hero Title -->
+            <div class="hero-lti p-8 sm:p-14 text-center mb-16">
+                <span class="inline-block text-xs font-mono font-bold tracking-widest uppercase text-indigo-900 bg-white/80 px-4 py-1.5 rounded-full border border-indigo-300 mb-6">
+                    <i class="fas fa-network-wired mr-1.5 text-indigo-600"></i> Certified 1EdTech LTI 1.3 Advantage Complete
+                </span>
+                <h1 class="text-4xl sm:text-6xl font-black text-slate-950 tracking-tight leading-tight mb-6">
+                    Institutional Integration.<br/>
+                    One click across your entire school district or campus.
+                </h1>
+                <p class="text-base sm:text-xl text-slate-700 max-w-3xl mx-auto leading-relaxed">
+                    Centralized account-level deployment for Canvas LMS, Moodle, Blackboard Learn, and Brightspace D2L. Zero individual extensions required, featuring OIDC Single Sign-On and bidirectional gradebook synchronization.
+                </p>
+
+                <div class="mt-8 flex flex-col sm:flex-row justify-center gap-4">
+                    <a href="/en/institutions" class="px-7 py-3.5 text-sm font-bold text-white bg-slate-900 hover:bg-slate-800 rounded-xl transition-all shadow-md flex items-center justify-center gap-2">
+                        <i class="fas fa-school text-indigo-400"></i>
+                        <span>Request District Deployment</span>
+                    </a>
+                    <a href="/en/extension" class="px-6 py-3.5 text-sm font-bold text-slate-700 bg-white hover:bg-slate-50 border border-slate-300 rounded-xl transition-colors flex items-center justify-center gap-2">
+                        <i class="fas fa-puzzle-piece text-blue-600"></i>
+                        <span>Are you an individual teacher? Use Zero-IT Extension</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- COMPARISON: EXTENSION VS. LTI 1.3 -->
+            <div class="precision-card p-8 sm:p-10 mb-16 bg-white border-slate-300">
+                <div class="max-w-3xl mx-auto text-center mb-8">
+                    <span class="text-xs font-mono font-bold text-indigo-700 uppercase tracking-widest block mb-2">
+                        Architecture Choices
+                    </span>
+                    <h3 class="text-2xl sm:text-3xl font-black text-slate-900">
+                        When to choose Extension vs. LTI 1.3 Advantage?
+                    </h3>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="p-6 rounded-2xl bg-blue-50/50 border border-blue-200">
+                        <div class="flex items-center gap-3 mb-3">
+                            <span class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center text-lg">
+                                <i class="fas fa-puzzle-piece"></i>
+                            </span>
+                            <div>
+                                <h4 class="font-extrabold text-slate-900 text-base">Copilot Extension (Zero-IT)</h4>
+                                <span class="text-xs font-mono text-blue-700 font-semibold">For Teachers and Departments</span>
+                            </div>
+                        </div>
+                        <ul class="space-y-2 text-xs text-slate-700 mt-4">
+                            <li class="flex items-start gap-2">
+                                <i class="fas fa-check text-blue-600 mt-0.5"></i>
+                                <span><strong>Instant Activation:</strong> Installs in Chrome/Edge in 30 seconds without requesting IT permissions.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fas fa-check text-blue-600 mt-0.5"></i>
+                                <span><strong>Touches no LMS servers:</strong> Operates as a presentation layer inside the educator's browser.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fas fa-check text-blue-600 mt-0.5"></i>
+                                <span>Ideal for agile classroom pilots and early adopter educators.</span>
+                            </li>
+                        </ul>
+                        <div class="mt-6">
+                            <a href="/en/extension" class="text-xs font-bold text-blue-700 hover:text-blue-900 flex items-center gap-1">
+                                View LMS Extension details &rarr;
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="p-6 rounded-2xl bg-indigo-50/50 border border-indigo-200">
+                        <div class="flex items-center gap-3 mb-3">
+                            <span class="w-10 h-10 rounded-xl bg-indigo-700 text-white flex items-center justify-center text-lg">
+                                <i class="fas fa-network-wired"></i>
+                            </span>
+                            <div>
+                                <h4 class="font-extrabold text-slate-900 text-base">LTI 1.3 Advantage Integration</h4>
+                                <span class="text-xs font-mono text-indigo-700 font-semibold">For Districts, Networks & Colleges</span>
+                            </div>
+                        </div>
+                        <ul class="space-y-2 text-xs text-slate-700 mt-4">
+                            <li class="flex items-start gap-2">
+                                <i class="fas fa-check text-indigo-600 mt-0.5"></i>
+                                <span><strong>District-wide rollout:</strong> Configured once by the LMS administrator across accounts and sub-accounts.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fas fa-check text-indigo-600 mt-0.5"></i>
+                                <span><strong>Universal access:</strong> All educators and students access via Single Sign-On without local installs.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fas fa-check text-indigo-600 mt-0.5"></i>
+                                <span>Automated roster synchronization (NRPS) and direct gradebook writeback (AGS).</span>
+                            </li>
+                        </ul>
+                        <div class="mt-6">
+                            <a href="/en/institutions" class="text-xs font-bold text-indigo-700 hover:text-indigo-900 flex items-center gap-1">
+                                Request institutional LTI setup &rarr;
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- THE 3 CORE LTI 1.3 ADVANTAGE SERVICES -->
+            <div class="mb-16">
+                <div class="text-center max-w-2xl mx-auto mb-10">
+                    <span class="text-xs font-mono font-bold text-teal-700 uppercase tracking-widest block mb-2">
+                        Certified Interoperability
+                    </span>
+                    <h2 class="text-3xl font-black text-slate-900">
+                        The 3 Pillars of the 1EdTech Standard
+                    </h2>
+                    <p class="text-slate-600 text-sm mt-3">
+                        ColabEdu delivers the complete LTI 1.3 Advantage suite for an invisible and seamless pedagogical experience inside your LMS:
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Deep Linking 2.0 -->
+                    <div class="precision-card p-6 border-slate-200">
+                        <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center text-xl mb-4">
+                            <i class="fas fa-link"></i>
+                        </div>
+                        <span class="text-[10px] font-mono font-bold text-blue-700 uppercase tracking-wider block mb-1">
+                            LTI Deep Linking 2.0
+                        </span>
+                        <h4 class="font-black text-slate-900 text-lg mb-2">Native Lesson Selection</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            When building an assignment in Canvas or Moodle, educators browse ColabEdu's OER catalog in an embedded modal and select units, simulations, or exams in one click.
+                        </p>
+                    </div>
+
+                    <!-- Assignment and Grade Services (AGS) -->
+                    <div class="precision-card p-6 border-slate-200">
+                        <div class="w-12 h-12 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center text-xl mb-4">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <span class="text-[10px] font-mono font-bold text-teal-700 uppercase tracking-wider block mb-1">
+                            Assignment & Grade Services (AGS)
+                        </span>
+                        <h4 class="font-black text-slate-900 text-lg mb-2">Gradebook Synchronization</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            The moment a teacher commits grading or a student finishes an authentic assessment, detailed rubric scores, criteria evidence, and feedback write back securely to the gradebook.
+                        </p>
+                    </div>
+
+                    <!-- Names and Role Provisioning Services (NRPS) -->
+                    <div class="precision-card p-6 border-slate-200">
+                        <div class="w-12 h-12 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center text-xl mb-4">
+                            <i class="fas fa-users-cog"></i>
+                        </div>
+                        <span class="text-[10px] font-mono font-bold text-indigo-700 uppercase tracking-wider block mb-1">
+                            Names & Role Provisioning (NRPS)
+                        </span>
+                        <h4 class="font-black text-slate-900 text-lg mb-2">Roster & Section Sync</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Handles student schedule changes, new enrollments, and co-teaching sections automatically via opaque pseudonymized tokens, guaranteeing strict GDPR and FERPA compliance.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SUPPORTED LMS ECOSYSTEM -->
+            <div class="precision-card p-8 sm:p-12 mb-16 bg-white border-slate-300">
+                <div class="text-center max-w-2xl mx-auto mb-10">
+                    <span class="text-xs font-mono font-bold text-slate-500 uppercase tracking-widest block mb-2">
+                        Supported Platforms
+                    </span>
+                    <h3 class="text-2xl sm:text-3xl font-black text-slate-900">
+                        Certified for Your Learning Management System
+                    </h3>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                    <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col items-center">
+                        <div class="w-14 h-14 rounded-2xl bg-red-100 text-red-600 flex items-center justify-center text-2xl mb-3 shadow-xs">
+                            <i class="fas fa-circle-nodes"></i>
+                        </div>
+                        <h5 class="font-black text-slate-900 text-sm">Instructure Canvas</h5>
+                        <p class="text-[11px] text-slate-500 mt-1">LTI 1.3 Developer Keys & Dynamic Registration</p>
+                    </div>
+
+                    <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col items-center">
+                        <div class="w-14 h-14 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center text-2xl mb-3 shadow-xs">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <h5 class="font-black text-slate-900 text-sm">Moodle LMS</h5>
+                        <p class="text-[11px] text-slate-500 mt-1">Preconfigured External Tool (3.9+ through 4.x)</p>
+                    </div>
+
+                    <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col items-center">
+                        <div class="w-14 h-14 rounded-2xl bg-blue-100 text-blue-700 flex items-center justify-center text-2xl mb-3 shadow-xs">
+                            <i class="fas fa-chalkboard"></i>
+                        </div>
+                        <h5 class="font-black text-slate-900 text-sm">Blackboard Learn</h5>
+                        <p class="text-[11px] text-slate-500 mt-1">Ultra & Original Course View Support</p>
+                    </div>
+
+                    <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col items-center">
+                        <div class="w-14 h-14 rounded-2xl bg-orange-100 text-orange-600 flex items-center justify-center text-2xl mb-3 shadow-xs">
+                            <i class="fas fa-sun"></i>
+                        </div>
+                        <h5 class="font-black text-slate-900 text-sm">D2L Brightspace</h5>
+                        <p class="text-[11px] text-slate-500 mt-1">Complete LTI Advantage Deployment</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECURITY & PRIVACY PROTOCOLS -->
+            <div class="p-8 sm:p-12 rounded-2xl bg-slate-900 text-white mb-16 shadow-lg">
+                <div class="flex flex-col md:flex-row items-center justify-between gap-8">
+                    <div class="max-w-2xl">
+                        <span class="text-xs font-mono font-bold text-teal-400 uppercase tracking-widest block mb-2">
+                            Institutional Security & Sovereignty
+                        </span>
+                        <h3 class="text-2xl sm:text-3xl font-black mb-4">
+                            Hardened Data Governance for IT Directors
+                        </h3>
+                        <p class="text-sm text-slate-300 leading-relaxed mb-4">
+                            LTI 1.3 is built on OpenID Connect (OIDC) and asymmetric JSON Web Signatures (JWS). No student or educator credentials ever exist outside your institutional perimeter.
+                        </p>
+                        <div class="grid grid-cols-2 gap-4 text-xs font-mono text-slate-400">
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-shield-alt text-teal-400"></i>
+                                <span>Zero PII Storage (Configurable)</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-lock text-teal-400"></i>
+                                <span>OAuth 2.0 Bearer JWT</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-server text-teal-400"></i>
+                                <span>Sovereign EU & US Data Regions</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-ban text-teal-400"></i>
+                                <span>Zero Model Training on Student Data</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="shrink-0 text-center">
+                        <a href="/en/institutions" class="px-7 py-4 text-sm font-extrabold text-slate-950 bg-teal-400 hover:bg-teal-300 rounded-xl transition-all shadow-md inline-block">
+                            Talk with District IT Support
+                        </a>
+                        <p class="text-[11px] text-slate-400 mt-2 font-mono">Response within 24 hours</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FINAL CTA -->
+            <div class="precision-card p-8 text-center bg-white border-slate-300">
+                <h4 class="text-xl font-bold text-slate-900 mb-2">Want to evaluate before district-wide LMS deployment?</h4>
+                <p class="text-xs text-slate-600 max-w-xl mx-auto mb-6">
+                    You can explore our interactive OER lessons directly in the web app or test the Zero-IT browser extension anytime.
+                </p>
+                <div class="flex flex-wrap justify-center gap-4 text-xs font-bold">
+                    <a href={appUrl} target="_blank" rel="noopener noreferrer" class="px-5 py-2.5 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition">
+                        Launch Web App &rarr;
+                    </a>
+                    <a href="/en/extension" class="px-5 py-2.5 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 transition">
+                        View Zero-IT Extension
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <Footer lang="en" />
+
+</body>
+</html>

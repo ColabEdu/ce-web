@@ -1,0 +1,211 @@
+---
+// src/pages/es/extension.astro
+// Extensión Universal para LMS: Canvas SpeedGrader, Moodle Gradebook y Google Classroom
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import { appLink } from "@colabedu/ui-core/navigation";
+import "../../styles/global.css";
+
+const appUrl = appLink('app', '/');
+---
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate icon" type="image/png" href="/favicon.png" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Extensión Copiloto para LMS (Canvas, Moodle, Classroom) | ColabEdu.net</title>
+    <meta name="description" content="Extensión copiloto de ColabEdu para Canvas SpeedGrader, Moodle Gradebook y Google Classroom. Corrección asistida por IA de exámenes manuscritos sin cambiar de plataforma.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+
+    <style is:global>
+        :root {
+            --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+        body {
+            font-family: var(--font-sans);
+            background-color: #FAF9F6;
+            color: #0F172A;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+        .precision-card {
+            background-color: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            border-radius: 1.25rem;
+            box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.03);
+            transition: all 0.2s ease-in-out;
+        }
+        .precision-card:hover {
+            border-color: #CBD5E1;
+            box-shadow: 0 10px 20px -4px rgba(15, 23, 42, 0.05);
+        }
+        .hero-ext {
+            background: linear-gradient(135deg, rgba(238, 242, 255, 0.6) 0%, rgba(240, 253, 250, 0.5) 50%, rgba(254, 243, 199, 0.3) 100%);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            border-radius: 2rem;
+        }
+    </style>
+</head>
+<body class="selection:bg-blue-600 selection:text-white">
+
+    <Header lang="es" />
+
+    <main class="py-12 sm:py-16">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- Hero Title -->
+            <div class="hero-ext p-8 sm:p-14 text-center mb-16">
+                <span class="inline-block text-xs font-mono font-bold tracking-widest uppercase text-blue-900 bg-white/80 px-4 py-1.5 rounded-full border border-blue-300 mb-6">
+                    <i class="fas fa-puzzle-piece mr-1.5 text-blue-600"></i> Zero-IT · Cero Curva de Aprendizaje
+                </span>
+                <h1 class="text-4xl sm:text-6xl font-black text-slate-950 tracking-tight leading-tight mb-6">
+                    No necesitas otra plataforma.<br/>
+                    ColabEdu se inyecta en tu LMS habitual.
+                </h1>
+                <p class="text-lg sm:text-xl text-slate-700 font-normal leading-relaxed max-w-3xl mx-auto">
+                    Los docentes no quieren aprender otro software escolar que añada complejidad. Nuestra extensión oficial para Chrome y Microsoft Edge abre el copiloto evaluativo directamente dentro del panel de calificación de tu centro educativo.
+                </p>
+            </div>
+
+            <!-- Compatibilidad con los 3 Grandes LMS -->
+            <div class="mb-16">
+                <div class="text-center mb-10">
+                    <span class="text-xs font-mono font-bold text-slate-400 uppercase tracking-widest block mb-1">Integración Nativa en el Aula</span>
+                    <h2 class="text-3xl font-black text-slate-900">Adaptado al entorno exacto donde ya trabajas</h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    
+                    <!-- LMS 1: Canvas LMS -->
+                    <div class="precision-card p-8 bg-white border-slate-200 flex flex-col justify-between">
+                        <div>
+                            <div class="w-12 h-12 rounded-xl bg-red-50 text-red-600 flex items-center justify-center font-bold text-xl mb-6 shadow-xs">
+                                <i class="fas fa-circle-notch"></i>
+                            </div>
+                            <span class="text-xs font-mono font-bold text-red-700 uppercase tracking-wider block mb-1">Canvas LMS</span>
+                            <h3 class="text-xl font-bold text-slate-900 mb-3">Integración en SpeedGrader</h3>
+                            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mb-4">
+                                Se ancla en el panel lateral de SpeedGrader. Cuando abres la entrega escaneada de un alumno, el botón de ColabEdu procesa el manuscrito y pre-rellena la matriz de rúbrica oficial de Canvas en 1 solo clic.
+                            </p>
+                        </div>
+                        <div class="pt-4 border-t border-slate-100 text-xs font-bold text-red-700 flex items-center gap-1">
+                            <span>Sincronización SpeedGrader</span>
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                    </div>
+
+                    <!-- LMS 2: Moodle -->
+                    <div class="precision-card p-8 bg-white border-slate-200 flex flex-col justify-between">
+                        <div>
+                            <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold text-xl mb-6 shadow-xs">
+                                <i class="fas fa-graduation-cap"></i>
+                            </div>
+                            <span class="text-xs font-mono font-bold text-amber-700 uppercase tracking-wider block mb-1">Moodle LMS</span>
+                            <h3 class="text-xl font-bold text-slate-900 mb-3">Integración en Gradebook y Tareas</h3>
+                            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mb-4">
+                                Compatible con la vista de calificación avanzada de Moodle y su libro de calificaciones (Gradebook). Detecta rúbricas y guías de evaluación nativas de Moodle, volcando el feedback y la nota sin salir de la pestaña.
+                            </p>
+                        </div>
+                        <div class="pt-4 border-t border-slate-100 text-xs font-bold text-amber-700 flex items-center gap-1">
+                            <span>Sincronización Moodle Gradebook</span>
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                    </div>
+
+                    <!-- LMS 3: Google Classroom -->
+                    <div class="precision-card p-8 bg-white border-slate-200 flex flex-col justify-between">
+                        <div>
+                            <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold text-xl mb-6 shadow-xs">
+                                <i class="fab fa-google"></i>
+                            </div>
+                            <span class="text-xs font-mono font-bold text-emerald-700 uppercase tracking-wider block mb-1">Google Workspace</span>
+                            <h3 class="text-xl font-bold text-slate-900 mb-3">Google Classroom & Drive</h3>
+                            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mb-4">
+                                Se acopla a la vista de revisión de tareas de Google Classroom. Lee archivos PDF e imágenes subidas por los alumnos desde Google Drive, generando borradores de comentarios privados listos para publicar.
+                            </p>
+                        </div>
+                        <div class="pt-4 border-t border-slate-100 text-xs font-bold text-emerald-700 flex items-center gap-1">
+                            <span>Sincronización Classroom</span>
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Los 3 Pasos del Docente con la Extensión -->
+            <div class="precision-card p-8 sm:p-12 bg-white border-blue-200 mb-16">
+                <div class="max-w-3xl mx-auto">
+                    <span class="text-xs font-mono font-bold text-blue-700 uppercase tracking-wider block mb-2">Flujo de Trabajo Real</span>
+                    <h3 class="text-2xl sm:text-3xl font-black text-slate-900 mb-6">
+                        Cómo recuperas tus 15 horas semanales
+                    </h3>
+
+                    <div class="space-y-6">
+                        <div class="flex items-start gap-4">
+                            <div class="w-8 h-8 rounded-full bg-blue-600 text-white font-bold text-sm flex items-center justify-center shrink-0">1</div>
+                            <div>
+                                <h4 class="font-extrabold text-slate-900 text-base">Abre la entrega en tu LMS habitual</h4>
+                                <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mt-0.5">
+                                    Entra en Canvas SpeedGrader, Moodle o Google Classroom como haces siempre. La extensión se activa discretamente en el lateral derecho.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4">
+                            <div class="w-8 h-8 rounded-full bg-blue-600 text-white font-bold text-sm flex items-center justify-center shrink-0">2</div>
+                            <div>
+                                <h4 class="font-extrabold text-slate-900 text-base">Pulsa "Pre-calificar con Copiloto"</h4>
+                                <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mt-0.5">
+                                    En menos de 8 segundos, el motor multimodal lee la caligrafía manuscrita, evalúa contra los criterios oficiales de la prueba y redacta el borrador de rúbrica.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4">
+                            <div class="w-8 h-8 rounded-full bg-blue-600 text-white font-bold text-sm flex items-center justify-center shrink-0">3</div>
+                            <div>
+                                <h4 class="font-extrabold text-slate-900 text-base">Valida, añade tus notas personales y firma</h4>
+                                <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mt-0.5">
+                                    Tú mantienes el control absoluto: puedes modificar cualquier puntuación, agregar un consejo afectivo al alumno y enviar la calificación oficial al libro de notas con 1 clic.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Call to action -->
+            <div class="p-8 sm:p-12 rounded-2xl bg-slate-900 text-white text-center">
+                <h3 class="text-2xl sm:text-3xl font-black mb-3">Instala la extensión en 30 segundos</h3>
+                <p class="text-slate-300 text-sm max-w-xl mx-auto mb-6">
+                    Sin permisos invasivos. Sin requerir instalaciones en el servidor del colegio ni aprobación del departamento de TI.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <a href="https://chromewebstore.google.com/detail/colabedu-assistant/" target="_blank" rel="noopener noreferrer" class="px-7 py-4 text-base font-extrabold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-all shadow-md flex items-center justify-center gap-2">
+                        <i class="fab fa-chrome text-lg"></i>
+                        <span>Instalar para Chrome & Edge (Gratis)</span>
+                    </a>
+                    <a href="/es/lti" class="px-6 py-4 text-sm font-bold text-slate-300 hover:text-white border border-slate-700 rounded-xl transition-colors flex items-center justify-center gap-2">
+                        <i class="fas fa-network-wired text-indigo-400"></i>
+                        <span>¿Buscas despliegue institucional? Ver LTI 1.3</span>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Unified Footer -->
+    <Footer lang="es" />
+
+</body>
+</html>

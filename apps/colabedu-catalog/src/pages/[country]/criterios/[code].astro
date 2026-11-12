@@ -1,0 +1,289 @@
+---
+import CatalogLayout from '@/layouts/CatalogLayout.astro';
+import BreadcrumbJsonLd from '@/components/seo/BreadcrumbJsonLd.astro';
+import InteractiveCtaButton from '@/components/catalog/InteractiveCtaButton.astro';
+import { loadCatalog, truncate } from '@/lib/catalogLoader';
+import type { CriterionItem } from '@/lib/types';
+
+export function getStaticPaths() {
+  const { criteria } = loadCatalog();
+  return criteria.map((criterion) => ({
+    params: {
+      country: criterion.country,
+      code: criterion.slug,
+    },
+    props: { criterion },
+  }));
+}
+
+interface Props {
+  criterion: CriterionItem;
+}
+
+const { criterion } = Astro.props;
+
+const canonicalUrl = `https://colabedu.org${criterion.canonicalPath}`;
+
+const metaTitle = `${criterion.code} — ${criterion.title} | Criterios y Estándares Oficiales — ColabEdu`;
+const metaDescription = truncate(
+  criterion.description ||
+    `Catálogo oficial de recursos educativos alineados con el criterio ${criterion.code} (${criterion.title}). ${criterion.lessons.length} lecciones y ${criterion.exams.length} exámenes interactivos.`
+);
+
+const breadcrumbs = [
+  { label: "Catálogo", href: "/catalog" },
+  { label: criterion.country.toUpperCase(), href: `/catalog/${criterion.country}` },
+  { label: "Criterios Oficiales", href: `/catalog/${criterion.country}/criterios` },
+  { label: criterion.code, href: criterion.canonicalPath },
+];
+
+const breadcrumbSchema = [
+  { name: "Catálogo", url: "https://colabedu.org/catalog" },
+  { name: criterion.country.toUpperCase(), url: `https://colabedu.org/catalog/${criterion.country}` },
+  { name: "Criterios Oficiales", url: `https://colabedu.org/catalog/${criterion.country}/criterios` },
+  { name: criterion.code, url: canonicalUrl },
+];
+
+const definedTermSchema = {
+  "@context": "https://schema.org",
+  "@type": "DefinedTerm",
+  "name": `${criterion.code}: ${criterion.title}`,
+  "description": criterion.description || criterion.title,
+  "termCode": criterion.code,
+  "inDefinedTermSet": {
+    "@type": "DefinedTermSet",
+    "name": criterion.standard || "Marco Normativo Oficial ColabEdu",
+  },
+  "url": canonicalUrl,
+};
+---
+
+<CatalogLayout
+  title={metaTitle}
+  description={metaDescription}
+  canonicalUrl={canonicalUrl}
+>
+  <BreadcrumbJsonLd slot="head" items={breadcrumbSchema} />
+  <script type="application/ld+json" set:html={JSON.stringify(definedTermSchema)} slot="head" />
+
+  <!-- Hero Header -->
+  <header class="relative pt-12 pb-16 px-4 sm:px-6 lg:px-8 border-b border-slate-800/80 bg-gradient-to-b from-[#0C1527] via-[#0A0E1A] to-[#070A12] overflow-hidden">
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(16,185,129,0.15),transparent)] pointer-events-none"></div>
+
+    <div class="max-w-5xl mx-auto relative z-10">
+      <!-- Breadcrumbs -->
+      <nav class="flex items-center gap-2 text-xs text-slate-400 mb-6 flex-wrap">
+        {breadcrumbs.map((b, idx) => (
+          <div class="flex items-center gap-2">
+            {idx > 0 && <span class="text-slate-600">/</span>}
+            <a href={b.href} class="hover:text-emerald-400 transition-colors">
+              {b.label}
+            </a>
+          </div>
+        ))}
+      </nav>
+
+      <!-- Badges -->
+      <div class="flex items-center gap-2.5 flex-wrap mb-4">
+        <span class="px-3 py-1 rounded-full text-xs font-mono font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shadow-sm">
+          {criterion.code}
+        </span>
+        <span class="px-3 py-1 rounded-full text-xs font-semibold bg-slate-800 text-slate-200 border border-slate-700">
+          {criterion.standard}
+        </span>
+        {criterion.bloomLevel && (
+          <span class="px-2.5 py-0.5 rounded-full text-xs font-mono text-cyan-400 bg-cyan-500/10 border border-cyan-500/20">
+            Nivel Bloom: {criterion.bloomLevel}
+          </span>
+        )}
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/25">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+          Acreditación Oficial
+        </span>
+      </div>
+
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight mb-4">
+        {criterion.title}
+      </h1>
+
+      {criterion.description && (
+        <p class="text-base sm:text-lg text-slate-300 leading-relaxed max-w-3xl">
+          {criterion.description}
+        </p>
+      )}
+
+      <!-- Stats Bar -->
+      <div class="mt-8 pt-6 border-t border-slate-800/80 flex items-center gap-6 text-xs text-slate-400 flex-wrap">
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
+          <strong class="text-white font-semibold">{criterion.lessons.length}</strong>
+          <span>lecciones interactivas</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-indigo-400"></span>
+          <strong class="text-white font-semibold">{criterion.exams.length}</strong>
+          <span>exámenes y simulacros</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+          <span>Jurisdicción: <strong class="text-white uppercase font-semibold">{criterion.country}</strong></span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="py-12 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto space-y-16">
+    <!-- Interactive Lessons Section -->
+    <section>
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-8 pb-4 border-b border-slate-800">
+        <div>
+          <span class="text-xs uppercase font-mono tracking-wider text-emerald-400 font-bold block mb-1">
+            Recursos Didácticos de Aprendizaje
+          </span>
+          <h2 class="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+            Lecciones Interactivas ({criterion.lessons.length})
+          </h2>
+        </div>
+        <span class="text-xs text-slate-400">
+          Alineación certificada con {criterion.code}
+        </span>
+      </div>
+
+      {criterion.lessons.length > 0 ? (
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {criterion.lessons.map((lesson) => (
+            <article class="p-6 rounded-2xl bg-[#0B101E] border border-slate-800/80 hover:border-emerald-500/40 transition-all flex flex-col justify-between group shadow-sm hover:shadow-md">
+              <div>
+                <div class="flex items-center justify-between gap-2 mb-3">
+                  <span class="text-[11px] font-mono uppercase text-cyan-400 bg-cyan-950/40 px-2 py-0.5 rounded border border-cyan-800/40">
+                    {lesson.subject.replace(/_/g, ' ')}
+                  </span>
+                  <span class="text-xs text-slate-400">
+                    ⏱ {lesson.estimatedMinutes} min
+                  </span>
+                </div>
+
+                <h3 class="text-lg font-bold text-white group-hover:text-emerald-300 transition-colors mb-2">
+                  <a href={lesson.canonicalPath}>
+                    {lesson.title}
+                  </a>
+                </h3>
+
+                <p class="text-xs text-slate-400 leading-relaxed line-clamp-3 mb-4">
+                  {lesson.computedMetaDescription}
+                </p>
+              </div>
+
+              <div class="pt-4 border-t border-slate-800/60 flex items-center justify-between gap-3">
+                <a
+                  href={lesson.canonicalPath}
+                  class="text-xs font-semibold text-slate-300 hover:text-white transition-colors"
+                >
+                  Ver ficha didáctica →
+                </a>
+
+                <InteractiveCtaButton
+                  lessonId={lesson.id}
+                  text="Practicar (90s) ↗"
+                  size="sm"
+                />
+              </div>
+            </article>
+          ))}
+        </div>
+      ) : (
+        <div class="p-8 rounded-2xl bg-slate-900/40 border border-slate-800 text-center text-slate-400 text-sm">
+          No hay lecciones publicadas todavía para este criterio.
+        </div>
+      )}
+    </section>
+
+    <!-- Exams and Tests Section -->
+    {criterion.exams.length > 0 && (
+      <section>
+        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-8 pb-4 border-b border-slate-800">
+          <div>
+            <span class="text-xs uppercase font-mono tracking-wider text-cyan-400 font-bold block mb-1">
+              Evaluación Sumativa y Diagnóstica
+            </span>
+            <h2 class="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+              Exámenes y Pruebas Oficiales ({criterion.exams.length})
+            </h2>
+          </div>
+          <span class="text-xs text-slate-400">
+            Pruebas adaptadas a convocatorias oficiales
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {criterion.exams.map((exam) => (
+            <article class="p-6 rounded-2xl bg-[#0B101E] border border-slate-800/80 hover:border-cyan-500/40 transition-all flex flex-col justify-between group shadow-sm hover:shadow-md">
+              <div>
+                <div class="flex items-center justify-between gap-2 mb-3">
+                  <span class="text-[11px] font-mono text-indigo-400 bg-indigo-950/40 px-2 py-0.5 rounded border border-indigo-800/40">
+                    {exam.organization || 'Convocatoria Oficial'} {exam.year ? `(${exam.year})` : ''}
+                  </span>
+                  <span class="text-xs text-slate-400">
+                    {exam.tasks.length} cuestiones
+                  </span>
+                </div>
+
+                <h3 class="text-lg font-bold text-white group-hover:text-cyan-300 transition-colors mb-2">
+                  <a href={exam.canonicalPath}>
+                    {exam.title}
+                  </a>
+                </h3>
+
+                <p class="text-xs text-slate-400 leading-relaxed line-clamp-3 mb-4">
+                  {exam.computedMetaDescription}
+                </p>
+              </div>
+
+              <div class="pt-4 border-t border-slate-800/60 flex items-center justify-between gap-3">
+                <a
+                  href={exam.canonicalPath}
+                  class="text-xs font-semibold text-slate-300 hover:text-white transition-colors"
+                >
+                  Ver examen completo →
+                </a>
+
+                <a
+                  href={exam.appPracticeUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-cyan-500 hover:bg-cyan-400 text-slate-950 transition-colors"
+                >
+                  <span>Resolver ↗</span>
+                </a>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <!-- Teacher Technical Callout -->
+    <div class="p-8 rounded-3xl bg-gradient-to-r from-[#0C1527] to-[#0A0E1A] border border-white/[0.08] shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+      <div class="space-y-2">
+        <div class="inline-flex items-center gap-2 text-xs font-mono text-emerald-400">
+          <span>👩‍🏫</span>
+          <span>Acreditación Curricular Docente OPS v0.9.6</span>
+        </div>
+        <h3 class="text-xl font-bold text-white">
+          ¿Enseñas en base a este estándar ministerial?
+        </h3>
+        <p class="text-xs sm:text-sm text-slate-300 max-w-2xl leading-relaxed">
+          Las lecciones de ColabEdu se integran mediante LTI 1.3 en Google Classroom, Canvas y Moodle. La evaluación competencial se genera en tiempo real sin alucinaciones, aplicando rúbricas analíticas oficiales.
+        </p>
+      </div>
+
+      <a
+        href={`/catalog/${criterion.country}/criterios`}
+        class="shrink-0 px-5 py-2.5 rounded-xl text-xs font-semibold text-white bg-slate-800 hover:bg-slate-700 border border-slate-700 transition-colors inline-flex items-center gap-2"
+      >
+        <span>Ver todos los criterios</span>
+        <span>→</span>
+      </a>
+    </div>
+  </main>
+</CatalogLayout>

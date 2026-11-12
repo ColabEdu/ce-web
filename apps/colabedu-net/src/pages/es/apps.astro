@@ -1,0 +1,327 @@
+---
+// src/pages/es/apps.astro
+// Ecosistema de Aplicaciones Nativas: Tablets de Aula, Teléfonos Móviles y Chromebooks
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import { appLink } from "@colabedu/ui-core/navigation";
+import "../../styles/global.css";
+
+const appUrl = appLink('app', '/');
+---
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate icon" type="image/png" href="/favicon.png" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplicaciones Móviles, Tablets y Chromebooks | ColabEdu.net</title>
+    <meta name="description" content="Descarga y despliega ColabEdu en tablets Android de centro, smartphones para captura OCR de exámenes manuscritos y Chromebooks escolares con compatibilidad offline y rendimiento nativo.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+
+    <style is:global>
+        :root {
+            --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+        body {
+            font-family: var(--font-sans);
+            background-color: #FAF9F6;
+            color: #0F172A;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+        .precision-card {
+            background-color: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            border-radius: 1.25rem;
+            box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.03);
+            transition: all 0.2s ease-in-out;
+        }
+        .precision-card:hover {
+            border-color: #CBD5E1;
+            box-shadow: 0 10px 20px -4px rgba(15, 23, 42, 0.05);
+        }
+        .hero-apps {
+            background: linear-gradient(135deg, rgba(238, 242, 255, 0.7) 0%, rgba(240, 253, 250, 0.6) 50%, rgba(254, 243, 199, 0.4) 100%);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            border-radius: 2rem;
+        }
+        .device-card-tablet {
+            background: linear-gradient(180deg, #FFFFFF 0%, rgba(239, 246, 255, 0.45) 100%);
+            border: 1px solid #DBEAFE;
+        }
+        .device-card-mobile {
+            background: linear-gradient(180deg, #FFFFFF 0%, rgba(240, 253, 250, 0.45) 100%);
+            border: 1px solid #CCFBF1;
+        }
+        .device-card-chromebook {
+            background: linear-gradient(180deg, #FFFFFF 0%, rgba(254, 243, 199, 0.35) 100%);
+            border: 1px solid #FDE68A;
+        }
+    </style>
+</head>
+<body class="selection:bg-blue-600 selection:text-white">
+
+    <Header lang="es" />
+
+    <main class="py-12 sm:py-16">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- Hero Title -->
+            <div class="hero-apps p-8 sm:p-14 text-center mb-16">
+                <span class="inline-block text-xs font-mono font-bold tracking-widest uppercase text-blue-900 bg-white/80 px-4 py-1.5 rounded-full border border-blue-300 mb-6">
+                    <i class="fas fa-mobile-screen mr-1.5 text-blue-600"></i> Multi-Dispositivo Nativo
+                </span>
+                <h1 class="text-4xl sm:text-6xl font-black text-slate-950 tracking-tight leading-tight mb-6">
+                    ColabEdu en Cualquier Dispositivo.<br/>
+                    Tablets, Móviles y Chromebooks.
+                </h1>
+                <p class="text-base sm:text-xl text-slate-700 max-w-3xl mx-auto leading-relaxed">
+                    Diseñado en Flutter nativo y WebAssembly para adaptarse a los equipamientos reales de los centros educativos: carritos de tablets compartidas, smartphones de profesores para captura OCR y portátiles escolares.
+                </p>
+
+                <div class="mt-8 flex flex-col sm:flex-row justify-center gap-4">
+                    <a href={appUrl} target="_blank" rel="noopener noreferrer" class="px-7 py-3.5 text-sm font-bold text-white bg-slate-900 hover:bg-blue-600 rounded-xl transition-all shadow-md flex items-center justify-center gap-2">
+                        <i class="fas fa-laptop text-blue-400"></i>
+                        <span>Abrir Web App en Navegador</span>
+                    </a>
+                    <a href="#instalacion" class="px-6 py-3.5 text-sm font-bold text-slate-700 bg-white hover:bg-slate-50 border border-slate-300 rounded-xl transition-colors flex items-center justify-center gap-2">
+                        <i class="fas fa-download text-teal-600"></i>
+                        <span>Guía de Despliegue para Centros</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- LOS 3 FORM-FACTORS DE AULA -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+                
+                <!-- 1. TABLETS ANDROID / IPAD -->
+                <div class="precision-card device-card-tablet p-8 flex flex-col justify-between">
+                    <div>
+                        <div class="w-14 h-14 rounded-2xl bg-blue-600 text-white flex items-center justify-center text-2xl mb-6 shadow-md">
+                            <i class="fas fa-tablet-screen-button"></i>
+                        </div>
+                        <span class="text-xs font-mono font-bold text-blue-700 uppercase tracking-widest block mb-2">
+                            Aulas y Carritos Compartidos
+                        </span>
+                        <h3 class="text-2xl font-black text-slate-900 mb-3">
+                            Tablets (Android & iPadOS)
+                        </h3>
+                        <p class="text-xs text-slate-600 leading-relaxed mb-6">
+                            Optimizado para pantalla partida y uso táctil. Ideal para lecciones interactivas, escritura con stylus o lápiz óptico, y rotación de alumnos en carritos digitales sin mezclar identidades.
+                        </p>
+                        
+                        <div class="space-y-2 text-xs font-mono text-slate-700 mb-6">
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-check text-blue-600"></i>
+                                <span>Multi-Tenant por Deep Linking</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-check text-blue-600"></i>
+                                <span>Trazos matemáticos & KaTeX</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-check text-blue-600"></i>
+                                <span>Instalación Wi-Fi sin cables</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-4 border-t border-blue-200">
+                        <span class="text-[11px] font-semibold text-blue-900 bg-blue-100/80 px-2.5 py-1 rounded-md block text-center">
+                            Diseñado para carritos y stylus
+                        </span>
+                    </div>
+                </div>
+
+                <!-- 2. SMARTPHONES / MÓVILES -->
+                <div class="precision-card device-card-mobile p-8 flex flex-col justify-between">
+                    <div>
+                        <div class="w-14 h-14 rounded-2xl bg-teal-600 text-white flex items-center justify-center text-2xl mb-6 shadow-md">
+                            <i class="fas fa-mobile-screen"></i>
+                        </div>
+                        <span class="text-xs font-mono font-bold text-teal-700 uppercase tracking-widest block mb-2">
+                            Captura Docente y Práctica
+                        </span>
+                        <h3 class="text-2xl font-black text-slate-900 mb-3">
+                            Smartphones (Android & iOS)
+                        </h3>
+                        <p class="text-xs text-slate-600 leading-relaxed mb-6">
+                            La herramienta de bolsillo del profesor: digitalización multi-página de exámenes en papel con la cámara, laboratorio de voz para pruebas orales y notificaciones de entrega en tiempo real.
+                        </p>
+                        
+                        <div class="space-y-2 text-xs font-mono text-slate-700 mb-6">
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-check text-teal-600"></i>
+                                <span>Escáner OCR Multi-Página</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-check text-teal-600"></i>
+                                <span>Grabadora de orales sin compresión</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-check text-teal-600"></i>
+                                <span>Firma de notas con un pulgar</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-4 border-t border-teal-200">
+                        <span class="text-[11px] font-mono text-teal-900 bg-teal-100/80 px-2.5 py-1 rounded-md font-semibold block text-center">
+                            Alineación y OCR de alta resolución
+                        </span>
+                    </div>
+                </div>
+
+                <!-- 3. CHROMEBOOKS / WEB NATIVA -->
+                <div class="precision-card device-card-chromebook p-8 flex flex-col justify-between">
+                    <div>
+                        <div class="w-14 h-14 rounded-2xl bg-amber-600 text-white flex items-center justify-center text-2xl mb-6 shadow-md">
+                            <i class="fab fa-chrome"></i>
+                        </div>
+                        <span class="text-xs font-mono font-bold text-amber-800 uppercase tracking-widest block mb-2">
+                            Flotas Escolares 1:1
+                        </span>
+                        <h3 class="text-2xl font-black text-slate-900 mb-3">
+                            Chromebooks & Portátiles
+                        </h3>
+                        <p class="text-xs text-slate-600 leading-relaxed mb-6">
+                            Rendimiento optimizado para ChromeOS mediante WebAssembly y Progressive Web App (PWA). Despliegue masivo en 1 clic a través de Google Workspace for Education Admin Console.
+                        </p>
+                        
+                        <div class="space-y-2 text-xs font-mono text-slate-700 mb-6">
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-check text-amber-700"></i>
+                                <span>PWA con arranque instantáneo</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-check text-amber-700"></i>
+                                <span>Soporte de teclado físico completo</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-check text-amber-700"></i>
+                                <span>Cero consumo de disco local</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-4 border-t border-amber-200">
+                        <span class="text-[11px] font-mono text-amber-950 bg-amber-100/80 px-2.5 py-1 rounded-md font-semibold block text-center">
+                            Google Workspace PWA Ready
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- GESTIÓN Y DESPLIEGUE EN CENTROS EDUCATIVOS (ENFOQUE DE COLEGIO / DIRECCIÓN) -->
+            <div id="instalacion" class="precision-card p-8 sm:p-12 mb-16 bg-white border-slate-300">
+                <div class="max-w-3xl mx-auto text-center mb-10">
+                    <span class="text-xs font-mono font-bold text-indigo-700 uppercase tracking-widest block mb-2">
+                        Simplicidad para Coordinadores TIC y Dirección
+                    </span>
+                    <h2 class="text-3xl font-black text-slate-900">
+                        Diseñado para la Realidad Operativa del Colegio
+                    </h2>
+                    <p class="text-slate-600 text-sm mt-3 leading-relaxed">
+                        Desplegar tecnología en un centro no debería implicar configurar tablet por tablet ni pelear con cuentas personales de Google o Apple. ColabEdu ofrece una integración limpia y adaptada a la gestión escolar:
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <!-- Pilar 1: Gestión de Flotas MDM -->
+                    <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col justify-between">
+                        <div>
+                            <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center text-lg mb-4">
+                                <i class="fas fa-boxes-stacked"></i>
+                            </div>
+                            <h4 class="font-black text-slate-900 text-base mb-2">Compatible con Sistemas MDM</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                Distribución masiva silenciosa a través de las consolas de gestión del centro o consejería educativa (Google Workspace Admin, Microsoft Intune, Jamf o Relution).
+                            </p>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-200 text-[11px] font-semibold text-blue-700">
+                            Cero intervención manual
+                        </div>
+                    </div>
+
+                    <!-- Pilar 2: Activación por Código QR -->
+                    <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col justify-between">
+                        <div>
+                            <div class="w-10 h-10 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center text-lg mb-4">
+                                <i class="fas fa-qrcode"></i>
+                            </div>
+                            <h4 class="font-black text-slate-900 text-base mb-2">Emparejamiento Inmediato</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                El alumno o docente apunta la cámara a la pantalla del aula o a su credencial para vincular su grupo al instante. Sin escribir contraseñas complejas ni recordar correos.
+                            </p>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-200 text-[11px] font-semibold text-teal-700">
+                            Listo en 5 segundos
+                        </div>
+                    </div>
+
+                    <!-- Pilar 3: Privacidad y Modo Examen -->
+                    <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col justify-between">
+                        <div>
+                            <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center text-lg mb-4">
+                                <i class="fas fa-shield-halved"></i>
+                            </div>
+                            <h4 class="font-black text-slate-900 text-base mb-2">Aislamiento y Modo Examen</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                Entornos sellados para pruebas oficiales. Los datos de una sesión no se cruzan con la siguiente y no se almacenan fotos personales en la memoria del dispositivo.
+                            </p>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-200 text-[11px] font-semibold text-amber-800">
+                            Cumplimiento estricto RGPD
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Banner de Asistencia para Colegios -->
+                <div class="bg-gradient-to-r from-blue-50 to-indigo-50/60 p-6 rounded-2xl border border-blue-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div class="flex items-center gap-3.5">
+                        <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center shrink-0">
+                            <i class="fas fa-headset text-base"></i>
+                        </div>
+                        <div>
+                            <h5 class="text-sm font-bold text-slate-900">¿Necesitas soporte para la flota de tu colegio?</h5>
+                            <p class="text-xs text-slate-600">Nuestro equipo de soporte asiste a coordinadores TIC en la homologación de carritos y portátiles.</p>
+                        </div>
+                    </div>
+                    <a href="/es/institutions" class="px-5 py-2.5 text-xs font-bold text-white bg-slate-900 hover:bg-blue-600 rounded-xl transition-all shrink-0">
+                        Contactar Soporte TIC &rarr;
+                    </a>
+                </div>
+            </div>
+
+            <!-- CTA FINAL -->
+            <div class="p-8 sm:p-12 rounded-2xl bg-slate-900 text-white text-center">
+                <h3 class="text-2xl sm:text-3xl font-black mb-3">¿Listo para probar ColabEdu en tus dispositivos?</h3>
+                <p class="text-slate-300 text-sm max-w-xl mx-auto mb-6">
+                    Accede a la versión web de inmediato o solicita los paquetes de distribución para la flota de tu colegio.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <a href={appUrl} target="_blank" rel="noopener noreferrer" class="px-7 py-4 text-base font-extrabold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-all shadow-md flex items-center justify-center gap-2">
+                        <i class="fas fa-rocket text-lg"></i>
+                        <span>Entrar a la App Web</span>
+                    </a>
+                    <a href="/es/institutions" class="px-6 py-4 text-sm font-bold text-slate-300 hover:text-white border border-slate-700 rounded-xl transition-colors flex items-center justify-center">
+                        Contactar para Flotas de Centro
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <Footer lang="es" />
+
+</body>
+</html>

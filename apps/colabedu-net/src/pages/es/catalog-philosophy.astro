@@ -1,0 +1,241 @@
+---
+// src/pages/es/catalog-philosophy.astro
+// Filosofía del Catálogo OER de ColabEdu
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import { appLink } from "@colabedu/ui-core/navigation";
+import "../../styles/global.css";
+
+const catalogUrl = appLink('catalog', '/');
+const appUrl = appLink('app', '/');
+---
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate icon" type="image/png" href="/favicon.png" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filosofía del Catálogo OER | ColabEdu.net</title>
+    <meta name="description" content="Filosofía del Catálogo ColabEdu: Recursos Educativos Abiertos (OER), sin paywalls editoriales, enriquecidos como lecciones interactivas con simulaciones PhET.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+
+    <style is:global>
+        :root {
+            --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+        body {
+            font-family: var(--font-sans);
+            background-color: #FAF9F6;
+            color: #0F172A;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+        .precision-card {
+            background-color: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            border-radius: 1.25rem;
+            box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.03);
+            transition: all 0.2s ease-in-out;
+        }
+        .precision-card:hover {
+            border-color: #CBD5E1;
+            box-shadow: 0 10px 20px -4px rgba(15, 23, 42, 0.05);
+        }
+        .hero-catalog {
+            background: linear-gradient(135deg, rgba(254, 243, 199, 0.5) 0%, rgba(254, 240, 138, 0.3) 50%, rgba(240, 253, 250, 0.4) 100%);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            border-radius: 2rem;
+        }
+    </style>
+</head>
+<body class="selection:bg-blue-600 selection:text-white">
+
+    <Header lang="es" />
+
+    <main class="py-12 sm:py-16">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- Hero Title -->
+            <div class="hero-catalog p-8 sm:p-14 text-center mb-16">
+                <span class="inline-block text-xs font-mono font-bold tracking-widest uppercase text-amber-900 bg-white/80 px-4 py-1.5 rounded-full border border-amber-300 mb-6">
+                    Red Federada de Recursos Abiertos · Más de 65 Repositorios OER
+                </span>
+                <h1 class="text-4xl sm:text-6xl font-black text-slate-950 tracking-tight leading-tight mb-6">
+                    El conocimiento curricular debe ser un bien común universal.
+                </h1>
+                <p class="text-lg sm:text-xl text-slate-700 font-normal leading-relaxed max-w-3xl mx-auto mb-6">
+                    Los libros de texto escolares no pueden costar 300 € al año a una familia. En ColabEdu gestionamos e indexamos <strong>más de 65 repositorios internacionales de Recursos Educativos Abiertos (OER)</strong>, transformándolos en un catálogo unificado y de acceso libre en colabedu.org.
+                </p>
+                <div class="inline-flex items-center gap-2 bg-amber-100/80 border border-amber-300/80 px-4 py-2 rounded-xl text-xs font-bold text-amber-950">
+                    <i class="fas fa-network-wired text-amber-700"></i>
+                    <span>65+ Repositorios OER Federados &rarr; 240+ Cursos Normalizados en Catálogo Único</span>
+                </div>
+            </div>
+
+            <!-- Tesis: La Diferencia entre Libro Estático y Factoría Interactiva -->
+            <div class="precision-card p-8 sm:p-10 bg-white border-amber-200 mb-16">
+                <div class="max-w-3xl mx-auto">
+                    <span class="text-xs font-mono font-bold text-amber-700 uppercase tracking-wider block mb-2">La Tesis Editorial de ColabEdu</span>
+                    <h2 class="text-2xl sm:text-3xl font-black text-slate-900 mb-4">
+                        ¿Por qué un catálogo abierto si ya existen PDFs en Internet?
+                    </h2>
+                    <p class="text-slate-600 text-sm sm:text-base leading-relaxed mb-4">
+                        Un PDF de 400 páginas descargado de un repositorio institucional es un ladrillo inerte: el alumno se pierde, no interactúa, no recibe corrección inmediata y el profesor no tiene telemetría de comprensión.
+                    </p>
+                    <p class="text-slate-600 text-sm sm:text-base leading-relaxed mb-6">
+                        La factoría de ColabEdu toma esos contenidos libres (OpenStax, Proyecto EDIA del INTEF, libros SEP México, ejercicios oficiales de Selectividad y guías AP/IB) y los transforma en <strong>Lecciones Interactivas Vivas</strong>:
+                    </p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-slate-200 text-center">
+                        <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                            <i class="fas fa-atom text-amber-600 text-xl mb-2 block"></i>
+                            <h4 class="font-bold text-xs text-slate-900 uppercase">Simulación PhET</h4>
+                            <p class="text-[11px] text-slate-500 mt-1">Laboratorios virtuales manipulables en la misma pantalla.</p>
+                        </div>
+                        <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                            <i class="fas fa-stairs text-teal-600 text-xl mb-2 block"></i>
+                            <h4 class="font-bold text-xs text-slate-900 uppercase">Andamiaje en 9 Pasos</h4>
+                            <p class="text-[11px] text-slate-500 mt-1">Preguntas escalonadas que guían el razonamiento sin regalar la solución.</p>
+                        </div>
+                        <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                            <i class="fas fa-calculator text-blue-600 text-xl mb-2 block"></i>
+                            <h4 class="font-bold text-xs text-slate-900 uppercase">KaTeX Dinámico</h4>
+                            <p class="text-[11px] text-slate-500 mt-1">Fórmulas matemáticas renderizadas en alta resolución.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ecosistema de Fuentes Abiertas -->
+            <div class="mb-16">
+                <div class="text-center mb-10">
+                    <span class="text-xs font-mono font-bold text-slate-400 uppercase tracking-widest block mb-1">Fuentes de Verdad OER</span>
+                    <h3 class="text-3xl font-black text-slate-900">De dónde proviene nuestro catálogo</h3>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="precision-card p-6 bg-white">
+                        <div class="flex items-center gap-3 mb-3">
+                            <span class="w-8 h-8 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-sm">ES</span>
+                            <h4 class="font-extrabold text-slate-900 text-base">España: INTEF EDIA & Bancos EvAU / PAU</h4>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Situaciones de aprendizaje abiertas bajo licencia Creative Commons del Ministerio de Educación (INTEF) y recopilaciones de exámenes reales de acceso a la universidad de todas las CCAA.
+                        </p>
+                    </div>
+
+                    <div class="precision-card p-6 bg-white">
+                        <div class="flex items-center gap-3 mb-3">
+                            <span class="w-8 h-8 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center font-bold text-sm">US</span>
+                            <h4 class="font-extrabold text-slate-900 text-base">EE.UU.: OpenStax Rice University</h4>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Tratados universitarios y de secundaria revisados por pares en Álgebra, Biología, Física y Química, con miles de problemas resueltos y rúbricas estandarizadas.
+                        </p>
+                    </div>
+
+                    <div class="precision-card p-6 bg-white">
+                        <div class="flex items-center gap-3 mb-3">
+                            <span class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-sm">MX</span>
+                            <h4 class="font-extrabold text-slate-900 text-base">México: Libros de Texto Gratuitos (SEP NEM)</h4>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Integración del marco curricular de la Nueva Escuela Mexicana (NEM Fase 6), campos formativos de Saberes y Pensamiento Científico y Ética, Naturaleza y Sociedades.
+                        </p>
+                    </div>
+
+                    <div class="precision-card p-6 bg-white">
+                        <div class="flex items-center gap-3 mb-3">
+                            <span class="w-8 h-8 rounded-lg bg-purple-100 text-purple-700 flex items-center justify-center font-bold text-sm">IB</span>
+                            <h4 class="font-extrabold text-slate-900 text-base">Marcos Internacionales: College Board AP & IB</h4>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Guías de materias, rúbricas analíticas oficiales y bancos de muestras liberadas para preparar AP Spanish, IB Spanish B y Bachillerato Internacional.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Por qué mantener un catálogo libre requiere tecnología continua -->
+            <div class="precision-card p-8 sm:p-10 bg-white border-slate-300 mb-16">
+                <div class="max-w-3xl mx-auto">
+                    <span class="text-xs font-mono font-bold text-blue-700 uppercase tracking-wider block mb-2">Ingeniería & Sostenimiento</span>
+                    <h2 class="text-2xl sm:text-3xl font-black text-slate-900 mb-4">
+                        Mantener un catálogo libre no cuesta cero euros
+                    </h2>
+                    <p class="text-slate-600 text-sm leading-relaxed mb-6">
+                        Muchos proyectos de recursos abiertos fracasan por abandono: enlaces rotos, formatos obsoletos y servidores caídos. En ColabEdu aplicamos <strong>estándares de ingeniería de software de primer nivel</strong> para que el catálogo permanezca vivo, indexado y accesible a escala global:
+                    </p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+                            <div class="flex items-center gap-2 font-bold text-xs text-slate-900 mb-1">
+                                <i class="fas fa-arrows-rotate text-blue-600"></i>
+                                <span>Digitalización & Parsing Continuo</span>
+                            </div>
+                            <p class="text-[11px] text-slate-500 leading-relaxed">
+                                Extracción automatizada de leyes, decretos y currículos oficiales para que cada lección esté siempre actualizada con el BOE, la LOMLOE, Common Core o los estándares AP.
+                            </p>
+                        </div>
+                        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+                            <div class="flex items-center gap-2 font-bold text-xs text-slate-900 mb-1">
+                                <i class="fas fa-cloud-bolt text-teal-600"></i>
+                                <span>Distribución Global Edge CDN</span>
+                            </div>
+                            <p class="text-[11px] text-slate-500 leading-relaxed">
+                                Compilación estática ultrarrápida y distribución en CDN mundial sin coste de servidor por consulta, para que cargue al instante en cualquier conexión escolar.
+                            </p>
+                        </div>
+                        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+                            <div class="flex items-center gap-2 font-bold text-xs text-slate-900 mb-1">
+                                <i class="fas fa-code-compare text-indigo-600"></i>
+                                <span>Trazabilidad Git-First & SemVer</span>
+                            </div>
+                            <p class="text-[11px] text-slate-500 leading-relaxed">
+                                Cada curso y ejercicio tiene versión semántica y auditoría criptográfica SHA-256 para garantizar la integridad pedagógica ante inspecciones educativas.
+                            </p>
+                        </div>
+                        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+                            <div class="flex items-center gap-2 font-bold text-xs text-slate-900 mb-1">
+                                <i class="fas fa-hand-holding-heart text-amber-600"></i>
+                                <span>Sostenimiento por Membresías</span>
+                            </div>
+                            <p class="text-[11px] text-slate-500 leading-relaxed">
+                                Las membresías de valor añadido financian esta factoría tecnológica para que los libros sigan siendo 100% abiertos para toda la sociedad.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Por qué colabedu.org es 100% abierto -->
+            <div class="p-8 sm:p-12 rounded-2xl bg-slate-900 text-white flex flex-col sm:flex-row items-center justify-between gap-8">
+                <div class="max-w-xl">
+                    <span class="text-xs font-mono font-bold text-amber-400 uppercase tracking-widest block mb-2">Soberanía y Acceso</span>
+                    <h3 class="text-2xl sm:text-3xl font-black leading-tight mb-2">
+                        Explora el catálogo en colabedu.org
+                    </h3>
+                    <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
+                        Cualquier persona puede navegar los temarios, leer las lecciones y consultar las fuentes oficiales sin crearse una cuenta ni introducir una tarjeta bancaria.
+                    </p>
+                </div>
+                <a href={catalogUrl} target="_blank" rel="noopener noreferrer" class="px-6 py-4 text-sm font-extrabold text-slate-900 bg-amber-400 hover:bg-amber-300 rounded-xl transition-all shadow-md shrink-0">
+                    <span>Ir al Catálogo Abierto &rarr;</span>
+                </a>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Unified Footer -->
+    <Footer lang="es" />
+
+</body>
+</html>

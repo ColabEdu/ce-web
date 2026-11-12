@@ -1,0 +1,184 @@
+---
+// src/pages/es/safe-space.astro
+// Safe Space: El espacio privado de práctica sin juicio social ni penalización escolar
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import { appLink } from "@colabedu/ui-core/navigation";
+import "../../styles/global.css";
+
+const appUrl = appLink('app', '/');
+---
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate icon" type="image/png" href="/favicon.png" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Safe Space: Aprender sin Miedo al Error | ColabEdu.net</title>
+    <meta name="description" content="El Safe Space privado de ColabEdu: un entorno de práctica confidencial en casa donde equivocarse 50 veces seguidas forma parte del aprendizaje, sin juicio social ni notas punitivas.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+
+    <style is:global>
+        :root {
+            --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+        body {
+            font-family: var(--font-sans);
+            background-color: #FAF9F6;
+            color: #0F172A;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+        .precision-card {
+            background-color: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            border-radius: 1.25rem;
+            box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.03);
+            transition: all 0.2s ease-in-out;
+        }
+        .precision-card:hover {
+            border-color: #CBD5E1;
+            box-shadow: 0 10px 20px -4px rgba(15, 23, 42, 0.05);
+        }
+        .hero-safespace {
+            background: linear-gradient(135deg, rgba(254, 243, 199, 0.4) 0%, rgba(253, 230, 138, 0.25) 50%, rgba(240, 253, 250, 0.4) 100%);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            border-radius: 2rem;
+        }
+    </style>
+</head>
+<body class="selection:bg-amber-600 selection:text-white">
+
+    <Header lang="es" />
+
+    <main class="py-12 sm:py-16">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- Hero Title -->
+            <div class="hero-safespace p-8 sm:p-14 text-center mb-16">
+                <span class="inline-block text-xs font-mono font-bold tracking-widest uppercase text-amber-900 bg-white/80 px-4 py-1.5 rounded-full border border-amber-300 mb-6">
+                    <i class="fas fa-shield-heart mr-1.5 text-amber-600"></i> Espacio Confidencial de Aprendizaje
+                </span>
+                <h1 class="text-4xl sm:text-6xl font-black text-slate-950 tracking-tight leading-tight mb-6">
+                    El aula exige dar la respuesta correcta.<br/>
+                    El Safe Space te da permiso para fallar.
+                </h1>
+                <p class="text-lg sm:text-xl text-slate-700 font-normal leading-relaxed max-w-3xl mx-auto">
+                    El mayor obstáculo para aprender no es la falta de capacidad, sino el miedo al ridículo social frente a los compañeros o a la penalización en el cuaderno de notas. En ColabEdu creamos un espacio protegido donde equivocarse es el único camino hacia el dominio.
+                </p>
+            </div>
+
+            <!-- Tesis Central: La Ansiedad en el Aula -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+                <div class="precision-card p-8 bg-white border-red-200">
+                    <span class="text-xs font-mono font-bold text-red-600 uppercase tracking-wider block mb-2">La Realidad del Aula Convencional</span>
+                    <h3 class="text-xl font-black text-slate-900 mb-3">La Parálisis por Juicio Social</h3>
+                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mb-4">
+                        En una clase de 30 estudiantes, levantar la mano y equivocarse tiene un coste emocional altísimo: risas contenidas, miradas de juicio y la etiqueta de "lento". 
+                    </p>
+                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                        Como resultado, los alumnos inseguros o que arrastran lagunas de cursos anteriores guardan silencio y asienten con la cabeza, acumulando una frustración que desemboca en fracaso escolar.
+                    </p>
+                </div>
+
+                <div class="precision-card p-8 bg-white border-emerald-200">
+                    <span class="text-xs font-mono font-bold text-emerald-700 uppercase tracking-wider block mb-2">La Respuesta de ColabEdu</span>
+                    <h3 class="text-xl font-black text-slate-900 mb-3">El Laboratorio Confidencial en Casa</h3>
+                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mb-4">
+                        En ColabEdu, el alumno practica en su tableta o móvil a las 11 de la noche en un entorno 100% privado. Puede cometer 50 errores consecutivos sin que ningún compañero lo vea.
+                    </p>
+                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                        El copiloto socrático jamás se impacienta, jamás juzga y jamás muestra un tono condescendiente: descompone el error con empatía pedagógica hasta que el estudiante "conecta los cables".
+                    </p>
+                </div>
+            </div>
+
+            <!-- Los 3 Pilares del Safe Space -->
+            <div class="mb-16">
+                <div class="text-center mb-10">
+                    <span class="text-xs font-mono font-bold text-slate-400 uppercase tracking-widest block mb-1">Garantías Pedagógicas</span>
+                    <h3 class="text-3xl font-black text-slate-900">Cómo protegemos la autoestima del estudiante</h3>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="precision-card p-6 bg-white flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center font-bold text-lg shrink-0">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-extrabold text-slate-900 text-base mb-1">Privacidad Formativa: Los borradores no van al expediente</h4>
+                            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                                Los intentos fallidos, las preguntas ingenuas y los titubeos orales pertenecen al alumno. El profesor no recibe una fiscalización de cada fallo, sino un mapa agregado de competencias consolidadas cuando el alumno decide enviar su práctica.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="precision-card p-6 bg-white flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-xl bg-teal-50 text-teal-700 flex items-center justify-center font-bold text-lg shrink-0">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-extrabold text-slate-900 text-base mb-1">Retroalimentación No Punitiva (Cero "Mal, Inténtalo de Nuevo")</h4>
+                            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                                Decirle a un alumno "Respuesta Incorrecta" destruye la motivación. ColabEdu señala: *"Veo que has sumado los catetos directamente; echa un vistazo al área de los cuadrados, ¿qué observas en la esquina derecha?"*. Se transforma el error en una pista de indagación.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="precision-card p-6 bg-white flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center font-bold text-lg shrink-0">
+                            <i class="fas fa-stopwatch"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-extrabold text-slate-900 text-base mb-1">Tiempo Infinito y Ritmo Propio</h4>
+                            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                                Sin cuentas atrás agresivas ni comparativas con la media de la clase. El estudiante con TDAH, dislexia o dificultades de procesamiento puede tomarse 40 minutos en un problema o repetirlo al día siguiente sin presión.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="precision-card p-6 bg-white flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-700 flex items-center justify-center font-bold text-lg shrink-0">
+                            <i class="fas fa-dumbbell"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-extrabold text-slate-900 text-base mb-1">El Gimnasio Pre-Examen: Pronóstico sin Juicio</h4>
+                            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                                Practica simulacros reales de Selectividad (PAU), Common Core, AP Spanish o ensayos IB tantas veces como quieras. Descubre con qué nota saldrías hoy según los criterios de los tribunales oficiales, detecta tus fallos recurrentes y corrígelos antes del día del examen real.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Call to action -->
+            <div class="p-8 sm:p-12 rounded-2xl bg-slate-900 text-white text-center">
+                <h3 class="text-2xl sm:text-3xl font-black mb-3">La confianza se construye practicando sin miedo</h3>
+                <p class="text-slate-300 text-sm max-w-xl mx-auto mb-6">
+                    Descubre cómo las lecciones interactivas de ColabEdu devuelven a los alumnos el entusiasmo por las matemáticas, la lengua y las ciencias.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <a href={appUrl} target="_blank" class="px-6 py-3.5 text-sm font-extrabold text-slate-900 bg-amber-400 hover:bg-amber-300 rounded-xl transition-all">
+                        Probar Unidad en Safe Space &rarr;
+                    </a>
+                    <a href="/es/linguistic-inclusion" class="px-6 py-3.5 text-sm font-bold text-slate-300 hover:text-white border border-slate-700 rounded-xl transition-colors">
+                        Ver Inclusión Lingüística
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Unified Footer -->
+    <Footer lang="es" />
+
+</body>
+</html>

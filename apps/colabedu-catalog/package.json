@@ -6,6 +6,7 @@
     "dev": "astro dev --port 4323 --host 0.0.0.0",
     "start": "astro dev --port 4323 --host 0.0.0.0",
     "build": "astro build",
+    "test": "node --experimental-strip-types test/criteria.test.ts",
     "preview": "astro preview",
     "astro": "astro"
   },

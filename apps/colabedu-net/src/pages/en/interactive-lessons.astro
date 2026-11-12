@@ -1,0 +1,676 @@
+---
+// src/pages/en/interactive-lessons.astro
+// Interactive Lessons: Guided Active Learning with Micro-Widgets and Socratic Copilot
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import { appLink } from "@colabedu/ui-core/navigation";
+import "../../styles/global.css";
+
+const catalogUrl = appLink('app', '/navigator/spec_root/0');
+const seoCatalogUrl = appLink('catalog', '/');
+const appUrl = appLink('app', '/');
+---
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate icon" type="image/png" href="/favicon.png" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Lessons: Guided Active Learning | ColabEdu.net</title>
+    <meta name="description" content="Discover ColabEdu Interactive Lessons: structured slide-based micro-learning featuring KaTeX formulas, dynamic simulations, Socratic checkpoints, and virtual labs that surpass static PDFs.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+
+    <style is:global>
+        :root {
+            --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+        body {
+            font-family: var(--font-sans);
+            background-color: #FAF9F6;
+            color: #0F172A;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+        .precision-card {
+            background-color: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            border-radius: 1.25rem;
+            box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.03);
+            transition: all 0.2s ease-in-out;
+        }
+        .precision-card:hover {
+            border-color: #CBD5E1;
+            box-shadow: 0 10px 20px -4px rgba(15, 23, 42, 0.05);
+        }
+        .hero-lessons {
+            background: linear-gradient(135deg, rgba(238, 242, 255, 0.7) 0%, rgba(224, 231, 255, 0.5) 50%, rgba(240, 253, 250, 0.4) 100%);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            border-radius: 2rem;
+        }
+        .lesson-canvas-container {
+            background: #0F172A;
+            border-radius: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Alternating chromatic background rhythm */
+        .section-tint-blue {
+            background: linear-gradient(180deg, #FFFFFF 0%, rgba(239, 246, 255, 0.45) 100%);
+            border: 1px solid #BFDBFE;
+        }
+        .section-tint-teal {
+            background: linear-gradient(180deg, #FFFFFF 0%, rgba(204, 251, 241, 0.45) 100%);
+            border: 1px solid #99F6E4;
+        }
+        .section-tint-indigo {
+            background: linear-gradient(180deg, #FFFFFF 0%, rgba(238, 242, 255, 0.5) 100%);
+            border: 1px solid #C7D2FE;
+        }
+    </style>
+</head>
+<body class="selection:bg-blue-600 selection:text-white">
+
+    <Header lang="en" />
+
+    <main class="py-12 sm:py-16">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- Hero Title -->
+            <div class="hero-lessons p-8 sm:p-14 text-center mb-16">
+                <span class="inline-block text-xs font-mono font-bold tracking-widest uppercase text-blue-900 bg-white/80 px-4 py-1.5 rounded-full border border-blue-300 mb-6">
+                    <i class="fas fa-layer-group mr-1.5 text-blue-600"></i> Active Pedagogy & Socratic Scaffolding
+                </span>
+                <h1 class="text-4xl sm:text-6xl font-black text-slate-950 tracking-tight leading-tight mb-6">
+                    The end of the static PDF.<br/>
+                    Lessons that come alive.
+                </h1>
+                <p class="text-lg sm:text-xl text-slate-700 font-normal leading-relaxed max-w-3xl mx-auto mb-8">
+                    We transform official syllabi into guided micro-learning experiences. Every lesson unites curricular rigor, dynamic mathematical visualization, interactive simulators, and Socratic reflection checkpoints.
+                </p>
+                
+                <div class="flex flex-wrap items-center justify-center gap-4">
+                    <a href="#demo-interactive" class="px-6 py-3 rounded-xl bg-blue-600 text-white font-bold text-sm shadow-md hover:bg-blue-700 transition flex items-center gap-2">
+                        <i class="fas fa-play text-xs"></i>
+                        <span>Try Lesson Simulator</span>
+                    </a>
+                    <a href={catalogUrl} target="_blank" rel="noopener noreferrer" class="px-6 py-3 rounded-xl bg-white text-slate-800 font-bold text-sm border border-slate-300 hover:bg-slate-50 transition flex items-center gap-2">
+                        <i class="fas fa-book-open text-blue-600"></i>
+                        <span>Explore Lessons in Catalog</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- What is an Interactive Lesson? (3 Pedagogical Principles) -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+                <div class="precision-card p-6">
+                    <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-lg mb-4">
+                        <i class="fas fa-shoe-prints"></i>
+                    </div>
+                    <span class="text-xs font-mono font-bold text-blue-700 uppercase tracking-wider block mb-1">Progressive Scaffolding</span>
+                    <h3 class="text-base font-black text-slate-900 mb-2">Optimal Cognitive Load Slides</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Instead of overwhelming 30-page chapters, content is organized into a canonical sequence of 4 to 9 slides: hook, core concept, hands-on simulation, and synthesis.
+                    </p>
+                </div>
+
+                <div class="precision-card p-6">
+                    <div class="w-10 h-10 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center font-bold text-lg mb-4">
+                        <i class="fas fa-sliders"></i>
+                    </div>
+                    <span class="text-xs font-mono font-bold text-teal-700 uppercase tracking-wider block mb-1">Conceptual Manipulation</span>
+                    <h3 class="text-base font-black text-slate-900 mb-2">Learn by Adjusting Variables</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Students don't memorize abstract formulas; they adjust velocity sliders, angle inputs, or chemical parameters to immediately observe effects in real time.
+                    </p>
+                </div>
+
+                <div class="precision-card p-6">
+                    <div class="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-lg mb-4">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <span class="text-xs font-mono font-bold text-indigo-700 uppercase tracking-wider block mb-1">Socratic Checkpoints</span>
+                    <h3 class="text-base font-black text-slate-900 mb-2">Verification Without Easy Answers</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Built-in checkpoints test comprehension. If a student errs, they receive a targeted Socratic hint guiding their deduction rather than a spoon-fed answer.
+                    </p>
+                </div>
+            </div>
+
+            <!-- LIVE DEMO SECTION: LESSON SIMULATOR -->
+            <div id="demo-interactive" class="precision-card section-tint-blue p-6 sm:p-10 mb-16 shadow-lg border-blue-200 scroll-mt-24">
+                
+                <div class="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-slate-200 mb-8">
+                    <div>
+                        <span class="text-xs font-mono font-bold text-blue-600 uppercase tracking-widest block mb-1">
+                            <i class="fas fa-desktop mr-1.5"></i> A2UI Classroom Demo
+                        </span>
+                        <h2 class="text-2xl sm:text-3xl font-black text-slate-950">
+                            High School Physics: Projectile Motion Kinematics
+                        </h2>
+                    </div>
+                    
+                    <div class="flex items-center gap-2 bg-slate-100 p-1.5 rounded-xl text-xs font-mono font-semibold text-slate-600">
+                        <span id="slide-indicator">Step 1 of 4</span>
+                        <span class="text-slate-300">|</span>
+                        <span class="text-emerald-700 font-bold"><i class="fas fa-circle text-[8px] mr-1"></i>Live</span>
+                    </div>
+                </div>
+
+                <!-- LESSON WIDGET CONTAINER -->
+                <div class="bg-slate-50 border border-slate-200 rounded-2xl p-6 sm:p-8 min-h-[440px] flex flex-col justify-between">
+                    
+                    <!-- STEP 1: HOOK AND MOTIVATION -->
+                    <div id="lesson-step-1" class="lesson-step">
+                        <div class="flex items-center gap-2 text-xs font-bold font-mono text-indigo-700 uppercase tracking-wider mb-3">
+                            <span class="px-2.5 py-1 rounded-md bg-indigo-100">Step 1 · The Real-World Problem</span>
+                        </div>
+                        <h3 class="text-xl sm:text-2xl font-black text-slate-900 mb-4">
+                            Why does a projectile achieve maximum range at 45°?
+                        </h3>
+                        <p class="text-sm text-slate-700 leading-relaxed mb-6">
+                            Think of a penalty kick in soccer, a firefighting water cannon, or a space rover landing. Parabolic motion results from two simultaneous, independent orthogonal motions formulated by Galileo Galilei in 1638:
+                        </p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+                            <div class="p-4 rounded-xl bg-white border border-slate-200">
+                                <span class="text-xs font-bold text-blue-700 uppercase block mb-1">Horizontal Axis (X)</span>
+                                <p class="text-xs text-slate-600">Uniform Rectilinear Motion. Horizontal velocity remains constant because no horizontal acceleration acts in a vacuum:</p>
+                                <div class="mt-2 font-mono text-xs font-bold text-slate-800 bg-slate-50 p-2 rounded">
+                                    v_x = v_0 · cos(&alpha;)
+                                </div>
+                            </div>
+                            <div class="p-4 rounded-xl bg-white border border-slate-200">
+                                <span class="text-xs font-bold text-teal-700 uppercase block mb-1">Vertical Axis (Y)</span>
+                                <p class="text-xs text-slate-600">Uniformly Accelerated Motion, governed continuously by planetary gravitational pull:</p>
+                                <div class="mt-2 font-mono text-xs font-bold text-slate-800 bg-slate-50 p-2 rounded">
+                                    v_y = v_0 · sin(&alpha;) - g · t
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- STEP 2: INTERACTIVE CANVAS WITH SLIDERS -->
+                    <div id="lesson-step-2" class="lesson-step hidden">
+                        <div class="flex items-center gap-2 text-xs font-bold font-mono text-teal-700 uppercase tracking-wider mb-3">
+                            <span class="px-2.5 py-1 rounded-md bg-teal-100">Step 2 · Hands-on Virtual Lab</span>
+                        </div>
+                        <h3 class="text-xl sm:text-2xl font-black text-slate-900 mb-2">
+                            Simulate the Trajectory in Real Time
+                        </h3>
+                        <p class="text-xs sm:text-sm text-slate-600 mb-4">
+                            Adjust angle and initial velocity. Observe how the curve bends and the maximum horizontal range X_max changes:
+                        </p>
+
+                        <!-- Canvas and Controls -->
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4">
+                            <!-- Canvas Visualizer -->
+                            <div class="lg:col-span-2 lesson-canvas-container p-3 flex flex-col justify-between h-56 sm:h-64">
+                                <div class="flex items-center justify-between text-[11px] font-mono text-slate-400">
+                                    <span>Cartesian Plane (x, y)</span>
+                                    <span id="telemetry-info" class="text-emerald-400 font-bold">Range: 40.8 m | Max Height: 10.2 m</span>
+                                </div>
+                                <canvas id="trajectory-canvas" class="w-full h-44"></canvas>
+                            </div>
+
+                            <!-- Interactive Sliders -->
+                            <div class="p-4 rounded-xl bg-white border border-slate-200 flex flex-col justify-around">
+                                <div>
+                                    <div class="flex justify-between text-xs font-bold text-slate-800 mb-1">
+                                        <span>Launch Angle (&alpha;):</span>
+                                        <span id="angle-display" class="font-mono text-blue-600 font-black">45°</span>
+                                    </div>
+                                    <input type="range" id="angle-slider" min="15" max="80" value="45" step="1" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600">
+                                    <div class="flex justify-between text-[10px] text-slate-400 font-mono mt-1">
+                                        <span>15° (flat)</span>
+                                        <span>45° (optimal)</span>
+                                        <span>80° (vertical)</span>
+                                    </div>
+                                </div>
+
+                                <div class="mt-4">
+                                    <div class="flex justify-between text-xs font-bold text-slate-800 mb-1">
+                                        <span>Initial Velocity (v_0):</span>
+                                        <span id="velocity-display" class="font-mono text-teal-600 font-black">20 m/s</span>
+                                    </div>
+                                    <input type="range" id="velocity-slider" min="10" max="35" value="20" step="1" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-teal-600">
+                                    <div class="flex justify-between text-[10px] text-slate-400 font-mono mt-1">
+                                        <span>10 m/s</span>
+                                        <span>35 m/s</span>
+                                    </div>
+                                </div>
+
+                                <div class="mt-3 p-2.5 rounded-lg bg-slate-50 border border-slate-200 text-[11px] text-slate-600 font-mono">
+                                    Canonical Formula: <span class="font-bold text-slate-800">X_max = (v_0² · sin(2&alpha;)) / g</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- STEP 3: SOCRATIC COMPREHENSION CHECKPOINT -->
+                    <div id="lesson-step-3" class="lesson-step hidden">
+                        <div class="flex items-center gap-2 text-xs font-bold font-mono text-amber-700 uppercase tracking-wider mb-3">
+                            <span class="px-2.5 py-1 rounded-md bg-amber-100">Step 3 · Conceptual Reasoning Checkpoint</span>
+                        </div>
+                        <h3 class="text-xl sm:text-2xl font-black text-slate-900 mb-2">
+                            The Dilemma of 30° and 60°
+                        </h3>
+                        <p class="text-xs sm:text-sm text-slate-600 mb-6">
+                            You fire two projectiles with identical initial speed: one at 30° and another at 60°. Neglecting air resistance, which one achieves the greater horizontal distance?
+                        </p>
+
+                        <!-- Quiz Options -->
+                        <div class="space-y-3 mb-6" id="quiz-options">
+                            <button class="quiz-option w-full p-4 rounded-xl bg-white border border-slate-200 hover:border-blue-400 hover:bg-blue-50/40 text-left transition text-xs sm:text-sm font-semibold text-slate-800 flex items-center justify-between" data-choice="30">
+                                <span>A) The 30° launch, because it has less air time and travels faster horizontally.</span>
+                                <i class="far fa-circle text-slate-300 choice-icon"></i>
+                            </button>
+
+                            <button class="quiz-option w-full p-4 rounded-xl bg-white border border-slate-200 hover:border-blue-400 hover:bg-blue-50/40 text-left transition text-xs sm:text-sm font-semibold text-slate-800 flex items-center justify-between" data-choice="60">
+                                <span>B) The 60° launch, because it stays aloft longer thanks to higher vertical lift.</span>
+                                <i class="far fa-circle text-slate-300 choice-icon"></i>
+                            </button>
+
+                            <button class="quiz-option w-full p-4 rounded-xl bg-white border border-slate-200 hover:border-blue-400 hover:bg-blue-50/40 text-left transition text-xs sm:text-sm font-semibold text-slate-800 flex items-center justify-between" data-choice="equal">
+                                <span>C) Both reach exactly the same horizontal distance (X_max).</span>
+                                <i class="far fa-circle text-slate-300 choice-icon"></i>
+                            </button>
+                        </div>
+
+                        <!-- Socratic Feedback Box -->
+                        <div id="quiz-feedback" class="hidden p-4 rounded-xl border text-xs sm:text-sm leading-relaxed mb-4">
+                            <!-- Injected dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- STEP 4: SYNTHESIS AND CONCLUSION -->
+                    <div id="lesson-step-4" class="lesson-step hidden">
+                        <div class="flex items-center gap-2 text-xs font-bold font-mono text-emerald-700 uppercase tracking-wider mb-3">
+                            <span class="px-2.5 py-1 rounded-md bg-emerald-100">Step 4 · Learning Synthesis</span>
+                        </div>
+                        <h3 class="text-xl sm:text-2xl font-black text-slate-900 mb-4">
+                            Concept Successfully Mastered!
+                        </h3>
+                        <p class="text-sm text-slate-700 leading-relaxed mb-6">
+                            You have proven experimentally and analytically the principle of <strong>complementary launch angles</strong> in kinematics: any angle pair summing to 90° (30° + 60° = 90°) yields the exact same horizontal range, because sin(2 · 30°) = sin(60°) = sin(120°) = sin(2 · 60°) = 0.866. One projectile travels high with low horizontal speed; the other skims flat but fast.
+                        </p>
+                        
+                        <div class="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-900 mb-6">
+                            <div class="font-bold flex items-center gap-2 mb-1">
+                                <i class="fas fa-check-circle text-emerald-600"></i>
+                                <span>Curricular Standards Alignment:</span>
+                            </div>
+                            <p class="leading-relaxed">
+                                AP Physics 1 Kinematics 2D & Next Generation Science Standards (NGSS HS-PS2-1: Forces and Motion).
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- NAVIGATION BOTTOM BAR -->
+                    <div class="flex items-center justify-between pt-6 border-t border-slate-200 mt-6">
+                        <button id="btn-prev" class="px-4 py-2 rounded-xl border border-slate-300 text-slate-600 font-bold text-xs hover:bg-slate-100 transition disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2" disabled>
+                            <i class="fas fa-chevron-left text-[10px]"></i>
+                            <span>Previous</span>
+                        </button>
+
+                        <div class="flex gap-2" id="step-dots">
+                            <span class="w-2.5 h-2.5 rounded-full bg-blue-600 dot-indicator"></span>
+                            <span class="w-2.5 h-2.5 rounded-full bg-slate-300 dot-indicator"></span>
+                            <span class="w-2.5 h-2.5 rounded-full bg-slate-300 dot-indicator"></span>
+                            <span class="w-2.5 h-2.5 rounded-full bg-slate-300 dot-indicator"></span>
+                        </div>
+
+                        <button id="btn-next" class="px-5 py-2 rounded-xl bg-blue-600 text-white font-bold text-xs shadow-xs hover:bg-blue-700 transition flex items-center gap-2">
+                            <span>Next</span>
+                            <i class="fas fa-chevron-right text-[10px]"></i>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- A2UI MICRO-WIDGETS CATALOG -->
+            <div class="precision-card section-tint-teal p-8 sm:p-12 mb-16 shadow-lg border-teal-200">
+                <div class="text-center max-w-2xl mx-auto mb-10">
+                    <span class="text-xs font-mono font-bold text-teal-800 uppercase tracking-widest block mb-2">
+                        A2UI Pedagogical Component Ecosystem
+                    </span>
+                    <h2 class="text-3xl font-black text-slate-900 tracking-tight">
+                        Ready-to-Use Learning Widgets
+                    </h2>
+                    <p class="text-sm text-slate-600 mt-2">
+                        Every lesson in ColabEdu is assembled using certified pedagogical widgets, without writing custom frontend code.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    
+                    <!-- Widget 1: KaTeX -->
+                    <div class="precision-card p-6 flex flex-col justify-between">
+                        <div>
+                            <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold mb-4">
+                                <i class="fas fa-square-root-variable"></i>
+                            </div>
+                            <h4 class="font-bold text-slate-900 text-base mb-1">KaTeX Formula Editor</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                                High-resolution mathematical typesetting. Ultra-fast rendering of matrices, calculus integrals, and limits.
+                            </p>
+                        </div>
+                        <div class="p-2.5 bg-slate-50 rounded-lg border border-slate-200 font-mono text-[11px] text-slate-700">
+                            &int; f(x) dx = F(b) - F(a)
+                        </div>
+                    </div>
+
+                    <!-- Widget 2: PhET Labs -->
+                    <div class="precision-card p-6 flex flex-col justify-between">
+                        <div>
+                            <div class="w-10 h-10 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center font-bold mb-4">
+                                <i class="fas fa-flask"></i>
+                            </div>
+                            <h4 class="font-bold text-slate-900 text-base mb-1">Embedded PhET Labs</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                                Seamless integration with University of Colorado virtual labs: electric circuits, stoichiometry, and optics.
+                            </p>
+                        </div>
+                        <div class="text-[11px] font-mono text-teal-700 bg-teal-50 p-2 rounded-lg border border-teal-200">
+                            100% interactive · Zero Java plugins
+                        </div>
+                    </div>
+
+                    <!-- Widget 3: Sequencing & Matching -->
+                    <div class="precision-card p-6 flex flex-col justify-between">
+                        <div>
+                            <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold mb-4">
+                                <i class="fas fa-bars-staggered"></i>
+                            </div>
+                            <h4 class="font-bold text-slate-900 text-base mb-1">Sequencing & Matching</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                                Draggable tiles for ordering historical timelines, algorithm steps, or pairing definitions with formal terms.
+                            </p>
+                        </div>
+                        <div class="text-[11px] font-mono text-indigo-700 bg-indigo-50 p-2 rounded-lg border border-indigo-200">
+                            Touch-optimized Drag & Drop
+                        </div>
+                    </div>
+
+                    <!-- Widget 4: Function Plotter -->
+                    <div class="precision-card p-6 flex flex-col justify-between">
+                        <div>
+                            <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center font-bold mb-4">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <h4 class="font-bold text-slate-900 text-base mb-1">CAS Function Plotter</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                                Plots curves, asymptotes, and derivatives as students manipulate constants via dynamic sliders.
+                            </p>
+                        </div>
+                        <div class="text-[11px] font-mono text-purple-700 bg-purple-50 p-2 rounded-lg border border-purple-200">
+                            Symja CAS · Infinitesimal precision
+                        </div>
+                    </div>
+
+                    <!-- Widget 5: Mermaid Diagrams -->
+                    <div class="precision-card p-6 flex flex-col justify-between">
+                        <div>
+                            <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold mb-4">
+                                <i class="fas fa-project-diagram"></i>
+                            </div>
+                            <h4 class="font-bold text-slate-900 text-base mb-1">Mermaid Concept Maps</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                                Family trees, biological pathways, and taxonomies that dynamically expand when tapping individual nodes.
+                            </p>
+                        </div>
+                        <div class="text-[11px] font-mono text-amber-700 bg-amber-50 p-2 rounded-lg border border-amber-200">
+                            Native vector SVG
+                        </div>
+                    </div>
+
+                    <!-- Widget 6: Video Checkpoints -->
+                    <div class="precision-card p-6 flex flex-col justify-between">
+                        <div>
+                            <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center font-bold mb-4">
+                                <i class="fas fa-circle-play"></i>
+                            </div>
+                            <h4 class="font-bold text-slate-900 text-base mb-1">Video Socratic Stops</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                                Real laboratory clips that pause playback at the key moment to prompt an inductive student hypothesis.
+                            </p>
+                        </div>
+                        <div class="text-[11px] font-mono text-rose-700 bg-rose-50 p-2 rounded-lg border border-rose-200">
+                            Active vs. passive viewing
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- FINAL BANNER TO EXAMS AND CATALOG -->
+            <div class="p-8 sm:p-12 rounded-3xl bg-gradient-to-br from-slate-900 to-indigo-950 text-white flex flex-col md:flex-row items-center justify-between gap-8 shadow-xl">
+                <div class="max-w-xl">
+                    <span class="text-xs font-mono font-bold text-blue-400 uppercase tracking-widest block mb-2">
+                        Next Pedagogical Step
+                    </span>
+                    <h3 class="text-2xl sm:text-3xl font-black tracking-tight mb-3">
+                        How to evaluate lessons with official rigor?
+                    </h3>
+                    <p class="text-sm text-slate-300 leading-relaxed">
+                        Discover how ColabEdu evaluates scanned handwritten exams, voice recordings, and digital tests with official rubrics and sovereign teacher review.
+                    </p>
+                </div>
+                <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto shrink-0">
+                    <a href="/en/interactive-exams" class="px-6 py-3.5 rounded-xl bg-blue-600 text-white font-bold text-sm text-center shadow-md hover:bg-blue-500 transition">
+                        Explore Interactive Exams &rarr;
+                    </a>
+                    <a href={catalogUrl} target="_blank" rel="noopener noreferrer" class="px-6 py-3.5 rounded-xl bg-white/10 text-white font-bold text-sm text-center hover:bg-white/20 transition border border-white/20">
+                        OER Catalog
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <Footer lang="en" />
+
+    <!-- LIVE DEMO REACTIVITY SCRIPT -->
+    <script is:inline>
+        let currentStep = 1;
+        const totalSteps = 4;
+
+        function updateStep(step) {
+            currentStep = step;
+            document.querySelectorAll('.lesson-step').forEach((el, idx) => {
+                if (idx + 1 === currentStep) {
+                    el.classList.remove('hidden');
+                } else {
+                    el.classList.add('hidden');
+                }
+            });
+
+            const indicator = document.getElementById('slide-indicator');
+            if (indicator) indicator.textContent = `Step ${currentStep} of ${totalSteps}`;
+
+            const dots = document.querySelectorAll('.dot-indicator');
+            dots.forEach((dot, idx) => {
+                if (idx + 1 === currentStep) {
+                    dot.className = 'w-2.5 h-2.5 rounded-full bg-blue-600 dot-indicator';
+                } else {
+                    dot.className = 'w-2.5 h-2.5 rounded-full bg-slate-300 dot-indicator';
+                }
+            });
+
+            const btnPrev = document.getElementById('btn-prev');
+            const btnNext = document.getElementById('btn-next');
+            if (btnPrev) btnPrev.disabled = currentStep === 1;
+            if (btnNext) {
+                if (currentStep === totalSteps) {
+                    btnNext.innerHTML = '<span>Restart</span> <i class="fas fa-rotate-right text-[10px]"></i>';
+                } else {
+                    btnNext.innerHTML = '<span>Next</span> <i class="fas fa-chevron-right text-[10px]"></i>';
+                }
+            }
+
+            if (currentStep === 2) {
+                setTimeout(drawTrajectory, 60);
+            }
+        }
+
+        document.getElementById('btn-prev')?.addEventListener('click', () => {
+            if (currentStep > 1) updateStep(currentStep - 1);
+        });
+
+        document.getElementById('btn-next')?.addEventListener('click', () => {
+            if (currentStep < totalSteps) {
+                updateStep(currentStep + 1);
+            } else {
+                updateStep(1);
+            }
+        });
+
+        // CANVAS TRAJECTORY SIMULATION
+        const canvas = document.getElementById('trajectory-canvas');
+        const angleSlider = document.getElementById('angle-slider');
+        const velocitySlider = document.getElementById('velocity-slider');
+        const angleDisplay = document.getElementById('angle-display');
+        const velocityDisplay = document.getElementById('velocity-display');
+        const telemetry = document.getElementById('telemetry-info');
+
+        function drawTrajectory() {
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const width = canvas.clientWidth;
+            const height = canvas.clientHeight;
+            if (width === 0 || height === 0) return;
+            canvas.width = width * (window.devicePixelRatio || 1);
+            canvas.height = height * (window.devicePixelRatio || 1);
+            ctx.scale(window.devicePixelRatio || 1, window.devicePixelRatio || 1);
+
+            ctx.clearRect(0, 0, width, height);
+
+            const angleDeg = parseFloat(angleSlider ? angleSlider.value : 45);
+            const v0 = parseFloat(velocitySlider ? velocitySlider.value : 20);
+            const g = 9.81;
+            const angleRad = (angleDeg * Math.PI) / 180;
+
+            if (angleDisplay) angleDisplay.textContent = `${angleDeg}°`;
+            if (velocityDisplay) velocityDisplay.textContent = `${v0} m/s`;
+
+            const maxRange = (Math.pow(v0, 2) * Math.sin(2 * angleRad)) / g;
+            const maxHeight = (Math.pow(v0 * Math.sin(angleRad), 2)) / (2 * g);
+
+            if (telemetry) {
+                telemetry.textContent = `Range: ${maxRange.toFixed(1)} m | Max Height: ${maxHeight.toFixed(1)} m`;
+            }
+
+            // Grid & Axes
+            ctx.strokeStyle = '#1E293B';
+            ctx.lineWidth = 1;
+            for (let x = 30; x < width; x += 40) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, height - 20);
+                ctx.stroke();
+            }
+            for (let y = 20; y < height - 20; y += 30) {
+                ctx.beginPath();
+                ctx.moveTo(30, y);
+                ctx.lineTo(width, y);
+                ctx.stroke();
+            }
+
+            // Ground
+            ctx.strokeStyle = '#475569';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(30, height - 20);
+            ctx.lineTo(width, height - 20);
+            ctx.stroke();
+
+            // Parabolic curve
+            const scaleX = (width - 50) / 125;
+            const scaleY = (height - 40) / 40;
+
+            ctx.beginPath();
+            ctx.strokeStyle = '#38BDF8';
+            ctx.lineWidth = 3;
+
+            const tFlight = (2 * v0 * Math.sin(angleRad)) / g;
+            for (let t = 0; t <= tFlight; t += 0.05) {
+                const x = v0 * Math.cos(angleRad) * t;
+                const y = v0 * Math.sin(angleRad) * t - 0.5 * g * Math.pow(t, 2);
+
+                const canvasX = 30 + x * scaleX;
+                const canvasY = (height - 20) - y * scaleY;
+
+                if (t === 0) ctx.moveTo(canvasX, canvasY);
+                else ctx.lineTo(canvasX, canvasY);
+            }
+            ctx.stroke();
+
+            // Impact point
+            const endX = 30 + maxRange * scaleX;
+            ctx.fillStyle = '#34D399';
+            ctx.beginPath();
+            ctx.arc(endX, height - 20, 5, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Origin
+            ctx.fillStyle = '#60A5FA';
+            ctx.beginPath();
+            ctx.arc(30, height - 20, 6, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        angleSlider?.addEventListener('input', drawTrajectory);
+        velocitySlider?.addEventListener('input', drawTrajectory);
+        window.addEventListener('resize', drawTrajectory);
+
+        // SOCRATIC QUIZ
+        const quizButtons = document.querySelectorAll('.quiz-option');
+        const feedbackBox = document.getElementById('quiz-feedback');
+
+        quizButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const choice = btn.getAttribute('data-choice');
+                
+                quizButtons.forEach(b => {
+                    b.classList.remove('border-blue-600', 'bg-blue-50', 'border-emerald-500', 'bg-emerald-50', 'border-amber-500', 'bg-amber-50');
+                });
+
+                if (feedbackBox) {
+                    feedbackBox.classList.remove('hidden', 'bg-emerald-50', 'border-emerald-200', 'text-emerald-900', 'bg-amber-50', 'border-amber-200', 'text-amber-900');
+                    
+                    if (choice === 'equal') {
+                        btn.classList.add('border-emerald-500', 'bg-emerald-50');
+                        feedbackBox.classList.add('bg-emerald-50', 'border-emerald-200', 'text-emerald-900');
+                        feedbackBox.innerHTML = `
+                            <div class="font-bold flex items-center gap-2 mb-1">
+                                <i class="fas fa-check-circle text-emerald-600 text-base"></i>
+                                <span>Superb Socratic deduction!</span>
+                            </div>
+                            <p>Exactly: complementary launch angles (30° and 60°) achieve the exact same horizontal range. The reason is trigonometric: sin(2 · 30°) = sin(60°) and sin(2 · 60°) = sin(120°) = sin(60°). One flies higher with lower horizontal velocity, while the other flies low and fast.</p>
+                        `;
+                    } else {
+                        btn.classList.add('border-amber-500', 'bg-amber-50');
+                        feedbackBox.classList.add('bg-amber-50', 'border-amber-200', 'text-amber-900');
+                        feedbackBox.innerHTML = `
+                            <div class="font-bold flex items-center gap-2 mb-1">
+                                <i class="fas fa-brain text-amber-600 text-base"></i>
+                                <span>Socratic hint to reflect:</span>
+                            </div>
+                            <p>Recall the formula from step 2: X_max = (v_0² · sin(2&alpha;)) / g. What is sin(2 · 30°) = sin(60°)? What is sin(2 · 60°) = sin(120°)? Return to step 2 and adjust the slider between 30° and 60°: where does the green landing point fall?</p>
+                        `;
+                    }
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

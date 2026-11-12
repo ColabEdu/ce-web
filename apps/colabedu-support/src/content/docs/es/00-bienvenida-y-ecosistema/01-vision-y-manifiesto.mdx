@@ -1,0 +1,64 @@
+---
+title: "Visión y Manifiesto de ColabEdu"
+description: "IA soberana, grounding normativo L0 y pedagogía activa sin alucinaciones."
+---
+
+import { Steps, Tabs, TabItem, Aside } from '@astrojs/starlight/components';
+
+## 1. Visión General y Propósito
+
+ColabEdu nace con un principio inmutable: **cero tolerancia a la alucinación pedagógica o normativa**. 
+A diferencia de herramientas de IA genéricas que inventan criterios o aplican heurísticas descontextualizadas, ColabEdu opera exclusivamente sobre una base de conocimiento oficial verificada criptográficamente por hash SHA-256 (leyes educativas como LOMLOE, decretos autonómicos, frameworks AP de College Board y Bachillerato Internacional).
+
+Esta plataforma conecta a docentes, alumnos y administradores en un flujo pedagógico continuo donde la inteligencia artificial actúa como tutor socrático y asistente de corrección, preservando siempre la soberanía del profesor.
+
+---
+
+## 2. Paso a Paso Visual (Aplicación Web / Tablet)
+
+<Steps>
+1. **Acceso al Portal Principal**:
+   Entra en [colabedu.net](https://colabedu.net) o abre la aplicación ColabEdu en tu navegador o tablet.
+
+2. **Exploración del Entorno**:
+   Observa el panel de bienvenida con acceso a tus cursos activos, catálogo normativo y asignaciones pendientes.
+
+   <figure>
+     <img src="/images/screenshots/es/ui-bienvenida-vision-manifiesto.webp" alt="Visión y Manifiesto de ColabEdu" />
+     <figcaption>Vista del panel general y manifiesto de soberanía pedagógica en ColabEdu.</figcaption>
+   </figure>
+
+3. **Verificación de Metadatos Normativos**:
+   Comprueba que cada curso y ejercicio muestra su sello de grounding normativo oficial con su identificador de decreto y competencia vinculada.
+</Steps>
+
+---
+
+## 3. Consejos Pedagógicos y Buenas Prácticas
+
+- Utiliza ColabEdu como un amplificador del tiempo docente, no como un sustituto del criterio humano.
+- Diseña actividades que estimulen el razonamiento crítico y la argumentación en lugar de la memorización mecánica.
+- Consulta el radar de competencias para verificar el equilibrio entre saberes básicos y destrezas prácticas.
+
+---
+
+<Aside type="tip" title="💻 ¿Prefieres automatizarlo por Terminal? (Equivalente CLI)">
+
+Puedes verificar el estado normativo y los principios de plataforma mediante `./ce-cli.sh`:
+
+<Tabs>
+  <TabItem label="Comando Directo">
+  ```bash
+  ./ce-cli.sh course readiness --standard=standard.lomloe.es --level=HS
+  ```
+  </TabItem>
+
+  <TabItem label="Inspección de Fuentes L0">
+  ```bash
+  cat ce-specs/sources/sources_manifest.json | jq '.sources[] | {id, title, sha256}'
+  ```
+  </TabItem>
+</Tabs>
+
+> **Nota de Gobernanza**: Toda llamada CLI utiliza internamente el Dev-Bypass o credenciales seguras, garantizando las mismas reglas de validación y seguridad que la interfaz gráfica.
+</Aside>

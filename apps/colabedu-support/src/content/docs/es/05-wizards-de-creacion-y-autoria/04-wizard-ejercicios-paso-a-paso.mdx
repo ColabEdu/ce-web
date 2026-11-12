@@ -1,0 +1,72 @@
+---
+title: "Asistente de Ejercicios en 5 Pasos y Calibración Sintética"
+description: "Paso a paso con enunciado, fuentes, andamiaje, rúbrica y botón 🧪 Test de entregas sintéticas."
+---
+
+import { Steps, Tabs, TabItem, Aside } from '@astrojs/starlight/components';
+
+## 1. Visión General y Propósito
+
+El **Asistente de Creación y Edición de Ejercicios (Exercise Wizard)** permite al docente diseñar retos pedagógicos de alto rigor normativo en solo 5 pasos asistidos por inteligencia artificial.
+
+La joya de la corona del asistente es el **Paso 5: Calibración y Directivas**, que incorpora el botón **🧪 Probar con Entrega Sintética**. Este botón permite al docente someter la rúbrica y sus directivas a prueba contra 3 entregas simuladas de alumnos arquetípicos (A: Alto rendimiento, B: Rendimiento medio con errores conceptuales típicos, C: Bajo rendimiento) antes de publicar la tarea a los estudiantes reales.
+
+---
+
+## 2. Los 5 Pasos del Asistente
+
+<Steps>
+1. **Paso 1: Enunciado y Contexto Curricular**:
+   Redacta o refina con IA el planteamiento del reto, vinculándolo automáticamente a las competencias del currículo oficial.
+
+2. **Paso 2: Fuentes y Lecturas Asociadas**:
+   Adjunta textos normativos L0, fragmentos de libros OER o recursos multimedia de referencia.
+
+3. **Paso 3: Andamiaje Socrático y Preguntas Guía**:
+   Define los peldaños de ayuda que el Companion ofrecerá al alumno cuando se atasque, evitando que la IA le dé la respuesta directa.
+
+4. **Paso 4: Rúbrica y Criterios de Calificación**:
+   Desglosa los niveles de desempeño y descriptores cuantitativos/cualitativos según la normativa vigente.
+
+5. **Paso 5: Directivas de Aula y Calibración Sintética**:
+   Introduce directivas en lenguaje natural (ej. *"No penalizar errores tipográficos"* o *"Exigir unidades"*). 
+   Pulsa en **🧪 Probar con Entrega Sintética** para ver cómo califica el motor Grading V2 a los 3 arquetipos de alumno en vivo.
+
+   <figure>
+     <img src="/images/screenshots/es/ui-wizard-ejercicios-step5-synthetic.webp" alt="Paso 5 del Wizard de Ejercicios" />
+     <figcaption>Paso 5: Ajuste de directivas y botón de simulación con entregas sintéticas.</figcaption>
+   </figure>
+</Steps>
+
+---
+
+## 3. Consejos Pedagógicos y Buenas Prácticas
+
+- Utiliza siempre la prueba sintética para verificar que la rúbrica distingue con claridad entre un error de cálculo y una falta de comprensión conceptual.
+- Las directivas de aula no modifican la plantilla en Git: quedan guardadas de forma segura en `assignments.evaluation_overrides` en la base de datos de tu centro.
+
+---
+
+<Aside type="tip" title="💻 ¿Prefieres automatizarlo por Terminal? (Equivalente CLI)">
+
+Puedes validar y simular la evaluación de un ejercicio con entregas de prueba mediante `./ce-cli.sh`:
+
+<Tabs>
+  <TabItem label="Simular Evaluación Sintética">
+  ```bash
+  ./ce-cli.sh test eval \
+    --spec="ce-specs/catalog/es/eso/biology/genetics/ex_mendel_01.v1.yaml" \
+    --mode=SYNTHETIC_TRIO
+  ```
+  </TabItem>
+
+  <TabItem label="Validación Estricta de Esquema">
+  ```bash
+  ./ce-cli.sh spec validate \
+    --file="ce-specs/catalog/es/eso/biology/genetics/ex_mendel_01.v1.yaml"
+  ```
+  </TabItem>
+</Tabs>
+
+> **Nota de Gobernanza**: Toda llamada CLI utiliza internamente el Dev-Bypass o credenciales seguras, garantizando las mismas reglas de validación y seguridad que la interfaz gráfica.
+</Aside>

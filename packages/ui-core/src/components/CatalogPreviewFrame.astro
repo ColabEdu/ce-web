@@ -1,0 +1,142 @@
+---
+// CatalogPreviewFrame.astro: Widget Demo Frame in-situ con iframe, selector de marco y botón expandir
+import { appLink } from "../navigation/routes";
+
+export interface Props {
+  initialStandard?: 'all' | 'es' | 'us' | 'intl';
+  height?: string;
+  title?: string;
+  lang?: string;
+}
+
+const {
+  initialStandard = 'all',
+  height = '620px',
+  title,
+  lang = 'es',
+} = Astro.props;
+
+const isEn = lang === 'en';
+const baseCatalogPath = initialStandard === 'all' ? '/catalog/' : `/catalog/${initialStandard}/`;
+const defaultCatalogUrl = appLink('catalog', baseCatalogPath);
+const defaultTitle = isEn 
+  ? 'Curricular OER Catalog & Interactive Lessons Explorer' 
+  : 'Explorador del Catálogo Curricular OER & Lecciones Interactivas';
+---
+
+<div class="catalog-preview-container rounded-2xl border border-slate-300/80 bg-white shadow-xl overflow-hidden my-8">
+  <!-- Device & Filter Chrome Topbar -->
+  <div class="flex flex-wrap items-center justify-between gap-3 px-4 py-3 bg-slate-900 text-white border-b border-slate-800">
+    <!-- Window controls & Title -->
+    <div class="flex items-center gap-3">
+      <div class="flex items-center gap-1.5">
+        <span class="w-3 h-3 rounded-full bg-red-500/80"></span>
+        <span class="w-3 h-3 rounded-full bg-amber-500/80"></span>
+        <span class="w-3 h-3 rounded-full bg-emerald-500/80"></span>
+      </div>
+      <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider bg-amber-400 text-slate-950">
+        Live Catalog Preview
+      </span>
+      <span class="text-xs font-semibold text-slate-200 hidden md:inline">
+        {title || defaultTitle}
+      </span>
+    </div>
+
+    <!-- Quick Framework Switcher & Maximize Action -->
+    <div class="flex items-center gap-2">
+      <!-- Framework Filter Buttons -->
+      <div class="inline-flex p-0.5 rounded-lg bg-slate-800 border border-slate-700 text-xs font-mono">
+        <button
+          type="button"
+          data-catalog-target="/catalog/"
+          class="catalog-filter-btn px-2.5 py-1 rounded-md text-[11px] font-bold transition-all bg-amber-500 text-slate-950 shadow-xs"
+        >
+          {isEn ? 'All' : 'Todos'}
+        </button>
+        <button
+          type="button"
+          data-catalog-target="/catalog/es"
+          class="catalog-filter-btn px-2.5 py-1 rounded-md text-[11px] font-bold text-slate-300 hover:text-white transition-all"
+        >
+          🇪🇸 {isEn ? 'Spain' : 'España'}
+        </button>
+        <button
+          type="button"
+          data-catalog-target="/catalog/us"
+          class="catalog-filter-btn px-2.5 py-1 rounded-md text-[11px] font-bold text-slate-300 hover:text-white transition-all"
+        >
+          🇺🇸 USA (AP)
+        </button>
+        <button
+          type="button"
+          data-catalog-target="/catalog/intl"
+          class="catalog-filter-btn px-2.5 py-1 rounded-md text-[11px] font-bold text-slate-300 hover:text-white transition-all"
+        >
+          🌐 IB
+        </button>
+      </div>
+
+      <!-- Maximize to New Tab Button -->
+      <a
+        id="catalog-fullscreen-btn"
+        href={defaultCatalogUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition flex items-center gap-1.5 border border-white/10"
+        title={isEn ? "Open in full tab" : "Abrir en nueva pestaña"}
+      >
+        <span>{isEn ? "Full Page" : "Pantalla Completa"}</span>
+        <i class="fas fa-arrow-up-right-from-square text-[10px]"></i>
+      </a>
+    </div>
+  </div>
+
+  <!-- Interactive Iframe -->
+  <div class="relative w-full bg-slate-950">
+    <iframe
+      id="catalog-preview-iframe"
+      src={defaultCatalogUrl}
+      class="w-full border-none block"
+      style={`height: ${height};`}
+      loading="lazy"
+      title={title || defaultTitle}
+      allow="clipboard-read; clipboard-write"
+    ></iframe>
+  </div>
+</div>
+
+<script>
+  function setupCatalogFilters() {
+    const container = document.querySelector('.catalog-preview-container');
+    if (!container) return;
+
+    const iframe = container.querySelector('#catalog-preview-iframe') as HTMLIFrameElement;
+    const fullscreenBtn = container.querySelector('#catalog-fullscreen-btn') as HTMLAnchorElement;
+    const filterButtons = container.querySelectorAll('.catalog-filter-btn');
+
+    filterButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetPath = btn.getAttribute('data-catalog-target') || '/catalog/';
+        
+        filterButtons.forEach(b => {
+          b.classList.remove('bg-amber-500', 'text-slate-950', 'shadow-xs');
+          b.classList.add('text-slate-300');
+        });
+        btn.classList.add('bg-amber-500', 'text-slate-950', 'shadow-xs');
+        btn.classList.remove('text-slate-300');
+
+        if (iframe) {
+          const currentSrc = new URL(iframe.src);
+          currentSrc.pathname = targetPath;
+          iframe.src = currentSrc.toString();
+          if (fullscreenBtn) {
+            fullscreenBtn.href = currentSrc.toString();
+          }
+        }
+      });
+    });
+  }
+
+  setupCatalogFilters();
+  document.addEventListener('astro:page-load', setupCatalogFilters);
+</script>

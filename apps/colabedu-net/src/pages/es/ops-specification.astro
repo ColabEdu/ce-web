@@ -1,0 +1,319 @@
+---
+// src/pages/es/ops-specification.astro
+// Especificación OPS (Open Pedagogy Specification): Especificación Abierta, Declarativa y Soberana
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import { appLink } from "@colabedu/ui-core/navigation";
+import "../../styles/global.css";
+
+const orgUrl = appLink('org', '/');
+const catalogUrl = appLink('catalog', '/');
+---
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate icon" type="image/png" href="/favicon.png" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Especificación OPS (Open Pedagogy Specification) | ColabEdu.net</title>
+    <meta name="description" content="Descubre la especificación abierta OPS (Open Pedagogy Specification v0.9.6): la especificación declarativa YAML/JSON Schema desarrollada en el proyecto open source colabedu.org que desvincula la pedagogía del software propietario.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+
+    <style is:global>
+        :root {
+            --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+        body {
+            font-family: var(--font-sans);
+            background-color: #FAF9F6;
+            color: #0F172A;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+        .precision-card {
+            background-color: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            border-radius: 1.25rem;
+            box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.03);
+            transition: all 0.2s ease-in-out;
+        }
+        .precision-card:hover {
+            border-color: #CBD5E1;
+            box-shadow: 0 10px 20px -4px rgba(15, 23, 42, 0.05);
+        }
+        .hero-ops {
+            background: linear-gradient(135deg, rgba(238, 242, 255, 0.8) 0%, rgba(240, 253, 250, 0.6) 50%, rgba(254, 243, 199, 0.4) 100%);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            border-radius: 2rem;
+        }
+        .code-box {
+            font-family: 'JetBrains Mono', monospace;
+            background-color: #0F172A;
+            color: #38BDF8;
+            border-radius: 1rem;
+            padding: 1.25rem;
+            font-size: 0.75rem;
+            line-height: 1.6;
+            overflow-x: auto;
+        }
+        /* Ritmo cromático alternante */
+        .section-tint-blue {
+            background: linear-gradient(180deg, #FFFFFF 0%, rgba(239, 246, 255, 0.45) 100%);
+            border: 1px solid #BFDBFE;
+        }
+        .section-tint-amber {
+            background: linear-gradient(180deg, #FFFFFF 0%, rgba(254, 243, 199, 0.4) 100%);
+            border: 1px solid #FDE68A;
+        }
+    </style>
+</head>
+<body class="selection:bg-blue-600 selection:text-white">
+
+    <Header lang="es" />
+
+    <main class="py-12 sm:py-16">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- Hero Title -->
+            <div class="hero-ops p-8 sm:p-14 text-center mb-16">
+                <div class="inline-flex items-center gap-2 text-xs font-mono font-bold tracking-widest uppercase text-blue-900 bg-white/90 px-4 py-1.5 rounded-full border border-blue-300 mb-6">
+                    <i class="fas fa-cube text-blue-600"></i>
+                    <span>Especificación Abierta · OPS v0.9.6</span>
+                </div>
+                <h1 class="text-4xl sm:text-6xl font-black text-slate-950 tracking-tight leading-tight mb-6">
+                    Open Pedagogy Specification.<br/>
+                    Pedagogía como código declarativo.
+                </h1>
+                <p class="text-lg sm:text-xl text-slate-700 font-normal leading-relaxed max-w-3xl mx-auto mb-8">
+                    <strong>OPS (Open Pedagogy Specification)</strong> es una especificación técnica abierta y auditable que desacopla la autoría de lecciones, ejercicios y rúbricas evaluativas del software propietario. Un formato declarativo desarrollado en el proyecto open source <strong>colabedu.org</strong> para que la comunidad educativa sea dueña absoluta de su patrimonio didáctico.
+                </p>
+                
+                <div class="flex flex-wrap items-center justify-center gap-4">
+                    <a href={orgUrl} target="_blank" rel="noopener noreferrer" class="px-6 py-3 rounded-xl bg-blue-600 text-white font-bold text-sm shadow-md hover:bg-blue-700 transition flex items-center gap-2">
+                        <i class="fas fa-external-link-alt text-xs"></i>
+                        <span>Explorar el Proyecto ColabEdu.org</span>
+                    </a>
+                    <a href="/es/grounding" class="px-6 py-3 rounded-xl bg-white text-slate-800 font-bold text-sm border border-slate-300 hover:bg-slate-50 transition flex items-center gap-2">
+                        <i class="fas fa-shield-halved text-blue-600"></i>
+                        <span>Ver Arquitectura Grounding L0</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- ¿Por qué una especificación abierta? (El Problema del Lock-in) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+                <div class="precision-card p-8 bg-red-50/50 border-red-200">
+                    <div class="w-10 h-10 rounded-xl bg-red-100 text-red-600 flex items-center justify-center font-bold text-lg mb-4">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <span class="text-xs font-mono font-bold text-red-700 uppercase tracking-wider block mb-1">El Modelo Propietario Tradicional</span>
+                    <h3 class="text-xl font-black text-slate-900 mb-3">Cautividad Tecnológica (Vendor Lock-in)</h3>
+                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mb-4">
+                        Cuando un colegio o distrito crea cursos digitales en plataformas comerciales cerradas, sus preguntas, rúbricas y materiales quedan atrapados en formatos binarios propietarios o bases de datos inaccesibles. Si cambian de proveedor, pierden todo su trabajo pedagógico acumulado.
+                    </p>
+                    <div class="p-3 bg-red-100/60 rounded-xl border border-red-200 text-xs text-red-900 font-medium">
+                        Consecuencia: Las instituciones educativas pagan licencias cautivas una y otra vez sin ser dueñas del contenido didáctico.
+                    </div>
+                </div>
+
+                <div class="precision-card p-8 bg-emerald-50/50 border-emerald-200">
+                    <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-lg mb-4">
+                        <i class="fas fa-unlock-keyhole"></i>
+                    </div>
+                    <span class="text-xs font-mono font-bold text-emerald-700 uppercase tracking-wider block mb-1">El Paradigma OPS & ColabEdu</span>
+                    <h3 class="text-xl font-black text-slate-900 mb-3">Soberanía Pedagógica Git-First</h3>
+                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mb-4">
+                        OPS define cada lección, ejercicio y criterio oficial en texto legible por humanos (YAML y JSON Schema). Se versiona en repositorios Git institucionales, se valida contra esquemas matemáticos formales y se ejecuta en cualquier motor compatible sin dependencias cerradas.
+                    </p>
+                    <div class="p-3 bg-emerald-100/60 rounded-xl border border-emerald-200 text-xs text-emerald-900 font-medium">
+                        Beneficio: El centro y los docentes son propietarios inmutables de sus especificaciones curriculares para siempre.
+                    </div>
+                </div>
+            </div>
+
+            <!-- ESTRUCTURA ANATÓMICA DE OPS: LAS 4 CAPAS CURRICULARES -->
+            <div class="precision-card p-8 sm:p-12 mb-16 section-tint-blue">
+                <span class="text-xs font-mono font-bold text-blue-700 uppercase tracking-widest block mb-2">
+                    Anatomía de la Especificación
+                </span>
+                <h2 class="text-2xl sm:text-3xl font-black text-slate-950 mb-4">
+                    La Pirámide de Especificaciones OPS (C0 a C3)
+                </h2>
+                <p class="text-sm text-slate-600 leading-relaxed mb-8">
+                    Una especificación OPS no es un simple enunciado con respuestas; es un grafo estructurado donde cada elemento se fundamenta en la capa superior sin ambigüedades:
+                </p>
+
+                <div class="space-y-4">
+                    <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                        <div class="flex items-center gap-3">
+                            <span class="w-9 h-9 rounded-xl bg-slate-900 text-white font-mono font-bold flex items-center justify-center text-xs shrink-0">L0</span>
+                            <div>
+                                <h4 class="font-bold text-slate-900 text-sm">L0 Grounding Normativo (Decreto Oficial)</h4>
+                                <p class="text-xs text-slate-500">BOE RD 534/2024, LOMLOE, US Common Core, California CDE, College Board AP con hash criptográfico SHA-256 verificado.</p>
+                            </div>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-md bg-slate-200 text-slate-800 text-[10px] font-mono font-bold shrink-0">Ley de Origen</span>
+                    </div>
+
+                    <div class="p-5 rounded-2xl bg-amber-50/70 border border-amber-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                        <div class="flex items-center gap-3">
+                            <span class="w-9 h-9 rounded-xl bg-amber-600 text-white font-mono font-bold flex items-center justify-center text-xs shrink-0">C0</span>
+                            <div>
+                                <h4 class="font-bold text-slate-900 text-sm">C0 Taxonomía & Criterios de Evaluación</h4>
+                                <p class="text-xs text-slate-500">Mapeo formal de competencias, criterios observables, niveles de desempeño y descriptores analíticos.</p>
+                            </div>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-md bg-amber-200 text-amber-900 text-[10px] font-mono font-bold shrink-0">Rúbrica Oficial</span>
+                    </div>
+
+                    <div class="p-5 rounded-2xl bg-indigo-50/70 border border-indigo-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                        <div class="flex items-center gap-3">
+                            <span class="w-9 h-9 rounded-xl bg-indigo-600 text-white font-mono font-bold flex items-center justify-center text-xs shrink-0">C1</span>
+                            <div>
+                                <h4 class="font-bold text-slate-900 text-sm">C1 Receta Didáctica & Ponderación</h4>
+                                <p class="text-xs text-slate-500">Estructura del examen o lección: pesos de cada bloque temático, tiempo asignado y directivas de aula.</p>
+                            </div>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-md bg-indigo-200 text-indigo-900 text-[10px] font-mono font-bold shrink-0">Blueprint Curricular</span>
+                    </div>
+
+                    <div class="p-5 rounded-2xl bg-blue-50/70 border border-blue-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                        <div class="flex items-center gap-3">
+                            <span class="w-9 h-9 rounded-xl bg-blue-600 text-white font-mono font-bold flex items-center justify-center text-xs shrink-0">C2</span>
+                            <div>
+                                <h4 class="font-bold text-slate-900 text-sm">C2 Ejercicio o Lección Canónica</h4>
+                                <p class="text-xs text-slate-500">Enunciados, widgets A2UI, soluciones canónicas paso a paso y análisis de misconcepciones frecuentes.</p>
+                            </div>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-md bg-blue-200 text-blue-900 text-[10px] font-mono font-bold shrink-0">Spec de Aula</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EJEMPLO EN VIVO DE ESPECIFICACIÓN OPS EN YAML -->
+            <div class="mb-16">
+                <div class="text-center max-w-2xl mx-auto mb-8">
+                    <span class="text-xs font-mono font-bold text-indigo-700 uppercase tracking-widest block mb-2">
+                        Transparencia Total
+                    </span>
+                    <h2 class="text-3xl font-black text-slate-900 tracking-tight">
+                        Así se define una Lección en OPS
+                    </h2>
+                    <p class="text-sm text-slate-600 mt-2">
+                        Sin formatos cerrados. Un documento YAML declarativo que cualquier docente o desarrollador puede auditar, editar y versionar.
+                    </p>
+                </div>
+
+                <div class="code-box">
+<pre><code>apiVersion: colabedu.ai/v1beta1
+kind: InteractiveLesson
+metadata:
+  id: "lesson.physics.parabolic_motion.v1"
+  title: "Cinemática: Simulación de Tiro Parabólico"
+  standard: "standard.lomloe.es"
+  competencies: ["CE.FIS.2", "CCL2"]
+  version: "1.0.0"
+spec:
+  durationMinutes: 45
+  slides:
+    - slideNumber: 1
+      title: "El Problema del Alcance Máximo"
+      layout: "split"
+      theory: "v_x = v_0 * cos(alpha); v_y = v_0 * sin(alpha) - g*t"
+    - slideNumber: 2
+      title: "Laboratorio Manipulativo"
+      layout: "widget"
+      widget:
+        type: "physics_parameter_slider"
+        parameters: ["angle", "initial_velocity"]
+    - slideNumber: 3
+      title: "Checkpoint Socrático"
+      layout: "widget"
+      widget:
+        type: "quiz_widget"
+        question: "¿Por qué 30º y 60º tienen el mismo alcance?"
+        socratic_hint: "Analiza el término sin(2*alpha) en la fórmula de alcance."</code></pre>
+                </div>
+            </div>
+
+            <!-- CONEXIÓN CON COLABEDU.ORG: EL PROYECTO OPEN SOURCE -->
+            <div class="precision-card p-8 sm:p-12 mb-16 section-tint-amber">
+                <div class="flex items-center gap-3 text-blue-700 font-bold text-xs font-mono uppercase tracking-widest mb-3">
+                    <i class="fas fa-code-branch"></i>
+                    <span>Comunidad Open Source</span>
+                </div>
+                <h3 class="text-2xl sm:text-3xl font-black text-slate-950 mb-4">
+                    ColabEdu.org: El Proyecto Open Source donde se describe la OPS
+                </h3>
+                <p class="text-sm text-slate-700 leading-relaxed mb-6">
+                    <strong>ColabEdu.org</strong> es el portal del proyecto open source donde se publica y documenta la especificación abierta <strong>OPS</strong>. En él se encuentran las definiciones de los meta-esquemas, las guías de implementación para desarrolladores y las fuentes normativas abiertas. Por su parte, <strong>ColabEdu.net</strong> proporciona la suite de infraestructura en la nube, despliegues de aula, apps móviles y extensiones para centros e instituciones.
+                </p>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+                    <div class="p-4 rounded-xl bg-white border border-slate-200">
+                        <span class="text-xs font-bold text-slate-900 block mb-1">
+                            <i class="fas fa-scale-balanced text-blue-600 mr-1.5"></i> Especificación Abierta y Auditable
+                        </span>
+                        <p class="text-xs text-slate-600">
+                            Cualquier centro o desarrollador puede implementar su propio motor de ejecución o validador compatible con OPS sin costes de licenciamiento.
+                        </p>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-white border border-slate-200">
+                        <span class="text-xs font-bold text-slate-900 block mb-1">
+                            <i class="fas fa-globe text-teal-600 mr-1.5"></i> 65+ Repositorios OER Federados
+                        </span>
+                        <p class="text-xs text-slate-600">
+                            OPS conecta con catálogos educativos abiertos como Procomún, OpenStax, CK-12, PhET Colorado y redes docentes colaborativas.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="pt-6 border-t border-slate-200 flex flex-wrap items-center justify-between gap-4">
+                    <div class="text-xs text-slate-500 font-mono">
+                        Especificación Abierta: <span class="font-bold text-blue-700">OPS v0.9.6</span>
+                    </div>
+                    <a href={orgUrl} target="_blank" rel="noopener noreferrer" class="px-5 py-2.5 rounded-xl bg-blue-600 text-white font-bold text-xs hover:bg-blue-700 transition flex items-center gap-2">
+                        <span>Ver documentación técnica en ColabEdu.org</span>
+                        <i class="fas fa-external-link-alt text-[10px]"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- BANNER FINAL -->
+            <div class="p-8 sm:p-12 rounded-3xl bg-slate-900 text-white flex flex-col md:flex-row items-center justify-between gap-8 shadow-xl">
+                <div class="max-w-xl">
+                    <span class="text-xs font-mono font-bold text-blue-400 uppercase tracking-widest block mb-2">
+                        Explora las Aplicaciones de OPS
+                    </span>
+                    <h3 class="text-2xl sm:text-3xl font-black tracking-tight mb-3">
+                        Mira la especificación en acción en el aula
+                    </h3>
+                    <p class="text-sm text-slate-300 leading-relaxed">
+                        Experimenta las lecciones interactivas con simulación y los exámenes auténticos con corrección OCR basados íntegramente en especificaciones OPS.
+                    </p>
+                </div>
+                <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto shrink-0">
+                    <a href="/es/interactive-lessons" class="px-6 py-3.5 rounded-xl bg-blue-600 text-white font-bold text-sm text-center shadow-md hover:bg-blue-500 transition">
+                        Lecciones Interactivas
+                    </a>
+                    <a href="/es/interactive-exams" class="px-6 py-3.5 rounded-xl bg-white/10 text-white font-bold text-sm text-center hover:bg-white/20 transition border border-white/20">
+                        Exámenes & OCR
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <Footer lang="es" />
+
+</body>
+</html>

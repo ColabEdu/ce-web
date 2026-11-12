@@ -1,0 +1,159 @@
+---
+// src/pages/es/linguistic-inclusion.astro
+// Inclusión Lingüística Real y Apoyo a Alumnos Newcomers
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import { appLink } from "@colabedu/ui-core/navigation";
+import "../../styles/global.css";
+
+const appUrl = appLink('app', '/');
+---
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate icon" type="image/png" href="/favicon.png" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inclusión Lingüística y Newcomers | ColabEdu.net</title>
+    <meta name="description" content="Inclusión lingüística real en ColabEdu: apoyo a alumnos recién llegados (newcomers) con glosarios pedagógicos, doble lengua de andamiaje y nivelación en ciencias y matemáticas.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+
+    <style is:global>
+        :root {
+            --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+        body {
+            font-family: var(--font-sans);
+            background-color: #FAF9F6;
+            color: #0F172A;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+        .precision-card {
+            background-color: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            border-radius: 1.25rem;
+            box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.03);
+            transition: all 0.2s ease-in-out;
+        }
+        .precision-card:hover {
+            border-color: #CBD5E1;
+            box-shadow: 0 10px 20px -4px rgba(15, 23, 42, 0.05);
+        }
+        .hero-inclusion {
+            background: linear-gradient(135deg, rgba(240, 253, 250, 0.6) 0%, rgba(204, 251, 241, 0.3) 50%, rgba(254, 243, 199, 0.3) 100%);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            border-radius: 2rem;
+        }
+    </style>
+</head>
+<body class="selection:bg-teal-600 selection:text-white">
+
+    <Header lang="es" />
+
+    <main class="py-12 sm:py-16">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- Hero Title -->
+            <div class="hero-inclusion p-8 sm:p-14 text-center mb-16">
+                <span class="inline-block text-xs font-mono font-bold tracking-widest uppercase text-teal-900 bg-white/80 px-4 py-1.5 rounded-full border border-teal-300 mb-6">
+                    <i class="fas fa-language mr-1.5 text-teal-600"></i> Equidad para Alumnos Recién Llegados (Newcomers)
+                </span>
+                <h1 class="text-4xl sm:text-6xl font-black text-slate-950 tracking-tight leading-tight mb-6">
+                    Que el idioma de acogida no sea una barrera para aprender álgebra o física.
+                </h1>
+                <p class="text-lg sm:text-xl text-slate-700 font-normal leading-relaxed max-w-3xl mx-auto">
+                    Un alumno con incorporación tardía al sistema educativo o procedente de otro país no tiene un déficit intelectual: tiene un desfase de código lingüístico. ColabEdu andamia el aprendizaje con doble lengua y glosarios socráticos en tiempo real.
+                </p>
+            </div>
+
+            <!-- Tesis Central: La Doble Brecha -->
+            <div class="precision-card p-8 sm:p-10 bg-white border-teal-200 mb-16">
+                <div class="max-w-3xl mx-auto">
+                    <span class="text-xs font-mono font-bold text-teal-700 uppercase tracking-wider block mb-2">El Problema Invisible de las Aulas</span>
+                    <h2 class="text-2xl sm:text-3xl font-black text-slate-900 mb-4">
+                        El 68% del fracaso escolar en alumnos inmigrantes ocurre en ciencias y matemáticas
+                    </h2>
+                    <p class="text-slate-600 text-sm sm:text-base leading-relaxed mb-4">
+                        Los centros educativos suelen volcar los esfuerzos de inmersión en la clase de Lengua Castellana. Sin embargo, cuando ese mismo alumno entra en Biología, Física o Matemáticas se encuentra con un léxico altamente técnico (*"ósmosis"*, *"cateto"*, *"hipotenusa"*, *"densidad relativa"*).
+                    </p>
+                    <p class="text-slate-600 text-sm sm:text-base leading-relaxed mb-6">
+                        Al no comprender el enunciado del problema, suspende. No por incapacidad lógica, sino por un bloqueo en el vocabulario académico.
+                    </p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-6 border-t border-slate-200 text-center">
+                        <div class="p-4 bg-teal-50/60 rounded-xl border border-teal-200">
+                            <i class="fas fa-book-atlas text-teal-700 text-xl mb-2 block"></i>
+                            <h4 class="font-bold text-xs text-slate-900 uppercase">Glosario Contextual</h4>
+                            <p class="text-[11px] text-slate-500 mt-1">Definiciones visuales en 1 clic de cada concepto técnico de la lección.</p>
+                        </div>
+                        <div class="p-4 bg-teal-50/60 rounded-xl border border-teal-200">
+                            <i class="fas fa-arrows-split-up-and-left text-teal-700 text-xl mb-2 block"></i>
+                            <h4 class="font-bold text-xs text-slate-900 uppercase">Andamiaje Bilingüe</h4>
+                            <p class="text-[11px] text-slate-500 mt-1">El copiloto socrático puede razonar en la lengua materna mientras enseña los términos oficiales.</p>
+                        </div>
+                        <div class="p-4 bg-teal-50/60 rounded-xl border border-teal-200">
+                            <i class="fas fa-universal-access text-teal-700 text-xl mb-2 block"></i>
+                            <h4 class="font-bold text-xs text-slate-900 uppercase">Inclusión DUA</h4>
+                            <p class="text-[11px] text-slate-500 mt-1">Diseño Universal para el Aprendizaje: texto, audio, apoyo visual y manipulable.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cómo Ayuda al Docente en el Aula Heterogénea -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+                <div class="precision-card p-8 bg-white">
+                    <span class="text-xs font-mono font-bold text-amber-700 uppercase tracking-wider block mb-2">Para el Profesor</span>
+                    <h3 class="text-xl font-black text-slate-900 mb-3">Atender a 30 alumnos con 5 idiomas diferentes</h3>
+                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mb-4">
+                        Es humanamente imposible que un profesor de matemáticas atienda simultáneamente a un alumno hispanohablante nativo, a dos estudiantes ucranianos recién llegados, a uno de origen marroquí y a otro de China.
+                    </p>
+                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                        ColabEdu se convierte en el auxiliar de apoyo individual: el alumno trabaja el mismo estándar Common Core, LOMLOE o AP pero con andamiaje lingüístico adaptado, liberando al docente para coordinar la clase.
+                    </p>
+                </div>
+
+                <div class="precision-card p-8 bg-white">
+                    <span class="text-xs font-mono font-bold text-teal-700 uppercase tracking-wider block mb-2">Para el Estudiante Newcomer</span>
+                    <h3 class="text-xl font-black text-slate-900 mb-3">Integración sin pérdida de nivel curricular</h3>
+                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mb-4">
+                        No rebajamos los objetivos competenciales ni condenamos al alumno a tareas infantiles de colorear fichas.
+                    </p>
+                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                        El estudiante resuelve los mismos teoremas de geometría y las mismas leyes de movimiento, preservando su autoestima y facilitando su incorporación con éxito a cursos superiores.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Call to action -->
+            <div class="p-8 sm:p-12 rounded-2xl bg-slate-900 text-white text-center">
+                <h3 class="text-2xl sm:text-3xl font-black mb-3">Ningún estudiante se queda atrás por una barrera idiomática</h3>
+                <p class="text-slate-300 text-sm max-w-xl mx-auto mb-6">
+                    Descubre cómo los centros piloto de ColabEdu han reducido a la mitad el abandono temprano en alumnado newcomer.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <a href="/es/institutions" class="px-6 py-3.5 text-sm font-extrabold text-slate-900 bg-amber-400 hover:bg-amber-300 rounded-xl transition-all">
+                        Solicitar Piloto para tu Centro &rarr;
+                    </a>
+                    <a href="/es/socratic-tutor" class="px-6 py-3.5 text-sm font-bold text-slate-300 hover:text-white border border-slate-700 rounded-xl transition-colors">
+                        Ver Tutor Socrático
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Unified Footer -->
+    <Footer lang="es" />
+
+</body>
+</html>

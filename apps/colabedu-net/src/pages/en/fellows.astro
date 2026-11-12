@@ -1,0 +1,333 @@
+---
+// src/pages/en/fellows.astro
+// ColabEdu Education Fellows Program: Pedagogical Ambassadors, University Internships & Civic Impact
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import { appLink } from "@colabedu/ui-core/navigation";
+import "../../styles/global.css";
+
+const lang = 'en';
+const catalogUrl = appLink('catalog', '/');
+const appUrl = appLink('app', '/');
+const supportUrl = appLink('support', '/');
+---
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate icon" type="image/png" href="/favicon.png" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ColabEdu Fellows Program | Internships, Open Pedagogy & Social Equity</title>
+    <meta name="description" content="Join the ColabEdu Education Fellows program: graduate internships, master's theses, OER curriculum digitization, and pedagogical onboarding for Title I schools and foundations.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+
+    <style is:global>
+        :root {
+            --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+        body {
+            font-family: var(--font-sans);
+            background-color: #FAF9F6;
+            color: #0F172A;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+        .precision-card {
+            background-color: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            border-radius: 1.25rem;
+            box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.03);
+            transition: all 0.2s ease-in-out;
+        }
+        .precision-card:hover {
+            border-color: #CBD5E1;
+            box-shadow: 0 10px 20px -4px rgba(15, 23, 42, 0.05);
+        }
+        .hero-fellows {
+            background: linear-gradient(135deg, rgba(240, 253, 250, 0.7) 0%, rgba(254, 243, 199, 0.4) 50%, rgba(238, 242, 255, 0.4) 100%);
+            border: 1px solid rgba(204, 251, 241, 0.8);
+            border-radius: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body class="selection:bg-teal-600 selection:text-white">
+
+    <Header lang={lang} />
+
+    <main class="py-12 sm:py-16">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- Hero Section -->
+            <div class="hero-fellows p-8 sm:p-14 text-center mb-16 shadow-xs">
+                <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-teal-100/90 border border-teal-300 text-teal-900 text-xs font-bold shadow-2xs mb-6">
+                    <span class="flex h-2 w-2 rounded-full bg-teal-600"></span>
+                    <span>Open Application · Graduate Internships, Master's Theses & EdTech Leadership</span>
+                </span>
+                <h1 class="text-4xl sm:text-6xl font-black text-slate-950 tracking-tight leading-tight mb-6">
+                    <span class="text-teal-700">ColabEdu Education Fellows</span> Program.<br/>
+                    Civic technology so no student is left behind.
+                </h1>
+                <p class="text-lg sm:text-xl text-slate-700 font-normal leading-relaxed max-w-3xl mx-auto mb-8">
+                    We invite graduate students in Education (M.Ed., MA Education, EdTech, Educational Policy). We believe in <strong>building collaboratively with partner institutions</strong>: our Fellows serve as <strong>pedagogical ambassadors</strong> who engage as peers with public schools, foundations, and school districts to co-design classroom impact and accelerate open curriculum digitization.
+                </p>
+
+                <div class="flex flex-wrap items-center justify-center gap-4">
+                    <a
+                        href={`mailto:fellows@colabedu.org?subject=${encodeURIComponent("ColabEdu Education Fellows Application")}&body=${encodeURIComponent("Hello ColabEdu Team,\n\nI would like to apply for the ColabEdu Education Fellows program. Below are my university, degree, and pedagogical focus:\n\n- University / Graduate Program:\n- Specialization (Math, STEM, Language, EdTech, Public Policy):\n- Primary Motivation:\n- Phone / LinkedIn:\n\nThank you.")}`}
+                        class="px-6 py-3.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-black text-sm shadow-md hover:shadow-lg transition-all flex items-center gap-2"
+                    >
+                        <i class="fas fa-paper-plane text-xs"></i>
+                        <span>Apply as an Education Fellow</span>
+                    </a>
+                    <a
+                        href="/en/sponsored"
+                        class="px-5 py-3.5 rounded-xl bg-white hover:bg-slate-50 text-slate-800 font-bold text-sm border border-slate-300 shadow-xs transition-colors flex items-center gap-2"
+                    >
+                        <i class="fas fa-hand-holding-dollar text-amber-600 text-xs"></i>
+                        <span>Explore Sponsorship Programs</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Core Philosophy: Collaborative Building vs Transactional Selling -->
+            <div class="bg-white rounded-3xl border border-slate-200 p-8 sm:p-12 mb-16 shadow-xs">
+                <div class="max-w-3xl mx-auto text-center mb-10">
+                    <span class="text-xs font-mono font-bold uppercase tracking-wider text-teal-700 bg-teal-50 px-3 py-1 rounded-full border border-teal-200">
+                        Our Philosophy
+                    </span>
+                    <h2 class="text-2xl sm:text-4xl font-black text-slate-900 mt-3">
+                        We believe in building collaboratively with partner institutions
+                    </h2>
+                    <p class="text-sm sm:text-base text-slate-600 mt-3 leading-relaxed">
+                        Sustainable educational transformation does not happen through software sales funnels. It is built through <strong>peer-level pedagogical co-design, dedicated classroom support, and strict standards compliance</strong>.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200">
+                        <div class="w-10 h-10 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center text-lg mb-3">
+                            <i class="fas fa-handshake-angle"></i>
+                        </div>
+                        <h4 class="font-extrabold text-slate-900 text-sm mb-1.5">Co-Design Without Transactional Friction</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            We do not push software licenses or pressure schools. We assess genuine classroom needs and co-develop tailored equity and digital learning initiatives.
+                        </p>
+                    </div>
+
+                    <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200">
+                        <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center text-lg mb-3">
+                            <i class="fas fa-scale-balanced"></i>
+                        </div>
+                        <h4 class="font-extrabold text-slate-900 text-sm mb-1.5">Language of the Classroom & Standards</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Our Fellows converse in the language of educators: mastering Common Core, Texas TEKS, AP/IB rubrics, and LOMLOE frameworks, appreciating actual Sunday evening workloads.
+                        </p>
+                    </div>
+
+                    <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200">
+                        <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center text-lg mb-3">
+                            <i class="fas fa-heart-pulse"></i>
+                        </div>
+                        <h4 class="font-extrabold text-slate-900 text-sm mb-1.5">High-Impact Philanthropic Alliances</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            We connect corporate CSR foundations and civic grants directly with real public classrooms, guaranteeing that sovereign compute grants reach under-resourced students.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Candidate Profile -->
+            <div class="mb-16">
+                <div class="text-center max-w-2xl mx-auto mb-10">
+                    <span class="text-xs font-mono font-bold uppercase tracking-wider text-slate-400">
+                        Fellow Qualifications
+                    </span>
+                    <h2 class="text-2xl sm:text-3xl font-black text-slate-900 mt-1">
+                        Who are we looking for?
+                    </h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="precision-card p-6 sm:p-8 flex gap-4">
+                        <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-xl shrink-0 shadow-xs">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-extrabold text-slate-900 text-base mb-1">Graduate & Master's Students</h3>
+                            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                                Enrolled in M.Ed., MA in Education, Educational Technology, Curriculum & Instruction, or Education Policy programs.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="precision-card p-6 sm:p-8 flex gap-4">
+                        <div class="w-12 h-12 rounded-2xl bg-teal-50 text-teal-600 flex items-center justify-center font-bold text-xl shrink-0 shadow-xs">
+                            <i class="fas fa-book-open-reader"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-extrabold text-slate-900 text-base mb-1">Passion for Open Educational Resources</h3>
+                            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                                Champions of universal access to knowledge, open-source educational software, and eliminating textbook costs for public school students.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="precision-card p-6 sm:p-8 flex gap-4">
+                        <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold text-xl shrink-0 shadow-xs">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-extrabold text-slate-900 text-base mb-1">Enthusiasm for Socratic & Sovereign AI</h3>
+                            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                                Curiosity about how computer vision and LLMs can scaffold inquiry-based learning without giving answers away or compromising student privacy.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="precision-card p-6 sm:p-8 flex gap-4">
+                        <div class="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center font-bold text-xl shrink-0 shadow-xs">
+                            <i class="fas fa-users-viewfinder"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-extrabold text-slate-900 text-base mb-1">Commitment to Equity & Newcomers</h3>
+                            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                                Sensitivity toward students in Title I districts, rural areas, and newcomer English/Spanish language learners requiring mother-tongue scaffolding.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Real Day-to-Day Projects -->
+            <div class="bg-gradient-to-br from-slate-900 to-slate-950 text-white rounded-3xl p-8 sm:p-12 mb-16 shadow-xl relative overflow-hidden">
+                <div class="max-w-3xl mb-10">
+                    <span class="tag-badge bg-teal-900/80 text-teal-300 border border-teal-700 uppercase tracking-wider text-xs mb-3">
+                        Day-to-Day Impact
+                    </span>
+                    <h2 class="text-2xl sm:text-4xl font-black text-white tracking-tight">
+                        What will you actually work on?
+                    </h2>
+                    <p class="text-slate-300 text-sm sm:text-base mt-2">
+                        Engage in substantive digital transformation projects that directly benefit thousands of educators and learners.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-slate-800/80 p-6 rounded-2xl border border-slate-700">
+                        <div class="text-teal-400 font-mono font-bold text-xs uppercase mb-2">Track 1 · Institutional Dialogue & Co-Design</div>
+                        <h4 class="text-lg font-bold text-white mb-2">Partner Entity Dialogue & Program Co-Design</h4>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            When a foundation, municipality, or school district seeks to partner, the Fellow does not run a sales pitch: they prepare a standards-aligned pedagogical needs study and collaboratively co-design how Socratic copilots and interactive simulations solve genuine classroom challenges.
+                        </p>
+                    </div>
+
+                    <div class="bg-slate-800/80 p-6 rounded-2xl border border-slate-700">
+                        <div class="text-amber-400 font-mono font-bold text-xs uppercase mb-2">Track 2 · OER Factory</div>
+                        <h4 class="text-lg font-bold text-white mb-2">Open Curriculum Digitization & Enrichment</h4>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Convert open textbooks (OpenStax, INTEF, SEP) into interactive Open Pedagogy Specifications (OPS v0.9.6), infusing KaTeX math, active simulations, and 9-step guided reasoning scaffolds.
+                        </p>
+                    </div>
+
+                    <div class="bg-slate-800/80 p-6 rounded-2xl border border-slate-700">
+                        <div class="text-blue-400 font-mono font-bold text-xs uppercase mb-2">Track 3 · Classroom Onboarding</div>
+                        <h4 class="text-lg font-bold text-white mb-2">Pedagogical Concierge for Teachers</h4>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Guide educators through their initial school pilots: configure course rubrics, demonstrate the Canvas/Moodle SpeedGrader browser extension, and address instructional questions with zero technical friction.
+                        </p>
+                    </div>
+
+                    <div class="bg-slate-800/80 p-6 rounded-2xl border border-slate-700">
+                        <div class="text-emerald-400 font-mono font-bold text-xs uppercase mb-2">Track 4 · Impact Audit</div>
+                        <h4 class="text-lg font-bold text-white mb-2">Social Return on Investment (SROI) & PISA Telemetry</h4>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Draft quarterly accountability reports for sponsors and public agencies, measuring Socratic tutoring volume, teacher time recovered, and gains across STEM and literacy benchmarks.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- University Partnerships & Master's Thesis Credits -->
+            <div class="bg-white rounded-3xl border border-slate-200 p-8 sm:p-12 mb-16 shadow-xs">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                    <div class="lg:col-span-7 space-y-4">
+                        <span class="text-xs font-mono font-bold uppercase tracking-wider text-teal-700 bg-teal-50 px-3 py-1 rounded-full border border-teal-200">
+                            Academic Recognition
+                        </span>
+                        <h3 class="text-2xl sm:text-3xl font-black text-slate-900">
+                            Curricular Internships & Master's Thesis Co-Advising
+                        </h3>
+                        <p class="text-sm text-slate-600 leading-relaxed">
+                            The ColabEdu Education Fellows program is structured formally through **university educational cooperation agreements**. We offer:
+                        </p>
+                        <ul class="space-y-2 text-xs sm:text-sm text-slate-700">
+                            <li class="flex items-start gap-2">
+                                <i class="fas fa-check-circle text-teal-600 mt-1"></i>
+                                <span><strong>Recognized Curricular and Extracurricular Internships</strong> with university academic credit allocation (ECTS / US Quarter & Semester units).</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fas fa-check-circle text-teal-600 mt-1"></i>
+                                <span><strong>Master's Thesis (TFM) Co-Advising</strong> grounded in authentic classroom telemetry, competency-based assessment, or OER public policy.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fas fa-check-circle text-teal-600 mt-1"></i>
+                                <span><strong>Fellowship Stipend / Financial Grant</strong> corresponding to weekly commitment.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fas fa-check-circle text-teal-600 mt-1"></i>
+                                <span><strong>Career Pathway</strong>: priority onboarding into ColabEdu's core educational operations team as platform operations expand.</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="lg:col-span-5 bg-slate-50 p-6 rounded-2xl border border-slate-200 text-center space-y-4">
+                        <div class="w-14 h-14 rounded-2xl bg-teal-600 text-white flex items-center justify-center font-bold text-2xl mx-auto shadow-md">
+                            <i class="fas fa-building-columns"></i>
+                        </div>
+                        <h4 class="font-extrabold text-slate-900 text-base">Representing a University or School of Education?</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            We establish direct institutional agreements with university departments of education to host student cohorts and EdTech researchers.
+                        </p>
+                        <a
+                            href="mailto:universities@colabedu.org?subject=University%20Cooperation%20Agreement%20ColabEdu%20Fellows"
+                            class="inline-block px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition-colors"
+                        >
+                            Inquire for University Agreements &rarr;
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Final Call to Action -->
+            <div class="text-center max-w-2xl mx-auto py-8">
+                <h3 class="text-2xl sm:text-3xl font-black text-slate-900 mb-3">
+                    Build the future of open pedagogy with us
+                </h3>
+                <p class="text-sm text-slate-600 mb-6">
+                    Submit your resume or a brief statement of interest sharing your dedication to public education, civic technology, and educational equity.
+                </p>
+                <a
+                    href={`mailto:fellows@colabedu.org?subject=${encodeURIComponent("ColabEdu Education Fellows Application")}`}
+                    class="px-8 py-4 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-black text-base shadow-md hover:shadow-lg transition-all inline-flex items-center gap-2.5"
+                >
+                    <i class="fas fa-envelope text-sm"></i>
+                    <span>Contact fellows@colabedu.org</span>
+                </a>
+            </div>
+
+        </div>
+    </main>
+
+    <Footer lang={lang} />
+
+</body>
+</html>

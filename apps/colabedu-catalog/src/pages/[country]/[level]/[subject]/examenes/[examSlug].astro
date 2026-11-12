@@ -2,7 +2,7 @@
 import CatalogLayout from '@/layouts/CatalogLayout.astro';
 import ExamJsonLd from '@/components/seo/ExamJsonLd.astro';
 import BreadcrumbJsonLd from '@/components/seo/BreadcrumbJsonLd.astro';
-import { loadCatalog, BASE_APP_URL } from '@/lib/catalogLoader';
+import { loadCatalog, BASE_APP_URL, slugify } from '@/lib/catalogLoader';
 import type { ExamSpecItem, CourseSpecItem } from '@/lib/types';
 
 export function getStaticPaths() {
@@ -93,6 +93,20 @@ const breadcrumbSchema = [
         <span class="px-2.5 py-0.5 rounded-full text-xs font-mono text-cyan-400 bg-cyan-500/10 border border-cyan-500/20">
           Nota Máxima: {exam.totalMaxScore} pts
         </span>
+        {exam.transversalCompetencies && exam.transversalCompetencies.length > 0 && (
+          <div class="flex items-center gap-1.5 flex-wrap">
+            {exam.transversalCompetencies.map((comp) => (
+              <a
+                href={`/catalog/${exam.country}/criterios/${slugify(comp)}`}
+                class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-300 border border-emerald-500/25 hover:bg-emerald-500/20 hover:border-emerald-500/50 transition-colors inline-flex items-center gap-1 group"
+                title={`Ver lecciones y exámenes evaluados bajo el criterio ${comp}`}
+              >
+                <span>{comp}</span>
+                <span class="text-emerald-400/60 group-hover:text-emerald-300 text-[10px]">↗</span>
+              </a>
+            ))}
+          </div>
+        )}
       </div>
 
       <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight mb-4">

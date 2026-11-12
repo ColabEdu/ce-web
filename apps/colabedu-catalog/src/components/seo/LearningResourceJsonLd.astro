@@ -10,6 +10,11 @@ interface Props {
 const { lesson, canonicalUrl, courseName } = Astro.props;
 
 // Extract questions from slides
+const isEnglish = lesson.standardRef?.includes('us') || lesson.language === 'en';
+const teaserAnswerText = isEnglish
+  ? "Interactive solution, official rubric, and step-by-step socratic feedback available in the ColabEdu simulator."
+  : "Resolución socrática, comprobación interactiva y rúbrica oficial disponible en el simulador táctil de ColabEdu.";
+
 const questions: any[] = [];
 if (lesson.slides) {
   for (const s of lesson.slides) {
@@ -17,13 +22,12 @@ if (lesson.slides) {
       for (const q of s.embeddedWidget.props.questions) {
         questions.push({
           "@type": "Question",
-          "name": s.title || "Pregunta de Práctica",
+          "name": s.title || (isEnglish ? "Practice Question" : "Pregunta de Práctica"),
           "text": q.text,
-          "suggestedAnswer": q.options && typeof q.correct === "number" && q.options[q.correct] ? {
+          "suggestedAnswer": {
             "@type": "Answer",
-            "text": q.options[q.correct],
-            "comment": q.explanation || "Respuesta canónica oficial con corrección socrática"
-          } : undefined
+            "text": teaserAnswerText
+          }
         });
       }
     }

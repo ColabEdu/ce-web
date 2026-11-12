@@ -1,0 +1,264 @@
+---
+// src/pages/en/institutions.astro
+// Institutional Solutions, B2G Agreements, and School/District Sponsored Grants
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { appLink } from "@colabedu/ui-core/navigation";
+import { sponsoredGrantsCatalog } from '../../data/grants';
+
+const catalogUrl = appLink('catalog', '/');
+const appUrl = appLink('app', '/');
+---
+<BaseLayout lang="en" title="For Schools, Networks & School Districts | ColabEdu.net">
+    
+    <!-- Hero Section -->
+    <section class="pt-36 pb-20 bg-gradient-to-b from-blue-50/50 via-white to-slate-50 border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="max-w-3xl">
+                <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-100 text-blue-800 text-xs font-bold uppercase tracking-wider mb-6">
+                    K-12, High School & District Institutional Solutions
+                </span>
+                <h1 class="text-4xl sm:text-6xl font-black text-slate-950 tracking-tight leading-[1.1] mb-6">
+                    Protect your faculty from burnout.<br/>
+                    <span class="text-blue-600">Fund student mastery in critical subjects.</span>
+                </h1>
+                <p class="text-lg sm:text-xl text-slate-600 leading-relaxed mb-8">
+                    The sovereign educational platform that gives 15 hours back each week to every educator, guides students socratically, and empowers schools and districts to fund full or scoped curricular grants with zero IT friction.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <a href="#agreements" class="px-8 py-4 text-base font-extrabold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-all shadow-md text-center">
+                        Partnership Models & Sponsorship &rarr;
+                    </a>
+                    <a href="#audit" class="px-8 py-4 text-base font-bold text-slate-700 bg-white border border-slate-300 rounded-xl hover:bg-slate-50 transition-all text-center">
+                        Express 1-Day Pilot Audit
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3 Institutional Pillars -->
+    <section id="pillars" class="py-20 bg-white border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                
+                <!-- Pillar 1 -->
+                <div class="p-8 rounded-3xl border border-slate-200 bg-slate-50/50 flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-2xl bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-xl mb-6">
+                            <i class="fas fa-heart-pulse"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-3">1. Radical Faculty Relief</h3>
+                        <p class="text-sm text-slate-600 leading-relaxed mb-3">
+                            Amidst the global teacher shortage and burnout crisis (UNESCO projects a deficit of 44 million teachers), schools cannot afford to lose educators to repetitive clerical work.
+                        </p>
+                        <p class="text-xs text-slate-500 leading-relaxed">
+                            Our browser extension connects directly into Canvas SpeedGrader, Moodle, and Google Classroom to pre-grade handwriting and essays in 1 click with sovereign teacher control.
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-200 text-xs font-bold text-emerald-700 flex items-center gap-1.5">
+                        <i class="fas fa-arrow-down"></i> -80% mechanical grading time
+                    </div>
+                </div>
+
+                <!-- Pillar 2: Eliminating Pedagogical Drift -->
+                <div class="p-8 rounded-3xl border border-slate-200 bg-slate-50/50 flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-2xl bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-xl mb-6">
+                            <i class="fas fa-scale-balanced"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-3">2. Eliminating Pedagogical Drift</h3>
+                        <p class="text-sm text-slate-600 leading-relaxed mb-3">
+                            Ensure every teacher and school across your district evaluates under identical success criteria using master C1/C2 recipes.
+                        </p>
+                        <p class="text-xs text-slate-500 leading-relaxed">
+                            Subjective grading variance collapses, guaranteeing absolute academic equity in both rural and metropolitan classrooms.
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-200 text-xs font-bold text-indigo-700 flex items-center gap-1.5">
+                        <i class="fas fa-bullseye"></i> -45% inter-evaluator variance
+                    </div>
+                </div>
+
+                <!-- Pillar 3: Targeted Diagnostics & Newcomers -->
+                <div class="p-8 rounded-3xl border border-slate-200 bg-slate-50/50 flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-2xl bg-teal-100 text-teal-800 flex items-center justify-center font-bold text-xl mb-6">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-3">3. PISA Diagnostics & Newcomers</h3>
+                        <p class="text-sm text-slate-600 leading-relaxed mb-3">
+                            Map the true competency benchmark of your secondary cohorts without overloading staff with weeks of manual scoring or disrupting instructional flow.
+                        </p>
+                        <p class="text-xs text-slate-500 leading-relaxed">
+                            Provide dual-language Socratic guidance for immigrant and English Learner (Newcomer) students, breaking the language barrier in STEM subjects.
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-200 text-xs font-bold text-teal-800 flex items-center gap-1.5">
+                        <i class="fas fa-shield"></i> Objective Diagnostics + Inclusion
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- INSTITUTIONAL PARTNERSHIPS & SPONSORSHIP MODELS -->
+    <section id="agreements" class="py-20 bg-slate-50 border-b border-slate-200 scroll-mt-24">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-xs font-mono font-bold text-blue-700 uppercase tracking-widest block mb-2">
+                    Flexible Procurement for Districts & School Networks
+                </span>
+                <h2 class="text-3xl sm:text-4xl font-black text-slate-900">
+                    District Funding & Sponsorship Models
+                </h2>
+                <p class="text-slate-600 text-sm mt-3 leading-relaxed">
+                    Schools don't need to purchase rigid, all-or-nothing proprietary suites. ColabEdu enables institutions to customize exactly what they sponsor and prioritize.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 max-w-6xl mx-auto mb-16">
+                <!-- Model A: School-wide Cloud License -->
+                <div class="p-7 rounded-3xl bg-white border border-slate-300 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center gap-2 text-blue-700 font-bold text-xs uppercase tracking-wider mb-2 font-mono">
+                            <i class="fas fa-building-columns"></i>
+                            <span>B2G Cloud District</span>
+                        </div>
+                        <h3 class="text-xl font-black text-slate-900 mb-2">Comprehensive School Licensing</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed mb-5">
+                            Full coverage across all subjects and grade levels. Centralized LTI 1.3 Advantage integration across Canvas/Moodle sub-accounts, MDM tablet fleet management, and public institutional billing.
+                        </p>
+                        <ul class="space-y-2 text-xs text-slate-700 font-mono mb-6">
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-blue-600"></i> Domain-level activation (@district.edu)</li>
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-blue-600"></i> Sub-account LTI 1.3 deployment</li>
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-blue-600"></i> Compliant US & EU cloud regions</li>
+                        </ul>
+                    </div>
+                    <a href="mailto:institutions@colabedu.net?subject=District%20Comprehensive%20Inquiry" class="w-full py-3 text-center text-xs font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 rounded-xl transition-colors">
+                        Inquire for School &rarr;
+                    </a>
+                </div>
+
+                <!-- Model B: Scoped Curricular Grants -->
+                <div class="p-7 rounded-3xl bg-white border-2 border-teal-600 shadow-md relative flex flex-col justify-between">
+                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-teal-600 text-white text-[10px] font-extrabold uppercase tracking-wider px-3 py-0.5 rounded-full shadow-xs">
+                        Maximum ROI
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2 text-teal-700 font-bold text-xs uppercase tracking-wider mb-2 font-mono">
+                            <i class="fas fa-layer-group"></i>
+                            <span>Scoped Grants</span>
+                        </div>
+                        <h3 class="text-xl font-black text-slate-900 mb-2">Partial Curricular Sponsorship</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed mb-5">
+                            Fund only high-priority departments: <strong>AP Calculus / Exam Prep</strong>, the <strong>Oral World Language Lab</strong>, or targeted <strong>Newcomer English Scaffolding</strong>. Tailored to the exact penny.
+                        </p>
+                        <ul class="space-y-2 text-xs text-slate-700 font-mono mb-6">
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-teal-700"></i> Department or course specific</li>
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-teal-700"></i> Predictable cohort-based cost</li>
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-teal-700"></i> Flexible family expansion path</li>
+                        </ul>
+                    </div>
+                    <a href="mailto:institutions@colabedu.net?subject=Scoped%20Curricular%20Grant%20Inquiry" class="w-full py-3 text-center text-xs font-extrabold text-white bg-teal-700 hover:bg-teal-800 rounded-xl transition-all shadow-xs">
+                        Configure Scoped Grant &rarr;
+                    </a>
+                </div>
+
+                <!-- Model C: Sovereign On-Premise & Gov Source-Available -->
+                <div class="p-7 rounded-3xl bg-slate-900 text-white shadow-xl flex flex-col justify-between border border-slate-700">
+                    <div>
+                        <div class="flex items-center gap-2 text-amber-400 font-bold text-xs uppercase tracking-wider mb-2 font-mono">
+                            <i class="fas fa-server"></i>
+                            <span>Gov Sovereign</span>
+                        </div>
+                        <h3 class="text-xl font-black text-white mb-2">On-Premise & Gov Source-Available</h3>
+                        <p class="text-xs text-slate-300 leading-relaxed mb-5">
+                            For Ministries of Education, Regional Authorities, and Large Urban Districts. Dedicated deployment in your own data centers with air-gapped local AI inference and escrowed source code access.
+                        </p>
+                        <ul class="space-y-2 text-xs text-slate-300 font-mono mb-6">
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-amber-400"></i> Dedicated Kubernetes / OpenShift cluster</li>
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-amber-400"></i> Air-gapped local LLM inference</li>
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-amber-400"></i> Source-available audit under Gov Escrow</li>
+                        </ul>
+                    </div>
+                    <a href="mailto:governments@colabedu.net?subject=Regional%20On%20Premise%20Inquiry" class="w-full py-3 text-center text-xs font-extrabold text-slate-950 bg-amber-400 hover:bg-amber-300 rounded-xl transition-all shadow-md">
+                        Regional On-Premise RFPs &rarr;
+                    </a>
+                </div>
+            </div>
+
+            <!-- DYNAMIC PARTNERSHIP DIRECTORY -->
+            <div class="max-w-5xl mx-auto">
+                <div class="text-center mb-8">
+                    <span class="text-xs font-mono font-bold text-slate-500 uppercase tracking-widest block mb-1">
+                        Active Network Grants & Reference Programs
+                    </span>
+                    <h3 class="text-2xl font-black text-slate-900">
+                        Registered Public & Private Funds
+                    </h3>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {sponsoredGrantsCatalog.map((grant) => (
+                        <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-[10px] font-mono font-bold uppercase px-2 py-0.5 rounded bg-slate-100 text-slate-700">
+                                        {grant.regionBadge}
+                                    </span>
+                                    <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                        {grant.status === 'ACTIVE_DEMO' ? 'Active Agreement' : 'Pilot'}
+                                    </span>
+                                </div>
+                                <h4 class="font-black text-slate-900 text-sm mb-1">{grant.name}</h4>
+                                <div class="text-[11px] text-slate-500 mb-3">Funded by: <strong class="text-slate-700">{grant.funderName}</strong></div>
+                                <p class="text-xs text-slate-600 leading-relaxed mb-4">{grant.scopeDescription}</p>
+                            </div>
+                            <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] font-mono text-slate-500">
+                                <span>Tier: <strong class="text-blue-700">{grant.tierProvided.split(' ')[0]}</strong></span>
+                                <span>{grant.currentBeneficiaries.toLocaleString()} seats active</span>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- 1-Day Evaluation Audit -->
+    <section id="audit" class="py-20 bg-slate-900 text-white">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <span class="text-xs font-mono font-bold uppercase tracking-widest text-amber-400 bg-amber-400/10 px-3.5 py-1.5 rounded-full border border-amber-400/20 mb-6 inline-block">
+                Express Onboarding Service
+            </span>
+            <h2 class="text-3xl sm:text-5xl font-black mb-6">
+                1-Day Evaluative Health Audit
+            </h2>
+            <p class="text-base sm:text-lg text-slate-300 max-w-2xl mx-auto mb-10 leading-relaxed">
+                In 24 hours, we analyze an anonymous sample of 50 student submissions from your institution: benchmark inter-department grading consistency, identify AI usage patterns, and audit state standards coverage.
+            </p>
+
+            <div class="bg-slate-800/80 p-8 rounded-2xl border border-slate-700 max-w-xl mx-auto text-left mb-8 space-y-4">
+                <div class="flex items-center gap-3 text-sm">
+                    <span class="text-amber-400 font-bold">1.</span>
+                    <span>Submit 50 anonymous student papers in PDF (handwritten or typed).</span>
+                </div>
+                <div class="flex items-center gap-3 text-sm">
+                    <span class="text-amber-400 font-bold">2.</span>
+                    <span>Forensic supercomputing batch run with Grading V2.</span>
+                </div>
+                <div class="flex items-center gap-3 text-sm">
+                    <span class="text-amber-400 font-bold">3.</span>
+                    <span>Executive leadership briefing with competency gap map delivered within 24 hours.</span>
+                </div>
+            </div>
+
+            <a href="mailto:institutions@colabedu.net?subject=1%20Day%20Pilot%20Audit%20Request" class="inline-block px-8 py-4 text-base font-extrabold text-slate-950 bg-amber-400 hover:bg-amber-300 rounded-xl transition-all shadow-lg">
+                Schedule a 1-Day Pilot Audit &rarr;
+            </a>
+        </div>
+    </section>
+
+</BaseLayout>

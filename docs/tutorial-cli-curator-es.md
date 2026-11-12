@@ -16,6 +16,35 @@ El pipeline curricular de ColabEdu se orquesta a través del script `./ce-cli.sh
 - **`normative bootstrap`**: Descarga, valida y registra los marcos jurídicos y normativos oficiales (BOE, CDE, LOMLOE) con huella SHA-256.
 - **`course readiness`**: Radar de preparación pedagógica que evalúa el estado de las 6 capas (L0 a L5) antes del ensamblaje.
 - **`spec batch run`**: Ejecuta el ciclo por lotes declarativo (`discover`, `fetch`, `parse`, `validate`, `compose_bundle`, `ingest`).
+- **`auth status / login / logout`**: Inspección y gestión de identidad, tokens JWT e impersonación de roles.
+
+### 1.1 Conectividad Multi-Tenant, Multi-Cluster y Autenticación Agéntica
+
+El CLI soporta conexión transparente a entornos locales, clústeres Kubernetes corporativos, máquinas virtuales On-Premise y *tenants* de demostración aislados mediante flags globales:
+
+```bash
+# 1. Inspeccionar el entorno activo, target resuelto y modo de autenticación
+./ce-cli.sh auth status
+
+# 2. Conectar a un entorno demo de cliente en MicroK8s (resuelve a https://api.<cliente>.demo.colabedu.net)
+./ce-cli.sh --env=demo-oxford course readiness --standard=std.es.lomloe --level=HS
+
+# 3. Conectar a una VM On-Premise (local o remota) por IP
+./ce-cli.sh --env=vm:10.142.227.238 auth status
+
+# 4. Iniciar sesión interactiva con Keycloak Soberano (guarda token en ~/.config/colabedu/auth.json)
+./ce-cli.sh auth login https://api.oxford.demo.colabedu.net admin SuperSecretPassword colabedu
+
+# 5. Dev-Bypass sin fricción (ideal para laboratorios, staging y agentes autónomos)
+./ce-cli.sh --env=demo-oxford --role=TEACHER oer discover --subject="Spanish" --framework="LOMLOE"
+```
+
+| Flag Global | Variable de Entorno | Descripción |
+| :--- | :--- | :--- |
+| `--env=<target>` | `COLABEDU_API_BASE_URL` | Destino predefinido (`local`, `k8s`, `alpha`, `prod`, `demo-<tenant>`, `vm:<ip>`). |
+| `--url=<endpoint>` | `COLABEDU_API_BASE_URL` | URL explícita del backend (`https://api.micolegio.edu.es`). |
+| `--token=<jwt>` | `COLABEDU_AUTH_TOKEN` | Token Bearer JWT manual. |
+| `--role=<role>` | `COLABEDU_DEV_ROLE` | Rol Dev-Bypass (`ADMIN`, `TEACHER`, `STUDENT`) para auditorías sin login interactivo. |
 
 ---
 

@@ -4,17 +4,66 @@ Bienvenido a la guía completa de referencia de la herramienta de línea de coma
 
 ---
 
-## 1. Modos de Ejecución y Entornos (`--env`)
+## 1. Modos de Ejecución, Entornos y Multi-Tenant (`--env`, `--url`)
 
-El comando `./ce-cli.sh` admite el parámetro `--env` para direccionar las operaciones al entorno deseado:
+El comando `./ce-cli.sh` admite los parámetros `--env`, `--url`, `--role` y `--token` para direccionar las operaciones a cualquier entorno estático, tenant específico, clúster remoto o máquina virtual:
+
+### 1.1 Entornos Predefinidos
+```bash
+./ce-cli.sh --env=local <comando>       # Local puro (http://localhost:8081)
+./ce-cli.sh --env=curator <comando>     # Servidor de Curación (http://localhost:8082)
+./ce-cli.sh --env=dev <comando>         # Desarrollo Cloud / Tailscale
+./ce-cli.sh --env=demo <comando>        # Demostración Cloud general
+./ce-cli.sh --env=stage <comando>       # Staging / Preproducción
+./ce-cli.sh --env=prod <comando>        # Producción SaaS
+```
+
+### 1.2 Resolución Dinámica de Tenants y Clústeres (Multi-Tenant)
+- **Namespaces de Demo por Cliente (`demo-<cliente>`)**:
+  Autoresuelve automáticamente al subdominio del cliente en Cloud DNS:
+  ```bash
+  ./ce-cli.sh --env=demo-oxford course readiness --standard="std.es.lomloe"
+  # Target: https://api.oxford.demo.colabedu.net
+  ```
+- **Máquinas Virtuales Dedicadas (Multipass / On-Premise VM)**:
+  Apunta directamente a la IP o puerto de la VM:
+  ```bash
+  ./ce-cli.sh --env=vm:10.142.227.238 course readiness ...
+  ./ce-cli.sh --env=vm:192.168.1.50:8080 course readiness ...
+  ```
+- **Servicios Internos en Clúster Kubernetes (`k8s:<namespace>`)**:
+  Resuelve al DNS interno del clúster:
+  ```bash
+  ./ce-cli.sh --env=k8s:demo-oxford ...
+  # Target: http://colabedu-backend.demo-oxford.svc.cluster.local:8080
+  ```
+- **URL Directa Arbitraria (`--url`)**:
+  ```bash
+  ./ce-cli.sh --url="https://api.micolegio.edu" course readiness ...
+  ```
+
+---
+
+## 1.3 Autenticación y Credenciales Multi-Proveedor (`auth`)
+
+El CLI soporta tanto el modo de desarrollo autónomo (Dev-Bypass) como la autenticación real contra el IdP Soberano (Keycloak) o Firebase:
 
 ```bash
-./ce-cli.sh --env local <comando>     # Local (http://localhost:8081)
-./ce-cli.sh --env curator <comando>   # Servidor de Curación (http://localhost:8082)
-./ce-cli.sh --env dev <comando>       # Desarrollo Cloud (Tailscale)
-./ce-cli.sh --env demo <comando>      # Demostración Cloud
-./ce-cli.sh --env stage <comando>     # Staging / Preproducción
-./ce-cli.sh --env prod <comando>      # Producción
+# Consultar estado de autenticación y entorno destino activo
+./ce-cli.sh auth status
+./ce-cli.sh --env=demo-oxford auth status
+
+# Obtener e inyectar token de Keycloak para entornos On-Premise / Tenants
+./ce-cli.sh auth login http://localhost:8085 profesor@colabedu.org test1234 colabedu
+# Guarda el token en ~/.config/colabedu/auth.json
+
+# Cerrar sesión y volver al modo Dev-Bypass estándar
+./ce-cli.sh auth logout
+
+# Cambiar de rol en modo Dev-Bypass
+./ce-cli.sh auth dev-token TEACHER
+./ce-cli.sh auth dev-token CONTENT_CREATOR
+./ce-cli.sh auth dev-token PLATFORM_SUPER_ADMIN
 ```
 
 ---

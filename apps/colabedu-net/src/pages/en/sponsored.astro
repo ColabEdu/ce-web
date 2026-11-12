@@ -1,0 +1,336 @@
+---
+// src/pages/en/sponsored.astro
+// Sponsored Memberships, Equity Grants & Institutional Philanthropy Partnerships
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { sponsoredGrantsCatalog } from "../../data/grants";
+import { appLink } from "@colabedu/ui-core/navigation";
+
+const appUrl = appLink('app', '/');
+const supportUrl = appLink('support', '/');
+---
+<BaseLayout 
+    title="Sponsored Memberships & Equity Grants | ColabEdu"
+    description="100% funded access to the ColabEdu active pedagogy platform through district consortiums, philanthropic funds, and 1-for-1 solidarity vouchers. Redeem student access or sponsor a public cohort."
+    lang="en"
+>
+    <!-- MAIN HERO -->
+    <section class="relative pt-32 pb-16 lg:pt-40 lg:pb-20 overflow-hidden bg-gradient-to-b from-amber-50/60 via-slate-50 to-white border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center max-w-4xl mx-auto">
+                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-100/80 border border-amber-300 text-amber-900 text-xs font-mono font-bold uppercase tracking-wider mb-6">
+                    <i class="fas fa-hand-holding-dollar text-amber-600"></i>
+                    <span>Funded Access & Solidarity Commitment</span>
+                </div>
+                <h1 class="text-4xl sm:text-6xl font-black text-slate-900 tracking-tight leading-tight mb-6">
+                    Sponsored Memberships.<br/>
+                    <span class="text-amber-600">No student left behind.</span>
+                </h1>
+                <p class="text-lg sm:text-xl text-slate-600 font-normal leading-relaxed max-w-3xl mx-auto mb-8">
+                    High-quality public education should never depend on personal ability to pay. Through B2G district agreements, philanthropic grants, and solidarity allocations from family accounts, we cover 100% of student and teacher accounts in public institutions.
+                </p>
+
+                <!-- Dual CTA: For Beneficiaries vs For Sponsors -->
+                <div class="flex flex-wrap items-center justify-center gap-4">
+                    <a href="#activate-grant" class="px-6 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold text-sm shadow-md transition-all flex items-center gap-2">
+                        <i class="fas fa-key"></i>
+                        <span>Redeem my Grant / School Domain</span>
+                    </a>
+                    <a href="#sponsor" class="px-6 py-3.5 rounded-xl bg-white hover:bg-slate-50 text-slate-800 font-bold text-sm border border-slate-300 shadow-xs transition-all flex items-center gap-2">
+                        <i class="fas fa-building-columns text-blue-600"></i>
+                        <span>Sponsor a Cohort or District</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BLOCK 1: FUNDING PILLARS -->
+    <section class="py-16 bg-white border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-12">
+                <span class="text-xs font-mono font-bold text-slate-500 uppercase tracking-widest block mb-1">
+                    Sustainability Architecture
+                </span>
+                <h2 class="text-2xl sm:text-3xl font-black text-slate-900">
+                    Where does grant funding come from?
+                </h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Pillar 1: B2G District Frameworks -->
+                <div class="p-8 rounded-3xl bg-slate-50 border border-slate-200 shadow-xs flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-2xl bg-blue-100 text-blue-700 flex items-center justify-center text-xl mb-6">
+                            <i class="fas fa-landmark"></i>
+                        </div>
+                        <span class="text-[11px] font-mono font-bold uppercase tracking-wider text-blue-700 block mb-1">Institutional B2G Pillar</span>
+                        <h3 class="text-lg font-black text-slate-900 mb-2">Ministries & School Districts</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Framework agreements that fund AI inference and official rubric alignment across all public schools in their jurisdiction.
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-200 text-xs text-slate-500 font-mono">
+                        Example: Madrid PAU 2026 & Andalusia STEM support funds.
+                    </div>
+                </div>
+
+                <!-- Pillar 2: 1-for-1 Solidarity Pool -->
+                <div class="p-8 rounded-3xl bg-slate-50 border border-slate-200 shadow-xs flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-2xl bg-teal-100 text-teal-700 flex items-center justify-center text-xl mb-6">
+                            <i class="fas fa-hand-holding-heart"></i>
+                        </div>
+                        <span class="text-[11px] font-mono font-bold uppercase tracking-wider text-teal-700 block mb-1">1-for-1 Solidarity Pool</span>
+                        <h3 class="text-lg font-black text-slate-900 mb-2">Family Subscriptions & Private Schools</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Every paid individual family subscription automatically allocates monthly inference queries to under-resourced classrooms.
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-200 text-xs text-slate-500 font-mono">
+                        Audited on Git repositories and verifiable metrics.
+                    </div>
+                </div>
+
+                <!-- Pillar 3: Philanthropic Endowments & CSR -->
+                <div class="p-8 rounded-3xl bg-slate-50 border border-slate-200 shadow-xs flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center text-xl mb-6">
+                            <i class="fas fa-seedling"></i>
+                        </div>
+                        <span class="text-[11px] font-mono font-bold uppercase tracking-wider text-amber-800 block mb-1">Philanthropic Grants</span>
+                        <h3 class="text-lg font-black text-slate-900 mb-2">Open Education Foundations</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Organizations committed to open education sponsor GPU capacity and oral assessment (Voice Lab) for vulnerable cohorts and newcomer students.
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-200 text-xs text-slate-500 font-mono">
+                        Designated vouchers and dedicated inference quotas.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BLOCK 2: FOR INSTITUTIONS: SPONSORSHIP AND DISTRICT AGREEMENT MODELS -->
+    <section id="activate-agreement" class="py-20 bg-slate-50 border-b border-slate-200 scroll-mt-20">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="text-center max-w-2xl mx-auto mb-12">
+                <span class="text-xs font-mono font-bold text-teal-700 uppercase tracking-widest block mb-2">
+                    For Schools, Districts & Foundations
+                </span>
+                <h2 class="text-3xl font-black text-slate-900">
+                    Institutional Coverage and Activation Models
+                </h2>
+                <p class="text-xs sm:text-sm text-slate-600 mt-2">
+                    Zero-touch deployment for hundreds or thousands of students without individual passwords or administrative friction.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+                
+                <!-- Model A: School Domain Agreement -->
+                <div class="p-8 rounded-3xl bg-white border border-slate-300 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="w-10 h-10 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center text-lg mb-4">
+                            <i class="fas fa-network-wired"></i>
+                        </div>
+                        <h4 class="font-black text-slate-900 text-lg mb-1">A. School Domain Enablement</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                            All students and teachers across your district or network (e.g. <code class="bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200">@lausd.net</code>, <code class="bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200">@educa.madrid.org</code>) gain access automatically upon signing in via Google Workspace or Microsoft 365.
+                        </p>
+                        <ul class="text-xs text-slate-600 space-y-2 mb-4">
+                            <li class="flex items-center gap-2">✓ Native SSO integration without manual account creation</li>
+                            <li class="flex items-center gap-2">✓ Dedicated supercompute quota reserved for the academic year</li>
+                            <li class="flex items-center gap-2">✓ Aggregated district analytics for curriculum directors</li>
+                        </ul>
+                    </div>
+                    <a href="#sponsor" class="w-full py-2.5 rounded-xl bg-teal-700 hover:bg-teal-800 text-white font-bold text-xs text-center transition-colors shadow-xs">
+                        Request Domain Agreement &rarr;
+                    </a>
+                </div>
+
+                <!-- Model B: Pre-Funded Voucher Batches -->
+                <div class="p-8 rounded-3xl bg-white border border-slate-300 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center text-lg mb-4">
+                            <i class="fas fa-ticket"></i>
+                        </div>
+                        <h4 class="font-black text-slate-900 text-lg mb-1">B. Pre-Funded Voucher Batches</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                            For philanthropic foundations, summer bridge programs, or targeted elective courses: issue grant tickets (e.g. <code class="bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200 font-mono">GRANT-XXXX-YYYY</code>) for instant redemption by students.
+                        </p>
+                        <ul class="text-xs text-slate-600 space-y-2 mb-4">
+                            <li class="flex items-center gap-2">✓ Fixed-budget allocation per cohort or batch</li>
+                            <li class="flex items-center gap-2">✓ Ideal for newcomer language immersion or remediation</li>
+                            <li class="flex items-center gap-2">✓ Formal public institution billing and procurement</li>
+                        </ul>
+                    </div>
+                    <a href="#sponsor" class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold text-xs text-center transition-colors shadow-xs">
+                        Quote Voucher Batch &rarr;
+                    </a>
+                </div>
+
+            </div>
+
+            <!-- Callout for individual students/teachers with vouchers -->
+            <div class="p-6 rounded-2xl bg-teal-50 border border-teal-200 text-center flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="text-left">
+                    <span class="text-xs font-bold text-teal-950 block">Are you an individual student or teacher holding a grant voucher or school email?</span>
+                    <span class="text-xs text-teal-800">Activate your funded account instantly without a credit card in the Memberships activation section.</span>
+                </div>
+                <a href="/en/memberships#activar-beca" class="px-5 py-2.5 rounded-xl bg-teal-800 text-white font-bold text-xs hover:bg-teal-900 transition-colors whitespace-nowrap shrink-0">
+                    Redeem in Memberships &rarr;
+                </a>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- BLOCK 3: REGISTERED ACTIVE GRANTS DIRECTORY -->
+    <section class="py-20 bg-white border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="text-center max-w-3xl mx-auto mb-14">
+                <span class="text-xs font-mono font-bold text-blue-700 uppercase tracking-widest block mb-2">
+                    Public Transparency & Provenance
+                </span>
+                <h2 class="text-3xl sm:text-4xl font-black text-slate-900">
+                    Active Grants and Endowments Directory
+                </h2>
+                <p class="text-slate-600 text-sm mt-3">
+                    Overview of philanthropic and B2G institutional partnerships currently active on the platform.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+                {sponsoredGrantsCatalog.map((grant) => (
+                    <div class="p-6 rounded-3xl bg-slate-50/70 border border-slate-200 hover:border-slate-300 transition-all shadow-xs flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-[10px] font-mono font-bold uppercase px-2.5 py-1 rounded-md bg-white border border-slate-200 text-slate-800">
+                                    <i class="fas fa-location-dot mr-1 text-slate-400"></i>
+                                    {grant.regionBadge}
+                                </span>
+                                <span class="text-[10px] font-mono font-bold px-2.5 py-1 rounded-md bg-emerald-50 text-emerald-800 border border-emerald-300">
+                                    {grant.status === 'ACTIVE_DEMO' ? 'Active Partnership' : grant.status === 'OPEN_APPLY' ? 'Open Application' : 'Pilot Program'}
+                                </span>
+                            </div>
+                            <h4 class="font-black text-slate-900 text-base mb-1">{grant.name}</h4>
+                            <div class="text-xs text-slate-500 mb-3">
+                                Funded by: <strong class="text-slate-800">{grant.funderName}</strong>
+                            </div>
+                            <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                                {grant.scopeDescription}
+                            </p>
+                        </div>
+                        
+                        <div class="pt-4 border-t border-slate-200/80 flex items-center justify-between text-[11px] font-mono text-slate-600">
+                            <div>
+                                Tier: <strong class="text-blue-700">{grant.tierProvided.split(' ')[0]}</strong>
+                            </div>
+                            <div class="text-emerald-700 font-bold">
+                                {grant.currentBeneficiaries.toLocaleString()} beneficiaries
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+        </div>
+    </section>
+
+    <!-- BLOCK 4: FOR SPONSORS, FOUNDATIONS AND DISTRICTS -->
+    <section id="sponsor" class="py-20 bg-slate-900 text-white scroll-mt-20">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="text-center max-w-3xl mx-auto mb-14">
+                <span class="text-xs font-mono font-bold text-amber-400 uppercase tracking-widest block mb-2">
+                    For Districts, Philanthropies & Corporate Sponsors
+                </span>
+                <h2 class="text-3xl sm:text-4xl font-black text-white">
+                    Sponsor a Student Cohort or Whole District
+                </h2>
+                <p class="text-slate-300 text-sm mt-3 leading-relaxed">
+                    Customize your educational impact program: designate specific subjects (AP Spanish, High School STEM, or Newcomer English), regional scope, and zero-friction activation methods.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-12">
+                <div class="p-6 rounded-2xl bg-slate-800/80 border border-slate-700">
+                    <div class="text-amber-400 font-black text-2xl mb-1">100%</div>
+                    <div class="text-xs font-bold text-white mb-1">Dedicated to Educational Inference</div>
+                    <p class="text-[11px] text-slate-400">Every contribution covers direct Socratic tutoring compute for students without financial means.</p>
+                </div>
+                <div class="p-6 rounded-2xl bg-slate-800/80 border border-slate-700">
+                    <div class="text-teal-400 font-black text-2xl mb-1">Frictionless</div>
+                    <div class="text-xs font-bold text-white mb-1">Domain or Voucher Activation</div>
+                    <p class="text-[11px] text-slate-400">Schools don't need to manage individual passwords or submit payment cards.</p>
+                </div>
+                <div class="p-6 rounded-2xl bg-slate-800/80 border border-slate-700">
+                    <div class="text-blue-400 font-black text-2xl mb-1">Auditable</div>
+                    <div class="text-xs font-bold text-white mb-1">Aggregated Privacy-First Metrics</div>
+                    <p class="text-[11px] text-slate-400">Detailed usage and learning gain reports without compromising student privacy.</p>
+                </div>
+            </div>
+
+            <!-- Sponsor Contact Action -->
+            <div class="p-8 rounded-3xl bg-slate-800 border border-slate-700 text-center max-w-2xl mx-auto">
+                <h3 class="text-xl font-bold text-white mb-2">Request a Sponsorship Partnership</h3>
+                <p class="text-xs text-slate-300 mb-6 leading-relaxed">
+                    Our institutional partnership team will draft a proposal tailored to your grant criteria, public procurement requirements, or philanthropic endowment.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center gap-3">
+                    <a href="mailto:instituciones@colabedu.net?subject=Sponsorship%20and%20Grants%20Partnership" class="px-6 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-xs transition-colors">
+                        Contact Institutional Partnerships &rarr;
+                    </a>
+                    <a href="/en/institutions" class="px-6 py-3.5 rounded-xl bg-slate-700 hover:bg-slate-600 text-white font-bold text-xs transition-colors">
+                        View School Plans
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- CLIENT SCRIPT FOR DOMAIN AND VOUCHER CHECK -->
+    <script define:vars={{ appUrl }}>
+        const memInputDomain = document.getElementById('sp-input-domain');
+        const memBtnCheck = document.getElementById('sp-btn-check-domain');
+        const memDomainResult = document.getElementById('sp-domain-result');
+
+        const knownDomains = ['@educa.madrid.org', '@madrid.org', '@g.educaand.es', '@xtec.cat', '@educa.jcyl.es', '@lausd.net', '@sfusd.edu', '@colabedu.org'];
+
+        memBtnCheck?.addEventListener('click', () => {
+            const val = (memInputDomain?.value || '').trim().toLowerCase();
+            if (!val || !val.includes('@')) {
+                memDomainResult.className = "p-3 rounded-xl text-xs font-semibold bg-red-50 text-red-700 border border-red-200 block";
+                memDomainResult.textContent = "Please enter a valid school email (e.g. @lausd.net).";
+                return;
+            }
+            const domain = '@' + val.split('@')[1];
+            if (knownDomains.includes(domain)) {
+                memDomainResult.className = "p-3 rounded-xl text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-300 block";
+                memDomainResult.innerHTML = `🎉 <strong>Active Agreement!</strong> Domain <code>${domain}</code> is fully sponsored. Sign in with your school account: <a href="${appUrl}" class="underline font-bold text-emerald-950 ml-1">Enter App &rarr;</a>`;
+            } else {
+                memDomainResult.className = "p-3 rounded-xl text-xs font-semibold bg-amber-50 text-amber-900 border border-amber-300 block";
+                memDomainResult.innerHTML = `ℹ️ Domain <code>${domain}</code> does not currently have pre-activated global coverage. Check with your school administration or explore individual plans.`;
+            }
+        });
+
+        const memInputVoucher = document.getElementById('sp-input-voucher');
+        const memBtnVoucher = document.getElementById('sp-btn-redeem-voucher');
+        const memVoucherResult = document.getElementById('sp-voucher-result');
+
+        memBtnVoucher?.addEventListener('click', () => {
+            const code = (memInputVoucher?.value || '').trim().toUpperCase();
+            if (code.length < 6) {
+                memVoucherResult.className = "p-3 rounded-xl text-xs font-semibold bg-red-50 text-red-700 border border-red-200 block";
+                memVoucherResult.textContent = "Code is too short. Please verify the ticket provided by your school.";
+                return;
+            }
+            memVoucherResult.className = "p-3 rounded-xl text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-300 block";
+            memVoucherResult.innerHTML = `✅ <strong>Voucher verified.</strong> <a href="${appUrl}?voucher=${encodeURIComponent(code)}" class="underline font-bold text-emerald-950 ml-1">Activate on my account &rarr;</a>`;
+        });
+    </script>
+</BaseLayout>

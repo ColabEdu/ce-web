@@ -173,6 +173,9 @@ importers:
       '@astrojs/starlight':
         specifier: ^0.39.2
         version: 0.39.2(astro@6.3.1(@types/node@24.12.4)(jiti@2.6.1)(lightningcss@1.30.2)(rollup@4.57.1)(yaml@2.8.2))(typescript@5.9.3)
+      '@colabedu/ui-core':
+        specifier: workspace:*
+        version: link:../../packages/ui-core
       astro:
         specifier: ^6.3.1
         version: 6.3.1(@types/node@24.12.4)(jiti@2.6.1)(lightningcss@1.30.2)(rollup@4.57.1)(yaml@2.8.2)

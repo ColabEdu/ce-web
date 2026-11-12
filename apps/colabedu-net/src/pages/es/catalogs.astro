@@ -1,0 +1,460 @@
+---
+// src/pages/es/catalogs.astro
+// Los Catálogos de ColabEdu: Cursos Ensamblados, OER Digitalizados y Catálogo Comunitario Docente
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import { appLink } from "@colabedu/ui-core/navigation";
+import { getAvailableJurisdictions } from "@colabedu/ui-core";
+import "../../styles/global.css";
+
+const catalogUrl = appLink('app', '/navigator/spec_root/0');
+const seoCatalogUrl = appLink('catalog', '/');
+const appUrl = appLink('app', '/');
+const jurisdictions = getAvailableJurisdictions();
+---
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate icon" type="image/png" href="/favicon.png" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ecosistema de Catálogos Curriculares | ColabEdu.net</title>
+    <meta name="description" content="Descubre los 3 catálogos de ColabEdu: Cursos Canónicos con 4 ensamblados de ritmo (Anual, Intensivo, Sprint PAU/AP y Remediation), OER Públicos Digitalizados (algunos esponsorizados) y el Catálogo de la Comunidad de Profesores.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+
+    <style is:global>
+        :root {
+            --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+        body {
+            font-family: var(--font-sans);
+            background-color: #FAF9F6;
+            color: #0F172A;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+        .precision-card {
+            background-color: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            border-radius: 1.25rem;
+            box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.03);
+            transition: all 0.2s ease-in-out;
+        }
+        .precision-card:hover {
+            border-color: #CBD5E1;
+            box-shadow: 0 10px 20px -4px rgba(15, 23, 42, 0.05);
+        }
+        .hero-catalogs {
+            background: linear-gradient(135deg, rgba(254, 243, 199, 0.6) 0%, rgba(238, 242, 255, 0.6) 50%, rgba(240, 253, 250, 0.5) 100%);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            border-radius: 2rem;
+        }
+        .assembly-card {
+            transition: all 0.2s ease;
+        }
+        .assembly-card:hover {
+            transform: translateY(-2px);
+        }
+        /* Ritmo cromático alternante */
+        .section-tint-warm {
+            background: linear-gradient(180deg, #FFFFFF 0%, rgba(254, 243, 199, 0.45) 100%);
+            border: 1px solid #FDE68A;
+        }
+        .section-tint-cool {
+            background: linear-gradient(180deg, #FFFFFF 0%, rgba(238, 242, 255, 0.5) 100%);
+            border: 1px solid #E0E7FF;
+        }
+        .section-tint-teal {
+            background: linear-gradient(180deg, #FFFFFF 0%, rgba(204, 251, 241, 0.45) 100%);
+            border: 1px solid #99F6E4;
+        }
+    </style>
+</head>
+<body class="selection:bg-amber-600 selection:text-white">
+
+    <Header lang="es" />
+
+    <main class="py-12 sm:py-16">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- Hero Title -->
+            <div class="hero-catalogs p-8 sm:p-14 text-center mb-16">
+                <span class="inline-block text-xs font-mono font-bold tracking-widest uppercase text-amber-900 bg-white/90 px-4 py-1.5 rounded-full border border-amber-300 mb-6">
+                    <i class="fas fa-layer-group mr-1.5 text-amber-600"></i> Arquitectura de Contenidos Curriculares
+                </span>
+                <h1 class="text-4xl sm:text-6xl font-black text-slate-950 tracking-tight leading-tight mb-6">
+                    Los tres catálogos<br/>
+                    de ColabEdu.
+                </h1>
+                <p class="text-lg sm:text-xl text-slate-700 font-normal leading-relaxed max-w-3xl mx-auto mb-8">
+                    En ColabEdu los contenidos no son un bloque monolítico. Coexisten tres catálogos complementarios: los <strong>Cursos Canónicos Ensamblados</strong> según diferentes ritmos de aula, los <strong>Recursos OER Digitalizados</strong> (abiertos y algunos esponsorizados) y el <strong>Catálogo de la Comunidad Docente</strong>.
+                </p>
+                
+                <div class="flex flex-wrap items-center justify-center gap-4 mb-8">
+                    <button
+                        type="button"
+                        data-open-catalog-modal
+                        class="px-6 py-3 rounded-xl bg-amber-500 text-slate-950 font-bold text-sm shadow-md hover:bg-amber-400 transition flex items-center gap-2 cursor-pointer"
+                    >
+                        <i class="fas fa-play text-xs"></i>
+                        <span>Interactuar con el Catálogo en Vivo</span>
+                    </button>
+                    <a href="#cursos-colabedu" class="px-6 py-3 rounded-xl bg-white text-slate-800 font-bold text-sm border border-slate-300 hover:bg-slate-50 transition flex items-center gap-2">
+                        <i class="fas fa-sliders text-amber-600"></i>
+                        <span>Ver Perfiles de Ensamblaje</span>
+                    </a>
+                </div>
+
+                <!-- Marco de Jurisdicciones Curriculares Soberanas -->
+                <div class="pt-6 border-t border-amber-200/60">
+                    <div class="text-[11px] font-mono font-bold text-slate-500 uppercase tracking-wider mb-3">
+                        Explorar Catálogos por Jurisdicción Soberana (L0 Grounding & OER):
+                    </div>
+                    <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
+                        {jurisdictions.map((j) => {
+                            const countryUrl = appLink('catalog', `/${j.code}`);
+                            return (
+                                <a
+                                    href={countryUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white hover:bg-amber-50/80 border border-slate-200 hover:border-amber-300 text-xs font-bold text-slate-800 transition-all shadow-xs group"
+                                >
+                                    <span class="text-sm">{j.flag}</span>
+                                    <span>{j.nativeName}</span>
+                                    <span class="text-[10px] text-slate-500 font-mono">({j.code.toUpperCase()})</span>
+                                    <i class="fas fa-arrow-up-right-from-square text-[9px] text-slate-400 group-hover:text-amber-600 transition-colors"></i>
+                                </a>
+                            );
+                        })}
+                    </div>
+                </div>
+            </div>
+
+            <!-- LOS 3 GRANDES CATÁLOGOS: RESUMEN COMPARATIVO -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+                <!-- Catálogo 1 -->
+                <div class="precision-card p-6 border-indigo-200 bg-indigo-50/20 flex flex-col justify-between">
+                    <div>
+                        <div class="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-lg mb-4">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <span class="text-xs font-mono font-bold text-indigo-700 uppercase tracking-wider block mb-1">Catálogo 1</span>
+                        <h3 class="text-base font-black text-slate-900 mb-2">Cursos Canónicos ColabEdu</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                            Cursos completos certificados por la factoría técnica. Una misma materia se ofrece en <strong>4 perfiles de ensamblaje</strong> según la necesidad pedagógica: Anual, Intensivo, Práctica de Examen y Recuperación (Remediation).
+                        </p>
+                    </div>
+                    <a href="#cursos-colabedu" class="text-xs font-bold text-indigo-700 hover:underline flex items-center gap-1">
+                        <span>Ver los 4 ensamblajes &rarr;</span>
+                    </a>
+                </div>
+
+                <!-- Catálogo 2 -->
+                <div class="precision-card p-6 border-amber-200 bg-amber-50/20 flex flex-col justify-between">
+                    <div>
+                        <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center font-bold text-lg mb-4">
+                            <i class="fas fa-globe"></i>
+                        </div>
+                        <span class="text-xs font-mono font-bold text-amber-700 uppercase tracking-wider block mb-1">Catálogo 2</span>
+                        <h3 class="text-base font-black text-slate-900 mb-2">OER Públicos Digitalizados</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                            Más de 65 repositorios internacionales abiertos (OpenStax, Proyecto EDIA, CK-12, PhET). Transformados de PDFs inertes a lecciones interactivas A2UI. Financiados como bien común o mediante patrocinios institucionales.
+                        </p>
+                    </div>
+                    <a href="#oer-digitalizados" class="text-xs font-bold text-amber-700 hover:underline flex items-center gap-1">
+                        <span>Ver fuentes y patrocinios &rarr;</span>
+                    </a>
+                </div>
+
+                <!-- Catálogo 3 -->
+                <div class="precision-card p-6 border-teal-200 bg-teal-50/20 flex flex-col justify-between">
+                    <div>
+                        <div class="w-10 h-10 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center font-bold text-lg mb-4">
+                            <i class="fas fa-users-gear"></i>
+                        </div>
+                        <span class="text-xs font-mono font-bold text-teal-700 uppercase tracking-wider block mb-1">Catálogo 3</span>
+                        <h3 class="text-base font-black text-slate-900 mb-2">Comunidad Docente</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                            Lecciones, recetas de examen y ejercicios creados por profesores usuarios mediante el asistente Curator. Compartidos bajo licencias abiertas, auditados y utilizables por cualquier docente de la red.
+                        </p>
+                    </div>
+                    <a href="#comunidad-profesores" class="text-xs font-bold text-teal-700 hover:underline flex items-center gap-1">
+                        <span>Ver catálogo colaborativo &rarr;</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- CATÁLOGO 1 EN DETALLE: LOS 4 PERFILES DE ENSAMBLAJE DE CURSOS COLABEDU -->
+            <div id="cursos-colabedu" class="precision-card section-tint-cool p-8 sm:p-12 mb-16 shadow-lg border-indigo-200 scroll-mt-24">
+                <div class="flex items-center gap-3 text-indigo-700 font-bold text-xs font-mono uppercase tracking-widest mb-3">
+                    <i class="fas fa-diagram-project"></i>
+                    <span>Catálogo 1 · Ensamblados Curriculares Flexibles</span>
+                </div>
+                <h2 class="text-2xl sm:text-3xl font-black text-slate-950 mb-4">
+                    Cursos ColabEdu: Una materia, cuatro ritmos pedagógicos
+                </h2>
+                <p class="text-sm text-slate-600 leading-relaxed mb-8">
+                    En la enseñanza real, ningún grupo de alumnos avanza con el mismo calendario ni con el mismo objetivo. Las especificaciones curriculares OPS permiten a los centros desplegar un mismo curso oficial en cuatro itinerarios canónicos preconfigurados:
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    
+                    <!-- Perfil 1: Anual Ordinario -->
+                    <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 assembly-card flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="px-2.5 py-1 rounded-md bg-blue-100 text-blue-800 text-[10px] font-mono font-bold uppercase">
+                                    Full Year · 32 Semanas
+                                </span>
+                                <i class="fas fa-calendar-alt text-blue-600 text-sm"></i>
+                            </div>
+                            <h4 class="font-black text-slate-900 text-lg mb-2">1. Curso Anual Ordinario</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                                Diseñado para el curso escolar regular de septiembre a mayo (140-150 horas lectivas). Distribución equilibrada de bloques temáticos, hitos evaluativos trimestrales y andamiaje conceptual progresivo para cubrir el 100% del currículo oficial.
+                            </p>
+                        </div>
+                        <div class="pt-3 border-t border-slate-200 text-[11px] font-mono text-slate-500">
+                            Ritmo: 4-5 lecciones/semana · Evaluación formativa continua
+                        </div>
+                    </div>
+
+                    <!-- Perfil 2: Intensivo / Bloques Concentrados -->
+                    <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 assembly-card flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="px-2.5 py-1 rounded-md bg-purple-100 text-purple-800 text-[10px] font-mono font-bold uppercase">
+                                    Intensive · 16 Semanas
+                                </span>
+                                <i class="fas fa-gauge-high text-purple-600 text-sm"></i>
+                            </div>
+                            <h4 class="font-black text-slate-900 text-lg mb-2">2. Curso Intensivo Acelerado</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                                Para programas cuatrimestrales, módulos de formación acelerada o academias. Condensa la teoría en los axiomas fundamentales y focaliza las horas en talleres de resolución práctica y comprobaciones conceptuales rápidas.
+                            </p>
+                        </div>
+                        <div class="pt-3 border-t border-slate-200 text-[11px] font-mono text-slate-500">
+                            Ritmo: Bloques condensados · Feedback sincrónico semanal
+                        </div>
+                    </div>
+
+                    <!-- Perfil 3: Sprint de Maestría y Examen (PAU / EBAU / AP) -->
+                    <div class="p-6 rounded-2xl bg-amber-50/60 border border-amber-200 assembly-card flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="px-2.5 py-1 rounded-md bg-amber-200 text-amber-900 text-[10px] font-mono font-bold uppercase">
+                                    Exam Mastery · 6 Semanas
+                                </span>
+                                <i class="fas fa-bullseye text-amber-700 text-sm"></i>
+                            </div>
+                            <h4 class="font-black text-slate-900 text-lg mb-2">3. Práctica de Examen (Sprint PAU / AP)</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                                El tramo final hacia las pruebas de acceso a la universidad o exámenes oficiales. Prescinde de la introducción básica y se centra en simulacros reales cronometrados (90 min), análisis forense de los criterios del tribunal evaluador y ejercicios de convocatorias anteriores.
+                            </p>
+                        </div>
+                        <div class="pt-3 border-t border-amber-200 text-[11px] font-mono text-amber-800">
+                            Simulacros reales · Rúbricas oficiales de corrección
+                        </div>
+                    </div>
+
+                    <!-- Perfil 4: Remediation y Refuerzo Competencial -->
+                    <div class="p-6 rounded-2xl bg-teal-50/60 border border-teal-200 assembly-card flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="px-2.5 py-1 rounded-md bg-teal-200 text-teal-900 text-[10px] font-mono font-bold uppercase">
+                                    Remediation · 8 Semanas
+                                </span>
+                                <i class="fas fa-heart-pulse text-teal-700 text-sm"></i>
+                            </div>
+                            <h4 class="font-black text-slate-900 text-lg mb-2">4. Curso de Remediation (Refuerzo)</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                                Diseñado para alumnos con vacíos en fundamentos previos o que no alcanzaron los objetivos mínimos en la primera evaluación. Descompone los conceptos complejos en micro-pasos guiados, activando el Copiloto Socrático en modo andamiaje guiado en el Safe Space.
+                            </p>
+                        </div>
+                        <div class="pt-3 border-t border-teal-200 text-[11px] font-mono text-teal-800">
+                            Andamiaje guiado paso a paso · Diagnóstico de brechas
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- CATÁLOGO 2 EN DETALLE: OER PÚBLICOS DIGITALIZADOS Y ESPONSORIZADOS -->
+            <div id="oer-digitalizados" class="precision-card p-8 sm:p-12 mb-16 shadow-lg border-amber-200 scroll-mt-24">
+                <div class="flex items-center gap-3 text-amber-700 font-bold text-xs font-mono uppercase tracking-widest mb-3">
+                    <i class="fas fa-book-open"></i>
+                    <span>Catálogo 2 · Recursos Educativos Abiertos</span>
+                </div>
+                <h2 class="text-2xl sm:text-3xl font-black text-slate-950 mb-4">
+                    OER Públicos Digitalizados (con módulos esponsorizados)
+                </h2>
+                <p class="text-sm text-slate-600 leading-relaxed mb-6">
+                    En ColabEdu creemos que el patrimonio curricular público financiado con impuestos o filantropía no debe morir en un PDF inaccesible. Nuestra factoría digitaliza y mantiene continuamente tratados canónicos abiertos:
+                </p>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+                    <div class="p-4 rounded-xl bg-white border border-slate-200">
+                        <div class="font-bold text-slate-900 text-xs mb-1 flex items-center gap-2">
+                            <span class="w-6 h-6 rounded-md bg-blue-100 text-blue-700 flex items-center justify-center text-[10px] font-bold">ES</span>
+                            <span>INTEF EDIA & Bancos EvAU</span>
+                        </div>
+                        <p class="text-xs text-slate-500">Recursos abiertos del Ministerio de Educación de España y pruebas liberadas de las 17 Comunidades Autónomas.</p>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-white border border-slate-200">
+                        <div class="font-bold text-slate-900 text-xs mb-1 flex items-center gap-2">
+                            <span class="w-6 h-6 rounded-md bg-amber-100 text-amber-700 flex items-center justify-center text-[10px] font-bold">US</span>
+                            <span>OpenStax Rice University & CK-12</span>
+                        </div>
+                        <p class="text-xs text-slate-500">Tratados revisados por pares en Ciencias y Matemáticas con miles de problemas resueltos y rúbricas AP.</p>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-white border border-slate-200">
+                        <div class="font-bold text-slate-900 text-xs mb-1 flex items-center gap-2">
+                            <span class="w-6 h-6 rounded-md bg-teal-100 text-teal-700 flex items-center justify-center text-[10px] font-bold">CO</span>
+                            <span>PhET Interactive Simulations</span>
+                        </div>
+                        <p class="text-xs text-slate-500">Laboratorios virtuales manipulables de física, química y biología integrados como widgets A2UI nativos.</p>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-white border border-slate-200">
+                        <div class="font-bold text-slate-900 text-xs mb-1 flex items-center gap-2">
+                            <span class="w-6 h-6 rounded-md bg-purple-100 text-purple-700 flex items-center justify-center text-[10px] font-bold">MX</span>
+                            <span>Libros de Texto Gratuitos (SEP NEM)</span>
+                        </div>
+                        <p class="text-xs text-slate-500">Currículo de la Nueva Escuela Mexicana digitalizado para secundaria y bachillerato.</p>
+                    </div>
+                </div>
+
+                <!-- El concepto de OER Esponsorizados -->
+                <div class="p-5 rounded-2xl bg-amber-50 border border-amber-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+                    <div>
+                        <span class="text-xs font-mono font-bold text-amber-900 uppercase tracking-wide block mb-1">
+                            <i class="fas fa-hand-holding-dollar mr-1"></i> OER Esponsorizados por Distritos e Instituciones
+                        </span>
+                        <p class="text-xs text-amber-900 leading-relaxed">
+                            Ciertos distritos escolares o fundaciones financian la digitalización y mantenimiento de temarios o materias prioritarias (ej. <em>Física y Química STEM Andalucía</em> o <em>Preparación Selectividad Madrid</em>) para que toda su red de colegios y familias acceda con coste cero.
+                        </p>
+                    </div>
+                    <a href="/es/institutions" class="px-4 py-2 rounded-xl bg-amber-600 text-white font-bold text-xs hover:bg-amber-700 transition shrink-0">
+                        Ver Modelos de Beca &rarr;
+                    </a>
+                </div>
+
+                <!-- Activación de Fondos Editoriales & Referencialidad Ciega -->
+                <div class="p-6 rounded-2xl bg-white border border-amber-300 shadow-sm">
+                    <div class="flex items-center gap-2 text-amber-800 font-mono text-xs font-bold uppercase tracking-wider mb-2">
+                        <i class="fas fa-shield-halved text-amber-600"></i>
+                        <span>Para Editoriales & Autores: Activación de Fondo Editorial sin Piratería</span>
+                    </div>
+                    <h3 class="text-lg font-black text-slate-900 mb-2">
+                        El Modelo de "Referencialidad Ciega"
+                    </h3>
+                    <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                        ¿Tiene su editorial libros de texto o manuales adoptados en cientos de centros? ColabEdu no reproduce ni "piratea" el contenido de su libro. Nuestro <strong>Curator Agent</strong> extrae la estructura pedagógica para guiar al alumno socráticamente hacia su manual físico:
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs text-slate-700 bg-amber-50/50 p-4 rounded-xl border border-amber-100 mb-4">
+                        <div class="flex items-start gap-2.5">
+                            <i class="fas fa-check-circle text-amber-600 mt-0.5 shrink-0"></i>
+                            <div>
+                                <strong class="text-slate-900">Protección Radical de la IP:</strong>
+                                <span>La IA no entrega la respuesta; interpela al alumno: <em>"Abre la pág. 142 de tu manual. ¿Qué relación ves entre el mapa topográfico y el texto fuente?"</em>. Valida la compra del libro original.</span>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-2.5">
+                            <i class="fas fa-bolt text-amber-600 mt-0.5 shrink-0"></i>
+                            <div>
+                                <strong class="text-slate-900">Digitalización Asistida en Semanas:</strong>
+                                <span>Pase de PDFs inertes a lecciones interactivas A2UI y rúbricas competenciales oficiales sin rehacer su material. Sus editores supervisan con control humano (Human-in-the-loop).</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between text-xs pt-2">
+                        <span class="text-slate-500 font-mono">Compatible con manuales impresos, licencias digitales y plataformas LMS LTI 1.3.</span>
+                        <a href="/es/institutions#convenios" class="font-bold text-amber-700 hover:underline">Consultar Soluciones Editoriales &rarr;</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CATÁLOGO 3 EN DETALLE: CATÁLOGO DE LA COMUNIDAD DE PROFESORES -->
+            <div id="comunidad-profesores" class="precision-card section-tint-teal p-8 sm:p-12 mb-16 shadow-lg border-teal-200 scroll-mt-24">
+                <div class="flex items-center gap-3 text-teal-700 font-bold text-xs font-mono uppercase tracking-widest mb-3">
+                    <i class="fas fa-people-roof"></i>
+                    <span>Catálogo 3 · Creación Docente Colaborativa</span>
+                </div>
+                <h2 class="text-2xl sm:text-3xl font-black text-slate-950 mb-4">
+                    Catálogo de la Comunidad de Profesores Usuarios
+                </h2>
+                <p class="text-sm text-slate-600 leading-relaxed mb-6">
+                    Los docentes no son meros consumidores pasivos de libros de texto. En ColabEdu los profesores crean, adaptan y comparten sus propios ejercicios, exámenes y lecciones interactivas:
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+                        <span class="text-xs font-mono font-bold text-teal-700 uppercase block mb-1">1. Autoría con Asistente</span>
+                        <h4 class="font-bold text-slate-900 text-sm mb-1">Curator AI Docente</h4>
+                        <p class="text-xs text-slate-500 leading-relaxed">
+                            El profesor sube un PDF de examen departamental o redacta un ejercicio. Curator detecta las competencias oficiales y genera la receta evaluativa C1/C2.
+                        </p>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+                        <span class="text-xs font-mono font-bold text-teal-700 uppercase block mb-1">2. Doble Auditoría</span>
+                        <h4 class="font-bold text-slate-900 text-sm mb-1">Validación Pedagógica</h4>
+                        <p class="text-xs text-slate-500 leading-relaxed">
+                            Antes de publicarse en la biblioteca comunitaria, la especificación pasa por un validador de esquemas (White-Box) y un peritaje independiente (LLM-as-a-Judge) que certifica KaTeX y rúbricas.
+                        </p>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+                        <span class="text-xs font-mono font-bold text-teal-700 uppercase block mb-1">3. Distribución Libre</span>
+                        <h4 class="font-bold text-slate-900 text-sm mb-1">Licencias Abiertas (CC)</h4>
+                        <p class="text-xs text-slate-500 leading-relaxed">
+                            Cualquier otro profesor puede duplicar el ejercicio para su aula, aplicar sus directivas personalizadas (`EvaluationOverrides`) o incorporarlo a su examen trimestral.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="p-4 rounded-xl bg-teal-50 border border-teal-200 text-xs text-teal-900 flex items-center justify-between">
+                    <span><i class="fas fa-handshake text-teal-600 mr-2"></i><strong>Patrimonio Compartido:</strong> Los materiales de los docentes jamás quedan atrapados en bases de datos propietarias. Se guardan en formato OPS legible.</span>
+                    <a href="/es/ops-specification" class="text-teal-800 font-bold hover:underline shrink-0 ml-4">Ver Especificación OPS &rarr;</a>
+                </div>
+            </div>
+
+            <!-- BANNER FINAL HACIA EL CATÁLOGO PÚBLICO -->
+            <div class="p-8 sm:p-12 rounded-3xl bg-slate-900 text-white flex flex-col md:flex-row items-center justify-between gap-8 shadow-xl">
+                <div class="max-w-xl">
+                    <span class="text-xs font-mono font-bold text-amber-400 uppercase tracking-widest block mb-2">
+                        Exploración Inmediata
+                    </span>
+                    <h3 class="text-2xl sm:text-3xl font-black tracking-tight mb-3">
+                        Navega los 240+ cursos en el catálogo público
+                    </h3>
+                    <p class="text-sm text-slate-300 leading-relaxed">
+                        Filtra por país, marco legal, materia y nivel. Explora las lecciones y simuladores sin registro ni tarjeta bancaria.
+                    </p>
+                </div>
+                <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto shrink-0">
+                    <a href={catalogUrl} target="_blank" rel="noopener noreferrer" class="px-6 py-3.5 rounded-xl bg-amber-400 text-slate-950 font-bold text-sm text-center shadow-md hover:bg-amber-300 transition">
+                        Abrir Catálogo OER &rarr;
+                    </a>
+                    <a href="/es/catalog-philosophy" class="px-6 py-3.5 rounded-xl bg-white/10 text-white font-bold text-sm text-center hover:bg-white/20 transition border border-white/20">
+                        Filosofía del Catálogo
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <Footer lang="es" />
+
+</body>
+</html>

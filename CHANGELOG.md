@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.9.11] - 2026-11-12
+
+### Added
+- **Ecosistema de los Tres Catálogos en `colabedu-net` (`src/pages/{es,en}/catalogs.astro`)**:
+  - Nueva página canónica que explica la convivencia y estructura de los tres catálogos: Cursos Canónicos por Ritmo (`FULL_YEAR`, `INTENSIVE`, `EXAM_MASTERY`, `REMEDIATION`), OER Públicos Digitalizados (con esponsorización B2G), y el Catálogo de la Comunidad docente.
+- **Paneles de Rúbrica y Atribución OER en `colabedu-catalog`**:
+  - `TeacherRubricPanel.astro`: Desglose interactivo de criterios de evaluación, descriptores cualitativos y ponderaciones para docentes.
+  - `OerAttributionPanel.astro`: Panel de trazabilidad legal de licencias abiertas (Creative Commons BY-SA, INTEF, OpenStax).
+  - Componente de marcado estructurado JSON-LD `LearningResourceJsonLd.astro` optimizado para indexación en Google for Education.
+- **Tutoriales Completos del CLI y Base de Conocimiento de Soporte**:
+  - Publicado el tutorial del CLI en inglés y español en `ce-web/apps/colabedu-support/src/content/docs/{admin,en/admin}/cli-tutorial.mdx`.
+  - Actualizado el tutorial canónico en `ce-web/apps/colabedu-org/src/content/docs/{es,en}/gitops-operations/cli-tutorial.mdx` enlazando con `CHANGELOG_CLI.md`.
+- **Modales Contextuales y Analítica PLG**:
+  - Modales de soporte y telemetría de eventos de embudo en Google Analytics 4 (GA4).
+
+### Changed
+- **Ecosystem Alignment**: Bump de versión a **`0.9.11`**.
+
 ## [0.9.10] - 2026-10-28
 
 ### Added

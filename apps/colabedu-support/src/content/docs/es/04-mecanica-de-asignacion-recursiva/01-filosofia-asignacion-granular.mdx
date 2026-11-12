@@ -1,0 +1,74 @@
+---
+title: "Filosofía de Asignación Granular (\"Todo Nodo es Asignable\")"
+description: "Flexibilidad pedagógica total para adaptar el ritmo curricular a la realidad del aula."
+---
+
+import { Steps, Tabs, TabItem, Aside } from '@astrojs/starlight/components';
+
+## 1. Visión General y Propósito
+
+En ColabEdu no existe la rigidez de obligar a docentes a prescribir cursos enteros a sus alumnos. El catálogo pedagógico sigue una estructura arbórea basada en especificaciones OPS (Open Pedagogy Specification), donde **absolutamente cualquier nodo es asignable de forma autónoma**:
+
+1. **Curso Completo (`CourseSpec`)**: El plan anual completo estructurado con secuenciación de unidades (Pathways).
+2. **Pathway o Unidad Temática (`Pathway`)**: Un bloque pedagógico de 2 a 4 semanas de duración.
+3. **Lección Interactiva (`InteractiveLesson`)**: Una sesión didáctica guiada con tarjetas A2UI y diálogo socrático.
+4. **Ejercicio Evaluativo (`ExerciseSpec`)**: Un reto de aplicación individual para pruebas parciales, exámenes o prácticas.
+5. **Recurso de Consulta (`ResourceSpec`)**: Lecturas de fuentes oficiales L0, fragmentos de libros OER o material multimedia.
+
+---
+
+## 2. Paso a Paso Visual: Cómo Asignar Cualquier Nodo
+
+<Steps>
+1. **Navegar por el Árbol Curricular**:
+   Abre cualquier curso en el catálogo o en el panel de tu clase para ver el desglose jerárquico.
+
+2. **Desplegar el Menú de Acción del Nodo**:
+   Junto al título de cualquier curso, pathway, lección o ejercicio, pulsa en el botón **Asignar a Clase** (icono de calendario con más).
+
+   <figure>
+     <img src="/images/screenshots/es/ui-asignacion-recursiva-granular.webp" alt="Asignación Recursiva Granular" />
+     <figcaption>Menú contextual que permite asignar cualquier nivel del árbol curricular a una clase específica.</figcaption>
+   </figure>
+
+3. **Configurar Fechas y Directivas de Aula**:
+   Define la ventana temporal (fecha de inicio y entrega límite) e inyecta directivas de evaluación específicas si se trata de un ejercicio.
+
+4. **Publicar Asignación**:
+   Confirma la asignación. El alumnado de la clase verá inmediatamente el nodo en su panel de estudio sin ruido innecesario.
+</Steps>
+
+---
+
+## 3. Consejos Pedagógicos y Buenas Prácticas
+
+- Asigna **ejercicios individuales** cuando necesites una prueba rápida de diagnóstico al inicio de la sesión.
+- Asigna **lecciones interactivas** para el aula invertida (*flipped classroom*) o tareas de profundización en casa.
+- Asigna **unidades completas (Pathways)** para proyectos de investigación que abarquen varias semanas.
+
+---
+
+<Aside type="tip" title="💻 ¿Prefieres automatizarlo por Terminal? (Equivalente CLI)">
+
+Puedes asignar nodos individuales o estructuras completas mediante `./ce-cli.sh`:
+
+<Tabs>
+  <TabItem label="Asignar Ejercicio Puntual">
+  ```bash
+  ./ce-cli.sh assignment create \
+    --spec="ce-specs/catalog/es/eso/biology/genetics/ex_mendel_01.v1.yaml" \
+    --class="class_3eso_a" \
+    --due-date="2026-11-20T23:59:00Z"
+  ```
+  </TabItem>
+
+  <TabItem label="Asignar Bloque Pathway por Lote">
+  ```bash
+  ./ce-cli.sh spec batch run \
+    --file="ce-specs/batches/assign_genetics_pathway.yaml"
+  ```
+  </TabItem>
+</Tabs>
+
+> **Nota de Gobernanza**: Toda llamada CLI utiliza internamente el Dev-Bypass o credenciales seguras, garantizando las mismas reglas de validación y seguridad que la interfaz gráfica.
+</Aside>

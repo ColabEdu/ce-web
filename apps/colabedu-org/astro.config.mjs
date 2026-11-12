@@ -81,14 +81,15 @@ export default defineConfig({
                         const injectLink = () => {
                             const target = document.querySelector('.social-icons') || document.querySelector('theme-select');
                             if (target && target.parentNode) {
-                                if (!document.getElementById('custom-catalog-link')) {
-                                    const catLink = document.createElement('a');
-                                    catLink.id = 'custom-catalog-link';
-                                    catLink.href = '/catalog';
+                                if (!document.getElementById('custom-catalog-btn')) {
+                                    const catBtn = document.createElement('button');
+                                    catBtn.id = 'custom-catalog-btn';
+                                    catBtn.type = 'button';
+                                    catBtn.setAttribute('data-open-catalog-modal', '');
                                     const isEn = window.location.pathname.startsWith('/en/');
-                                    catLink.textContent = isEn ? 'Curricular Catalog' : 'Catálogo Curricular';
-                                    catLink.style.cssText = 'margin-right: 1.25rem; font-weight: 600; color: var(--sl-color-accent); text-decoration: none; display: inline-flex; align-items: center; gap: 0.25rem;';
-                                    target.parentNode.insertBefore(catLink, target);
+                                    catBtn.textContent = isEn ? 'OER Catalog' : 'Catálogo OER';
+                                    catBtn.style.cssText = 'margin-right: 1.25rem; font-weight: 600; color: var(--sl-color-accent); background: transparent; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 0.25rem; font-size: inherit;';
+                                    target.parentNode.insertBefore(catBtn, target);
                                 }
                                 if (!document.getElementById('custom-blog-link')) {
                                     const link = document.createElement('a');
@@ -96,8 +97,19 @@ export default defineConfig({
                                     const isEn = window.location.pathname.startsWith('/en/');
                                     link.href = isEn ? '/en/news' : '/es/news';
                                     link.textContent = 'Blog / News';
-                                    link.style.cssText = 'margin-right: 1.5rem; font-weight: 600; color: var(--sl-color-accent-high); text-decoration: none;';
+                                    link.style.cssText = 'margin-right: 1.25rem; font-weight: 600; color: var(--sl-color-accent-high); text-decoration: none;';
                                     target.parentNode.insertBefore(link, target);
+                                }
+                                if (!document.getElementById('custom-support-btn')) {
+                                    const supBtn = document.createElement('button');
+                                    supBtn.id = 'custom-support-btn';
+                                    supBtn.type = 'button';
+                                    supBtn.setAttribute('data-open-support-modal', '');
+                                    supBtn.setAttribute('data-support-tab', 'chat');
+                                    supBtn.title = 'Soporte y Ayuda / Support Companion';
+                                    supBtn.innerHTML = '<span style="display:inline-flex;align-items:center;justify-content:center;width:1.75rem;height:1.75rem;border-radius:0.5rem;background:var(--sl-color-gray-5);color:var(--sl-color-white);font-weight:bold;font-size:0.85rem;cursor:pointer;">?</span>';
+                                    supBtn.style.cssText = 'margin-right: 1rem; background: transparent; border: none; padding: 0; cursor: pointer; display: inline-flex; align-items: center;';
+                                    target.parentNode.insertBefore(supBtn, target);
                                 }
                             }
                         };

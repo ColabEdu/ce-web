@@ -1,5 +1,8 @@
 ---
+import { slugify } from '@/lib/catalogLoader';
+
 interface Props {
+  country?: string;
   standard?: string;
   competencyTags?: string[];
   cognitiveDomains?: string[];
@@ -8,6 +11,7 @@ interface Props {
 }
 
 const {
+  country = "es",
   standard = "Estándar Oficial LOMLOE / AP",
   competencyTags = [],
   cognitiveDomains = [],
@@ -45,9 +49,14 @@ const {
         <span class="text-xs uppercase font-mono tracking-wider text-slate-400 font-semibold block mb-1.5">
           Marco Normativo Oficial de Referencia
         </span>
-        <span class="text-xs font-mono text-cyan-300 bg-cyan-950/40 px-3 py-1.5 rounded-xl border border-cyan-800/40 inline-block shadow-sm">
-          {standard}
-        </span>
+        <a
+          href={`/catalog/${country}/criterios`}
+          class="text-xs font-mono text-cyan-300 bg-cyan-950/40 px-3 py-1.5 rounded-xl border border-cyan-800/40 inline-flex items-center gap-1.5 shadow-sm hover:bg-cyan-900/40 hover:border-cyan-700/60 transition-colors group"
+          title={`Ver catálogo de criterios oficiales de ${country.toUpperCase()}`}
+        >
+          <span>{standard}</span>
+          <span class="text-cyan-400/60 group-hover:text-cyan-300 transition-colors">↗</span>
+        </a>
       </div>
 
       {targetAudience && (
@@ -82,9 +91,14 @@ const {
           </span>
           <div class="flex flex-wrap gap-2">
             {competencyTags.map((tag) => (
-              <span class="px-3 py-1 rounded-xl text-xs font-semibold bg-emerald-500/10 text-emerald-300 border border-emerald-500/25">
-                {tag}
-              </span>
+              <a
+                href={`/catalog/${country}/criterios/${slugify(tag)}`}
+                class="px-3 py-1 rounded-xl text-xs font-semibold bg-emerald-500/10 text-emerald-300 border border-emerald-500/25 hover:bg-emerald-500/20 hover:border-emerald-500/50 transition-all inline-flex items-center gap-1.5 group"
+                title={`Explorar lecciones asociadas al criterio ${tag}`}
+              >
+                <span>{tag}</span>
+                <span class="text-emerald-400/60 group-hover:text-emerald-300 transition-colors">↗</span>
+              </a>
             ))}
           </div>
         </div>

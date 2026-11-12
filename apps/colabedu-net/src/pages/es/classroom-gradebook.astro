@@ -1,0 +1,624 @@
+---
+// src/pages/es/classroom-gradebook.astro
+// Gestión de Aulas (Progreso en Lecciones), Gradebook (Ejercicios) e Informes de Feedback Individual
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import { appLink } from "@colabedu/ui-core/navigation";
+import "../../styles/global.css";
+
+const catalogUrl = appLink('catalog', '/');
+const appUrl = appLink('app', '/');
+---
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate icon" type="image/png" href="/favicon.png" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Aulas, Gradebook de Ejercicios & Feedback | ColabEdu.net</title>
+    <meta name="description" content="Visualiza en tiempo real el progreso de tus alumnos en las lecciones durante la clase o la semana. Gestiona el Gradebook de ejercicios y genera informes de feedback personalizados para cada estudiante.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+
+    <style is:global>
+        :root {
+            --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+        body {
+            font-family: var(--font-sans);
+            background-color: #FAF9F6;
+            color: #0F172A;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+        .precision-card {
+            background-color: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            border-radius: 1.25rem;
+            box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.03);
+            transition: all 0.2s ease-in-out;
+        }
+        .precision-card:hover {
+            border-color: #CBD5E1;
+            box-shadow: 0 10px 20px -4px rgba(15, 23, 42, 0.05);
+        }
+        .hero-gradebook {
+            background: linear-gradient(135deg, rgba(238, 242, 255, 0.7) 0%, rgba(243, 232, 255, 0.5) 50%, rgba(254, 243, 199, 0.4) 100%);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            border-radius: 2rem;
+        }
+        .pulse-live {
+            box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+            animation: pulse-ring 1.8s infinite cubic-bezier(0.66, 0, 0, 1);
+        }
+        @keyframes pulse-ring {
+            to {
+                box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
+            }
+        }
+        /* Ritmo cromático alternante */
+        .section-tint-blue {
+            background: linear-gradient(180deg, #FFFFFF 0%, rgba(239, 246, 255, 0.45) 100%);
+            border: 1px solid #BFDBFE;
+        }
+        .section-tint-purple {
+            background: linear-gradient(180deg, #FFFFFF 0%, rgba(243, 232, 255, 0.4) 100%);
+            border: 1px solid #DDD6FE;
+        }
+        .section-tint-emerald {
+            background: linear-gradient(180deg, #FFFFFF 0%, rgba(209, 250, 229, 0.45) 100%);
+            border: 1px solid #A7F3D0;
+        }
+    </style>
+</head>
+<body class="selection:bg-purple-600 selection:text-white">
+
+    <Header lang="es" />
+
+    <main class="py-12 sm:py-16">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- Hero Title -->
+            <div class="hero-gradebook p-8 sm:p-14 text-center mb-16">
+                <span class="inline-block text-xs font-mono font-bold tracking-widest uppercase text-purple-900 bg-white/80 px-4 py-1.5 rounded-full border border-purple-300 mb-6">
+                    <i class="fas fa-chalkboard-user mr-1.5 text-purple-600"></i> Analítica Docente Integral
+                </span>
+                <h1 class="text-4xl sm:text-6xl font-black text-slate-950 tracking-tight leading-tight mb-6">
+                    Gestión de Aulas, Gradebook<br/>
+                    y Feedback por Estudiante.
+                </h1>
+                <p class="text-lg sm:text-xl text-slate-700 font-normal leading-relaxed max-w-3xl mx-auto mb-8">
+                    Tres capas complementarias para el día a día escolar: monitoriza cómo avanzan tus alumnos en las lecciones en vivo o a lo largo de la semana, gestiona el libro de calificaciones de ejercicios y genera informes de feedback pedagógico individual con 1 clic.
+                </p>
+                
+                <!-- Botón de apertura de app real / demo -->
+                <div class="flex flex-wrap items-center justify-center gap-4">
+                    <a href="#vista-aulas" class="px-6 py-3 rounded-xl bg-purple-600 text-white font-bold text-sm shadow-md hover:bg-purple-700 transition flex items-center gap-2">
+                        <i class="fas fa-radar text-xs"></i>
+                        <span>1. Progreso en Lecciones (En Vivo & Semanal)</span>
+                    </a>
+                    <a href="#demo-gradebook" class="px-6 py-3 rounded-xl bg-white text-slate-800 font-bold text-sm border border-slate-300 hover:bg-slate-50 transition flex items-center gap-2">
+                        <i class="fas fa-table text-purple-600"></i>
+                        <span>2. Gradebook de Ejercicios</span>
+                    </a>
+                    <a href={appUrl} target="_blank" rel="noopener noreferrer" class="px-5 py-3 rounded-xl bg-slate-900 text-white font-bold text-sm hover:bg-slate-800 transition flex items-center gap-2">
+                        <i class="fas fa-arrow-up-right-from-square text-xs"></i>
+                        <span>Abrir Plataforma Docente</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- TRES MÓDULOS DE AULA CON DISTINCIÓN CLARA -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+                <!-- Módulo 1 -->
+                <div class="precision-card p-6 border-blue-200 bg-blue-50/20 flex flex-col justify-between">
+                    <div>
+                        <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-lg mb-4">
+                            <i class="fas fa-person-chalkboard"></i>
+                        </div>
+                        <span class="text-xs font-mono font-bold text-blue-700 uppercase tracking-wider block mb-1">Módulo 1 · Gestión de Aulas</span>
+                        <h3 class="text-base font-black text-slate-900 mb-2">Progreso en Lecciones</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                            Sabe exactamente en qué diapositiva o checkpoint está cada estudiante mientras impartes la clase, o monitoriza el ritmo semanal de asimilación autónoma desde casa.
+                        </p>
+                    </div>
+                    <a href="#vista-aulas" class="text-xs font-bold text-blue-700 hover:underline flex items-center gap-1">
+                        <span>Ver monitor en directo</span>
+                        <i class="fas fa-chevron-down text-[10px]"></i>
+                    </a>
+                </div>
+
+                <!-- Módulo 2 -->
+                <div class="precision-card p-6 border-purple-200 bg-purple-50/20 flex flex-col justify-between">
+                    <div>
+                        <div class="w-10 h-10 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center font-bold text-lg mb-4">
+                            <i class="fas fa-table-list"></i>
+                        </div>
+                        <span class="text-xs font-mono font-bold text-purple-700 uppercase tracking-wider block mb-1">Módulo 2 · Gradebook</span>
+                        <h3 class="text-base font-black text-slate-900 mb-2">Evaluación de Ejercicios</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                            Calificaciones cuantitativas y competenciales de exámenes escaneados por OCR, entregas orales y tareas razonadas, sincronizadas con Canvas y Moodle.
+                        </p>
+                    </div>
+                    <a href="#demo-gradebook" class="text-xs font-bold text-purple-700 hover:underline flex items-center gap-1">
+                        <span>Ver cuaderno de notas</span>
+                        <i class="fas fa-chevron-down text-[10px]"></i>
+                    </a>
+                </div>
+
+                <!-- Módulo 3 -->
+                <div class="precision-card p-6 border-emerald-200 bg-emerald-50/20 flex flex-col justify-between">
+                    <div>
+                        <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-lg mb-4">
+                            <i class="fas fa-file-waveform"></i>
+                        </div>
+                        <span class="text-xs font-mono font-bold text-emerald-700 uppercase tracking-wider block mb-1">Módulo 3 · Feedback Individual</span>
+                        <h3 class="text-base font-black text-slate-900 mb-2">Informes para Estudiantes</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                            Diagnóstico narrativo individualizado: fortalezas demostradas, misconcepciones superadas y sugerencias de remediación en el Safe Space para familias y tutorías.
+                        </p>
+                    </div>
+                    <a href="#informes-feedback" class="text-xs font-bold text-emerald-700 hover:underline flex items-center gap-1">
+                        <span>Ver informe narrativo</span>
+                        <i class="fas fa-chevron-down text-[10px]"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- SECCIÓN 1: GESTIÓN DE AULAS Y MONITOR DE PROGRESO DE LECCIONES -->
+            <div id="vista-aulas" class="precision-card section-tint-blue p-6 sm:p-10 mb-16 shadow-lg border-blue-200 scroll-mt-24">
+                
+                <div class="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-slate-200 mb-6">
+                    <div>
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 pulse-live"></span>
+                            <span class="text-xs font-mono font-bold text-blue-700 uppercase tracking-widest">
+                                Monitor de Aula en Vivo · Modo Clase Activa
+                            </span>
+                        </div>
+                        <h2 class="text-2xl sm:text-3xl font-black text-slate-950">
+                            Lección Activa: Cinemática del Tiro Parabólico (1º Bach A)
+                        </h2>
+                    </div>
+
+                    <!-- Selector de Vista: En Directo vs Semanal -->
+                    <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-xl text-xs font-bold text-slate-600">
+                        <button id="btn-view-live" class="px-3 py-1.5 rounded-lg bg-white text-slate-900 shadow-xs">
+                            <i class="fas fa-bolt text-amber-500 mr-1"></i> En Clase (En Vivo)
+                        </button>
+                        <button id="btn-view-week" class="px-3 py-1.5 rounded-lg text-slate-500 hover:text-slate-900">
+                            <i class="fas fa-calendar-week text-indigo-500 mr-1"></i> Resumen Semanal
+                        </button>
+                    </div>
+                </div>
+
+                <!-- VISTA 1: RADAR DE ALUMNOS EN CLASE EN TIEMPO REAL -->
+                <div id="panel-live" class="space-y-6">
+                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                        Durante la sesión de clase, el docente visualiza en su tablet o pantalla principal en qué fase se encuentra cada estudiante, quién necesita apoyo socrático y quién ha completado ya el laboratorio:
+                    </p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <!-- Columna Paso 1 -->
+                        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-xs font-bold text-slate-700">Paso 1: Gancho & Teoría</span>
+                                <span class="text-[11px] font-mono bg-slate-200 px-2 py-0.5 rounded font-bold">2 alumnos</span>
+                            </div>
+                            <div class="space-y-2">
+                                <div class="p-2.5 bg-white rounded-lg border border-slate-200 text-xs flex items-center justify-between">
+                                    <span class="font-medium text-slate-800">Sofía M.</span>
+                                    <span class="text-[10px] text-slate-400 font-mono">02:15 min</span>
+                                </div>
+                                <div class="p-2.5 bg-white rounded-lg border border-slate-200 text-xs flex items-center justify-between">
+                                    <span class="font-medium text-slate-800">David R.</span>
+                                    <span class="text-[10px] text-slate-400 font-mono">01:40 min</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Columna Paso 2 -->
+                        <div class="p-4 rounded-xl bg-teal-50/60 border border-teal-200">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-xs font-bold text-teal-900">Paso 2: Laboratorio Canvas</span>
+                                <span class="text-[11px] font-mono bg-teal-200 text-teal-950 px-2 py-0.5 rounded font-bold">14 alumnos</span>
+                            </div>
+                            <div class="space-y-2">
+                                <div class="p-2.5 bg-white rounded-lg border border-teal-200 text-xs flex items-center justify-between">
+                                    <span class="font-medium text-slate-800">Marcos R.</span>
+                                    <span class="text-[10px] text-teal-600 font-bold"><i class="fas fa-sliders mr-1"></i>Manipulando</span>
+                                </div>
+                                <div class="p-2.5 bg-white rounded-lg border border-teal-200 text-xs flex items-center justify-between">
+                                    <span class="font-medium text-slate-800">Elena G.</span>
+                                    <span class="text-[10px] text-teal-600 font-bold"><i class="fas fa-sliders mr-1"></i>Manipulando</span>
+                                </div>
+                                <div class="p-2.5 bg-white rounded-lg border border-teal-200 text-xs flex items-center justify-between">
+                                    <span class="font-medium text-slate-800">Lucía N.</span>
+                                    <span class="text-[10px] text-teal-600 font-bold"><i class="fas fa-sliders mr-1"></i>Manipulando</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Columna Paso 3 -->
+                        <div class="p-4 rounded-xl bg-amber-50/70 border border-amber-200">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-xs font-bold text-amber-950">Paso 3: Checkpoint Socrático</span>
+                                <span class="text-[11px] font-mono bg-amber-200 text-amber-950 px-2 py-0.5 rounded font-bold">8 alumnos</span>
+                            </div>
+                            <div class="space-y-2">
+                                <div class="p-2.5 bg-white rounded-lg border border-amber-300 text-xs flex items-center justify-between">
+                                    <span class="font-medium text-slate-800">Carlos M.</span>
+                                    <span class="text-[10px] bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded font-bold">Pista 2</span>
+                                </div>
+                                <div class="p-2.5 bg-white rounded-lg border border-amber-300 text-xs flex items-center justify-between">
+                                    <span class="font-medium text-slate-800">Javier V.</span>
+                                    <span class="text-[10px] bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded font-bold">Pista 1</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Columna Paso 4 -->
+                        <div class="p-4 rounded-xl bg-emerald-50/70 border border-emerald-200">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-xs font-bold text-emerald-950">Paso 4: Completado</span>
+                                <span class="text-[11px] font-mono bg-emerald-200 text-emerald-950 px-2 py-0.5 rounded font-bold">4 alumnos</span>
+                            </div>
+                            <div class="space-y-2">
+                                <div class="p-2.5 bg-white rounded-lg border border-emerald-200 text-xs flex items-center justify-between">
+                                    <span class="font-medium text-slate-800">Paula S.</span>
+                                    <span class="text-[10px] text-emerald-600 font-bold">&check; 100%</span>
+                                </div>
+                                <div class="p-2.5 bg-white rounded-lg border border-emerald-200 text-xs flex items-center justify-between">
+                                    <span class="font-medium text-slate-800">Mateo T.</span>
+                                    <span class="text-[10px] text-emerald-600 font-bold">&check; 100%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VISTA 2: RESUMEN SEMANAL DE RITMO Y DIFICULTADES -->
+                <div id="panel-week" class="hidden space-y-4">
+                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                        Seguimiento asíncrono de las lecciones asignadas a lo largo de la semana (práctica en casa o aula invertida):
+                    </p>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs border-collapse">
+                            <thead>
+                                <tr class="bg-slate-100 text-slate-700 font-mono text-[11px] uppercase border-b border-slate-200">
+                                    <th class="p-3">Lección Asignada</th>
+                                    <th class="p-3 text-center">Tasa de Finalización</th>
+                                    <th class="p-3 text-center">Tiempo Medio</th>
+                                    <th class="p-3 text-center">Punto de Mayor Duda</th>
+                                    <th class="p-3 text-center">Acción Sugerida</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-200">
+                                <tr>
+                                    <td class="p-3 font-bold text-slate-900">Tiro Parabólico (Física)</td>
+                                    <td class="p-3 text-center font-mono font-bold text-emerald-700">92% (26/28)</td>
+                                    <td class="p-3 text-center font-mono">18 min</td>
+                                    <td class="p-3 text-center text-amber-700 font-medium">Checkpoint 30º vs 60º</td>
+                                    <td class="p-3 text-center"><span class="px-2 py-0.5 rounded bg-blue-100 text-blue-800 text-[10px] font-bold">Repasar 5 min en pizarra</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-bold text-slate-900">Regla de Barrow (Matemáticas II)</td>
+                                    <td class="p-3 text-center font-mono font-bold text-blue-700">86% (24/28)</td>
+                                    <td class="p-3 text-center font-mono">24 min</td>
+                                    <td class="p-3 text-center text-amber-700 font-medium">Signo en límite inferior</td>
+                                    <td class="p-3 text-center"><span class="px-2 py-0.5 rounded bg-amber-100 text-amber-800 text-[10px] font-bold">Reforzar con cápsula Safe Space</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- SECCIÓN 2: EL GRADEBOOK DE EJERCICIOS Y EXÁMENES -->
+            <div id="demo-gradebook" class="precision-card p-6 sm:p-10 mb-16 shadow-lg border-purple-200 scroll-mt-24">
+                
+                <div class="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-slate-200 mb-6">
+                    <div>
+                        <span class="text-xs font-mono font-bold text-purple-600 uppercase tracking-widest block mb-1">
+                            <i class="fas fa-table-list mr-1.5"></i> Cuaderno de Calificaciones de Ejercicios
+                        </span>
+                        <h2 class="text-2xl sm:text-3xl font-black text-slate-950">
+                            Gradebook: Calificación de Entregas & Rúbricas (C2/C3)
+                        </h2>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs font-mono text-slate-500 font-semibold">Grupo: 28 alumnos</span>
+                        <button class="px-3 py-1.5 rounded-lg bg-purple-50 text-purple-700 font-bold text-xs border border-purple-200 hover:bg-purple-100 transition">
+                            <i class="fas fa-download mr-1"></i> Exportar a CSV / Canvas
+                        </button>
+                    </div>
+                </div>
+
+                <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mb-6">
+                    El <strong>Gradebook de ColabEdu</strong> consolida las entregas de ejercicios de tus alumnos (manuscritos escaneados, exámenes orales y tests razonados) vinculando cada nota a las competencias oficiales del currículo:
+                </p>
+
+                <!-- Tabla de Calificaciones de Ejercicios -->
+                <div class="overflow-x-auto mb-6">
+                    <table class="w-full text-left border-collapse text-xs">
+                        <thead>
+                            <tr class="bg-slate-100/90 text-slate-700 font-mono border-b border-slate-200 text-[11px] uppercase tracking-wider">
+                                <th class="p-3">Estudiante</th>
+                                <th class="p-3 text-center">Ej. 1: Matrices</th>
+                                <th class="p-3 text-center">Ej. 2: Derivadas</th>
+                                <th class="p-3 text-center">Examen: Integrales</th>
+                                <th class="p-3 text-center">Competencia CE.MAT.2</th>
+                                <th class="p-3 text-center">Nota Global</th>
+                                <th class="p-3 text-center">Feedback Alumno</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200">
+                            <!-- Alumno 1 -->
+                            <tr class="hover:bg-slate-50 transition student-row">
+                                <td class="p-3 font-bold text-slate-900 flex items-center gap-2">
+                                    <div class="w-6 h-6 rounded-full bg-blue-100 text-blue-700 text-[10px] font-bold flex items-center justify-center">MR</div>
+                                    <span>Marcos Ruiz</span>
+                                </td>
+                                <td class="p-3 text-center font-mono font-bold text-emerald-700">9.5</td>
+                                <td class="p-3 text-center font-mono font-bold text-emerald-700">8.8</td>
+                                <td class="p-3 text-center font-mono font-bold text-emerald-700">9.0</td>
+                                <td class="p-3 text-center"><span class="px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-800 font-bold text-[10px]">Sobresaliente</span></td>
+                                <td class="p-3 text-center font-mono font-black text-slate-900">9.1</td>
+                                <td class="p-3 text-center">
+                                    <button class="view-report-btn text-purple-700 font-bold hover:underline" data-student="Marcos Ruiz" data-grade="9.1" data-status="high">Ver Feedback &rarr;</button>
+                                </td>
+                            </tr>
+
+                            <!-- Alumno 2 -->
+                            <tr class="hover:bg-slate-50 transition student-row">
+                                <td class="p-3 font-bold text-slate-900 flex items-center gap-2">
+                                    <div class="w-6 h-6 rounded-full bg-teal-100 text-teal-700 text-[10px] font-bold flex items-center justify-center">LN</div>
+                                    <span>Lucía Navarro</span>
+                                </td>
+                                <td class="p-3 text-center font-mono font-bold text-blue-700">7.5</td>
+                                <td class="p-3 text-center font-mono font-bold text-emerald-700">8.0</td>
+                                <td class="p-3 text-center font-mono font-bold text-blue-700">7.0</td>
+                                <td class="p-3 text-center"><span class="px-2 py-0.5 rounded-md bg-blue-100 text-blue-800 font-bold text-[10px]">Notable</span></td>
+                                <td class="p-3 text-center font-mono font-black text-slate-900">7.5</td>
+                                <td class="p-3 text-center">
+                                    <button class="view-report-btn text-purple-700 font-bold hover:underline" data-student="Lucía Navarro" data-grade="7.5" data-status="mid">Ver Feedback &rarr;</button>
+                                </td>
+                            </tr>
+
+                            <!-- Alumno 3 -->
+                            <tr class="hover:bg-amber-50/50 transition student-row">
+                                <td class="p-3 font-bold text-slate-900 flex items-center gap-2">
+                                    <div class="w-6 h-6 rounded-full bg-amber-100 text-amber-700 text-[10px] font-bold flex items-center justify-center">CM</div>
+                                    <span>Carlos Morales</span>
+                                </td>
+                                <td class="p-3 text-center font-mono font-bold text-amber-700">5.5</td>
+                                <td class="p-3 text-center font-mono font-bold text-red-600">4.5</td>
+                                <td class="p-3 text-center font-mono font-bold text-amber-700">6.0</td>
+                                <td class="p-3 text-center"><span class="px-2 py-0.5 rounded-md bg-amber-100 text-amber-800 font-bold text-[10px]">Refuerzo</span></td>
+                                <td class="p-3 text-center font-mono font-black text-slate-900">5.3</td>
+                                <td class="p-3 text-center">
+                                    <button class="view-report-btn text-purple-700 font-bold hover:underline" data-student="Carlos Morales" data-grade="5.3" data-status="low">Ver Feedback &rarr;</button>
+                                </td>
+                            </tr>
+
+                            <!-- Alumno 4 -->
+                            <tr class="hover:bg-slate-50 transition student-row">
+                                <td class="p-3 font-bold text-slate-900 flex items-center gap-2">
+                                    <div class="w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 text-[10px] font-bold flex items-center justify-center">EG</div>
+                                    <span>Elena García</span>
+                                </td>
+                                <td class="p-3 text-center font-mono font-bold text-emerald-700">8.5</td>
+                                <td class="p-3 text-center font-mono font-bold text-emerald-700">8.0</td>
+                                <td class="p-3 text-center font-mono font-bold text-emerald-700">8.5</td>
+                                <td class="p-3 text-center"><span class="px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-800 font-bold text-[10px]">Notable Alto</span></td>
+                                <td class="p-3 text-center font-mono font-black text-slate-900">8.3</td>
+                                <td class="p-3 text-center">
+                                    <button class="view-report-btn text-purple-700 font-bold hover:underline" data-student="Elena García" data-grade="8.3" data-status="mid-high">Ver Feedback &rarr;</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="p-3 bg-purple-50 rounded-xl border border-purple-200 text-xs text-purple-900 flex items-center justify-between">
+                    <span><i class="fas fa-lightbulb text-purple-600 mr-2"></i><strong>Atajo:</strong> Haz clic en <em>"Ver Feedback &rarr;"</em> para inspeccionar el informe narrativo y las recomendaciones del estudiante seleccionado.</span>
+                </div>
+            </div>
+
+            <!-- SECCIÓN 3: INFORMES DE FEEDBACK FORMATIVO POR ESTUDIANTE -->
+            <div id="informes-feedback" class="precision-card section-tint-emerald p-6 sm:p-10 mb-16 shadow-lg border-emerald-200 scroll-mt-24">
+                
+                <div class="flex items-center justify-between pb-4 border-b border-slate-200 mb-6">
+                    <div>
+                        <span class="text-xs font-mono font-bold text-emerald-600 uppercase tracking-widest block mb-1">
+                            Módulo 3 · Feedback Formativo Individualizado
+                        </span>
+                        <h3 class="text-xl sm:text-2xl font-black text-slate-900" id="report-title">
+                            Informe de Feedback: Marcos Ruiz
+                        </h3>
+                    </div>
+                    <button class="px-4 py-2 rounded-xl bg-slate-900 text-white font-bold text-xs hover:bg-slate-800 transition flex items-center gap-2">
+                        <i class="fas fa-file-pdf"></i>
+                        <span>Descargar PDF para Familia</span>
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                    <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+                        <span class="text-xs text-slate-500 font-mono block">Calificación de Ejercicios:</span>
+                        <div class="text-3xl font-black text-slate-950 font-mono mt-1" id="report-grade">9.1 / 10</div>
+                        <span class="text-[11px] text-emerald-700 font-bold mt-1 block">Nivel de Dominio: Avanzado</span>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+                        <span class="text-xs text-slate-500 font-mono block">Práctica en Safe Space:</span>
+                        <div class="text-3xl font-black text-slate-950 font-mono mt-1">14 sesiones</div>
+                        <span class="text-[11px] text-slate-600 font-bold mt-1 block">Resolución autónoma: 92%</span>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+                        <span class="text-xs text-slate-500 font-mono block">Alineación Curricular Oficial:</span>
+                        <div class="text-3xl font-black text-emerald-600 font-mono mt-1">100%</div>
+                        <span class="text-[11px] text-emerald-700 font-bold mt-1 block">Criterios superados: 6/6</span>
+                    </div>
+                </div>
+
+                <!-- Bloques Narrativos del Informe -->
+                <div class="space-y-4 text-xs sm:text-sm text-slate-700 leading-relaxed mb-6" id="report-body">
+                    <div class="p-4 rounded-xl bg-emerald-50/70 border border-emerald-200">
+                        <h4 class="font-bold text-emerald-950 flex items-center gap-2 mb-1">
+                            <i class="fas fa-circle-check text-emerald-600"></i> Fortalezas Demostradas en Ejercicios
+                        </h4>
+                        <p class="text-emerald-900 text-xs">
+                            Excelente rigor formal en el planteamiento de cálculo integral. Resuelve ecuaciones asociadas con precisión y explicita siempre las unidades de medida en el resultado final (u²). Su aplicación de la regla de Barrow demuestra asimilación conceptual sólida.
+                        </p>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-blue-50/70 border border-blue-200">
+                        <h4 class="font-bold text-blue-950 flex items-center gap-2 mb-1">
+                            <i class="fas fa-arrows-to-dot text-blue-600"></i> Diagnóstico de Crecimiento
+                        </h4>
+                        <p class="text-blue-900 text-xs">
+                            En problemas de optimización de funciones racionales, tiende a verificar los máximos/mínimos únicamente por la primera derivada. Se recomienda consolidar la justificación con el criterio de la segunda derivada o el estudio sistemático del signo en los intervalos de crecimiento.
+                        </p>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-purple-50/70 border border-purple-200">
+                        <h4 class="font-bold text-purple-950 flex items-center gap-2 mb-1">
+                            <i class="fas fa-route text-purple-600"></i> Remediación Asignada en Safe Space
+                        </h4>
+                        <p class="text-purple-900 text-xs">
+                            Se le ha asignado en su catálogo de práctica la cápsula interactiva <em>"Optimización en Economía y Geometría: Taller de Justificación FRQ"</em> (15 minutos).
+                        </p>
+                    </div>
+                </div>
+
+                <div class="text-[11px] font-mono text-slate-400 border-t border-slate-200 pt-3 flex justify-between">
+                    <span>Generado con el motor soberano Grading V2</span>
+                    <span>Revisado y editable por el profesor del grupo</span>
+                </div>
+            </div>
+
+            <!-- EMBEBIDO O ACCESO A LA APP REAL -->
+            <div class="p-8 sm:p-12 rounded-3xl bg-slate-900 text-white flex flex-col md:flex-row items-center justify-between gap-8 shadow-xl">
+                <div class="max-w-xl">
+                    <span class="text-xs font-mono font-bold text-purple-400 uppercase tracking-widest block mb-2">
+                        Experiencia en Producción
+                    </span>
+                    <h3 class="text-2xl sm:text-3xl font-black tracking-tight mb-3">
+                        Pruébalo en la Plataforma Docente de ColabEdu
+                    </h3>
+                    <p class="text-sm text-slate-300 leading-relaxed">
+                        Accede directamente a la aplicación web o descarga las aplicaciones nativas para tablets escolares y gestiona tus grupos con sincronización LTI 1.3 inmediata.
+                    </p>
+                </div>
+                <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto shrink-0">
+                    <a href={appUrl} target="_blank" rel="noopener noreferrer" class="px-6 py-3.5 rounded-xl bg-purple-600 text-white font-bold text-sm text-center shadow-md hover:bg-purple-500 transition">
+                        Entrar a la App Docente &rarr;
+                    </a>
+                    <a href="/es/apps" class="px-6 py-3.5 rounded-xl bg-white/10 text-white font-bold text-sm text-center hover:bg-white/20 transition border border-white/20">
+                        Ver Apps para Tablets
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <Footer lang="es" />
+
+    <!-- SCRIPT DE REACTIVIDAD DEL PANEL DE AULA Y FEEDBACK -->
+    <script is:inline>
+        // Toggle Vista En Vivo vs Semanal
+        const btnLive = document.getElementById('btn-view-live');
+        const btnWeek = document.getElementById('btn-view-week');
+        const panelLive = document.getElementById('panel-live');
+        const panelWeek = document.getElementById('panel-week');
+
+        btnLive?.addEventListener('click', () => {
+            btnLive.className = 'px-3 py-1.5 rounded-lg bg-white text-slate-900 shadow-xs';
+            btnWeek.className = 'px-3 py-1.5 rounded-lg text-slate-500 hover:text-slate-900';
+            panelLive?.classList.remove('hidden');
+            panelWeek?.classList.add('hidden');
+        });
+
+        btnWeek?.addEventListener('click', () => {
+            btnWeek.className = 'px-3 py-1.5 rounded-lg bg-white text-slate-900 shadow-xs';
+            btnLive.className = 'px-3 py-1.5 rounded-lg text-slate-500 hover:text-slate-900';
+            panelWeek?.classList.remove('hidden');
+            panelLive?.classList.add('hidden');
+        });
+
+        // Visor dinámico de feedback individual
+        const reportTitle = document.getElementById('report-title');
+        const reportGrade = document.getElementById('report-grade');
+        const reportBody = document.getElementById('report-body');
+
+        document.querySelectorAll('.view-report-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const name = btn.getAttribute('data-student') || 'Estudiante';
+                const grade = btn.getAttribute('data-grade') || '8.0';
+                const status = btn.getAttribute('data-status') || 'mid';
+
+                if (reportTitle) reportTitle.textContent = `Informe de Feedback: ${name}`;
+                if (reportGrade) reportGrade.textContent = `${grade} / 10`;
+
+                if (reportBody) {
+                    if (status === 'low') {
+                        reportBody.innerHTML = `
+                            <div class="p-4 rounded-xl bg-amber-50/70 border border-amber-200">
+                                <h4 class="font-bold text-amber-950 flex items-center gap-2 mb-1">
+                                    <i class="fas fa-triangle-exclamation text-amber-600"></i> Dificultad Detectada en el Ejercicio
+                                </h4>
+                                <p class="text-amber-900 text-xs">
+                                    En la prueba de derivadas se observa confusión al aplicar la regla de la cadena con funciones trigonométricas compuestas. Sin embargo, en el cálculo de integrales inmediatas ha mostrado una notable mejoría tras 4 sesiones de práctica en el Safe Space.
+                                </p>
+                            </div>
+                            <div class="p-4 rounded-xl bg-blue-50/70 border border-blue-200">
+                                <h4 class="font-bold text-blue-950 flex items-center gap-2 mb-1">
+                                    <i class="fas fa-compass text-blue-600"></i> Plan de Remediación Individualizado
+                                </h4>
+                                <p class="text-blue-900 text-xs">
+                                    Asignación recomendada: Lección interactiva <em>"Regla de la Cadena Visual: Descomposición en Muñecas Rusas"</em> con Copiloto Socrático activado en modo andamiaje guiado.
+                                </p>
+                            </div>
+                        `;
+                    } else {
+                        reportBody.innerHTML = `
+                            <div class="p-4 rounded-xl bg-emerald-50/70 border border-emerald-200">
+                                <h4 class="font-bold text-emerald-950 flex items-center gap-2 mb-1">
+                                    <i class="fas fa-circle-check text-emerald-600"></i> Fortalezas Demostradas en Ejercicios
+                                </h4>
+                                <p class="text-emerald-900 text-xs">
+                                    Progreso constante y riguroso. Supera con solvencia los estándares de formulación analítica y resolución gráfica. Plantea las hipótesis de los teoremas de Bolzano y Rolle de forma ordenada antes de operar.
+                                </p>
+                            </div>
+                            <div class="p-4 rounded-xl bg-purple-50/70 border border-purple-200">
+                                <h4 class="font-bold text-purple-950 flex items-center gap-2 mb-1">
+                                    <i class="fas fa-star text-purple-600"></i> Enriquecimiento Curricular
+                                </h4>
+                                <p class="text-purple-900 text-xs">
+                                    Recomendado para problemas avanzados de examen PAU de convocatorias extraordinarias y olimpíadas matemáticas escolares.
+                                </p>
+                            </div>
+                        `;
+                    }
+                }
+
+                // Scroll suave al visor de informe
+                document.getElementById('informes-feedback')?.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+    </script>
+
+</body>
+</html>

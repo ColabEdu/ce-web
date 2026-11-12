@@ -9,7 +9,7 @@ export function getStaticPaths() {
   const { coursesByCountry, recentAdditionsByCountry } = loadCatalog();
   const countries = Object.keys(coursesByCountry);
 
-  const uniqueCountries = countries.length > 0 ? countries : ['es', 'us', 'intl'];
+  const uniqueCountries = countries.length > 0 ? countries : ['es', 'us', 'mx', 'intl'];
 
   return uniqueCountries.map((c) => ({
     params: { country: c },

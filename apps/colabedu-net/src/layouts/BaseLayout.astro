@@ -14,6 +14,8 @@ const { title = 'ColabEdu - Recupera tu tiempo', lang = 'es' } = Astro.props;
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{title}</title>
     <meta name="description" content="Automatización de evaluación multimodal para docentes e instituciones.">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate icon" type="image/png" href="/favicon.png" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style is:global>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
@@ -107,6 +109,37 @@ const { title = 'ColabEdu - Recupera tu tiempo', lang = 'es' } = Astro.props;
                 window.location.href = '/' + lang + '/';
             }
         }
+
+        // Dynamic Browser Detection for Extension CTAs (Chrome vs Microsoft Edge)
+        (function() {
+            try {
+                var ua = navigator.userAgent.toLowerCase();
+                var isEdge = /edg([ea]|ios)?\//.test(ua);
+                if (isEdge) {
+                    var edgeUrl = "https://microsoftedge.microsoft.com/addons/detail/colabedu-assistant/";
+                    var isEn = (document.documentElement.lang || 'es').startsWith('en');
+
+                    // 1. Update all links pointing to Chrome Web Store
+                    document.querySelectorAll('a[href*="chromewebstore.google.com"]').forEach(function(el) {
+                        el.href = edgeUrl;
+                    });
+
+                    // 2. Update specific labels and icons
+                    document.querySelectorAll('.extension-cta-label').forEach(function(el) {
+                        el.textContent = isEn ? "Add to Microsoft Edge (Free)" : "Añadir a Microsoft Edge (Gratis)";
+                    });
+                    document.querySelectorAll('.extension-main-label').forEach(function(el) {
+                        el.textContent = isEn ? "Install Official Microsoft Edge Add-on" : "Instalar Extensión Oficial para Microsoft Edge";
+                    });
+
+                    // 3. Switch icons to Edge
+                    document.querySelectorAll('.fa-chrome').forEach(function(icon) {
+                        icon.classList.remove('fa-chrome');
+                        icon.classList.add('fa-edge');
+                    });
+                }
+            } catch(e) {}
+        })();
     </script>
 </body>
 </html>

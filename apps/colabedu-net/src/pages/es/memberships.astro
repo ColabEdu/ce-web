@@ -1,0 +1,615 @@
+---
+// src/pages/es/memberships.astro
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { appLink } from "@colabedu/ui-core/navigation";
+import { getTiersByAudience, getTierPrice, type BillingTier } from '../../data/billing';
+
+const catalogUrl = appLink('catalog', '/');
+const appUrl = appLink('app', '/');
+
+const studentTiers = getTiersByAudience('STUDENT');
+const teacherTiers = getTiersByAudience('TEACHER');
+
+// Preparar datos JSON seguros para renderizado reactivo del lado cliente (moneda y periodicidad)
+const tiersPayload = {
+    students: studentTiers.map((t) => ({
+        id: t.id,
+        name: t.name,
+        description: t.description,
+        popular: t.popular,
+        monthlyEvaluations: t.monthly_evaluations,
+        features: t.features,
+        prices: {
+            es_month: getTierPrice(t, 'es', 'month')?.formatted || '',
+            es_year: getTierPrice(t, 'es', 'year')?.formatted || '',
+            us_month: getTierPrice(t, 'us', 'month')?.formatted || '',
+            us_year: getTierPrice(t, 'us', 'year')?.formatted || '',
+        }
+    })),
+    teachers: teacherTiers.map((t) => ({
+        id: t.id,
+        name: t.name,
+        description: t.description,
+        popular: t.popular,
+        monthlyEvaluations: t.monthly_evaluations,
+        features: t.features,
+        prices: {
+            es_month: getTierPrice(t, 'es', 'month')?.formatted || '',
+            es_year: getTierPrice(t, 'es', 'year')?.formatted || '',
+            us_month: getTierPrice(t, 'us', 'month')?.formatted || '',
+            us_year: getTierPrice(t, 'us', 'year')?.formatted || '',
+        }
+    }))
+};
+---
+<BaseLayout lang="es" title="Membresías y Sostenimiento de Infraestructura | ColabEdu.net">
+    
+    <!-- Hero Section -->
+    <section class="pt-36 pb-16 bg-gradient-to-b from-amber-50/40 via-white to-slate-50 border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-amber-300 text-amber-900 text-xs font-bold shadow-xs mb-6">
+                <span class="flex h-2 w-2 rounded-full bg-amber-500"></span>
+                <span>Transparencia de Cómputo e Inferencia Soberana</span>
+            </div>
+
+            <h1 class="text-4xl sm:text-6xl font-black text-slate-950 tracking-tight leading-tight mb-6">
+                El contenido es libre y abierto.<br/>
+                <span class="text-blue-600">La tecnología se sostiene entre todos.</span>
+            </h1>
+
+            <p class="text-lg sm:text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed mb-8">
+                El 100% de los libros y exámenes oficiales OER son gratuitos. Tu membresía no paga por contenidos: financia la <strong>factoría tecnológica continua</strong> que digitaliza fuentes públicas, desarrolla las apps de aula y sostiene la inferencia asistida por IA para ti y para estudiantes becados de escuelas públicas.
+            </p>
+
+            <!-- Cuadrícula de Transparencia de Infraestructura: Qué sostiene tu membresía -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-6xl mx-auto mb-12 text-left">
+                <!-- Pilar 1: Digitalización OER -->
+                <div class="p-5 rounded-2xl bg-white border border-slate-200/90 shadow-xs hover:border-amber-400 transition-colors">
+                    <div class="w-9 h-9 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center text-sm font-bold mb-3">
+                        <i class="fas fa-book-sparkles"></i>
+                    </div>
+                    <h4 class="font-black text-slate-900 text-xs sm:text-sm mb-1.5">Digitalización & Enriquecimiento OER</h4>
+                    <p class="text-[11px] text-slate-600 leading-relaxed">
+                        Transformamos miles de PDFs estáticos de 65+ repositorios oficiales (INTEF, OpenStax, SEP) en lecciones vivas con simulaciones PhET, KaTeX y andamiaje en 9 pasos.
+                    </p>
+                </div>
+
+                <!-- Pilar 2: Apps Multiplataforma -->
+                <div class="p-5 rounded-2xl bg-white border border-slate-200/90 shadow-xs hover:border-teal-400 transition-colors">
+                    <div class="w-9 h-9 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center text-sm font-bold mb-3">
+                        <i class="fas fa-tablet-screen-button"></i>
+                    </div>
+                    <h4 class="font-black text-slate-900 text-xs sm:text-sm mb-1.5">Desarrollo Continuo de Apps de Aula</h4>
+                    <p class="text-[11px] text-slate-600 leading-relaxed">
+                        Mantenimiento de aplicaciones nativas para tablets escolares (Android/iPad con soporte stylus), Chromebooks PWA y extensiones de navegador para Canvas y Moodle.
+                    </p>
+                </div>
+
+                <!-- Pilar 3: Motor de Evaluación Asistida -->
+                <div class="p-5 rounded-2xl bg-white border border-slate-200/90 shadow-xs hover:border-blue-400 transition-colors">
+                    <div class="w-9 h-9 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center text-sm font-bold mb-3">
+                        <i class="fas fa-brain-circuit"></i>
+                    </div>
+                    <h4 class="font-black text-slate-900 text-xs sm:text-sm mb-1.5">Motor de Evaluación & Rúbricas Oficiales</h4>
+                    <p class="text-[11px] text-slate-600 leading-relaxed">
+                        Algoritmos de visión artificial para OCR manuscrito, alineación en tiempo real con descriptores Common Core/LOMLOE/IB y baremación de niveles de competencia PISA 1 a 6.
+                    </p>
+                </div>
+
+                <!-- Pilar 4: Inferencia Segura & RGPD -->
+                <div class="p-5 rounded-2xl bg-white border border-slate-200/90 shadow-xs hover:border-indigo-400 transition-colors">
+                    <div class="w-9 h-9 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center text-sm font-bold mb-3">
+                        <i class="fas fa-server"></i>
+                    </div>
+                    <h4 class="font-black text-slate-900 text-xs sm:text-sm mb-1.5">Inferencia Soberana & Privacidad RGPD</h4>
+                    <p class="text-[11px] text-slate-600 leading-relaxed">
+                        Clústeres de inferencia de baja latencia con aislamiento estricto de datos de menores, sin reutilización para entrenamiento y fondo de cómputo para centros públicos.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Dual Control Bar: Audience Tabs + Currency Switcher -->
+            <div class="max-w-6xl mx-auto flex flex-col xl:flex-row items-center justify-between gap-4 bg-white p-3.5 rounded-3xl border border-slate-300 shadow-sm">
+                
+                <!-- Tab Selector: Estudiantes vs. Docentes vs. Becas/Convenios Escolar -->
+                <div class="flex items-center flex-wrap justify-center sm:justify-start gap-1 bg-slate-100 p-1.5 rounded-2xl w-full xl:w-auto">
+                    <button id="tab-btn-students" class="flex items-center justify-center gap-2 px-4 sm:px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm bg-blue-600 text-white shadow-sm transition-all whitespace-nowrap">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span>Para Estudiantes & Familias</span>
+                    </button>
+                    <button id="tab-btn-teachers" class="flex items-center justify-center gap-2 px-4 sm:px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm text-slate-600 hover:text-slate-900 transition-all whitespace-nowrap">
+                        <i class="fas fa-chalkboard-user"></i>
+                        <span>Para Docentes</span>
+                    </button>
+                    <a href="#activar-beca" class="flex items-center justify-center gap-2 px-3 sm:px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm text-teal-800 hover:text-teal-950 transition-all whitespace-nowrap">
+                        <i class="fas fa-ticket text-teal-600"></i>
+                        <span>Activar Beca</span>
+                    </a>
+                    <a href="/es/sponsored" class="flex items-center justify-center gap-2 px-3 sm:px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm text-amber-800 hover:text-amber-950 transition-all whitespace-nowrap">
+                        <i class="fas fa-hand-holding-dollar text-amber-600"></i>
+                        <span>Esponsorizar &rarr;</span>
+                    </a>
+                </div>
+
+                <!-- Currency & Entity Selector -->
+                <div class="flex flex-wrap items-center gap-3 w-full xl:w-auto justify-center xl:justify-end">
+                    <div class="flex items-center gap-1.5">
+                        <span class="text-[11px] font-mono font-bold text-slate-500 uppercase tracking-wider">Moneda:</span>
+                        <div class="flex items-center bg-slate-100 p-1 rounded-xl text-xs font-bold">
+                            <button id="curr-btn-eur" class="px-3 py-1.5 rounded-lg bg-slate-900 text-white shadow-xs transition-all">
+                                🇪🇸 EUR (€)
+                            </button>
+                            <button id="curr-btn-usd" class="px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition-all">
+                                🇺🇸 USD ($)
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Periodicity Toggle -->
+                    <div class="flex items-center bg-slate-100 p-1 rounded-xl text-xs font-bold">
+                        <button id="period-btn-month" class="px-3.5 py-1.5 rounded-lg bg-white text-slate-900 shadow-xs transition-all">
+                            Mensual
+                        </button>
+                        <button id="period-btn-year" class="px-3.5 py-1.5 rounded-lg text-emerald-700 hover:text-emerald-900 transition-all">
+                            Anual (-15%)
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 1: ESTUDIANTES & FAMILIAS -->
+    <section id="section-students" class="py-16 sm:py-24 bg-white border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="text-center max-w-3xl mx-auto mb-14">
+                <span class="text-xs font-mono font-bold text-blue-700 uppercase tracking-widest block mb-2">Preparación Autónoma, Familias & Tutoría Personalizada</span>
+                <h2 class="text-3xl sm:text-4xl font-black text-slate-900">
+                    Membresías para Alumnado y Familias
+                </h2>
+                <p class="text-slate-600 text-sm mt-3">
+                    Práctica confidencial en casa sin miedo al error, preparación para la PAU/EBAU y exámenes AP, y tutoría socrática 24/7.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                
+                <!-- Tier 1: Acceso Libre OER (Siempre Gratuito) -->
+                <div class="rounded-3xl p-8 border border-slate-200 bg-slate-50/50 flex flex-col justify-between">
+                    <div>
+                        <div class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Comunidad Abierta</div>
+                        <h3 class="text-2xl font-black text-slate-900 mb-1">Acceso Libre OER</h3>
+                        <p class="text-xs text-slate-500 mb-6">Para estudio teórico autodidacta y práctica diagnóstica inicial.</p>
+                        
+                        <div class="mb-6 pb-6 border-b border-slate-200">
+                            <span class="text-4xl font-black text-slate-900">0 €</span>
+                            <span class="text-xs text-slate-500 font-semibold">/ para siempre</span>
+                        </div>
+
+                        <ul class="space-y-3 text-xs sm:text-sm text-slate-600 mb-8">
+                            <li class="flex items-center gap-2">✓ <strong>100% Catálogo OER abierto</strong> en colabedu.org</li>
+                            <li class="flex items-center gap-2">✓ Cursos completos y ejercicios oficiales sin coste</li>
+                            <li class="flex items-center gap-2">✓ 3 evaluaciones analíticas iniciales de cortesía</li>
+                            <li class="flex items-center gap-2 text-slate-400">✗ Sin tutor socrático ilimitado 24/7</li>
+                            <li class="flex items-center gap-2 text-slate-400">✗ Sin laboratorio oral Voice Lab</li>
+                        </ul>
+                    </div>
+
+                    <a href={catalogUrl} target="_blank" class="w-full py-3 text-center text-sm font-bold text-slate-700 bg-white border border-slate-300 rounded-xl hover:bg-slate-100 transition-colors">
+                        Explorar Catálogo Libre
+                    </a>
+                </div>
+
+                <!-- Tier 2: Academia Base (student_core) -->
+                <div class="rounded-3xl p-8 border-2 border-blue-600 bg-white shadow-xl relative flex flex-col justify-between">
+                    <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-blue-600 text-white text-[11px] font-extrabold uppercase tracking-wider px-3.5 py-1 rounded-full shadow-xs">
+                        Más Elegido · Selectividad & AP
+                    </div>
+                    <div>
+                        <div class="text-xs font-bold text-blue-600 uppercase tracking-widest mb-2">Estudiante Individual</div>
+                        <h3 class="text-2xl font-black text-slate-900 mb-1">Academia Base</h3>
+                        <p class="text-xs text-slate-500 mb-6">Preparación oficial para PAU/EBAU y Bachillerato con tutoría guiada.</p>
+                        
+                        <div class="mb-6 pb-6 border-b border-slate-200">
+                            <span id="price-student_core" class="text-4xl font-black text-slate-900">19,99 €</span>
+                            <span id="period-label-student_core" class="text-xs text-slate-500 font-semibold">/ mes</span>
+                            <div id="subtext-student_core" class="text-[11px] text-emerald-600 font-bold mt-1">Cancela cuando quieras</div>
+                        </div>
+
+                        <ul class="space-y-3 text-xs sm:text-sm text-slate-700 mb-8">
+                            <li class="flex items-center gap-2">✓ <strong>500 evaluaciones analíticas IA al mes</strong></li>
+                            <li class="flex items-center gap-2">✓ Tutor socrático 24/7 sin límite de consultas</li>
+                            <li class="flex items-center gap-2">✓ Rúbricas oficiales de tu comunidad o currículo</li>
+                            <li class="flex items-center gap-2">✓ Entorno Safe Space privado en casa</li>
+                            <li class="flex items-center gap-2">✓ Financia 50 consultas para alumnos de centros públicos</li>
+                        </ul>
+                    </div>
+
+                    <a href={appUrl} class="w-full py-3.5 text-center text-sm font-extrabold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-all shadow-md">
+                        Comenzar con Academia Base
+                    </a>
+                </div>
+
+                <!-- Tier 3: Academia Élite & Oral (student_ap_allaccess) -->
+                <div class="rounded-3xl p-8 border border-slate-200 bg-slate-50/50 flex flex-col justify-between">
+                    <div>
+                        <div class="text-xs font-bold text-teal-700 uppercase tracking-widest mb-2">Alto Rendimiento & Idiomas</div>
+                        <h3 class="text-2xl font-black text-slate-900 mb-1">Academia Élite & Oral</h3>
+                        <p class="text-xs text-slate-500 mb-6">Todo lo anterior más Voice Lab Oral y perfil multihijo.</p>
+                        
+                        <div class="mb-6 pb-6 border-b border-slate-200">
+                            <span id="price-student_ap_allaccess" class="text-4xl font-black text-slate-900">35,00 €</span>
+                            <span id="period-label-student_ap_allaccess" class="text-xs text-slate-500 font-semibold">/ mes</span>
+                            <div id="subtext-student_ap_allaccess" class="text-[11px] text-emerald-600 font-bold mt-1">Cancela cuando quieras</div>
+                        </div>
+
+                        <ul class="space-y-3 text-xs sm:text-sm text-slate-700 mb-8">
+                            <li class="flex items-center gap-2">✓ <strong>1.000 evaluaciones al mes</strong></li>
+                            <li class="flex items-center gap-2">✓ <strong>Voice Lab Oral ilimitado</strong> (Speaking AP / IB)</li>
+                            <li class="flex items-center gap-2">✓ Corrección de caligrafía difícil con OCR</li>
+                            <li class="flex items-center gap-2">✓ Cuenta familiar (hasta 2 estudiantes)</li>
+                            <li class="flex items-center gap-2">✓ Financia 100 consultas solidarias de aula</li>
+                        </ul>
+                    </div>
+
+                    <a href={appUrl} class="w-full py-3 text-center text-sm font-bold text-slate-900 bg-white border border-slate-300 rounded-xl hover:bg-slate-100 transition-colors">
+                        Elegir Academia Élite
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 2: DOCENTES & DEPARTAMENTOS -->
+    <section id="section-teachers" class="hidden py-16 sm:py-24 bg-white border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="text-center max-w-3xl mx-auto mb-14">
+                <span class="text-xs font-mono font-bold text-indigo-700 uppercase tracking-widest block mb-2">Soberanía Docente & Ahorro de Tiempo</span>
+                <h2 class="text-3xl sm:text-4xl font-black text-slate-900">
+                    Membresías Profesionales para Docentes y Departamentos
+                </h2>
+                <p class="text-slate-600 text-sm mt-3">
+                    Ahorra de 6 a 8 horas semanales en correcciones manuscritas con OCR, pre-corrección forense y sincronización con Canvas y Moodle.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                
+                <!-- Tier 1 Docente: Docente Monogrupo (teacher_pro) -->
+                <div class="rounded-3xl p-8 border border-slate-200 bg-white shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="text-xs font-bold text-indigo-600 uppercase tracking-widest mb-2">Docente Individual</div>
+                        <h3 class="text-2xl font-black text-slate-900 mb-1">Docente Monogrupo</h3>
+                        <p class="text-xs text-slate-500 mb-6">Para profesores que gestionan un grupo o materia principal.</p>
+                        
+                        <div class="mb-6 pb-6 border-b border-slate-200">
+                            <span id="price-teacher_pro" class="text-4xl font-black text-slate-900">24,99 €</span>
+                            <span id="period-label-teacher_pro" class="text-xs text-slate-500 font-semibold">/ mes</span>
+                            <div id="subtext-teacher_pro" class="text-[11px] text-emerald-600 font-bold mt-1">Cancela cuando quieras</div>
+                        </div>
+
+                        <ul class="space-y-3 text-xs sm:text-sm text-slate-700 mb-8">
+                            <li class="flex items-center gap-2">✓ <strong>500 evaluaciones asistidas por IA al mes</strong></li>
+                            <li class="flex items-center gap-2">✓ <strong>OCR para exámenes manuscritos</strong> en tablet o móvil</li>
+                            <li class="flex items-center gap-2">✓ Creación de rúbricas analíticas oficiales personalizadas</li>
+                            <li class="flex items-center gap-2">✓ Corrección por lotes de aula (*Batch Grading*)</li>
+                            <li class="flex items-center gap-2">✓ Integración con Canvas SpeedGrader y Moodle</li>
+                        </ul>
+                    </div>
+
+                    <a href={appUrl} class="w-full py-3.5 text-center text-sm font-bold text-slate-900 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors">
+                        Activar Docente Monogrupo
+                    </a>
+                </div>
+
+                <!-- Tier 2 Docente: Docente Multigrupo / Departamento (teacher_department) -->
+                <div class="rounded-3xl p-8 border-2 border-indigo-600 bg-white shadow-xl relative flex flex-col justify-between">
+                    <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-indigo-600 text-white text-[11px] font-extrabold uppercase tracking-wider px-3.5 py-1 rounded-full shadow-xs">
+                        Recomendado · Departamentos Didácticos
+                    </div>
+                    <div>
+                        <div class="text-xs font-bold text-indigo-600 uppercase tracking-widest mb-2">Departamentos & Equipos</div>
+                        <h3 class="text-2xl font-black text-slate-900 mb-1">Docente Multigrupo / Departamento</h3>
+                        <p class="text-xs text-slate-500 mb-6">Para departamentos completos y múltiples asignaturas o cursos paralelos.</p>
+                        
+                        <div class="mb-6 pb-6 border-b border-slate-200">
+                            <span id="price-teacher_department" class="text-4xl font-black text-slate-900">35,00 €</span>
+                            <span id="period-label-teacher_department" class="text-xs text-slate-500 font-semibold">/ mes</span>
+                            <div id="subtext-teacher_department" class="text-[11px] text-emerald-600 font-bold mt-1">Cancela cuando quieras</div>
+                        </div>
+
+                        <ul class="space-y-3 text-xs sm:text-sm text-slate-700 mb-8">
+                            <li class="flex items-center gap-2">✓ <strong>1.000 evaluaciones asistidas por IA al mes</strong></li>
+                            <li class="flex items-center gap-2">✓ OCR manuscrito y laboratorio oral ilimitado</li>
+                            <li class="flex items-center gap-2">✓ <strong>Informes transversales Common Core / LOMLOE / IB / AP</strong></li>
+                            <li class="flex items-center gap-2">✓ Banco colegiado de recetas de examen departamentales</li>
+                            <li class="flex items-center gap-2">✓ Módulos de remediación y cohortes de refuerzo</li>
+                        </ul>
+                    </div>
+
+                    <a href={appUrl} class="w-full py-3.5 text-center text-sm font-extrabold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl transition-all shadow-md">
+                        Comenzar en Departamento
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 3: ACTIVAR BECA O CONVENIO ESCOLAR (ALUMNOS & DOCENTES) -->
+    <!-- Ubicada directamente tras los precios para que cualquier estudiante o docente con código o dominio escolar pueda activarlo sin pagar -->
+    <section id="activar-beca" class="py-16 sm:py-20 bg-teal-50/40 border-b border-teal-100 scroll-mt-20">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-10">
+                <span class="text-xs font-mono font-bold text-teal-800 uppercase tracking-widest block mb-2">Activación Sin Tarjeta Bancaria</span>
+                <h2 class="text-2xl sm:text-3xl font-black text-slate-900">
+                    ¿Tienes una Beca de Centro o Convenio Escolar?
+                </h2>
+                <p class="text-slate-600 text-xs sm:text-sm mt-2 max-w-2xl mx-auto leading-relaxed">
+                    Si tu colegio, instituto o distrito tiene un convenio activo o tu profesor te ha entregado un ticket voucher, tu cuota de cómputo didáctico está 100% cubierta. Actívalo en segundos:
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <!-- Vía A: Verificación de Dominio Escolar -->
+                <div class="p-6 sm:p-7 rounded-3xl bg-white border border-teal-200/80 shadow-xs flex flex-col justify-between">
+                    <div>
+                        <div class="w-10 h-10 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center text-base mb-3">
+                            <i class="fas fa-at"></i>
+                        </div>
+                        <h4 class="font-black text-slate-900 text-base mb-1">1. Por Correo del Centro</h4>
+                        <p class="text-[11px] text-slate-600 leading-relaxed mb-4">
+                            Si tu correo pertenece a un dominio educativo con convenio (ej. <code class="bg-slate-100 px-1 py-0.5 rounded border border-slate-200">@educa.madrid.org</code>, <code class="bg-slate-100 px-1 py-0.5 rounded border border-slate-200">@g.educaand.es</code>), entra con tu cuenta y se activará solo.
+                        </p>
+                        <div class="space-y-3">
+                            <input 
+                                id="mem-input-domain" 
+                                type="email" 
+                                placeholder="tu_correo@colegio.edu" 
+                                class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-mono bg-white focus:outline-hidden focus:border-teal-600 text-slate-900"
+                            />
+                            <button 
+                                id="mem-btn-check-domain" 
+                                class="w-full py-2.5 rounded-xl bg-teal-700 hover:bg-teal-800 text-white font-bold text-xs transition-colors shadow-xs">
+                                Comprobar Cobertura Escolar
+                            </button>
+                            <div id="mem-domain-result" class="hidden p-3 rounded-xl text-xs font-semibold"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vía B: Canje de Código Voucher de Beca -->
+                <div class="p-6 sm:p-7 rounded-3xl bg-white border border-amber-200/80 shadow-xs flex flex-col justify-between">
+                    <div>
+                        <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center text-base mb-3">
+                            <i class="fas fa-ticket"></i>
+                        </div>
+                        <h4 class="font-black text-slate-900 text-base mb-1">2. Por Código Voucher</h4>
+                        <p class="text-[11px] text-slate-600 leading-relaxed mb-4">
+                            Si tu profesor o tutor te ha entregado un ticket de beca (ej. <code class="bg-slate-100 px-1 py-0.5 rounded border border-slate-200 font-mono">MADRID-XXXX-YYYY</code>), canjéalo aquí para empezar a estudiar:
+                        </p>
+                        <div class="space-y-3">
+                            <input 
+                                id="mem-input-voucher" 
+                                type="text" 
+                                placeholder="CODIGO-VOUCHER" 
+                                class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-mono uppercase bg-white focus:outline-hidden focus:border-amber-500 text-slate-900 text-center"
+                            />
+                            <button 
+                                id="mem-btn-redeem-voucher" 
+                                class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold text-xs transition-colors shadow-xs">
+                                Canjear Beca en mi Cuenta
+                            </button>
+                            <div id="mem-voucher-result" class="hidden p-3 rounded-xl text-xs font-semibold"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Enlace institucional hacia la página de centros / esponsorización -->
+            <div class="p-5 rounded-2xl bg-white border border-slate-200 text-center flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="text-left">
+                    <span class="text-xs font-bold text-slate-900 block">¿Quieres financiar un lote de becas para todo tu centro o distrito?</span>
+                    <span class="text-[11px] text-slate-500">Conoce nuestros convenios institucionales B2G y opciones de esponsorización de cohortes completas.</span>
+                </div>
+                <a href="/es/sponsored" class="px-4 py-2 rounded-xl bg-slate-900 text-white font-bold text-xs hover:bg-teal-700 transition-colors whitespace-nowrap shrink-0">
+                    Esponsorizar Cohortes en /sponsored &rarr;
+                </a>
+            </div>
+        </div>
+    </section>
+    <section class="py-14 bg-slate-900 text-white border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-8">
+            <div class="max-w-2xl">
+                <span class="text-xs font-mono font-bold text-amber-400 uppercase tracking-widest block mb-2">Despliegue Institucional para Centros</span>
+                <h3 class="text-2xl sm:text-3xl font-black text-white">¿Representas a un Colegio, Instituto o Distrito Escolar?</h3>
+                <p class="text-slate-300 text-sm mt-2 leading-relaxed">
+                    Disponemos de convenios B2G, integración LTI 1.3 institucional con Canvas/Moodle a nivel de cuenta completa, soporte MDM para carritos de tablets y facturación mediante factura electrónica (Face).
+                </p>
+            </div>
+            <div class="flex flex-col sm:flex-row gap-3 shrink-0">
+                <a href="/es/institutions#convenios" class="px-5 py-3.5 rounded-xl bg-teal-600 hover:bg-teal-500 font-bold text-xs sm:text-sm text-white transition-all shadow-lg flex items-center justify-center gap-2">
+                    <i class="fas fa-hand-holding-dollar"></i>
+                    <span>Ver Modelos de Convenio & Scoped</span>
+                </a>
+                <a href="/es/institutions" class="px-5 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-500 font-bold text-xs sm:text-sm text-white transition-all shadow-lg flex items-center justify-center gap-2">
+                    <span>Planes para Centros &rarr;</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Referral & Equity Pass Section -->
+    <section class="py-16 bg-slate-50 border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+            
+            <!-- Referral Program -->
+            <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-xs flex flex-col justify-between">
+                <div>
+                    <span class="text-xs font-bold text-amber-700 uppercase tracking-wider bg-amber-50 px-2.5 py-1 rounded border border-amber-200">Programa Solidario</span>
+                    <h3 class="text-2xl font-black text-slate-900 mt-3 mb-2">Invita a un Compañero (1 Mes Gratis)</h3>
+                    <p class="text-sm text-slate-600 leading-relaxed mb-4">
+                        Por cada amigo o docente colega que se registre con tu enlace y active su cuenta, <strong>ambos recibís 1 mes completo de membresía ilimitada gratis</strong>.
+                    </p>
+                </div>
+                <div class="pt-4 border-t border-slate-100">
+                    <a href={appUrl} class="text-sm font-bold text-blue-600 hover:text-blue-800 flex items-center gap-1.5">
+                        <span>Obtener mi enlace de recomendación</span>
+                        <i class="fas fa-arrow-right text-xs"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Equity Pass -->
+            <div class="bg-teal-950 text-white p-8 rounded-3xl border border-teal-800 shadow-md flex flex-col justify-between">
+                <div>
+                    <span class="text-xs font-bold text-amber-300 uppercase tracking-wider bg-teal-900 px-2.5 py-1 rounded border border-teal-700">Equidad Garantizada</span>
+                    <h3 class="text-2xl font-black text-white mt-3 mb-2">Beca de Equidad al 100%</h3>
+                    <p class="text-sm text-slate-300 leading-relaxed mb-4">
+                        Si estudias en un centro público o tu familia no puede asumir la cuota de inferencia, el Fondo de Fundaciones Mecenas financia tu membresía completa con 1 clic.
+                    </p>
+                </div>
+                <div class="pt-4 border-t border-teal-800">
+                    <a href={appUrl} class="inline-block px-5 py-2.5 text-xs font-bold text-slate-950 bg-amber-400 hover:bg-amber-300 rounded-xl transition-all shadow-sm">
+                        Solicitar Beca de Cómputo Gratuita
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Client Script for Interactive Tabs, Currency and Periodicity -->
+    <script is:inline define:vars={{ tiersPayload, appUrl }}>
+        let currentAudience = 'students'; // 'students' | 'teachers' | 'grants'
+        let currentCurrency = 'es';       // 'es' (EUR) | 'us' (USD)
+        let currentPeriod = 'month';      // 'month' | 'year'
+
+        const tabBtnStudents = document.getElementById('tab-btn-students');
+        const tabBtnTeachers = document.getElementById('tab-btn-teachers');
+        const tabBtnGrants = document.getElementById('tab-btn-grants');
+        const secStudents = document.getElementById('section-students');
+        const secTeachers = document.getElementById('section-teachers');
+        const secGrants = document.getElementById('section-grants');
+
+        const currBtnEur = document.getElementById('curr-btn-eur');
+        const currBtnUsd = document.getElementById('curr-btn-usd');
+
+        const periodBtnMonth = document.getElementById('period-btn-month');
+        const periodBtnYear = document.getElementById('period-btn-year');
+
+        function updateUI() {
+            // 1. Audience Switch
+            [secStudents, secTeachers].forEach(s => s?.classList.add('hidden'));
+            [tabBtnStudents, tabBtnTeachers].forEach(b => {
+                if (b) b.className = "flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm text-slate-600 hover:text-slate-900 transition-all whitespace-nowrap";
+            });
+
+            if (currentAudience === 'students') {
+                secStudents?.classList.remove('hidden');
+                if (tabBtnStudents) tabBtnStudents.className = "flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm bg-blue-600 text-white shadow-sm transition-all whitespace-nowrap";
+            } else if (currentAudience === 'teachers') {
+                secTeachers?.classList.remove('hidden');
+                if (tabBtnTeachers) tabBtnTeachers.className = "flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm bg-indigo-600 text-white shadow-sm transition-all whitespace-nowrap";
+            }
+
+            // 2. Currency Switch
+            if (currentCurrency === 'es') {
+                currBtnEur.className = "px-3.5 py-1.5 rounded-lg bg-slate-900 text-white shadow-xs transition-all";
+                currBtnUsd.className = "px-3.5 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition-all";
+            } else {
+                currBtnUsd.className = "px-3.5 py-1.5 rounded-lg bg-slate-900 text-white shadow-xs transition-all";
+                currBtnEur.className = "px-3.5 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition-all";
+            }
+
+            // 3. Periodicity Switch
+            if (currentPeriod === 'month') {
+                periodBtnMonth.className = "px-3.5 py-1.5 rounded-lg bg-white text-slate-900 shadow-xs transition-all";
+                periodBtnYear.className = "px-3.5 py-1.5 rounded-lg text-emerald-700 hover:text-emerald-900 transition-all";
+            } else {
+                periodBtnYear.className = "px-3.5 py-1.5 rounded-lg bg-emerald-700 text-white shadow-xs transition-all";
+                periodBtnMonth.className = "px-3.5 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition-all";
+            }
+
+            // 4. Update rendered prices for all tiers
+            const priceKey = `${currentCurrency}_${currentPeriod}`;
+            const periodLabel = currentPeriod === 'month' ? '/ mes' : '/ año';
+            const subtext = currentPeriod === 'month' ? 'Cancela cuando quieras' : '2 meses de ahorro incluidos';
+
+            const allTiers = [...tiersPayload.students, ...tiersPayload.teachers];
+            allTiers.forEach(t => {
+                const elPrice = document.getElementById(`price-${t.id}`);
+                const elLabel = document.getElementById(`period-label-${t.id}`);
+                const elSubtext = document.getElementById(`subtext-${t.id}`);
+
+                if (elPrice && t.prices[priceKey]) {
+                    elPrice.textContent = t.prices[priceKey];
+                }
+                if (elLabel) {
+                    elLabel.textContent = periodLabel;
+                }
+                if (elSubtext) {
+                    elSubtext.textContent = subtext;
+                }
+            });
+        }
+
+        tabBtnStudents?.addEventListener('click', () => { currentAudience = 'students'; updateUI(); });
+        tabBtnTeachers?.addEventListener('click', () => { currentAudience = 'teachers'; updateUI(); });
+        tabBtnGrants?.addEventListener('click', () => { currentAudience = 'grants'; updateUI(); });
+
+        currBtnEur?.addEventListener('click', () => { currentCurrency = 'es'; updateUI(); });
+        currBtnUsd?.addEventListener('click', () => { currentCurrency = 'us'; updateUI(); });
+
+        periodBtnMonth?.addEventListener('click', () => { currentPeriod = 'month'; updateUI(); });
+        periodBtnYear?.addEventListener('click', () => { currentPeriod = 'year'; updateUI(); });
+
+        // Domain verification inside memberships tab
+        const memInputDomain = document.getElementById('mem-input-domain');
+        const memBtnCheck = document.getElementById('mem-btn-check-domain');
+        const memDomainResult = document.getElementById('mem-domain-result');
+
+        const knownDomains = ['@educa.madrid.org', '@madrid.org', '@g.educaand.es', '@xtec.cat', '@educa.jcyl.es', '@lausd.net', '@sfusd.edu', '@colabedu.org'];
+
+        memBtnCheck?.addEventListener('click', () => {
+            const val = (memInputDomain?.value || '').trim().toLowerCase();
+            if (!val || !val.includes('@')) {
+                memDomainResult.className = "p-3 rounded-xl text-xs font-semibold bg-red-50 text-red-700 border border-red-200 block";
+                memDomainResult.textContent = "Introduce un correo escolar válido (ej. @educa.madrid.org).";
+                return;
+            }
+            const domain = '@' + val.split('@')[1];
+            if (knownDomains.includes(domain)) {
+                memDomainResult.className = "p-3 rounded-xl text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-300 block";
+                memDomainResult.innerHTML = `🎉 <strong>¡Convenio Activo!</strong> El dominio <code>${domain}</code> está financiado. Entra con tu cuenta institucional: <a href="${appUrl}" class="underline font-bold text-emerald-950 ml-1">Entrar a la App &rarr;</a>`;
+            } else {
+                memDomainResult.className = "p-3 rounded-xl text-xs font-semibold bg-amber-50 text-amber-900 border border-amber-300 block";
+                memDomainResult.innerHTML = `ℹ️ El dominio <code>${domain}</code> no tiene un convenio global preactivado. Consulta con tu centro o explora los planes individuales.`;
+            }
+        });
+
+        // Voucher verification inside memberships tab
+        const memInputVoucher = document.getElementById('mem-input-voucher');
+        const memBtnVoucher = document.getElementById('mem-btn-redeem-voucher');
+        const memVoucherResult = document.getElementById('mem-voucher-result');
+
+        memBtnVoucher?.addEventListener('click', () => {
+            const code = (memInputVoucher?.value || '').trim().toUpperCase();
+            if (code.length < 6) {
+                memVoucherResult.className = "p-3 rounded-xl text-xs font-semibold bg-red-50 text-red-700 border border-red-200 block";
+                memVoucherResult.textContent = "Código demasiado corto. Revisa el ticket entregado por tu centro.";
+                return;
+            }
+            memVoucherResult.className = "p-3 rounded-xl text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-300 block";
+            memVoucherResult.innerHTML = `✅ <strong>Voucher verificado.</strong> <a href="${appUrl}?voucher=${encodeURIComponent(code)}" class="underline font-bold text-emerald-950 ml-1">Activar en mi cuenta &rarr;</a>`;
+        });
+
+        // Initial setup
+        updateUI();
+    </script>
+</BaseLayout>

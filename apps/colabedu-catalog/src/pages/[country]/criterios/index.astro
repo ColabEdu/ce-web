@@ -1,0 +1,167 @@
+---
+import CatalogLayout from '@/layouts/CatalogLayout.astro';
+import BreadcrumbJsonLd from '@/components/seo/BreadcrumbJsonLd.astro';
+import { loadCatalog } from '@/lib/catalogLoader';
+import type { CriterionItem } from '@/lib/types';
+
+export function getStaticPaths() {
+  const { criteriaByCountry } = loadCatalog();
+  return Object.keys(criteriaByCountry).map((country) => ({
+    params: { country },
+    props: {
+      country,
+      criteriaList: criteriaByCountry[country],
+    },
+  }));
+}
+
+interface Props {
+  country: string;
+  criteriaList: CriterionItem[];
+}
+
+const { country, criteriaList } = Astro.props;
+
+const canonicalUrl = `https://colabedu.org/catalog/${country}/criterios`;
+
+const metaTitle = `Criterios y Estándares Oficiales de Evaluación (${country.toUpperCase()}) — ColabEdu`;
+const metaDescription = `Catálogo completo de competencias clave, estándares y criterios de evaluación acreditados para ${country.toUpperCase()}. Consulta lecciones interactivas y exámenes alineados.`;
+
+const breadcrumbs = [
+  { label: "Catálogo", href: "/catalog" },
+  { label: country.toUpperCase(), href: `/catalog/${country}` },
+  { label: "Criterios Oficiales", href: canonicalUrl },
+];
+
+const breadcrumbSchema = [
+  { name: "Catálogo", url: "https://colabedu.org/catalog" },
+  { name: country.toUpperCase(), url: `https://colabedu.org/catalog/${country}` },
+  { name: "Criterios Oficiales", url: canonicalUrl },
+];
+
+const totalLessonsInCriteria = criteriaList.reduce((acc, c) => acc + c.lessons.length, 0);
+const totalExamsInCriteria = criteriaList.reduce((acc, c) => acc + c.exams.length, 0);
+---
+
+<CatalogLayout
+  title={metaTitle}
+  description={metaDescription}
+  canonicalUrl={canonicalUrl}
+>
+  <BreadcrumbJsonLd slot="head" items={breadcrumbSchema} />
+
+  <!-- Hero Header -->
+  <header class="relative pt-12 pb-16 px-4 sm:px-6 lg:px-8 border-b border-slate-800/80 bg-gradient-to-b from-[#0C1527] via-[#0A0E1A] to-[#070A12] overflow-hidden">
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(6,182,212,0.15),transparent)] pointer-events-none"></div>
+
+    <div class="max-w-5xl mx-auto relative z-10">
+      <!-- Breadcrumbs -->
+      <nav class="flex items-center gap-2 text-xs text-slate-400 mb-6 flex-wrap">
+        {breadcrumbs.map((b, idx) => (
+          <div class="flex items-center gap-2">
+            {idx > 0 && <span class="text-slate-600">/</span>}
+            <a href={b.href} class="hover:text-cyan-400 transition-colors">
+              {b.label}
+            </a>
+          </div>
+        ))}
+      </nav>
+
+      <div class="flex items-center gap-2 flex-wrap mb-4">
+        <span class="px-3 py-1 rounded-full text-xs font-mono font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">
+          Marco Curricular {country.toUpperCase()}
+        </span>
+        <span class="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+          Acreditación OPS v0.9.6
+        </span>
+      </div>
+
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight mb-4">
+        Criterios de Evaluación y Estándares Oficiales
+      </h1>
+
+      <p class="text-base sm:text-lg text-slate-300 leading-relaxed max-w-3xl">
+        Explora las competencias clave y descriptores operativos oficiales vigentes en {country.toUpperCase()}. Cada criterio incluye el desglose de lecciones interactivas táctiles y reactivos de examen con corrección socrática en 90 segundos.
+      </p>
+
+      <!-- Stats Bar -->
+      <div class="mt-8 pt-6 border-t border-slate-800/80 flex items-center gap-6 text-xs text-slate-400 flex-wrap">
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
+          <strong class="text-white font-semibold">{criteriaList.length}</strong>
+          <span>criterios y competencias registradas</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+          <strong class="text-white font-semibold">{totalLessonsInCriteria}</strong>
+          <span>vinculaciones a lecciones</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-indigo-400"></span>
+          <strong class="text-white font-semibold">{totalExamsInCriteria}</strong>
+          <span>vinculaciones a exámenes</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="py-12 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto space-y-12">
+    <!-- Criteria Grid -->
+    <section>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {criteriaList.map((crit) => (
+          <article class="p-6 rounded-2xl bg-[#0B101E] border border-slate-800/80 hover:border-cyan-500/40 transition-all flex flex-col justify-between group shadow-sm hover:shadow-md">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-3">
+                <span class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-cyan-500/10 text-cyan-300 border border-cyan-500/30">
+                  {crit.code}
+                </span>
+                <span class="text-[11px] font-mono text-slate-400">
+                  {crit.lessons.length} lecc. | {crit.exams.length} exám.
+                </span>
+              </div>
+
+              <h2 class="text-base font-bold text-white group-hover:text-cyan-300 transition-colors mb-2">
+                <a href={crit.canonicalPath}>
+                  {crit.title}
+                </a>
+              </h2>
+
+              {crit.description && (
+                <p class="text-xs text-slate-400 leading-relaxed line-clamp-3 mb-4">
+                  {crit.description}
+                </p>
+              )}
+            </div>
+
+            <div class="pt-4 border-t border-slate-800/60 flex items-center justify-between gap-2">
+              <span class="text-[10px] text-slate-400 truncate max-w-[150px]">
+                {crit.standard}
+              </span>
+
+              <a
+                href={crit.canonicalPath}
+                class="text-xs font-semibold text-cyan-400 group-hover:text-cyan-300 transition-colors inline-flex items-center gap-1"
+              >
+                <span>Explorar</span>
+                <span>→</span>
+              </a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <!-- Bottom Return Callout -->
+    <div class="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 flex items-center justify-between gap-4 text-xs text-slate-400">
+      <span>¿Buscas cursos completos estructurados por temario y niveles educativos?</span>
+      <a
+        href={`/catalog/${country}`}
+        class="text-cyan-400 hover:text-cyan-300 font-semibold inline-flex items-center gap-1"
+      >
+        <span>Ver Cursos de {country.toUpperCase()}</span>
+        <span>→</span>
+      </a>
+    </div>
+  </main>
+</CatalogLayout>

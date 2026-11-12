@@ -1,0 +1,490 @@
+---
+// src/pages/en/interactive-exams.astro
+// Authentic Exams & Exercises: Multimodality, Official Rubrics, and Sovereign Grading
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import { appLink } from "@colabedu/ui-core/navigation";
+import "../../styles/global.css";
+
+const catalogUrl = appLink('catalog', '/');
+const appUrl = appLink('app', '/');
+---
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate icon" type="image/png" href="/favicon.png" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authentic Exams & Exercises | ColabEdu.net</title>
+    <meta name="description" content="Discover how ColabEdu evaluates with official rigor: multi-page handwritten paper OCR, oral language laboratory, reasoned exercises, and official analytical rubrics with sovereign teacher review.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+
+    <style is:global>
+        :root {
+            --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+        body {
+            font-family: var(--font-sans);
+            background-color: #FAF9F6;
+            color: #0F172A;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+        .precision-card {
+            background-color: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            border-radius: 1.25rem;
+            box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.03);
+            transition: all 0.2s ease-in-out;
+        }
+        .precision-card:hover {
+            border-color: #CBD5E1;
+            box-shadow: 0 10px 20px -4px rgba(15, 23, 42, 0.05);
+        }
+        .hero-exams {
+            background: linear-gradient(135deg, rgba(238, 242, 255, 0.7) 0%, rgba(204, 251, 241, 0.5) 50%, rgba(254, 243, 199, 0.4) 100%);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            border-radius: 2rem;
+        }
+        .ruled-sheet {
+            background-color: #FFFDF9;
+            background-image: 
+                linear-gradient(to right, rgba(203, 213, 225, 0.25) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(203, 213, 225, 0.25) 1px, transparent 1px);
+            background-size: 20px 20px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        /* Alternating chromatic rhythm */
+        .section-tint-teal {
+            background: linear-gradient(180deg, #FFFFFF 0%, rgba(204, 251, 241, 0.45) 100%);
+            border: 1px solid #99F6E4;
+        }
+        .section-tint-blue {
+            background: linear-gradient(180deg, #FFFFFF 0%, rgba(239, 246, 255, 0.45) 100%);
+            border: 1px solid #BFDBFE;
+        }
+    </style>
+</head>
+<body class="selection:bg-teal-600 selection:text-white">
+
+    <Header lang="en" />
+
+    <main class="py-12 sm:py-16">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- Hero Title -->
+            <div class="hero-exams p-8 sm:p-14 text-center mb-16">
+                <span class="inline-block text-xs font-mono font-bold tracking-widest uppercase text-teal-900 bg-white/80 px-4 py-1.5 rounded-full border border-teal-300 mb-6">
+                    <i class="fas fa-file-pen mr-1.5 text-teal-600"></i> Authentic Assessment C2 & C3
+                </span>
+                <h1 class="text-4xl sm:text-6xl font-black text-slate-950 tracking-tight leading-tight mb-6">
+                    Authentic exams.<br/>
+                    From handwritten paper to the LMS.
+                </h1>
+                <p class="text-lg sm:text-xl text-slate-700 font-normal leading-relaxed max-w-3xl mx-auto mb-8">
+                    ColabEdu never replaces pen or paper. We evaluate handwritten exams using multi-page OCR, assess spoken language responses, and score digital tests against official analytical rubrics (Common Core, College Board AP, IB, State Frameworks) under sovereign teacher oversight.
+                </p>
+                
+                <div class="flex flex-wrap items-center justify-center gap-4">
+                    <a href="#demo-exam" class="px-6 py-3 rounded-xl bg-teal-600 text-white font-bold text-sm shadow-md hover:bg-teal-700 transition flex items-center gap-2">
+                        <i class="fas fa-magnifying-glass-chart text-xs"></i>
+                        <span>Try Grading Simulator</span>
+                    </a>
+                    <a href="/en/how-grading-works" class="px-6 py-3 rounded-xl bg-white text-slate-800 font-bold text-sm border border-slate-300 hover:bg-slate-50 transition flex items-center gap-2">
+                        <i class="fas fa-route text-teal-600"></i>
+                        <span>View 3-Stage Lifecycle</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- 3 Authentic Submission Modalities -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+                <div class="precision-card p-6">
+                    <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-lg mb-4">
+                        <i class="fas fa-pen-nib"></i>
+                    </div>
+                    <span class="text-xs font-mono font-bold text-blue-700 uppercase tracking-wider block mb-1">Traditional & In-Person</span>
+                    <h3 class="text-base font-black text-slate-900 mb-2">Paper Exam & OCR</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Students write by hand on standard exam paper. Teachers scan sheets using classroom tablets or mobile devices. Our computer vision engine segments questions and parses complex mathematical handwriting.
+                    </p>
+                </div>
+
+                <div class="precision-card p-6">
+                    <div class="w-10 h-10 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center font-bold text-lg mb-4">
+                        <i class="fas fa-microphone"></i>
+                    </div>
+                    <span class="text-xs font-mono font-bold text-purple-700 uppercase tracking-wider block mb-1">Oral Simulator with Forecasting</span>
+                    <h3 class="text-base font-black text-slate-900 mb-2">AP, IB & World Language Speaking</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed mb-3">
+                        Voice recordings for debates, presentations, and standardized oral simulations (e.g. <em>AP Cultural Comparison</em> or <em>Simulated Conversation</em>).
+                    </p>
+                    <p class="text-[11px] text-purple-800 font-mono bg-purple-50 p-2 rounded-lg border border-purple-100">
+                        <i class="fas fa-bolt text-purple-600 mr-1"></i>Instant score band forecast (e.g., "AP 4/5" or "ACTFL Advanced") without waiting weeks.
+                    </p>
+                </div>
+
+                <div class="precision-card p-6">
+                    <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-lg mb-4">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <span class="text-xs font-mono font-bold text-emerald-700 uppercase tracking-wider block mb-1">Rigorous Digital Practice</span>
+                    <h3 class="text-base font-black text-slate-900 mb-2">A2UI Reasoned Assessments</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed mb-3">
+                        On laptops or Chromebooks: AP-style Free-Response formal proofs, textual analysis with selectable citations, and step-by-step theorem demonstrations.
+                    </p>
+                    <p class="text-[11px] text-emerald-800 font-mono bg-emerald-50 p-2 rounded-lg border border-emerald-100">
+                        <i class="fas fa-chart-line text-emerald-600 mr-1"></i>Personal mastery curve and criterion-by-criterion score breakdown.
+                    </p>
+                </div>
+            </div>
+
+            <!-- LIVE DEMONSTRATOR: FORENSIC PRE-GRADING SIMULATOR -->
+            <div id="demo-exam" class="precision-card section-tint-teal p-6 sm:p-10 mb-16 shadow-lg border-teal-200 scroll-mt-24">
+                
+                <div class="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-slate-200 mb-8">
+                    <div>
+                        <span class="text-xs font-mono font-bold text-teal-600 uppercase tracking-widest block mb-1">
+                            <i class="fas fa-microscope mr-1.5"></i> Forensic Pre-Grading Cockpit
+                        </span>
+                        <h2 class="text-2xl sm:text-3xl font-black text-slate-950">
+                            AP Calculus BC: Area Between Two Curves
+                        </h2>
+                    </div>
+
+                    <!-- Modality Selector -->
+                    <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-xl text-xs font-bold text-slate-600">
+                        <button id="tab-manuscript" class="px-3 py-1.5 rounded-lg bg-white text-slate-900 shadow-xs mode-tab">
+                            <i class="fas fa-pen-nib mr-1 text-blue-600"></i> Handwritten OCR
+                        </button>
+                        <button id="tab-oral" class="px-3 py-1.5 rounded-lg text-slate-500 hover:text-slate-900 mode-tab">
+                            <i class="fas fa-microphone mr-1 text-purple-600"></i> Spoken Voice
+                        </button>
+                    </div>
+                </div>
+
+                <!-- CONTENT MODALITY 1: HANDWRITTEN EXAM -->
+                <div id="view-manuscript" class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    
+                    <!-- Left: Scanned Student Sheet with Annotations -->
+                    <div class="lg:col-span-7 ruled-sheet p-6 rounded-2xl border border-slate-300 shadow-inner relative flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-center pb-3 border-b border-slate-300 text-xs text-slate-500 mb-4">
+                                <span><strong>Student:</strong> Marcus R. (Period 3)</span>
+                                <span>Page 1 / 1 · May 24, 2025</span>
+                            </div>
+
+                            <div class="text-xs text-slate-800 font-mono space-y-3 leading-relaxed">
+                                <p class="text-slate-500 font-sans italic text-[11px]">
+                                    Prompt: Find the area of the region bounded by f(x) = -x² + 4 and g(x) = x + 2.
+                                </p>
+
+                                <div class="p-3 bg-white/80 rounded-lg border border-slate-200">
+                                    <div class="font-bold text-slate-900">1. Intersection points:</div>
+                                    <div>-x² + 4 = x + 2 &rArr; x² + x - 2 = 0</div>
+                                    <div>x = (-1 &plusmn; &radic;(1 + 8)) / 2 &rArr; <strong>x_1 = 1, x_2 = -2</strong> <span class="text-emerald-600 font-bold ml-2">&check; Correct</span></div>
+                                </div>
+
+                                <div class="p-3 bg-amber-50/80 rounded-lg border border-amber-300 relative">
+                                    <div class="flex items-center justify-between font-bold text-slate-900">
+                                        <span>2. Integral Setup:</span>
+                                        <span class="text-[10px] bg-amber-200 text-amber-900 px-2 py-0.5 rounded font-mono">OCR Recognized</span>
+                                    </div>
+                                    <div>A = &int;_{-2}^{1} [(-x² + 4) - (x + 2)] dx = &int;_{-2}^{1} (-x² - x + 2) dx</div>
+                                    <div class="mt-2 text-slate-700">Fundamental Theorem of Calculus:</div>
+                                    <div>F(x) = [-x³/3 - x²/2 + 2x]_{-2}^{1}</div>
+                                    <div class="mt-1 font-bold text-slate-950">
+                                        F(1) = -1/3 - 1/2 + 2 = 7/6
+                                    </div>
+                                    <div class="font-bold text-slate-950">
+                                        F(-2) = 8/3 - 2 - 4 = -10/3
+                                    </div>
+                                    <div class="text-blue-700 font-bold mt-1">
+                                        Area = 7/6 - (-10/3) = 7/6 + 20/6 = 27/6 = <strong>9/2 units² = 4.5 units²</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 pt-3 border-t border-slate-200 flex items-center justify-between text-[11px] text-slate-500 font-mono">
+                            <span><i class="fas fa-camera text-blue-600 mr-1"></i>Captured via iPad Cart #4</span>
+                            <span class="text-emerald-700 font-bold">OCR Confidence: 98.4%</span>
+                        </div>
+                    </div>
+
+                    <!-- Right: Pre-evaluation with Official Rubric and Teacher Decision -->
+                    <div class="lg:col-span-5 flex flex-col justify-between space-y-4">
+                        
+                        <div class="precision-card p-5 border-teal-200 bg-teal-50/40">
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-xs font-mono font-bold text-teal-800 uppercase tracking-wider">
+                                    Official Rubric · AP Calculus Standards
+                                </span>
+                                <span class="text-lg font-black text-teal-900 font-mono">2.50 / 2.50</span>
+                            </div>
+
+                            <div class="space-y-3 text-xs">
+                                <div class="p-3 bg-white rounded-xl border border-slate-200">
+                                    <div class="flex justify-between font-bold text-slate-900 mb-0.5">
+                                        <span>Criterion 1: Setup & Intersections</span>
+                                        <span class="text-teal-700 font-mono">0.75 / 0.75</span>
+                                    </div>
+                                    <p class="text-[11px] text-slate-500">Sets functions equal, solves quadratic equation, and correctly establishes bounds [-2, 1].</p>
+                                </div>
+
+                                <div class="p-3 bg-white rounded-xl border border-slate-200">
+                                    <div class="flex justify-between font-bold text-slate-900 mb-0.5">
+                                        <span>Criterion 2: Antiderivative & FTC</span>
+                                        <span class="text-teal-700 font-mono">1.00 / 1.00</span>
+                                    </div>
+                                    <p class="text-[11px] text-slate-500">Correct antiderivative. Applies Fundamental Theorem with proper sign handling for the lower bound.</p>
+                                </div>
+
+                                <div class="p-3 bg-white rounded-xl border border-slate-200">
+                                    <div class="flex justify-between font-bold text-slate-900 mb-0.5">
+                                        <span>Criterion 3: Units & Simplification</span>
+                                        <span class="text-teal-700 font-mono">0.75 / 0.75</span>
+                                    </div>
+                                    <p class="text-[11px] text-slate-500">Simplifies cleanly to 9/2 and specifies square area units (units²).</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sovereign Teacher Decision Panel -->
+                        <div class="precision-card p-5 bg-white border-slate-300">
+                            <span class="text-xs font-mono font-bold text-indigo-700 uppercase tracking-wider block mb-2">
+                                <i class="fas fa-user-shield mr-1"></i> Sovereign Teacher Oversight
+                            </span>
+                            <p class="text-xs text-slate-600 mb-3">
+                                AI serves strictly as an auxiliary clerk. The teacher reviews the draft in 2 seconds, can adjust points or add personal feedback, and publishes:
+                            </p>
+                            
+                            <div class="flex gap-2">
+                                <button id="btn-approve" class="w-full py-2.5 px-4 rounded-xl bg-emerald-600 text-white font-bold text-xs hover:bg-emerald-700 transition flex items-center justify-center gap-2 shadow-xs">
+                                    <i class="fas fa-check"></i>
+                                    <span>Approve & Publish to Canvas LMS</span>
+                                </button>
+                                <button class="py-2.5 px-3 rounded-xl border border-slate-300 text-slate-700 font-bold text-xs hover:bg-slate-50 transition" title="Manually edit score">
+                                    <i class="fas fa-pen"></i>
+                                </button>
+                            </div>
+                            <div id="approve-toast" class="hidden mt-2 p-2 bg-emerald-100 text-emerald-900 rounded-lg text-xs font-semibold text-center">
+                                &check; Score 2.50/2.50 and feedback synchronized with Canvas SpeedGrader.
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- CONTENT MODALITY 2: SPOKEN VOICE AND AUDIO -->
+                <div id="view-oral" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    
+                    <div class="lg:col-span-7 bg-slate-900 text-slate-100 p-6 rounded-2xl flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-center pb-3 border-b border-slate-800 text-xs text-slate-400 mb-4 font-mono">
+                                <span><strong>Oral Recording:</strong> AP Spanish Language Speaking</span>
+                                <span>Duration: 01:28 · WAV 48kHz</span>
+                            </div>
+
+                            <p class="text-xs text-slate-400 italic mb-4">
+                                Task: "Describe a challenge you faced and explain how you resolved it."
+                            </p>
+
+                            <!-- Audio Player Mockup -->
+                            <div class="p-4 rounded-xl bg-slate-800 border border-slate-700 mb-4">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <button class="w-9 h-9 rounded-full bg-teal-500 text-slate-950 flex items-center justify-center font-bold hover:scale-105 transition">
+                                        <i class="fas fa-play text-xs"></i>
+                                    </button>
+                                    <div class="flex-1">
+                                        <div class="h-2 bg-slate-700 rounded-full overflow-hidden">
+                                            <div class="w-2/3 h-full bg-teal-400"></div>
+                                        </div>
+                                        <div class="flex justify-between text-[10px] text-slate-400 font-mono mt-1">
+                                            <span>00:58</span>
+                                            <span>01:28</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Phonetic Transcription -->
+                            <div class="text-xs text-slate-300 font-mono space-y-2 leading-relaxed bg-slate-800/60 p-4 rounded-xl border border-slate-800">
+                                <div class="text-[10px] text-teal-400 font-bold uppercase tracking-wider">Phonetic Alignment:</div>
+                                <p>
+                                    "...at first, <span class="bg-teal-900/60 text-teal-200 px-1 rounded">I was completely overwhelmed</span> by the amount of work, but then I decided to break down the problem into smaller manageable milestones. Furthermore, collaborating with my peers helped us clarify..."
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between text-[11px] text-slate-400 font-mono">
+                            <span>WPM: 132 words/min (Fluent)</span>
+                            <span class="text-teal-400">CEFR Lexical Depth: B2+</span>
+                        </div>
+                    </div>
+
+                    <!-- Oral Rubric -->
+                    <div class="lg:col-span-5 flex flex-col justify-between space-y-4">
+                        <div class="precision-card p-5 border-purple-200 bg-purple-50/40">
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-xs font-mono font-bold text-purple-800 uppercase tracking-wider">
+                                    AP / ACTFL Speaking Rubric
+                                </span>
+                                <span class="text-lg font-black text-purple-900 font-mono">9.2 / 10.0</span>
+                            </div>
+
+                            <div class="space-y-2 text-xs">
+                                <div class="p-2.5 bg-white rounded-xl border border-slate-200">
+                                    <div class="flex justify-between font-bold text-slate-900">
+                                        <span>Fluency & Pacing:</span>
+                                        <span class="text-purple-700 font-mono">2.8 / 3.0</span>
+                                    </div>
+                                    <p class="text-[11px] text-slate-500">Natural pauses without excessive hesitations or prolonged silences.</p>
+                                </div>
+
+                                <div class="p-2.5 bg-white rounded-xl border border-slate-200">
+                                    <div class="flex justify-between font-bold text-slate-900">
+                                        <span>Grammar & Complex Structures:</span>
+                                        <span class="text-purple-700 font-mono">3.2 / 3.5</span>
+                                    </div>
+                                    <p class="text-[11px] text-slate-500">Accurate usage of transitional discourse markers ('furthermore', 'break down').</p>
+                                </div>
+
+                                <div class="p-2.5 bg-white rounded-xl border border-slate-200">
+                                    <div class="flex justify-between font-bold text-slate-900">
+                                        <span>Pronunciation & Phonetics:</span>
+                                        <span class="text-purple-700 font-mono">3.2 / 3.5</span>
+                                    </div>
+                                    <p class="text-[11px] text-slate-500">Strong intonation and clear phoneme differentiation.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="precision-card p-4 bg-white border-slate-300">
+                            <button class="w-full py-2.5 px-4 rounded-xl bg-purple-600 text-white font-bold text-xs hover:bg-purple-700 transition flex items-center justify-center gap-2 shadow-xs">
+                                <i class="fas fa-check"></i>
+                                <span>Approve Spoken Evaluation Report</span>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- COMPARISON: TRADITIONAL VS COLABEDU ASSISTED -->
+            <div class="precision-card section-tint-blue p-8 sm:p-12 mb-16 shadow-lg border-blue-200">
+                <div class="text-center max-w-2xl mx-auto mb-10">
+                    <span class="text-xs font-mono font-bold text-blue-700 uppercase tracking-widest block mb-2">
+                        Classroom Efficiency
+                    </span>
+                    <h2 class="text-3xl font-black text-slate-900 tracking-tight">
+                        Why educators recover up to 70% of grading time
+                    </h2>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse precision-card overflow-hidden">
+                        <thead>
+                            <tr class="bg-slate-100/80 border-b border-slate-200 text-xs font-mono text-slate-700 uppercase tracking-wider">
+                                <th class="p-4">Assessment Aspect</th>
+                                <th class="p-4 text-red-700">Traditional Manual Grading</th>
+                                <th class="p-4 text-teal-700">ColabEdu Assisted Grading</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200 text-xs text-slate-600">
+                            <tr>
+                                <td class="p-4 font-bold text-slate-900">Time per 3-page exam sheet</td>
+                                <td class="p-4 text-red-600">8 to 12 minutes per student</td>
+                                <td class="p-4 text-teal-700 font-bold">1 to 2 minutes of sovereign review</td>
+                            </tr>
+                            <tr>
+                                <td class="p-4 font-bold text-slate-900">Official Rubric Rigor</td>
+                                <td class="p-4">Fatigue-induced drift after 60 exams</td>
+                                <td class="p-4 text-teal-700 font-bold">100% faithful to official criteria (AP / State Frameworks)</td>
+                            </tr>
+                            <tr>
+                                <td class="p-4 font-bold text-slate-900">Formative Student Feedback</td>
+                                <td class="p-4">A hasty red number in the margin ("B-")</td>
+                                <td class="p-4 text-teal-700 font-bold">Granular criterion feedback with targeted remediation advice</td>
+                            </tr>
+                            <tr>
+                                <td class="p-4 font-bold text-slate-900">LMS Synchronization</td>
+                                <td class="p-4">Typing marks cell by cell in Canvas or Moodle</td>
+                                <td class="p-4 text-teal-700 font-bold">1-click instant gradebook sync via LTI 1.3 / Extension</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- LINK TO CLASSROOM GRADEBOOK -->
+            <div class="p-8 sm:p-12 rounded-3xl bg-slate-900 text-white flex flex-col md:flex-row items-center justify-between gap-8 shadow-xl">
+                <div class="max-w-xl">
+                    <span class="text-xs font-mono font-bold text-teal-400 uppercase tracking-widest block mb-2">
+                        Holistic Picture
+                    </span>
+                    <h3 class="text-2xl sm:text-3xl font-black tracking-tight mb-3">
+                        Manage Your Classroom Gradebook and Formative Feedback
+                    </h3>
+                    <p class="text-sm text-slate-300 leading-relaxed">
+                        Discover how all student submissions aggregate into an intuitive competency gradebook with automated progress reports for families.
+                    </p>
+                </div>
+                <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto shrink-0">
+                    <a href="/en/classroom-gradebook" class="px-6 py-3.5 rounded-xl bg-teal-500 text-slate-950 font-bold text-sm text-center shadow-md hover:bg-teal-400 transition">
+                        View Gradebook &rarr;
+                    </a>
+                    <a href="/en/interactive-lessons" class="px-6 py-3.5 rounded-xl bg-white/10 text-white font-bold text-sm text-center hover:bg-white/20 transition border border-white/20">
+                        Interactive Lessons
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <Footer lang="en" />
+
+    <!-- EXAM DEMO REACTIVITY SCRIPT -->
+    <script is:inline>
+        const tabManuscript = document.getElementById('tab-manuscript');
+        const tabOral = document.getElementById('tab-oral');
+        const viewManuscript = document.getElementById('view-manuscript');
+        const viewOral = document.getElementById('view-oral');
+        const btnApprove = document.getElementById('btn-approve');
+        const toast = document.getElementById('approve-toast');
+
+        tabManuscript?.addEventListener('click', () => {
+            tabManuscript.className = 'px-3 py-1.5 rounded-lg bg-white text-slate-900 shadow-xs mode-tab';
+            tabOral.className = 'px-3 py-1.5 rounded-lg text-slate-500 hover:text-slate-900 mode-tab';
+            viewManuscript?.classList.remove('hidden');
+            viewOral?.classList.add('hidden');
+        });
+
+        tabOral?.addEventListener('click', () => {
+            tabOral.className = 'px-3 py-1.5 rounded-lg bg-white text-slate-900 shadow-xs mode-tab';
+            tabManuscript.className = 'px-3 py-1.5 rounded-lg text-slate-500 hover:text-slate-900 mode-tab';
+            viewOral?.classList.remove('hidden');
+            viewManuscript?.classList.add('hidden');
+        });
+
+        btnApprove?.addEventListener('click', () => {
+            if (toast) {
+                toast.classList.remove('hidden');
+                btnApprove.disabled = true;
+                btnApprove.classList.add('opacity-50', 'cursor-not-allowed');
+                btnApprove.innerHTML = '<i class="fas fa-check-double mr-1"></i> Published to LMS';
+            }
+        });
+    </script>
+
+</body>
+</html>

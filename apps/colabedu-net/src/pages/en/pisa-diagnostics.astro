@@ -1,0 +1,278 @@
+---
+// src/pages/en/pisa-diagnostics.astro
+// Regional Diagnostics & AI-Assisted PISA Assessments
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import { appLink } from "@colabedu/ui-core/navigation";
+import "../../styles/global.css";
+
+const appUrl = appLink('app', '/navigator/spec_root/0');
+---
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate icon" type="image/png" href="/favicon.png" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regional Diagnostics & AI-Assisted PISA Assessments | ColabEdu.net</title>
+    <meta name="description" content="Large-scale diagnostic assessments and PISA cohort testing for school districts and regional education departments. Multimodal forensic grading of thousands of handwritten and digital exams in days with -45% grading variance.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+
+    <style is:global>
+        :root {
+            --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+        body {
+            font-family: var(--font-sans);
+            background-color: #FAF9F6;
+            color: #0F172A;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+        .precision-card {
+            background-color: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            border-radius: 1.25rem;
+            box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.03);
+            transition: all 0.2s ease-in-out;
+        }
+        .precision-card:hover {
+            border-color: #CBD5E1;
+            box-shadow: 0 10px 20px -4px rgba(15, 23, 42, 0.05);
+        }
+        .hero-pisa {
+            background: linear-gradient(135deg, rgba(238, 242, 255, 0.6) 0%, rgba(224, 231, 255, 0.4) 50%, rgba(245, 243, 255, 0.6) 100%);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 2rem;
+        }
+    </style>
+</head>
+<body class="selection:bg-indigo-600 selection:text-white">
+
+    <Header lang="en" />
+
+    <main class="py-12 sm:py-16">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- Hero Title -->
+            <div class="hero-pisa p-8 sm:p-14 text-center mb-16">
+                <span class="inline-block text-xs font-mono font-bold tracking-widest uppercase text-indigo-900 bg-white/80 px-4 py-1.5 rounded-full border border-indigo-300 mb-6">
+                    <i class="fas fa-chart-line mr-1.5 text-indigo-600"></i> Large-Scale B2G System Assessment
+                </span>
+                <h1 class="text-4xl sm:text-6xl font-black text-slate-950 tracking-tight leading-tight mb-6">
+                    Regional Diagnostics & PISA.<br/>
+                    <span class="text-indigo-600">Results in days, not months.</span>
+                </h1>
+                <p class="text-lg sm:text-xl text-slate-700 font-normal leading-relaxed max-w-3xl mx-auto mb-8">
+                    Census-level grade testing and PISA-aligned cohorts overwhelm school districts and ministries. ColabEdu delivers an AI-assisted multimodal grading engine that accurately scores tens of thousands of handwritten and digital open-response assessments under an identical, bias-free standard.
+                </p>
+                
+                <div class="flex flex-wrap items-center justify-center gap-4">
+                    <a href="#macro-arquitectura" class="px-6 py-3.5 rounded-xl bg-indigo-600 text-white font-bold text-sm shadow-md hover:bg-indigo-700 transition flex items-center gap-2">
+                        <i class="fas fa-network-wired text-xs"></i>
+                        <span>Explore Assessment Architecture</span>
+                    </a>
+                    <a href="mailto:institutions@colabedu.net?subject=Regional%20Diagnostic%20PISA%20Pilot" class="px-6 py-3.5 rounded-xl bg-white text-slate-800 font-bold text-sm border border-slate-300 hover:bg-slate-50 transition flex items-center gap-2">
+                        <i class="fas fa-building-columns text-indigo-600"></i>
+                        <span>Contact Diagnostics Unit</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- 3 Core Bottlenecks -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+                <div class="precision-card p-6 bg-white">
+                    <div class="w-10 h-10 rounded-xl bg-red-100 text-red-700 flex items-center justify-center font-bold text-lg mb-4">
+                        <i class="fas fa-clock-rotate-left"></i>
+                    </div>
+                    <span class="text-xs font-mono font-bold text-red-700 uppercase tracking-wider block mb-1">Operational Lag</span>
+                    <h3 class="text-base font-black text-slate-900 mb-2">3 to 6 Months Lag</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Traditional state assessment results arrive long after students have progressed to the next grade. District administrators miss the intervention window for learning recovery.
+                    </p>
+                </div>
+
+                <div class="precision-card p-6 bg-white">
+                    <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center font-bold text-lg mb-4">
+                        <i class="fas fa-scale-unbalanced"></i>
+                    </div>
+                    <span class="text-xs font-mono font-bold text-amber-700 uppercase tracking-wider block mb-1">Grading Drift</span>
+                    <h3 class="text-base font-black text-slate-900 mb-2">Evaluator Inconsistency</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Hundreds of human evaluators apply rubrics with fatigue and regional variance. Identical answers receive disparate scores depending on who grades them.
+                    </p>
+                </div>
+
+                <div class="precision-card p-6 bg-white">
+                    <div class="w-10 h-10 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center font-bold text-lg mb-4">
+                        <i class="fas fa-file-invoice-dollar"></i>
+                    </div>
+                    <span class="text-xs font-mono font-bold text-purple-700 uppercase tracking-wider block mb-1">Fiscal Burden</span>
+                    <h3 class="text-base font-black text-slate-900 mb-2">Bloated Logistics Costs</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Physical paper transit, external examiner stipends, and manual double-grading eat millions from public budgets for partial statistical samplings.
+                    </p>
+                </div>
+            </div>
+
+            <!-- MACRO ARCHITECTURE -->
+            <div id="macro-arquitectura" class="precision-card p-8 sm:p-12 mb-16 border-indigo-200 bg-indigo-50/20 scroll-mt-24">
+                <div class="text-center max-w-2xl mx-auto mb-10">
+                    <span class="text-xs font-mono font-bold text-indigo-700 uppercase tracking-widest block mb-2">
+                        Operational Methodology
+                    </span>
+                    <h2 class="text-3xl font-black text-slate-950 tracking-tight">
+                        Multimodal Forensic Evaluation Pipeline
+                    </h2>
+                    <p class="text-sm text-slate-600 mt-2">
+                        Combining handwriting OCR with deterministic Grading V2 rubrics:
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-4 gap-4 mb-8">
+                    <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs flex flex-col justify-between">
+                        <div>
+                            <span class="text-[11px] font-mono font-bold text-indigo-700 block mb-1">01. Delivery</span>
+                            <h4 class="font-bold text-slate-900 text-sm mb-2">Paper or Tablets</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                Schools administer tests on official printed test booklets or classroom Chromebooks/tablets without curriculum disruption.
+                            </p>
+                        </div>
+                        <div class="mt-4 pt-2 border-t border-slate-100 text-[11px] text-slate-400 font-mono">
+                            Zero pedagogical friction
+                        </div>
+                    </div>
+
+                    <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs flex flex-col justify-between">
+                        <div>
+                            <span class="text-[11px] font-mono font-bold text-indigo-700 block mb-1">02. Ingestion</span>
+                            <h4 class="font-bold text-slate-900 text-sm mb-2">High-Speed OCR</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                High-speed scanners or classroom mobile apps digitize batches. OCR isolates handwritten reasoning and math expressions.
+                            </p>
+                        </div>
+                        <div class="mt-4 pt-2 border-t border-slate-100 text-[11px] text-slate-400 font-mono">
+                            99% handwriting accuracy
+                        </div>
+                    </div>
+
+                    <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs flex flex-col justify-between">
+                        <div>
+                            <span class="text-[11px] font-mono font-bold text-indigo-700 block mb-1">03. Grading</span>
+                            <h4 class="font-bold text-slate-900 text-sm mb-2">Canonical Grading V2</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                Evaluated against official PISA Framework dimensions: Reading Literacy, Mathematical Reasoning, and Scientific Inquiry.
+                            </p>
+                        </div>
+                        <div class="mt-4 pt-2 border-t border-slate-100 text-[11px] text-slate-400 font-mono">
+                            -45% grading variance
+                        </div>
+                    </div>
+
+                    <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs flex flex-col justify-between">
+                        <div>
+                            <span class="text-[11px] font-mono font-bold text-indigo-700 block mb-1">04. Action</span>
+                            <h4 class="font-bold text-slate-900 text-sm mb-2">Remediation Pathways</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                Immediate generation of district gap radars and automated Socratic learning recovery pathways for lagging student cohorts.
+                            </p>
+                        </div>
+                        <div class="mt-4 pt-2 border-t border-slate-100 text-[11px] text-slate-400 font-mono">
+                            Actionable while in school
+                        </div>
+                    </div>
+                </div>
+
+                <!-- GDPR & Privacy Guarantee -->
+                <div class="p-4 rounded-xl bg-white border border-indigo-200 flex items-center justify-between text-xs text-indigo-950">
+                    <div class="flex items-center gap-3">
+                        <i class="fas fa-lock text-indigo-600 text-lg"></i>
+                        <span><strong>Sovereign Privacy & Pseudonymization:</strong> Submissions are indexed with cryptographic hashes. No minor PII leaves secure, sovereign cloud infrastructure (strictly GDPR & FERPA compliant).</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- COMPARISON TABLE -->
+            <div class="precision-card p-8 sm:p-12 mb-16 bg-white border-slate-200">
+                <div class="text-center max-w-2xl mx-auto mb-10">
+                    <span class="text-xs font-mono font-bold text-slate-400 uppercase tracking-widest block mb-2">
+                        Systemic Transformation
+                    </span>
+                    <h2 class="text-3xl font-black text-slate-900 tracking-tight">
+                        Legacy Census Testing vs. ColabEdu Engine
+                    </h2>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse precision-card overflow-hidden">
+                        <thead>
+                            <tr class="bg-slate-100/80 border-b border-slate-200 text-xs font-mono text-slate-700 uppercase tracking-wider">
+                                <th class="p-4">Benchmark Metric</th>
+                                <th class="p-4 text-red-700">Traditional State Examination</th>
+                                <th class="p-4 text-indigo-700">ColabEdu Assisted Engine</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200 text-xs text-slate-600">
+                            <tr>
+                                <td class="p-4 font-bold text-slate-900">Grading Turnaround (50,000 cohort)</td>
+                                <td class="p-4 text-red-600">12 to 16 weeks</td>
+                                <td class="p-4 text-indigo-700 font-bold">72 to 96 hours</td>
+                            </tr>
+                            <tr>
+                                <td class="p-4 font-bold text-slate-900">Evaluation Consistency</td>
+                                <td class="p-4">Variance up to &plusmn;1.8 pts between reader committees</td>
+                                <td class="p-4 text-indigo-700 font-bold">Variance &lt; &plusmn;0.1 (uniform rubric execution)</td>
+                            </tr>
+                            <tr>
+                                <td class="p-4 font-bold text-slate-900">Student & Family Impact</td>
+                                <td class="p-4">Zero feedback (dead administrative archive)</td>
+                                <td class="p-4 text-indigo-700 font-bold">Instant personalized Socratic remediation path</td>
+                            </tr>
+                            <tr>
+                                <td class="p-4 font-bold text-slate-900">Total Program Cost</td>
+                                <td class="p-4">High manual grading and committee logistical expenses</td>
+                                <td class="p-4 text-indigo-700 font-bold">75% reduction in overall system operational cost</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- FINAL CTA -->
+            <div class="p-8 sm:p-12 rounded-3xl bg-slate-900 text-white flex flex-col md:flex-row items-center justify-between gap-8 shadow-xl">
+                <div class="max-w-xl">
+                    <span class="text-xs font-mono font-bold text-indigo-400 uppercase tracking-widest block mb-2">
+                        Education Authorities & Districts
+                    </span>
+                    <h3 class="text-2xl sm:text-3xl font-black tracking-tight mb-3">
+                        Plan Your Next Census Assessment With Us
+                    </h3>
+                    <p class="text-sm text-slate-300 leading-relaxed">
+                        We provide full RFP technical dossiers, public procurement compliance, and rapid pilot validations for state departments and school networks.
+                    </p>
+                </div>
+                <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto shrink-0">
+                    <a href="mailto:institutions@colabedu.net?subject=Regional%20PISA%20RFP%20Inquiry" class="px-6 py-3.5 rounded-xl bg-indigo-500 text-white font-extrabold text-sm text-center shadow-md hover:bg-indigo-400 transition">
+                        Request Technical Dossier &rarr;
+                    </a>
+                    <a href="/en/interactive-exams" class="px-6 py-3.5 rounded-xl bg-white/10 text-white font-bold text-sm text-center hover:bg-white/20 transition border border-white/20">
+                        View Exam Simulator
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Unified Footer -->
+    <Footer lang="en" />
+
+</body>
+</html>

@@ -27,26 +27,69 @@ El CLI `ce-svc-cli` es la interfaz de línea de comandos para operar el pipeline
 
 ---
 
-## Configuración de entorno
+## Configuración de entorno y Conectividad Multi-Tenant
+
+El CLI `ce-cli.sh` permite operar contra múltiples clústeres Kubernetes, máquinas virtuales aisladas (BYO-VM), entornos Cloud gestionados y *tenants* de demostración en namespaces independientes, resolviendo automáticamente el host y las credenciales.
+
+### 1. Variables de Entorno Globales
 
 ```bash
-# Obligatorio
+# Variables Principales de Conectividad
+export COLABEDU_API_BASE_URL=http://localhost:8081     # URL del backend de la plataforma
 export CURATOR_API_BASE_URL=http://localhost:8081     # URL del backend (ce-svc-ai-services)
 export CE_SPECS_ROOT=/ruta/a/ce-specs                 # Raíz del repositorio de specs
+
+# Autenticación y Credenciales
+export COLABEDU_AUTH_TOKEN="Bearer <jwt>"             # Token JWT manual
+export COLABEDU_DEV_ROLE=ADMIN                        # Dev-Bypass sin fricción (ADMIN, TEACHER, STUDENT)
+export COLABEDU_INTERNAL_API_KEY=<key>                # X-Internal-API-Key
 
 # Opcionales (discovery de fuentes externas)
 export COLABEDU_API_KEY_CANVAS=<token>                # Canvas Commons API
 export COLABEDU_API_KEY_EUROPEANA=<wskey>             # Europeana Education API
 export GOOGLE_CSE_API_KEY=<key>                       # Google Custom Search API
 export GOOGLE_CSE_ID=<cx>                             # Google CSE ID
+```
 
-# Opcionales (operaciones internas)
-export COLABEDU_API_BASE_URL=http://localhost:8081
-export COLABEDU_API_INTERNAL_KEY=<key>               # X-Internal-API-Key
+### 2. Flags Globales de Destino Dinámico
+
+En lugar de redefinir variables de entorno en cada comando, puedes usar flags globales al invocar `./ce-cli.sh`:
+
+```bash
+# Conectar a un tenant demo específico (resuelve a https://api.<cliente>.demo.colabedu.net)
+./ce-cli.sh --env=demo-oxford curator curate --batch
+
+# Conectar al cluster autónomo de factoría de catálogo en MicroK8s
+./ce-cli.sh --env=catalogo auth status
+./ce-cli.sh --env=catalogo spec batch run --batch=ce-specs/batches/batch_01_ap_slc_frq_2023.yaml
+
+# Conectar a una VM On-Premise local o remota por IP (puerto 8080)
+./ce-cli.sh --env=vm:10.142.227.238 auth status
+
+# Conectar a una URL arbitraria
+./ce-cli.sh --url=https://api.micolegio.edu.es auth status
+
+# Impersonar rol docente sin login interactivo (Dev-Bypass)
+./ce-cli.sh --env=demo-oxford --role=TEACHER oer discover --subject="Spanish"
+```
+
+### 3. Autenticación contra Keycloak Soberano
+
+Para entornos corporativos y máquinas virtuales aisladas que requieran tokens JWT de Keycloak:
+
+```bash
+# Iniciar sesión e intercambiar credenciales por JWT persistido en ~/.config/colabedu/auth.json
+./ce-cli.sh auth login https://api.oxford.demo.colabedu.net admin SuperSecretPassword colabedu
+
+# Inspeccionar el estado de conexión, target activo y rol resuelto
+./ce-cli.sh auth status
+
+# Cerrar sesión
+./ce-cli.sh auth logout
 ```
 
 <Aside type="caution">
-El backend `ce-svc-ai-services` debe estar corriendo antes de ejecutar cualquier comando `curator`, `docs` o `taxonomy` que acceda a la API.
+El backend correspondiente (`ce-svc-parent` o `ce-svc-ai-services`) debe estar accesible en la URL resuelta antes de ejecutar cualquier comando `curator`, `docs` o `taxonomy`.
 </Aside>
 
 ---
@@ -550,9 +593,101 @@ docs sources
 docs sources --scope us --subject spanish_language
 ```
 
+### `oer discover` — Descubrimiento Federado y Auditoría Forense Planetaria OER
+
+Ejecuta el descubrimiento semántico planetario y la certificación de calidad multicriterio (4 vectores) a través de la red de repositorios federados (>65 repositorios soberanos en 52 países). Permite exportar el informe de auditoría forense en tabla Markdown con enlaces a los recursos, volcado a fichero o formato JSON estructurado.
+
+```bash
+./ce-cli.sh oer discover --subject=<materia> [--framework=<marco>] [--format=summary|table|md|json] [--output=<fichero>]
+```
+
+| Flag | Valor por defecto | Descripción |
+|---|---|---|
+| `--subject` | (requerido) | Materia o concepto pedagógico a descubrir (ej. `GEOMETRY_PYTHAGORAS`, `SPANISH_LANGUAGE_ARTS`) |
+| `--framework` | `GLOBAL` | Marco normativo territorial (ej. `standard.lomloe.es`, `College Board AP CED`, o `GLOBAL` para búsqueda ecuménica) |
+| `--format` | `summary` | Formato de salida: `summary` (resumen de consola), `table` / `md` (tabla Markdown con enlaces web), `json` (JSON estructurado) |
+| `--output`, `-o` | (stdout) | Ruta del fichero en disco donde guardar directamente el informe generado (ej. `ce-docs/reports/informe.md`) |
+
+**Ejemplos:**
+```bash
+# Búsqueda global del Teorema de Pitágoras con salida en tabla Markdown con hipervínculos
+./ce-cli.sh oer discover --subject="GEOMETRY_PYTHAGORAS" --framework="GLOBAL" --format=md
+
+# Exportación directa a archivo de documentación
+./ce-cli.sh oer discover --subject="GEOMETRY_PYTHAGORAS" --framework="GLOBAL" --format=md --output=ce-docs/reports/pitagoras_audit.md
+```
+
 ---
 
-### `docs stats`
+### `oer health` — Diagnóstico y Resiliencia de Repositorios OER
+
+Sondea y reporta en vivo el estado HTTP, latencia (ms) y disponibilidad de la red planetaria de repositorios OER sovereign (América, Europa, Asia-Pacífico y Globales).
+
+```bash
+./ce-cli.sh oer health [--region=america|europe|asia|all] [--catalog=<id>]
+```
+
+| Flag | Valor por defecto | Descripción |
+|---|---|---|
+| `--region` | `all` | Filtra el sondeo por bloque regional (`america`, `europe`, `asia`, `all`) |
+| `--catalog` | (todos) | Limita la comprobación a un conector específico (ej. `no_ndla`, `es_procomun`, `jp_nier`) |
+
+**Ejemplo:**
+```bash
+./ce-cli.sh oer health --region=europe --catalog=no_ndla
+# → Diagnóstico en vivo de conectores antes de lanzar batches de ensamblaje
+```
+
+---
+
+### `oer batch-transform` — Factoría Batch Harvester y Cola de Transformación OER
+
+Orquesta la transformación masiva y desatendida de paquetes y fuentes OER (`.elp`, `.mbz`, `.imscc`, `.h5p`, `.epub`, `.html`, `.pdf`) a lecciones interactivas A2UI y rúbricas OPS v0.9.6.
+
+- **Idempotencia Cero Coste**: Consulta el hash SHA-256 en base de datos (`spec_definitions.source_file_hash`); si el recurso ya fue procesado, se omite de inmediato con coste de inferencia \$0.00.
+- **Politeness Delay**: Aplica retardos respetuosos entre peticiones sucesivas al mismo dominio institucional para evitar bloqueos de IP.
+- **Rate Limiting Adaptativo**: Controla la cuota de Vertex AI / Gemini Flash con Token Bucket (RPM y TPM) y recupera errores 429 (`RESOURCE_EXHAUSTED`) mediante backoff exponencial con fluctuación aleatoria (*full jitter*).
+
+```bash
+./ce-cli.sh oer batch-transform --manifest=<ruta> [--concurrency=<N>] [--dry-run]
+```
+
+| Flag | Valor por defecto | Descripción |
+|---|---|---|
+| `--manifest`, `-m` | (requerido) | Ruta al manifiesto YAML del lote curado (`OerBatchManifest`) |
+| `--concurrency` | `4` | Número de trabajadores concurrentes para descarga y procesamiento |
+| `--dry-run` | `false` | Valida el manifiesto, conectividad y hashes SHA-256 sin consumir tokens ni persistir specs |
+
+**Ejemplos:**
+```bash
+# Validar un lote curado en modo Dry-Run sin coste
+./ce-cli.sh oer batch-transform --manifest=ce-specs/batches/samples/oer_sample_batch_es_sciences.yaml --dry-run
+
+# Ejecutar transformación con 4 hilos concurrentes
+./ce-cli.sh oer batch-transform --manifest=ce-specs/batches/samples/oer_sample_batch_es_sciences.yaml --concurrency=4
+```
+
+---
+
+### `oer batch-status` — Inspección de Trabajos y Telemetría de Lotes
+
+Consulta el progreso en tiempo real de un trabajo de transformación por lotes o lista los últimos trabajos ejecutados.
+
+```bash
+./ce-cli.sh oer batch-status [--job-id=<id>]
+```
+
+**Ejemplos:**
+```bash
+# Ver historial y resumen de trabajos recientes
+./ce-cli.sh oer batch-status
+
+# Inspeccionar telemetría detallada de un trabajo específico
+./ce-cli.sh oer batch-status --job-id=job-batch-6ecc7dbf
+```
+
+
+---
 
 Muestra estadísticas del catálogo local de fuentes.
 
@@ -1130,6 +1265,29 @@ cases:
     rubricCode: us.ap.spa.rubrica_frq
 ```
 
+### `test grading evaluate` (Evaluación de cohorte y remediación formativa)
+
+Ejecuta la evaluación formativa y competencial (Grading V2) sobre una carpeta local o carpeta en Google Drive con entregas de alumnos, generando informes individuales en Markdown/Google Docs y un cuaderno resumen general (`00_RESUMEN_Y_GRADEBOOK_GENERAL`).
+
+```bash
+# Evaluación con modo de remediación in-situ (por defecto, para pre-producción sin app)
+./ce-cli.sh test grading evaluate --path="Carta_a_un_amigo (nov-2026)" --remediation=in-situ
+
+# Con enlace a cuaderno de refuerzo en Google Drive o LMS
+./ce-cli.sh test grading evaluate --path="Carta_a_un_amigo (nov-2026)" --remediation=drive --remediation-url="https://docs.google.com/..."
+
+# Con deep-links a la app Flutter de ColabEdu (producción)
+./ce-cli.sh test grading evaluate --path="Carta_a_un_amigo (nov-2026)" --remediation=app
+```
+
+| Flag | Default | Descripción |
+|---|---|---|
+| `--path` | **obligatorio** | Ruta local o nombre/ID de carpeta en Google Drive |
+| `--remediation`, `--remediation-mode` | `in-situ` | Modo de remediación: `in-situ` (estrategias docentes reales y micro-ejercicios prácticos con solucionario), `app` (`colabedu://`), `lms` (`[📚 Práctica LMS]`), `drive` (`[📝 Abrir Cuaderno]`) |
+| `--remediation-url` | `null` | URL de destino para los modos `lms` o `drive` |
+| `--anonymity` | `first-name` | Nivel de anonimización: `first-name`, `anonymous`, `semi-anonymous`, `full` |
+| `--llm` | `false` | Activa inferencia con LLM en vivo (p.ej. Gemini 1.5/2.0 Flash) |
+
 ---
 
 ## Grupo `user` — Operaciones de usuario
@@ -1371,12 +1529,255 @@ Rotar `COLABEDU_INTERNAL_API_KEY` en producción antes de exponer `/ops/v1/lms/*
 
 ---
 
+## 11. Operaciones de Plataforma, Soporte y Automatización
+
+El CLI `ce-cli.sh` incorpora comandos de soporte, automatización de hardware y despliegues declarativos:
+
+### 11.1 Base de Conocimiento de Soporte (`support`)
+
+Herramientas conectadas a la base de conocimiento (`ce-web support kb`) y PostgreSQL con `pgvector`:
+
+```bash
+# Ingesta e indexación vectorial (embeddings 768-d) de artículos MDX de soporte
+./ce-cli.sh support index-kb
+
+# Captura automatizada de snapshots visuales en Chrome Headless (2x DPR)
+./ce-cli.sh support capture-snapshots
+```
+
+### 11.2 Despliegue de Instancias y Demos Institucionales (`instance` / `demo`)
+
+```bash
+# Validación previa y síntesis declarativa de manifiesto
+./ce-cli.sh instance plan --file=ce-specs/manifests/demo-canvas-intef.yaml
+
+# Despliegue automatizado en K8s o Appliance
+./ce-cli.sh instance deploy --file=ce-specs/manifests/demo-canvas-intef.yaml
+
+# Inspección autoritativa en vivo de URLs y endpoints
+./ce-cli.sh instance live --file=ce-specs/manifests/demo-canvas-intef.yaml
+
+# Alias de alta ergonomía para demostraciones y ventas
+./ce-cli.sh demo run --tenant=intef --lms=canvas
+./ce-cli.sh demo invite --tenant=intef --role=ALL --lang=es
+```
+
+### 11.3 Automatización Móvil y Tablets en Aulas (`mobile`)
+
+```bash
+# Diagnóstico de tablets conectadas por USB o Wi-Fi
+./ce-cli.sh mobile devices
+
+# Conexión inalámbrica instantánea (puerto 5555)
+./ce-cli.sh mobile wifi-enable
+
+# Compilación e instalación de APK de Flutter (ib_conversations)
+./ce-cli.sh mobile build demo --tenant=intef
+./ce-cli.sh mobile install demo --tenant=intef
+
+# Conmutación de tenant sin reinstalar (Deep Linking)
+./ce-cli.sh mobile deeplink intef
+```
+
+### 11.4 Extensiones de Navegador LMS (`extension`)
+
+```bash
+# Ejecutar suite de pruebas unitarias
+./ce-cli.sh extension test
+
+# Empaquetado para Chrome Web Store y Edge Add-ons
+./ce-cli.sh extension build prod
+
+# Empaquetado con inyección de endpoints para pilotos demo
+./ce-cli.sh extension build demo --tenant=intef
+```
+
+### 11.5 Catálogo Curricular SSG, Prefetching y Factoría Autónoma (`catalog`)
+
+```bash
+# Compilar catálogo SSG para desarrollo local
+./ce-cli.sh catalog build --env=local
+
+# Compilar catálogo para piloto demo con tenant específico e inyección de endpoints
+./ce-cli.sh catalog build --env=demo --tenant=intef
+
+# Publicar catálogo a producción con prefetching Wasm para apertura instantánea
+./ce-cli.sh catalog publish --env=prod
+
+# Inicializar la Factoría Autónoma de Catálogo (Gitea + MicroK8s + remoto Git 'factory')
+./ce-cli.sh catalog factory bootstrap
+
+# Asignar lección o receta a un aula y publicar tarea en LMS (Canvas) con rúbrica
+./ce-cli.sh catalog assign --spec-id=global.c1.ib.spanish_b.sl.debate.v1 --classroom="2º Bachillerato A" --publish
+```
+
+#### Asignación y Publicación en LMS (`catalog assign`)
+
+Permite vincular directamente cualquier especificación del catálogo a un aula (`Classroom`) y, opcionalmente (`--publish`), empujar la asignación a la API REST de Canvas o LMS activo, creando la tarea y asociando la rúbrica competencial para evaluación automática en SpeedGrader:
+
+- **`--spec-id`**: Referencia o identificador de la especificación didáctica (`InteractiveLesson`, `Recipe`, `Exercise`, `Course`, `Pathway`).
+- **`--classroom`**: Nombre o identificador numérico del aula de destino.
+- **`--entity-type`**: Tipo de entidad pedagógica (`EXERCISE`, `LESSON`, `RECIPE`, `COURSE`).
+- **`--publish`**: Publica automáticamente la tarea en el LMS configurado en el aula con su rúbrica y enlace de entrega.
+
+#### Factoría Autónoma de Curación GitOps (`catalog factory`)
+
+Permite inicializar y gestionar el entorno autónomo de curación curricular masiva en MicroK8s / Gitea sin interferir con las ramas de desarrollo diario:
+
+- **`catalog factory bootstrap`**: Comprueba y levanta el servidor Gitea dedicado, crea la organización `colabedu`, el repositorio `ce-specs`, configura el webhook hacia `ce-svc-spec-manager` y vincula el remoto Git `factory` en el repositorio local `ce-specs`.
+
+#### Despliegue Curricular Multi-Pilar y Diagnóstico OER (`spec rollout` y `oer health`)
+
+- **`spec rollout plan`**: Simula y audita en modo *dry-run* las diferencias curriculares, huellas digitales criptográficas (SHA-256) e idempotencia de lecciones para un lote o curso anual:
+  ```bash
+  ./ce-cli.sh spec rollout plan --file=ce-specs/batches/mx/batch_95_mx_secundaria_ciencias_fisica.yaml
+  ```
+- **`spec rollout run`**: Ejecuta el ensamblaje en 4 pilares (Teoría, Talleres, Evaluación C2 y Fuentes) y la localización quirúrgica para *newcomers*:
+  ```bash
+  ./ce-cli.sh spec rollout run --lesson=ses-01 --localize=uk_UA --rebuild
+  ```
+- **`oer health`**: Monitoreo de conectividad, latencia y certificados SSL de la red de 65 repositorios soberanos OER:
+  ```bash
+  ./ce-cli.sh oer health --region=europe --catalog=no_ndla
+  ```
+
+### 11.6 Historial Fechado de Cambios de Usuario
+
+Para consultar el registro cronológico y fechado de cada comando y opción añadida al CLI, consulta el fichero canónico [`CHANGELOG_CLI.md`](file:///home/jmolmo/git/colabedu/CHANGELOG_CLI.md).
+
+---
+
 ## Páginas relacionadas
 
 
+- [Portal de Soporte y Base de Conocimiento (Support KB)](/admin/cli-tutorial)
 - [Capacidades del Curador](/es/gitops-operations/curator-capabilities)
 - [Motor Seed & Bloom](/es/gitops-operations/seed-and-bloom)
 - [Referencia InteractiveLesson](/es/reference/interactive-lesson)
 - [Referencia ResourceLearning](/es/reference/resource-learning)
 - [Referencia Gem](/es/reference/gem)
+
+
+
+### `course bootstrap-all` (Pipeline DAG de 7 Fases con Fail-Fast y Reanudación Idempotente)
+
+El comando `./ce-cli.sh course bootstrap-all` orquesta de extremo a extremo el onboarding de una asignatura completa mediante un flujo DAG de 7 fases estrictas con puertas de verificación forense (*anti-404 gatekeeper*):
+
+1. **Fase 1: Normative Grounding & Taxonomía C0**: Síntesis y validación de competencias, criterios y catálogo canónico de errores conceptuales (*misconceptions*).
+2. **Fase 2: Federated OER Discovery & Context Cache (L3)**: Descubrimiento federado entre 71 repositorios OER y ranking pedagógico.
+3. **Fase 3: Descarga Física OER y Verificación Forense SHA-256**: Descarga real y verificación criptográfica (tamaño mínimo $>10$ KB, comprobación de cabeceras binarias y descarte de páginas de error HTML). **Si la fase 3 falla, el pipeline se detiene inmediatamente (*fail-fast*) y bloquea las fases downstream a coste $0.00**.
+4. **Fase 4: Deconstrucción Pedagógica y Mapeo de Unidades**: Desglose temático del libro de texto en capítulos y secciones curriculares.
+5. **Fase 5: Generación Socrática de Lecciones Interactivas (A2UI C1/C2)**: Autoría de lecciones interactivas guiadas por los esquemas canónicos.
+6. **Fase 6: Ensamblado de Cuarteto de Ritmos de Curso (L5)**: Generación de los 4 `CourseSpec` (`regular`, `intensive`, `exam_mastery`, `remediation`).
+7. **Fase 7: Pre-flight Audit & Radar OPS de 6 Capas**: Auditoría final de preparación operativa (certificación `CERTIFIED_GOLD`).
+
+#### Reanudación Idempotente y Banderas de Inyección
+
+Al resolver una incidencia en una fase previa, el comando detecta los artefactos previamente validados en el catálogo (`ce-specs`) y omite automáticamente las fases superadas (`[↷ OMITIDO - YA VÁLIDO EN CATÁLOGO]`) en pocos milisegundos, reanudando la ejecución exactamente donde se detuvo:
+
+```bash
+# Ejecución estándar (se detiene en Fase 3 si el OER no está disponible físicamente)
+./ce-cli.sh course bootstrap-all --standard=standard.lomloe.es --subject=FISICA --country=es --level=BACHILLERATO_2
+
+# Reanudación inyectando archivo local físico verificado
+./ce-cli.sh course bootstrap-all --standard=standard.lomloe.es --subject=FISICA --country=es --level=BACHILLERATO_2 \
+  --primary-oer-file=ce-specs/sources/test/unit_1_familias_comunidades_oer_test.pdf
+
+# Inyección de URL directa alternativa
+./ce-cli.sh course bootstrap-all --standard=standard.lomloe.es --subject=FISICA --country=es --level=BACHILLERATO_2 \
+  --primary-oer-url=https://recursos.educacion.gob.es/fisica_bach2_completo.pdf
+```
+
+### `course bootstrap-all --dry-run` (simulación real)
+
+`./ce-cli.sh course bootstrap-all ... --dry-run` y `--dry-run=true|false` son equivalentes. En simulación el backend no ejecuta la síntesis normativa, el descubrimiento OER federado ni el scaffold del curso. Comprueba siempre que la salida muestre `Dry Run: true`.
+
+```bash
+./ce-cli.sh course bootstrap-all --standard=standard.lomloe.es --country=es --level=BACHILLERATO_2 --subject=MATEMATICAS_II --dry-run=true
+```
+
+---
+
+## 12. Facturación, Membresías y Gestión de Usuarios (`billing`)
+
+El comando `./ce-cli.sh billing` permite a los operadores sincronizar el manifiesto canónico de precios (`billing-manifest.yaml`) con los entornos duales de Chargebee (`colabedu-us` y `colabedu-es`), auditar las membresías activas y gestionar directamente los derechos de usuarios:
+
+```bash
+# Sincronización canónica con ambos sitios Chargebee (US y ES)
+./ce-cli.sh billing sync --site=ALL
+
+# Sincronización exclusiva con el sitio europeo (EUR)
+./ce-cli.sh billing sync --site=ES
+
+# Listado de planes y membresías activas por rol o divisa
+./ce-cli.sh billing list --role=STUDENT --currency=EUR
+./ce-cli.sh billing list --role=TEACHER_PRO --currency=USD
+
+# Asignar directamente una membresía a un usuario (Profesor embajador o becario)
+./ce-cli.sh billing assign --user=usr_teacher_123 --tier=pro --role=teacher --reason="Embajador Didáctica UCM"
+
+# Consultar en tiempo real los derechos, cuota y consumo de un usuario
+./ce-cli.sh billing user --user=usr_teacher_123
+
+# Resetear a 0 la cuota mensual de evaluaciones de un usuario bloqueado
+./ce-cli.sh billing quota-reset --user=usr_student_456
+```
+
+---
+
+## 13. Subvenciones Institucionales B2G y Vouchers Filantrópicos (`sponsor`)
+
+Permite a los administradores registrar convenios institucionales con administraciones públicas (p.ej. Comunidad de Madrid) o fundaciones filantrópicas (p.ej. Hewlett Foundation) para acceso subvencionado de estudiantes a coste $0.00, así como canjear vouchers:
+
+```bash
+# Registrar un nuevo convenio institucional desde un manifiesto YAML o JSON
+./ce-cli.sh sponsor grant --file=ce-specs/manifests/grant-comunidad-madrid.yaml
+
+# Generar lote de códigos de voucher para distribución masiva en colegios
+./ce-cli.sh sponsor vouchers --grant-id=grant-cam-2026 --count=50 --prefix=MADRID
+
+# Consultar el estado y consumo de plazas de un convenio en tiempo real
+./ce-cli.sh sponsor status --grant-id=grant-cam-2026
+
+# Canjear y activar un voucher de membresía patrocinada para un estudiante
+./ce-cli.sh sponsor redeem --code=MADRID-A8X9K2 --user=usr_student_456
+```
+
+---
+
+## 14. Desacoplamiento Disciplinar Universal y Onboarding Multi-País (`normative bootstrap`)
+
+El comando `./ce-cli.sh normative bootstrap` sintetiza de forma autónoma el Cuarteto Normativo Mínimo (Taxonomía C0 + Rúbricas C0 + Recetas C1 + Perfiles de Ensamblaje C1) a partir de marcos curriculares oficiales (BOE, decretos autonómicos, frameworks estatales de EE.UU., marcos internacionales IB).
+
+Para habilitar el onboarding para más de 50 países en diferentes idiomas sin alterar código fuente Java ni condicionales fijos, el comando incorpora los flags `--domain` e `--language`:
+
+```bash
+# Síntesis normativa de Matemáticas II con dominio ISCED-F explícito e idioma
+./ce-cli.sh normative bootstrap \
+  --file=ce-specs/sources/boe_decree.pdf \
+  --standard=standard.lomloe.es \
+  --subject=matematicas_ii \
+  --domain=MATHEMATICS \
+  --language=es
+
+# Registro de marco curricular en inglés (California / AP)
+./ce-cli.sh normative bootstrap \
+  --file=ce-specs/sources/ca_hss_framework.pdf \
+  --standard=standard.us.ca.hss \
+  --subject=world_history \
+  --domain=HISTORY_AND_SOCIAL_SCIENCES \
+  --language=en
+```
+
+**Banderas soportadas:**
+
+| Flag | Tipo | Default | Descripción |
+|---|---|---|---|
+| `--file`, `-f` | `String` | **obligatorio** | Ruta local al documento normativo verificado (PDF, Markdown, YAML) con hash SHA-256 en capa L0. |
+| `--standard`, `-s` | `String` | **obligatorio** | Identificador canónico del estándar curricular (p.ej. `standard.lomloe.es`, `standard.us.ca.wl`). |
+| `--subject` | `String` | `general` | Asignatura curricular canónica (p.ej. `matematicas_ii`, `fisica`, `quimica`). |
+| `--country`, `-c` | `String` | `es` | Código de jurisdicción territorial ISO 3166-1 alpha-2 (`es`, `us`, `mx`, `fr`, etc.). |
+| `--level`, `-l` | `String` | `HS` | Nivel educativo (p.ej. `BACHILLERATO_2`, `HS`, `MS`). |
+| `--domain`, `-d` | `String` | *(auto)* | Dominio disciplinar UNESCO ISCED-F 2013 (`MATHEMATICS`, `PHYSICS`, `CHEMISTRY`, `LANGUAGE_AND_LITERATURE`, `HISTORY_AND_SOCIAL_SCIENCES`, `LIFE_SCIENCES`). |
+| `--language`, `--lang` | `String` | *(auto)* | Código de idioma ISO 639-1 (`es`, `en`, `fr`, `de`, `ca`, `zh`, `ja`). |
 

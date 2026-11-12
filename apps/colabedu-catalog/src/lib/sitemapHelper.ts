@@ -111,6 +111,26 @@ export function collectCatalogUrls(filter: SitemapFilter = {}): string[] {
     }
   }
 
+  // 4. Official Criteria & Curricular Standards Graph
+  const { criteria } = loadCatalog();
+  for (const crit of criteria) {
+    if (scope !== 'all' && scope !== 'pilot' && crit.country !== scope) {
+      continue;
+    }
+
+    // Criteria country hub
+    const criteriaHubUrl = `${domain}/catalog/${crit.country}/criterios`;
+    if (!urls.includes(criteriaHubUrl)) {
+      urls.push(criteriaHubUrl);
+    }
+
+    // Specific criterion page
+    const criterionUrl = `${domain}${crit.canonicalPath}`;
+    if (!urls.includes(criterionUrl)) {
+      urls.push(criterionUrl);
+    }
+  }
+
   return urls;
 }
 

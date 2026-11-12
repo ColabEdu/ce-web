@@ -1,0 +1,395 @@
+---
+// src/pages/es/grounding.astro
+// Arquitectura de Grounding L0 y Tolerancia Cero a la Alucinación Normativa
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import { appLink } from "@colabedu/ui-core/navigation";
+import "../../styles/global.css";
+
+const catalogUrl = appLink('catalog', '/');
+const appUrl = appLink('app', '/');
+---
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate icon" type="image/png" href="/favicon.png" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grounding L0 y Rigor Normativo | ColabEdu.net</title>
+    <meta name="description" content="Tolerancia Cero a la Alucinación Normativa en ColabEdu: cada rúbrica, competencia y criterio pedagógico está anclado a leyes oficiales (BOE, LOMLOE, CDE, IB) con hash SHA-256 verificado.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+
+    <style is:global>
+        :root {
+            --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+        body {
+            font-family: var(--font-sans);
+            background-color: #FAF9F6;
+            color: #0F172A;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+        .precision-card {
+            background-color: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            border-radius: 1.25rem;
+            box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.03);
+            transition: all 0.2s ease-in-out;
+        }
+        .precision-card:hover {
+            border-color: #CBD5E1;
+            box-shadow: 0 10px 20px -4px rgba(15, 23, 42, 0.05);
+        }
+        .hero-grounding {
+            background: linear-gradient(135deg, rgba(238, 242, 255, 0.6) 0%, rgba(240, 253, 250, 0.5) 50%, rgba(254, 243, 199, 0.3) 100%);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            border-radius: 2rem;
+        }
+        .code-snippet {
+            font-family: var(--font-mono);
+            background-color: #0F172A;
+            color: #38BDF8;
+            border-radius: 0.75rem;
+            padding: 1rem;
+            font-size: 0.75rem;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body class="selection:bg-blue-600 selection:text-white">
+
+    <Header lang="es" />
+
+    <main class="py-12 sm:py-16">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- Hero Title -->
+            <div class="hero-grounding p-8 sm:p-14 text-center mb-16">
+                <span class="inline-block text-xs font-mono font-bold tracking-widest uppercase text-blue-900 bg-white/80 px-4 py-1.5 rounded-full border border-blue-300 mb-6">
+                    <i class="fas fa-shield-halved mr-1 text-blue-600"></i> Rigor Pedagógico Certificado
+                </span>
+                <h1 class="text-4xl sm:text-6xl font-black text-slate-950 tracking-tight leading-tight mb-6">
+                    Tolerancia Cero a la Alucinación Normativa
+                </h1>
+                <p class="text-lg sm:text-xl text-slate-700 font-normal leading-relaxed max-w-3xl mx-auto">
+                    En educación no se puede improvisar. Cuando un modelo de IA califica a un estudiante o genera una rúbrica, no puede inventarse criterios. En ColabEdu, cada afirmación pedagógica está anclada a la ley oficial mediante <strong>Grounding L0</strong>.
+                </p>
+            </div>
+
+            <!-- ¿Qué es la Capa L0? -->
+            <div class="precision-card p-8 sm:p-10 bg-white border-blue-200 mb-16">
+                <div class="max-w-3xl mx-auto">
+                    <span class="text-xs font-mono font-bold text-blue-700 uppercase tracking-wider block mb-2">Fundamentación Jurídica y Curricular</span>
+                    <h2 class="text-2xl sm:text-3xl font-black text-slate-900 mb-4">
+                        ¿Cómo funciona la Capa L0 en ColabEdu?
+                    </h2>
+                    <p class="text-slate-600 text-sm sm:text-base leading-relaxed mb-4">
+                        La mayoría de herramientas comerciales de IA sufren de "alucinación normativa": inventan competencias, mezclan decretos antiguos o aplican criterios de un país sobre otro.
+                    </p>
+                    <p class="text-slate-600 text-sm sm:text-base leading-relaxed mb-6">
+                        ColabEdu resuelve esto con una arquitectura matemática estricta: antes de que un modelo evalúe una sola frase de un alumno, el backend valida que la rúbrica provenga de un documento oficial registrado en <code>sources_manifest.json</code> con su hash SHA-256 inmutable:
+                    </p>
+
+                    <!-- Code block showing real L0 metadata schema -->
+                    <div class="code-snippet mb-6">
+                        <div class="text-slate-400 mb-2">// Esquema de trazabilidad OPS v0.9.6 (ce-specs/sources/)</div>
+                        <div>{`{`}</div>
+                        <div class="pl-4">"source_id": "BOE-A-2024-11789-RD534",</div>
+                        <div class="pl-4">"jurisdiction": "es.nacional",</div>
+                        <div class="pl-4">"official_decree": "Real Decreto 534/2024 (PAU Selectividad)",</div>
+                        <div class="pl-4">"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",</div>
+                        <div class="pl-4">"verified_status": "ACTIVE_IMMUTABLE",</div>
+                        <div class="pl-4">"zero_hallucination_guarantee": true</div>
+                        <div>{`}`}</div>
+                    </div>
+
+                    <div class="bg-amber-50 p-4 rounded-xl border border-amber-200 flex items-start gap-3">
+                        <i class="fas fa-certificate text-amber-600 text-lg mt-0.5 shrink-0"></i>
+                        <p class="text-xs text-amber-900 leading-relaxed">
+                            <strong>Garantía para el docente:</strong> Si un alumno o su familia preguntan por qué se ha otorgado una nota, el sistema muestra la cita exacta del boletín oficial (BOE, DOGV, BOCM, CDE) que sustenta cada décima.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Marcos Normativos Activos y Anclados -->
+            <div class="mb-16">
+                <div class="text-center mb-10">
+                    <span class="text-xs font-mono font-bold text-slate-400 uppercase tracking-widest block mb-1">Cobertura Territorial</span>
+                    <h3 class="text-3xl font-black text-slate-900">Leyes oficiales ancladas en tiempo real</h3>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="precision-card p-6 bg-white">
+                        <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-lg mb-4">
+                            <i class="fas fa-landmark"></i>
+                        </div>
+                        <h4 class="font-extrabold text-slate-900 text-base mb-1">España (LOMLOE & PAU 2025)</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed mb-3">
+                            Real Decreto 243/2022 y Real Decreto 534/2024 de la nueva Prueba de Acceso a la Universidad (PAU). Descriptores de perfil de salida y criterios competenciales por comunidad autónoma.
+                        </p>
+                        <span class="text-[11px] font-mono font-bold text-blue-600">standard.lomloe.es</span>
+                    </div>
+
+                    <div class="precision-card p-6 bg-white">
+                        <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center font-bold text-lg mb-4">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <h4 class="font-extrabold text-slate-900 text-base mb-1">EE.UU. (Common Core & AP)</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed mb-3">
+                            Common Core State Standards (CCSS), California CDE Frameworks, Texas TEKS y rúbricas analíticas oficiales del College Board para Advanced Placement (AP).
+                        </p>
+                        <span class="text-[11px] font-mono font-bold text-amber-700">standard.ccss / standard.ap</span>
+                    </div>
+
+                    <div class="precision-card p-6 bg-white">
+                        <div class="w-10 h-10 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center font-bold text-lg mb-4">
+                            <i class="fas fa-globe"></i>
+                        </div>
+                        <h4 class="font-extrabold text-slate-900 text-base mb-1">Bachillerato Internacional (IB DP)</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed mb-3">
+                            Guía oficial de Lengua B (Nivel Medio y Superior), matrices analíticas de comprensión auditiva, comprensión lectora e interacción oral según la Organización del Bachillerato Internacional.
+                        </p>
+                        <span class="text-[11px] font-mono font-bold text-teal-700">standard.ib.diploma</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EL PIPELINE EN 5 CAPAS VERTICALES DE EVALUACIÓN PSICOMÉTRICA (GRADING V2) -->
+            <div class="precision-card p-8 sm:p-12 bg-white border-slate-300 mb-16 shadow-sm">
+                <div class="max-w-3xl mx-auto mb-12 text-center">
+                    <span class="text-xs font-mono font-bold text-indigo-700 uppercase tracking-widest block mb-2">
+                        Arquitectura Psicométrica Forense (Grading V2)
+                    </span>
+                    <h3 class="text-3xl font-black text-slate-900">
+                        Pipeline de 5 Capas: De la Ley Oficial a la Calificación Justa
+                    </h3>
+                    <p class="text-slate-600 text-sm mt-3 leading-relaxed">
+                        Para erradicar la arbitrariedad y garantizar que cada calificación esté blindada ante reclamaciones de inspección o familias, ColabEdu desacopla el proceso en una cascada de 5 especificaciones deterministas:
+                    </p>
+                </div>
+
+                <!-- CONTENEDOR DE LA PILA VERTICAL -->
+                <div class="relative max-w-4xl mx-auto space-y-4">
+                    <!-- Línea vertical de conexión central -->
+                    <div class="absolute left-6 sm:left-8 top-8 bottom-8 w-1 bg-gradient-to-b from-slate-400 via-blue-500 via-indigo-500 via-amber-500 to-emerald-500 -z-0"></div>
+
+                    <!-- CAPA 0: L0 Grounding Normativo -->
+                    <div class="relative z-10 bg-slate-900 text-white rounded-2xl p-6 sm:p-7 border border-slate-800 shadow-md ml-0 sm:ml-4 transition hover:border-slate-700">
+                        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">
+                            <div class="flex items-center gap-4">
+                                <span class="w-12 h-12 rounded-xl bg-slate-800 text-teal-400 font-mono font-black text-lg flex items-center justify-center shrink-0 border border-slate-700 shadow-inner">
+                                    L0
+                                </span>
+                                <div>
+                                    <div class="flex items-center gap-2">
+                                        <h4 class="text-lg font-black text-white">Capa 0: Grounding Normativo Oficial</h4>
+                                        <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-teal-900/60 text-teal-300 border border-teal-700/60 font-semibold uppercase">Inmutable SHA-256</span>
+                                    </div>
+                                    <p class="text-xs text-slate-400 font-mono">ce-specs/sources/sources_manifest.json</p>
+                                </div>
+                            </div>
+                            <div class="text-right sm:block hidden">
+                                <span class="text-xs font-mono text-slate-400">BOE RD 534/2024 · CDE Framework · AP Board</span>
+                            </div>
+                        </div>
+                        <p class="text-xs sm:text-sm text-slate-300 leading-relaxed mb-3">
+                            Documentos legales auténticos descargados de boletines oficiales. Verificados con hash criptográfico SHA-256 antes de alimentar la base vectorial de normas. Es el ancla jurídica que prohíbe evaluar lo que no exige la ley.
+                        </p>
+                        <div class="bg-slate-950/80 rounded-xl p-3 font-mono text-[11px] text-teal-300 flex items-center justify-between overflow-x-auto border border-slate-800">
+                            <span>sha256: 7f83b165...e2d9b  RD_534_2024_PAU_EBAU_Comun.pdf</span>
+                            <span class="text-slate-500 uppercase text-[10px]">Cero Alucinación</span>
+                        </div>
+                    </div>
+
+                    <!-- Flecha descendente conectora -->
+                    <div class="flex justify-center -my-2 relative z-10">
+                        <div class="w-7 h-7 rounded-full bg-slate-100 border border-slate-300 flex items-center justify-center text-slate-500 text-xs shadow-sm">
+                            <i class="fas fa-arrow-down"></i>
+                        </div>
+                    </div>
+
+                    <!-- CAPA 1: C0 EvaluationFramework -->
+                    <div class="relative z-10 bg-white rounded-2xl p-6 sm:p-7 border border-slate-200 shadow-sm ml-0 sm:ml-4 hover:border-blue-300 transition">
+                        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">
+                            <div class="flex items-center gap-4">
+                                <span class="w-12 h-12 rounded-xl bg-blue-600 text-white font-mono font-black text-lg flex items-center justify-center shrink-0 shadow-sm">
+                                    C0
+                                </span>
+                                <div>
+                                    <div class="flex items-center gap-2">
+                                        <h4 class="text-lg font-black text-slate-900">Capa 1: Marco & Descriptores de Competencia</h4>
+                                        <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-blue-100 text-blue-800 border border-blue-200 font-semibold uppercase">EvaluationFramework</span>
+                                    </div>
+                                    <p class="text-xs text-slate-500 font-mono">specs/frameworks/standard.lomloe.es.v1.yaml</p>
+                                </div>
+                            </div>
+                            <span class="text-xs font-mono bg-slate-100 text-slate-700 px-2.5 py-1 rounded-md font-semibold">Taxonomía & Escala 0-10</span>
+                        </div>
+                        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mb-3">
+                            Traduce la ley en escalas formales de calificación (0-10, A-F, 1-7 IB), descriptores de desempeño competencial, taxonomías DOK/Bloom y criterios de corrección vinculantes para todo el territorio o distrito.
+                        </p>
+                    </div>
+
+                    <!-- Flecha descendente conectora -->
+                    <div class="flex justify-center -my-2 relative z-10">
+                        <div class="w-7 h-7 rounded-full bg-slate-100 border border-slate-300 flex items-center justify-center text-slate-500 text-xs shadow-sm">
+                            <i class="fas fa-arrow-down"></i>
+                        </div>
+                    </div>
+
+                    <!-- CAPA 2: C1 GradingRecipe & C2 InteractiveExercise -->
+                    <div class="relative z-10 bg-white rounded-2xl p-6 sm:p-7 border border-slate-200 shadow-sm ml-0 sm:ml-4 hover:border-indigo-300 transition">
+                        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">
+                            <div class="flex items-center gap-4">
+                                <span class="w-12 h-12 rounded-xl bg-indigo-600 text-white font-mono font-black text-lg flex items-center justify-center shrink-0 shadow-sm">
+                                    C1·C2
+                                </span>
+                                <div>
+                                    <div class="flex items-center gap-2">
+                                        <h4 class="text-lg font-black text-slate-900">Capa 2: Receta Evaluativa & Ejercicio Canónico</h4>
+                                        <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-indigo-100 text-indigo-800 border border-indigo-200 font-semibold uppercase">Recipe & Exercise</span>
+                                    </div>
+                                    <p class="text-xs text-slate-500 font-mono">specs/recipes/pau_lengua_2025.yaml + exercises/*.yaml</p>
+                                </div>
+                            </div>
+                            <span class="text-xs font-mono bg-indigo-50 text-indigo-700 px-2.5 py-1 rounded-md font-semibold">Markscheme + Rúbricas</span>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-slate-600">
+                            <div class="bg-indigo-50/50 p-3 rounded-xl border border-indigo-100">
+                                <strong class="text-indigo-950 font-bold block mb-1">C1 GradingRecipe (Estructura de la Prueba):</strong>
+                                Ponderación por pregunta, penalizaciones por faltas de ortografía (p.ej. -0.25 hasta max 2.0 puntos) y umbrales de aprobado fijados por el tribunal.
+                            </div>
+                            <div class="bg-indigo-50/50 p-3 rounded-xl border border-indigo-100">
+                                <strong class="text-indigo-950 font-bold block mb-1">C2 InteractiveExercise (Contenido Didáctico):</strong>
+                                Enunciado exacto, textos auténticos citados, respuestas modélicas, criterios de corrección punto por punto y catálogo de misconcepciones frecuentes.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Flecha descendente conectora -->
+                    <div class="flex justify-center -my-2 relative z-10">
+                        <div class="w-7 h-7 rounded-full bg-slate-100 border border-slate-300 flex items-center justify-center text-slate-500 text-xs shadow-sm">
+                            <i class="fas fa-arrow-down"></i>
+                        </div>
+                    </div>
+
+                    <!-- CAPA 3: Directivas Dinámicas de Aula (Assignment Overrides) -->
+                    <div class="relative z-10 bg-amber-50/80 rounded-2xl p-6 sm:p-7 border border-amber-200 shadow-sm ml-0 sm:ml-4 hover:border-amber-300 transition">
+                        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">
+                            <div class="flex items-center gap-4">
+                                <span class="w-12 h-12 rounded-xl bg-amber-600 text-white font-mono font-black text-lg flex items-center justify-center shrink-0 shadow-sm">
+                                    <i class="fas fa-sliders text-base"></i>
+                                </span>
+                                <div>
+                                    <div class="flex items-center gap-2">
+                                        <h4 class="text-lg font-black text-amber-950">Capa 3: Directivas Dinámicas de Aula</h4>
+                                        <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-100 text-amber-900 border border-amber-300 font-semibold uppercase">EvaluationOverrides</span>
+                                    </div>
+                                    <p class="text-xs text-amber-800 font-mono">assignments.evaluation_overrides (JSONB en memoria)</p>
+                                </div>
+                            </div>
+                            <span class="text-xs font-mono bg-white text-amber-800 border border-amber-200 px-2.5 py-1 rounded-md font-semibold">Soberanía Docente</span>
+                        </div>
+                        <p class="text-xs sm:text-sm text-amber-900 leading-relaxed mb-3">
+                            El profesor modula la corrección en su clase sin crear archivos YAML paralelos en Git: adaptación curricular para dislexia, tolerancia ortográfica según etapa, bonificación de dialectos locales (p.ej. seseo/voseo) o tiempo mínimo de respuesta en exámenes orales.
+                        </p>
+                    </div>
+
+                    <!-- Flecha descendente conectora -->
+                    <div class="flex justify-center -my-2 relative z-10">
+                        <div class="w-7 h-7 rounded-full bg-slate-100 border border-slate-300 flex items-center justify-center text-slate-500 text-xs shadow-sm">
+                            <i class="fas fa-arrow-down"></i>
+                        </div>
+                    </div>
+
+                    <!-- CAPA 4: C3 StudentSubmission -->
+                    <div class="relative z-10 bg-white rounded-2xl p-6 sm:p-7 border border-slate-200 shadow-sm ml-0 sm:ml-4 hover:border-emerald-300 transition">
+                        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">
+                            <div class="flex items-center gap-4">
+                                <span class="w-12 h-12 rounded-xl bg-emerald-600 text-white font-mono font-black text-lg flex items-center justify-center shrink-0 shadow-sm">
+                                    C3
+                                </span>
+                                <div>
+                                    <div class="flex items-center gap-2">
+                                        <h4 class="text-lg font-black text-slate-900">Capa 4: Evidencia Auténtica del Estudiante</h4>
+                                        <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 border border-emerald-200 font-semibold uppercase">StudentSubmission</span>
+                                    </div>
+                                    <p class="text-xs text-slate-500 font-mono">submissions/uuid.c3.json (Multi-Página OCR + Audio)</p>
+                                </div>
+                            </div>
+                            <span class="text-xs font-mono bg-emerald-50 text-emerald-700 px-2.5 py-1 rounded-md font-semibold">Evidencia Bruta</span>
+                        </div>
+                        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                            La entrega real del alumno: examen manuscrito de varias páginas digitalizado con OCR móvil de alta resolución, audio grabado en la prueba oral o respuestas generadas en la lección interactiva.
+                        </p>
+                    </div>
+
+                    <!-- RESULTADO DEL PIPELINE: DICTAMEN PSICOMÉTRICO FINAL -->
+                    <div class="relative z-10 mt-6 bg-gradient-to-r from-emerald-600 via-teal-600 to-indigo-700 text-white rounded-2xl p-6 sm:p-7 shadow-lg ml-0 sm:ml-4">
+                        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 rounded-xl bg-white/20 backdrop-blur-sm text-white font-mono font-black text-xl flex items-center justify-center shrink-0 border border-white/30">
+                                    <i class="fas fa-stamp"></i>
+                                </div>
+                                <div>
+                                    <span class="text-[10px] font-mono uppercase tracking-widest text-emerald-200 font-bold block">Salida Certificada</span>
+                                    <h4 class="text-xl font-black text-white">Pre-calificación Forense y Dictamen Justificado</h4>
+                                    <p class="text-xs text-emerald-100 mt-1">Nota desglosada + Citación explícita de artículos de la ley + Rúbrica con feedback constructivo</p>
+                                </div>
+                            </div>
+                            <div class="text-right shrink-0">
+                                <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white text-slate-900 text-xs font-black shadow-sm">
+                                    <i class="fas fa-check-circle text-emerald-600"></i>
+                                    Aprobación Docente 1-Clic
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Auditoría Dual: Backend White-Box + LLM-as-a-Judge -->
+            <div class="precision-card p-8 bg-slate-900 text-white mb-16">
+                <div class="flex flex-col md:flex-row items-center justify-between gap-8">
+                    <div>
+                        <span class="text-xs font-mono font-bold text-teal-400 uppercase tracking-widest block mb-2">Protocolo de Doble Verificación</span>
+                        <h3 class="text-2xl font-black mb-3">Política de Auditoría Dual de Especificaciones</h3>
+                        <p class="text-slate-300 text-xs sm:text-sm leading-relaxed max-w-xl">
+                            Ninguna lección o examen se publica en ColabEdu sin superar dos filtros independientes: validación interna de esquemas en Java Spring Boot (White-Box) y un peritaje ciego con juez externo de IA (LLM-as-a-Judge) que audita rigor científico y andamiaje pedagógico.
+                        </p>
+                    </div>
+                    <div class="shrink-0 text-center">
+                        <div class="w-20 h-20 rounded-2xl bg-teal-500/20 border border-teal-400/40 flex items-center justify-center text-teal-300 text-3xl font-black mb-2 mx-auto">
+                            ✓✓
+                        </div>
+                        <span class="text-[11px] font-mono text-slate-400 uppercase font-bold">Doble Certificación</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Call to action -->
+            <div class="text-center">
+                <a href={catalogUrl} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-8 py-4 text-base font-extrabold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-all shadow-md">
+                    <i class="fas fa-book-open"></i>
+                    <span>Comprobar la Trazabilidad L0 en el Catálogo</span>
+                </a>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Unified Footer -->
+    <Footer lang="es" />
+
+</body>
+</html>
+

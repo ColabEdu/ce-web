@@ -1,0 +1,159 @@
+---
+// src/pages/en/linguistic-inclusion.astro
+// Real Linguistic Inclusion and Scaffolding for Newcomer / ELL Students
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import { appLink } from "@colabedu/ui-core/navigation";
+import "../../styles/global.css";
+
+const appUrl = appLink('app', '/');
+---
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate icon" type="image/png" href="/favicon.png" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linguistic Inclusion & Newcomer Support | ColabEdu.net</title>
+    <meta name="description" content="Authentic linguistic inclusion in ColabEdu: support for newcomer and ELL students with real-time pedagogical glossaries, dual-language scaffolding, and science/math remediation.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+
+    <style is:global>
+        :root {
+            --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+        body {
+            font-family: var(--font-sans);
+            background-color: #FAF9F6;
+            color: #0F172A;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+        .precision-card {
+            background-color: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            border-radius: 1.25rem;
+            box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.03);
+            transition: all 0.2s ease-in-out;
+        }
+        .precision-card:hover {
+            border-color: #CBD5E1;
+            box-shadow: 0 10px 20px -4px rgba(15, 23, 42, 0.05);
+        }
+        .hero-inclusion {
+            background: linear-gradient(135deg, rgba(240, 253, 250, 0.6) 0%, rgba(204, 251, 241, 0.3) 50%, rgba(254, 243, 199, 0.3) 100%);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            border-radius: 2rem;
+        }
+    </style>
+</head>
+<body class="selection:bg-teal-600 selection:text-white">
+
+    <Header lang="en" />
+
+    <main class="py-12 sm:py-16">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- Hero Title -->
+            <div class="hero-inclusion p-8 sm:p-14 text-center mb-16">
+                <span class="inline-block text-xs font-mono font-bold tracking-widest uppercase text-teal-900 bg-white/80 px-4 py-1.5 rounded-full border border-teal-300 mb-6">
+                    <i class="fas fa-language mr-1.5 text-teal-600"></i> Equity for Newcomer & ELL Students
+                </span>
+                <h1 class="text-4xl sm:text-6xl font-black text-slate-950 tracking-tight leading-tight mb-6">
+                    The host language must never be a barrier to learning algebra or physics.
+                </h1>
+                <p class="text-lg sm:text-xl text-slate-700 font-normal leading-relaxed max-w-3xl mx-auto">
+                    Students newly arrived from abroad or transitioning into a new instructional language do not have an intellectual deficit: they have a linguistic code gap. ColabEdu scaffolds instruction with dual-language reasoning and real-time Socratic glossaries.
+                </p>
+            </div>
+
+            <!-- Central Thesis: The Hidden Gap -->
+            <div class="precision-card p-8 sm:p-10 bg-white border-teal-200 mb-16">
+                <div class="max-w-3xl mx-auto">
+                    <span class="text-xs font-mono font-bold text-teal-700 uppercase tracking-wider block mb-2">The Hidden Classroom Bottleneck</span>
+                    <h2 class="text-2xl sm:text-3xl font-black text-slate-900 mb-4">
+                        68% of academic failure among newcomer students occurs in STEM subjects
+                    </h2>
+                    <p class="text-slate-600 text-sm sm:text-base leading-relaxed mb-4">
+                        Schools usually concentrate language immersion efforts inside Language Arts classes. However, when those same students step into Biology, Chemistry, or Calculus, they encounter specialized technical vocabulary (*"osmosis"*, *"hypotenuse"*, *"specific gravity"*).
+                    </p>
+                    <p class="text-slate-600 text-sm sm:text-base leading-relaxed mb-6">
+                        Unable to parse the problem prompt, they fail the assignment. Not due to a lack of logical comprehension, but because of an academic vocabulary barrier.
+                    </p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-6 border-t border-slate-200 text-center">
+                        <div class="p-4 bg-teal-50/60 rounded-xl border border-teal-200">
+                            <i class="fas fa-book-atlas text-teal-700 text-xl mb-2 block"></i>
+                            <h4 class="font-bold text-xs text-slate-900 uppercase">Contextual Glossary</h4>
+                            <p class="text-[11px] text-slate-500 mt-1">1-click visual and bilingual definitions for every technical term in the lesson.</p>
+                        </div>
+                        <div class="p-4 bg-teal-50/60 rounded-xl border border-teal-200">
+                            <i class="fas fa-arrows-split-up-and-left text-teal-700 text-xl mb-2 block"></i>
+                            <h4 class="font-bold text-xs text-slate-900 uppercase">Dual-Language Scaffolding</h4>
+                            <p class="text-[11px] text-slate-500 mt-1">The Socratic copilot can reason alongside students in their native tongue while teaching official standard nomenclature.</p>
+                        </div>
+                        <div class="p-4 bg-teal-50/60 rounded-xl border border-teal-200">
+                            <i class="fas fa-universal-access text-teal-700 text-xl mb-2 block"></i>
+                            <h4 class="font-bold text-xs text-slate-900 uppercase">UDL Accessibility</h4>
+                            <p class="text-[11px] text-slate-500 mt-1">Universal Design for Learning: text-to-speech, audio cues, visual models, and interactive widgets.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- How it Empowers Teachers in Heterogeneous Classrooms -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+                <div class="precision-card p-8 bg-white">
+                    <span class="text-xs font-mono font-bold text-amber-700 uppercase tracking-wider block mb-2">For Educators</span>
+                    <h3 class="text-xl font-black text-slate-900 mb-3">Teaching 30 students across 5 different languages</h3>
+                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mb-4">
+                        It is humanly impossible for a single math or science teacher to provide simultaneous individualized instruction to native speakers, newcomer students from Latin America, Ukraine, the Middle East, or East Asia.
+                    </p>
+                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                        ColabEdu functions as an in-situ teaching assistant: each student masters the exact same Common Core, AP or statutory standard, but with personalized linguistic scaffolding, freeing the teacher to orchestrate the classroom.
+                    </p>
+                </div>
+
+                <div class="precision-card p-8 bg-white">
+                    <span class="text-xs font-mono font-bold text-teal-700 uppercase tracking-wider block mb-2">For Newcomer Students</span>
+                    <h3 class="text-xl font-black text-slate-900 mb-3">Full inclusion without lowering curricular rigor</h3>
+                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mb-4">
+                        We never dumb down curriculum standards or relegate students to busywork coloring sheets.
+                    </p>
+                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                        Students solve authentic geometry proofs and apply Newton's laws, preserving their dignity, confidence, and trajectory toward graduation and higher education.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Call to action -->
+            <div class="p-8 sm:p-12 rounded-2xl bg-slate-900 text-white text-center">
+                <h3 class="text-2xl sm:text-3xl font-black mb-3">No student left behind due to a language barrier</h3>
+                <p class="text-slate-300 text-sm max-w-xl mx-auto mb-6">
+                    See how ColabEdu pilot schools cut newcomer dropout rates in half within one academic cycle.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <a href="/en/institutions" class="px-6 py-3.5 text-sm font-extrabold text-slate-900 bg-amber-400 hover:bg-amber-300 rounded-xl transition-all">
+                        Request a District Pilot &rarr;
+                    </a>
+                    <a href="/en/socratic-tutor" class="px-6 py-3.5 text-sm font-bold text-slate-300 hover:text-white border border-slate-700 rounded-xl transition-colors">
+                        View Socratic Tutor
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Unified Footer -->
+    <Footer lang="en" />
+
+</body>
+</html>

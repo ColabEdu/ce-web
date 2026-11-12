@@ -1,52 +1,168 @@
 ---
 import { appLink } from "@colabedu/ui-core/navigation";
+import GlobalModalHost from "@colabedu/ui-core/components/GlobalModalHost.astro";
 
 // src/components/Footer.astro
 const { lang = 'es' } = Astro.props;
 const orgUrl = appLink('org', '/');
-const orgNewsUrl = appLink('org', `/${lang}/news`);
 const supportUrl = appLink('support', '/');
-const termsUrl = appLink('catalog', '/terms');
-
-const termsLabel = lang === 'en' ? 'Terms of Use (Beta)' : 'Términos de Uso (Beta)';
-const privacyLabel = lang === 'en' ? 'Privacy' : 'Privacidad';
+const catalogUrl = appLink('app', '/navigator/spec_root/0');
+const seoCatalogUrl = appLink('catalog', '/');
 const copyrightYear = new Date().getFullYear();
+
+const isEn = lang === 'en';
+const t = {
+    desc: isEn ? 'Services, memberships, and classroom solutions portal of the ColabEdu ecosystem.' : 'Portal de servicios, membresías y soluciones de aula del ecosistema ColabEdu.',
+    rights: isEn ? 'All rights reserved.' : 'Todos los derechos reservados.',
+    col1Title: isEn ? 'Community & Services' : 'Comunidad & Servicios',
+    memberships: isEn ? 'Memberships & Pricing' : 'Membresías y Precios',
+    institutions: isEn ? 'Schools & District Networks' : 'Colegios y Redes Escolares',
+    vision: isEn ? 'Vision & Mission' : 'Visión & Misión',
+    philosophy: isEn ? 'Catalog Philosophy (65+ OER)' : 'Filosofía del Catálogo (65+ OER)',
+    grounding: isEn ? 'Grounding L0 & C0-C3' : 'Grounding L0 y Capas C0-C3',
+    col2Title: isEn ? 'Pedagogy & Classroom' : 'Pedagogía & Aula',
+    interactiveLessons: isEn ? 'Interactive Lessons' : 'Lecciones Interactivas',
+    interactiveExams: isEn ? 'Authentic Exams & OCR' : 'Exámenes & Corrección OCR',
+    gradebook: isEn ? 'Classrooms & Gradebook' : 'Gestión de Aulas & Gradebook',
+    safeSpace: isEn ? 'Safe Space (Confidential Practice)' : 'Safe Space (Práctica Confidencial)',
+    socraticTutor: isEn ? '9-Step Socratic Tutor' : 'Tutor Socrático de 9 Pasos',
+    inclusion: isEn ? 'Linguistic Inclusion (Newcomers)' : 'Inclusión Lingüística (Newcomers)',
+    extension: isEn ? 'LMS Extension (Canvas, Moodle, Classroom)' : 'Extensión LMS (Canvas, Moodle, Classroom)',
+    lti: isEn ? 'LTI 1.3 Advantage Integration' : 'Integración LTI 1.3 Advantage',
+    howGrading: isEn ? 'How Grading Works (Workflow)' : 'Cómo Funciona la Evaluación (Grading)',
+    apps: isEn ? 'Tablets, Mobile Apps & Chromebooks' : 'Tablets, Móviles y Chromebooks',
+    catalog: isEn ? 'Curricular OER Catalog' : 'Catálogo Curricular OER',
+    col3Title: isEn ? 'Ecosystem & Sovereignty' : 'Ecosistema & Soberanía',
+    opsSpec: isEn ? 'OPS v0.9.6 Open Spec' : 'Especificación OPS v0.9.6',
+    kbSupport: isEn ? 'Knowledge Base & Support' : 'Base de Conocimiento y Soporte',
+    gdpr: isEn ? 'Strict GDPR & FERPA compliance' : 'Cumplimiento estricto RGPD / FERPA',
+    sovereignty: isEn ? 'EU & US Data Sovereignty' : 'Soberanía de Datos UE / EE.UU.',
+    noAds: isEn ? 'Zero tolerance to advertising' : 'Tolerancia Cero a la Publicidad',
+};
 ---
-<footer class="bg-dark text-slate-400 py-12 border-t border-slate-800">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div class="col-span-1 md:col-span-1">
-                <span class="text-2xl font-bold text-white">Colab<span class="text-primary">Edu</span></span>
-                <p class="mt-4 text-sm">Tu copiloto de inteligencia pedagógica.</p>
+<footer class="bg-white border-t border-slate-200 py-16 text-xs text-slate-500">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-2 md:grid-cols-4 gap-10 mb-10">
+        <div>
+            <div class="font-black text-slate-900 text-base mb-3">ColabEdu.net</div>
+            <p class="text-slate-500 leading-relaxed mb-4">
+                {t.desc}
+            </p>
+            <div class="text-[11px] text-slate-400 font-medium mb-4">
+                &copy; {copyrightYear} ColabEdu Technologies. {t.rights}
             </div>
-            <div>
-                <h4 class="text-white font-semibold mb-4">Soluciones</h4>
-                <ul class="space-y-2 text-sm">
-                    <li><a href={`/${lang}/`} class="hover:text-white">Para Docentes</a></li>
-                    <li><a href={`/${lang}/student`} class="hover:text-white">Para Estudiantes</a></li>
-                    <li><a href={`/${lang}/school`} class="hover:text-white">Para Colegios</a></li>
-                </ul>
+
+            <!-- Legal Jurisdictions & Presence (GDPR / FERPA) -->
+            <div id="footer-jurisdictions-container" class="pt-3 border-t border-slate-100 flex flex-col gap-2 text-[11px] text-slate-500">
+                <!-- EU / Spain (GDPR) -->
+                <div id="loc-eu-madrid" class="flex items-start gap-2" data-region="eu">
+                    <span class="inline-flex items-center gap-0.5 text-base shrink-0 leading-none pt-0.5" title="Unión Europea · España (RGPD)">
+                        <span>🇪🇺</span>
+                        <span>🇪🇸</span>
+                    </span>
+                    <div class="flex flex-col">
+                        <span class="font-semibold text-slate-700">Madrid, España</span>
+                        <span class="text-[10px] text-teal-700 font-medium">Unión Europea · Área RGPD / GDPR</span>
+                    </div>
+                </div>
+
+                <!-- US / California (FERPA) -->
+                <div id="loc-us-cupertino" class="flex items-start gap-2" data-region="us">
+                    <span class="inline-flex items-center gap-1 text-base shrink-0 leading-none pt-0.5" title="United States · California (FERPA)">
+                        <span>🇺🇸</span>
+                        <!-- California Republic Flag Badge -->
+                        <span class="inline-flex items-center justify-center w-5 h-3.5 bg-amber-50 border border-slate-300 rounded-[2px] overflow-hidden text-[8px] font-black text-red-600 relative" title="California Republic">
+                            <span class="absolute top-[1px] left-[2px] text-[7px] text-red-600 leading-none">★</span>
+                            <span class="text-[7px] font-bold text-amber-950 ml-1.5 leading-none">CA</span>
+                            <span class="absolute bottom-0 inset-x-0 h-[1.5px] bg-red-600"></span>
+                        </span>
+                    </span>
+                    <div class="flex flex-col">
+                        <span class="font-semibold text-slate-700">Cupertino, CA</span>
+                        <span class="text-[10px] text-blue-700 font-medium">Silicon Valley · Área FERPA / COPPA</span>
+                    </div>
+                </div>
             </div>
-            <div>
-                <h4 class="text-white font-semibold mb-4">Institucional</h4>
-                <ul class="space-y-2 text-sm">
-                    <li><a href={`/${lang}/government`} class="hover:text-white">Para Gobiernos</a></li>
-                    <li><a href={`/${lang}/editorial`} class="hover:text-white">Para Editoriales</a></li>
-                    <li><a href={orgUrl} class="hover:text-white">OPS Standard</a></li>
-                </ul>
-            </div>
-            <div>
-                <h4 class="text-white font-semibold mb-4">Recursos & Ayuda</h4>
-                <ul class="space-y-2 text-sm">
-                    <li><a href={orgNewsUrl} class="hover:text-white">Blog & News</a></li>
-                    <li><a href={supportUrl} class="hover:text-white">Soporte y Ayuda</a></li>
-                    <li><a href={termsUrl} class="hover:text-white">{termsLabel}</a></li>
-                    <li><a href={termsUrl} class="hover:text-white">{privacyLabel}</a></li>
-                </ul>
-            </div>
+            
+            <script is:inline>
+                (function() {
+                    try {
+                        const container = document.getElementById('footer-jurisdictions-container');
+                        const locEu = document.getElementById('loc-eu-madrid');
+                        const locUs = document.getElementById('loc-us-cupertino');
+                        if (!container || !locEu || !locUs) return;
+
+                        // Detección de zona geográfica por TimeZone / Locale
+                        const tz = (Intl.DateTimeFormat().resolvedOptions().timeZone || '').toLowerCase();
+                        const isAmerica = tz.includes('america') || tz.includes('us/') || tz.includes('pacific') || tz.includes('central') || tz.includes('mountain') || tz.includes('eastern');
+                        const isEurope = tz.includes('europe') || tz.includes('madrid') || tz.includes('paris') || tz.includes('berlin') || tz.includes('london') || tz.includes('rome');
+
+                        if (isAmerica && !isEurope) {
+                            // En EE.UU./América, Cupertino (FERPA) aparece primero
+                            container.insertBefore(locUs, locEu);
+                        } else {
+                            // En Europa o resto del mundo por defecto, Madrid (RGPD) aparece primero
+                            container.insertBefore(locEu, locUs);
+                        }
+                    } catch (_) {}
+                })();
+            </script>
         </div>
-        <div class="mt-12 pt-8 border-t border-slate-800 text-center text-xs">
-            &copy; {copyrightYear} ColabEdu Inc. Todos los derechos reservados.
+
+        <div>
+            <div class="font-bold text-slate-900 mb-3 text-sm">{t.col1Title}</div>
+            <ul class="space-y-2">
+                <li><a href={`/${lang}/institutions`} class="hover:text-blue-600 transition-colors font-medium text-slate-900">{t.institutions}</a></li>
+                <li><a href={`/${lang}/pisa-diagnostics`} class="hover:text-indigo-600 transition-colors font-medium text-indigo-700">{isEn ? 'Regional & PISA Diagnostics' : 'Diagnóstico Regional & PISA'}</a></li>
+                <li><a href={`/${lang}/sponsored`} class="hover:text-blue-600 transition-colors text-amber-700 font-medium">{isEn ? 'Sponsored Memberships & Grants' : 'Membresías Esponsorizadas & Becas'}</a></li>
+                <li><a href={`/${lang}/fellows`} class="hover:text-teal-600 transition-colors text-teal-700 font-medium">{isEn ? 'ColabEdu Fellows Program' : 'Programa ColabEdu Fellows'}</a></li>
+                <li><a href={`/${lang}/memberships`} class="hover:text-blue-600 transition-colors">{isEn ? 'Memberships (Teachers, Students & Families)' : 'Membresías (Docentes, Alumnos y Familias)'}</a></li>
+                <li><a href={`/${lang}/catalogs`} class="hover:text-blue-600 transition-colors font-medium text-slate-700">{isEn ? 'The 3 Catalogs (Assemblies & OER)' : 'Los 3 Catálogos (Ensamblados & OER)'}</a></li>
+                <li><a href={`/${lang}/catalog-philosophy`} class="hover:text-blue-600 transition-colors">{t.philosophy}</a></li>
+                <li><a href={`/${lang}/vision`} class="hover:text-blue-600 transition-colors">{t.vision}</a></li>
+                <li><a href={`/${lang}/grounding`} class="hover:text-blue-600 transition-colors">{t.grounding}</a></li>
+            </ul>
+        </div>
+
+        <div>
+            <div class="font-bold text-slate-900 mb-3 text-sm">{t.col2Title}</div>
+            <ul class="space-y-2">
+                <li><a href={`/${lang}/interactive-lessons`} class="hover:text-blue-600 transition-colors">{t.interactiveLessons}</a></li>
+                <li><a href={`/${lang}/interactive-exams`} class="hover:text-blue-600 transition-colors">{t.interactiveExams}</a></li>
+                <li><a href={`/${lang}/classroom-gradebook`} class="hover:text-blue-600 transition-colors">{t.gradebook}</a></li>
+                <li><a href={`/${lang}/socratic-tutor`} class="hover:text-blue-600 transition-colors">{t.socraticTutor}</a></li>
+                <li><a href={`/${lang}/safe-space`} class="hover:text-blue-600 transition-colors">{t.safeSpace}</a></li>
+                <li><a href={`/${lang}/how-grading-works`} class="hover:text-blue-600 transition-colors">{t.howGrading}</a></li>
+                <li><a href={`/${lang}/cross-competencies`} class="hover:text-teal-700 transition-colors font-medium text-teal-800">{isEn ? 'Cross-Competencies & Shadow Audits' : 'Competencias Cruzadas & Shadow Audits'}</a></li>
+                <li><a href={`/${lang}/linguistic-inclusion`} class="hover:text-blue-600 transition-colors">{t.inclusion}</a></li>
+                <li><a href={`/${lang}/apps`} class="hover:text-blue-600 transition-colors">{t.apps}</a></li>
+                <li><a href={catalogUrl} target="_blank" rel="noopener noreferrer" class="hover:text-blue-600 transition-colors">{t.catalog}</a></li>
+            </ul>
+        </div>
+
+        <div>
+            <div class="font-bold text-slate-900 mb-3 text-sm">{t.col3Title}</div>
+            <ul class="space-y-2">
+                <li><a href={`/${lang}/ops-specification`} class="hover:text-blue-600 transition-colors font-medium text-slate-700">{t.opsSpec}</a></li>
+                <li><a href={`/${lang}/data-sovereignty-privacy`} class="hover:text-blue-600 transition-colors font-medium text-blue-700 flex items-center gap-1.5"><i class="fas fa-shield-halved text-[11px] text-blue-600"></i><span>{t.gdpr}</span></a></li>
+                <li><a href={`/${lang}/data-sovereignty-privacy#los-tres-pilares`} class="hover:text-teal-700 transition-colors text-slate-600">{t.sovereignty}</a></li>
+                <li><a href={`/${lang}/data-sovereignty-privacy#los-tres-pilares`} class="hover:text-amber-700 transition-colors text-slate-600">{t.noAds}</a></li>
+                <li><a href={`/${lang}/editorial`} class="hover:text-amber-700 transition-colors font-medium text-slate-500 text-[11px]">{isEn ? 'Publishing IP & Blind Referencing' : 'Fondos Editoriales & Referencialidad Ciega'}</a></li>
+                <li><a href={orgUrl} target="_blank" rel="noopener noreferrer" class="hover:text-blue-600 transition-colors">Proyecto ColabEdu.org &rarr;</a></li>
+                <li>
+                    <button
+                        type="button"
+                        data-open-support-modal
+                        data-support-tab="chat"
+                        data-support-lang={lang}
+                        class="hover:text-blue-600 transition-colors text-left flex items-center gap-1.5 cursor-pointer text-slate-500 hover:text-slate-900"
+                    >
+                        <span>{t.kbSupport}</span>
+                        <i class="fas fa-headset text-[10px] text-teal-600"></i>
+                    </button>
+                </li>
+            </ul>
         </div>
     </div>
 </footer>
+
+<GlobalModalHost lang={lang} />

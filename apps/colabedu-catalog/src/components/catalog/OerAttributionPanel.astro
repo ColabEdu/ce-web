@@ -1,5 +1,6 @@
 ---
 import type { OerSourceItem } from '@/lib/types';
+import { getAppBaseUrl } from '@colabedu/ui-core/navigation';
 
 interface Props {
   sources?: OerSourceItem[];
@@ -47,7 +48,7 @@ if (!sources || sources.length === 0) {
   <!-- Sources Grid -->
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
     {sources.map((src) => {
-      const baseAppUrl = import.meta.env.PUBLIC_COLABEDU_APP_URL || 'https://app.colabedu.org';
+      const baseAppUrl = getAppBaseUrl('app');
       const oerParams = new URLSearchParams();
       oerParams.set('source', src.id);
       if (src.title) oerParams.set('title', src.title);

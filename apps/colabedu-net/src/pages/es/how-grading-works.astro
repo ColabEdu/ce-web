@@ -1,0 +1,573 @@
+---
+// src/pages/es/how-grading-works.astro
+// Guía completa del flujo de evaluación asistida por IA (Grading V2):
+// 1. Descubrimiento/Creación en Catálogo OER
+// 2. Realización y Entregas por el Alumnado (Multi-Página OCR, Audio, Interactivo)
+// 3. Pre-corrección Forense, Edición Docente y Publicación en LMS
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import { appLink } from "@colabedu/ui-core/navigation";
+import "../../styles/global.css";
+
+const catalogUrl = appLink('catalog', '/');
+const appUrl = appLink('app', '/');
+---
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate icon" type="image/png" href="/favicon.png" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluación Asistida por IA | ColabEdu.net</title>
+    <meta name="description" content="Descubre el ciclo integral de evaluación asistida por IA de ColabEdu: búsqueda o creación de ejercicios en el catálogo OER, entrega multimodal de los estudiantes y revisión/edición soberana del profesor antes de publicar al LMS.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+
+    <style is:global>
+        :root {
+            --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+        body {
+            font-family: var(--font-sans);
+            background-color: #FAF9F6;
+            color: #0F172A;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+        .precision-card {
+            background-color: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            border-radius: 1.25rem;
+            box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.03);
+            transition: all 0.2s ease-in-out;
+        }
+        .precision-card:hover {
+            border-color: #CBD5E1;
+            box-shadow: 0 10px 20px -4px rgba(15, 23, 42, 0.05);
+        }
+        .hero-grading {
+            background: linear-gradient(135deg, rgba(238, 242, 255, 0.7) 0%, rgba(240, 253, 250, 0.6) 50%, rgba(254, 243, 199, 0.4) 100%);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            border-radius: 2rem;
+        }
+        /* Fondos cromáticos sutiles para cada fase */
+        .phase-card-1 {
+            background: linear-gradient(180deg, #FFFFFF 0%, rgba(239, 246, 255, 0.45) 100%);
+            border: 1px solid #DBEAFE;
+        }
+        .phase-card-2 {
+            background: linear-gradient(180deg, #FFFFFF 0%, rgba(204, 251, 241, 0.4) 100%);
+            border: 1px solid #99F6E4;
+        }
+        .phase-card-3 {
+            background: linear-gradient(180deg, #FFFFFF 0%, rgba(238, 242, 255, 0.5) 100%);
+            border: 1px solid #E0E7FF;
+        }
+        .ruled-paper {
+            background-color: #FFFDF9;
+            background-image: 
+                linear-gradient(to right, rgba(203, 213, 225, 0.2) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(203, 213, 225, 0.2) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+    </style>
+</head>
+<body class="selection:bg-blue-600 selection:text-white">
+
+    <Header lang="es" />
+
+    <main class="py-12 sm:py-16">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- Hero Title -->
+            <div class="hero-grading p-8 sm:p-14 text-center mb-16">
+                <span class="inline-block text-xs font-mono font-bold tracking-widest uppercase text-blue-900 bg-white/80 px-4 py-1.5 rounded-full border border-blue-300 mb-6">
+                    <i class="fas fa-route mr-1.5 text-blue-600"></i> Ciclo de Vida de la Evaluación Formativa & Competencial
+                </span>
+                <h1 class="text-4xl sm:text-6xl font-black text-slate-950 tracking-tight leading-tight mb-6">
+                    Evaluación Asistida por IA.<br/>
+                    Del catálogo al libro de notas del LMS.
+                </h1>
+                <p class="text-base sm:text-xl text-slate-700 max-w-3xl mx-auto leading-relaxed">
+                    Un flujo transparente y riguroso en 3 etapas: búsqueda o autoría del ejercicio, recogida multimodal de evidencias de los alumnos y supervisión docente soberana con aprobación en 1 clic.
+                </p>
+
+                <!-- 3-Step Flow Pills -->
+                <div class="mt-10 grid grid-cols-1 md:grid-cols-3 gap-4 text-left max-w-4xl mx-auto">
+                    <a href="#etapa-1" class="p-4 rounded-xl bg-white/90 border border-blue-200 shadow-xs hover:border-blue-400 transition flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-lg bg-blue-600 text-white font-mono font-bold flex items-center justify-center text-sm shrink-0">1</span>
+                        <div>
+                            <div class="text-xs font-bold text-slate-900">Elegir o Crear</div>
+                            <div class="text-[11px] text-slate-500">Catálogo OER o Asistente</div>
+                        </div>
+                    </a>
+                    <a href="#etapa-2" class="p-4 rounded-xl bg-white/90 border border-teal-200 shadow-xs hover:border-teal-400 transition flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-lg bg-teal-600 text-white font-mono font-bold flex items-center justify-center text-sm shrink-0">2</span>
+                        <div>
+                            <div class="text-xs font-bold text-slate-900">Entrega del Alumno</div>
+                            <div class="text-[11px] text-slate-500">OCR móvil, audio o app</div>
+                        </div>
+                    </a>
+                    <a href="#etapa-3" class="p-4 rounded-xl bg-white/90 border border-indigo-200 shadow-xs hover:border-indigo-400 transition flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-lg bg-indigo-600 text-white font-mono font-bold flex items-center justify-center text-sm shrink-0">3</span>
+                        <div>
+                            <div class="text-xs font-bold text-slate-900">Revisar y Publicar</div>
+                            <div class="text-[11px] text-slate-500">Edición soberana en LMS</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- ETAPA 1: DESCUBRIR O CREAR EL EJERCICIO -->
+            <div id="etapa-1" class="precision-card phase-card-1 p-8 sm:p-12 mb-16 shadow-sm scroll-mt-24">
+                <div class="flex items-center gap-4 mb-6">
+                    <span class="w-12 h-12 rounded-2xl bg-blue-600 text-white font-mono font-black text-xl flex items-center justify-center shadow-md">
+                        1
+                    </span>
+                    <div>
+                        <span class="text-xs font-mono font-bold text-blue-700 uppercase tracking-widest block">Etapa 1 · Selección Didáctica</span>
+                        <h2 class="text-2xl sm:text-3xl font-black text-slate-900">
+                            Descubrir en el Catálogo OER o Crear con Asistencia IA
+                        </h2>
+                    </div>
+                </div>
+
+                <p class="text-sm text-slate-600 leading-relaxed mb-8">
+                    Todo ejercicio o lección interactiva parte de una especificación curricular declarativa (C2) vinculada a una receta de examen (C1) y al marco normativo oficial (C0/L0). El docente tiene dos vías ágiles para asignar tareas:
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <!-- Vía A: Búsqueda en Catálogo -->
+                    <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-2.5 text-blue-700 font-bold text-sm mb-3">
+                                <i class="fas fa-search"></i>
+                                <span>Opción A: Explorar el Catálogo OER Canónico</span>
+                            </div>
+                            <h4 class="font-black text-slate-900 text-base mb-2">
+                                +65 Repositorios Oficiales Federados
+                            </h4>
+                            <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                                Filtra por país, marco legal (Common Core, LOMLOE, EBAU/PAU, CDE California, AP College Board), materia y nivel. Cada lección ya incluye criterios de evaluación oficiales, respuestas de referencia y misconcepciones analizadas.
+                            </p>
+                            <div class="p-3 bg-white rounded-xl border border-slate-200 font-mono text-[11px] text-slate-700">
+                                <div><span class="text-blue-600 font-bold">Filtro:</span> PAU 2025 · Lengua Castellana</div>
+                                <div><span class="text-slate-400">Receta:</span> Sintaxis de oraciones compuestas (C1)</div>
+                            </div>
+                        </div>
+                        <div class="mt-6 pt-4 border-t border-slate-200">
+                            <a href={catalogUrl} target="_blank" rel="noopener noreferrer" class="text-xs font-bold text-blue-600 hover:text-blue-800 flex items-center gap-1.5">
+                                <span>Abrir Catálogo de Lecciones OER</span>
+                                <i class="fas fa-external-link-alt text-[10px]"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Vía B: Creación con Workflow Curator -->
+                    <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-2.5 text-indigo-700 font-bold text-sm mb-3">
+                                <i class="fas fa-magic"></i>
+                                <span>Opción B: Crear o Importar con Curator</span>
+                            </div>
+                            <h4 class="font-black text-slate-900 text-base mb-2">
+                                De PDF o Texto de Examen a Spec en Minutos
+                            </h4>
+                            <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                                ¿Tienes tu propio examen en PDF o apuntes departamentales? El asistente <strong>Curator</strong> extrae los enunciados, detecta las competencias oficiales y genera la receta evaluativa C1/C2 sin alucinaciones, lista para su validación.
+                            </p>
+                            <div class="p-3 bg-white rounded-xl border border-slate-200 font-mono text-[11px] text-slate-700">
+                                <div><span class="text-indigo-600 font-bold">Modo de Creación:</span> Asistente Visual Web / Lote Institucional</div>
+                                <div><span class="text-slate-400">Verificación:</span> Dual-Audit (White-box + LLM-as-a-Judge)</div>
+                            </div>
+                        </div>
+                        <div class="mt-6 pt-4 border-t border-slate-200">
+                            <a href="/es/grounding" class="text-xs font-bold text-indigo-600 hover:text-indigo-800 flex items-center gap-1.5">
+                                <span>Conocer la Gobernanza de Specs OPS</span>
+                                <i class="fas fa-arrow-right text-[10px]"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Personalización de aula en Etapa 1 -->
+                <div class="bg-amber-50/70 p-5 rounded-xl border border-amber-200">
+                    <div class="flex items-start gap-3">
+                        <i class="fas fa-sliders text-amber-600 text-lg mt-0.5"></i>
+                        <div>
+                            <h5 class="text-xs font-bold text-amber-950 uppercase tracking-wide">Directivas Dinámicas de Aula (`EvaluationOverrides`)</h5>
+                            <p class="text-xs text-amber-900 mt-1 leading-relaxed">
+                                Antes de publicar la tarea a los estudiantes, el docente puede ajustar en 1 segundo directivas personalizadas para su grupo: bonificar variantes lingüísticas locales, fijar tolerancia ortográfica adaptada a estudiantes NEAE/dislexia o exigir un tiempo mínimo de exposición oral.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ETAPA 2: REALIZACIÓN Y ENTREGAS POR LOS ESTUDIANTES -->
+            <div id="etapa-2" class="precision-card phase-card-2 p-8 sm:p-12 mb-16 shadow-sm scroll-mt-24">
+                <div class="flex items-center gap-4 mb-6">
+                    <span class="w-12 h-12 rounded-2xl bg-teal-600 text-white font-mono font-black text-xl flex items-center justify-center shadow-md">
+                        2
+                    </span>
+                    <div>
+                        <span class="text-xs font-mono font-bold text-teal-700 uppercase tracking-widest block">Etapa 2 · Evidencias de Aprendizaje</span>
+                        <h2 class="text-2xl sm:text-3xl font-black text-slate-900">
+                            Cómo Realizan y Entregan los Estudiantes (C3)
+                        </h2>
+                    </div>
+                </div>
+
+                <p class="text-sm text-slate-600 leading-relaxed mb-8">
+                    ColabEdu no obliga a reemplazar el papel y bolígrafo ni impone interfaces rígidas. La entrega del alumno (C3) soporta las modalidades auténticas del aula:
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <!-- Modalidad 1: Examen Manuscrito + OCR Móvil -->
+                    <div class="p-6 rounded-2xl ruled-paper border border-slate-300 flex flex-col justify-between">
+                        <div>
+                            <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center text-lg mb-4">
+                                <i class="fas fa-pen-nib"></i>
+                            </div>
+                            <span class="text-[10px] font-mono font-bold text-blue-700 uppercase tracking-wider block mb-1">
+                                Modalidad Tradicional
+                            </span>
+                            <h4 class="font-black text-slate-900 text-base mb-2">Examen Manuscrito & OCR Móvil</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                Los alumnos escriben a mano en sus folios de examen. Con la tablet o móvil del centro/aula, se capturan las hojas en alta resolución. El motor de visión segmenta páginas, trazos matemáticos, diagramas y caligrafías complejas.
+                            </p>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-200 text-[11px] font-mono text-slate-500">
+                            Multi-página · Des-inclinación automática
+                        </div>
+                    </div>
+
+                    <!-- Modalidad 2: Exámenes Orales y Laboratorio de Voz -->
+                    <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col justify-between">
+                        <div>
+                            <div class="w-10 h-10 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center text-lg mb-4">
+                                <i class="fas fa-microphone"></i>
+                            </div>
+                            <span class="text-[10px] font-mono font-bold text-purple-700 uppercase tracking-wider block mb-1">
+                                Lenguas & Oratoria
+                            </span>
+                            <h4 class="font-black text-slate-900 text-base mb-2">Grabación de Voz & Pruebas Orales</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                En idiomas extranjeros o presentaciones de debate, el estudiante graba su respuesta oral. El sistema transcribe con marcas de tiempo fonéticas, evaluando fluidez, vocabulario formal y coherencia discursiva.
+                            </p>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-200 text-[11px] font-mono text-slate-500">
+                            Audio sin compresión · Análisis fonético
+                        </div>
+                    </div>
+
+                    <!-- Modalidad 3: Lección Interactiva en App/LMS -->
+                    <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col justify-between">
+                        <div>
+                            <div class="w-10 h-10 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center text-lg mb-4">
+                                <i class="fas fa-laptop-code"></i>
+                            </div>
+                            <span class="text-[10px] font-mono font-bold text-teal-700 uppercase tracking-wider block mb-1">
+                                Práctica Digital
+                            </span>
+                            <h4 class="font-black text-slate-900 text-base mb-2">Lecciones Interactivas A2UI</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                Directamente embebido en Canvas/Moodle vía LTI 1.3 o en la app web/móvil: respuestas de opción razonada, editor matemático KaTeX, ordenación cronológica y diálogos socráticos de 9 pasos.
+                            </p>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-200 text-[11px] font-mono text-slate-500">
+                            100% interactivo · Cero distracciones
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-100 border border-slate-200 text-xs text-slate-600 flex items-center justify-between">
+                    <span><i class="fas fa-shield-alt text-teal-600 mr-2"></i><strong>Safe Space Confidencial:</strong> Los borradores y ensayos preliminares no generan notas punitivas ni quedan en expedientes oficiales.</span>
+                    <a href="/es/safe-space" class="text-teal-700 font-bold hover:underline shrink-0 ml-4">Ver Safe Space &rarr;</a>
+                </div>
+            </div>
+
+            <!-- ETAPA 3: REVISIÓN DOCENTE, EDICIÓN Y PUBLICACIÓN AL LMS -->
+            <div id="etapa-3" class="precision-card phase-card-3 p-8 sm:p-12 mb-16 shadow-sm scroll-mt-24">
+                <div class="flex items-center gap-4 mb-6">
+                    <span class="w-12 h-12 rounded-2xl bg-indigo-600 text-white font-mono font-black text-xl flex items-center justify-center shadow-md">
+                        3
+                    </span>
+                    <div>
+                        <span class="text-xs font-mono font-bold text-indigo-700 uppercase tracking-widest block">Etapa 3 · Supervisión y Aprobación</span>
+                        <h2 class="text-2xl sm:text-3xl font-black text-slate-900">
+                            Pre-corrección, Edición Soberana y Envío al LMS
+                        </h2>
+                    </div>
+                </div>
+
+                <p class="text-sm text-slate-600 leading-relaxed mb-8">
+                    La inteligencia artificial <strong>jamás pone la nota final de forma autónoma</strong>. El docente mantiene el 100% de la autoridad pedagógica. Así es el flujo dentro del SpeedGrader de Canvas, el libro de Moodle o el panel de ColabEdu:
+                </p>
+
+                <!-- Simulación interactiva / Visual del flujo de revisión -->
+                <div class="p-6 rounded-2xl bg-slate-900 text-white mb-8 border border-slate-800">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-4 mb-6">
+                        <div class="flex items-center gap-3">
+                            <span class="w-3 h-3 rounded-full bg-red-500"></span>
+                            <span class="w-3 h-3 rounded-full bg-amber-500"></span>
+                            <span class="w-3 h-3 rounded-full bg-green-500"></span>
+                            <span class="font-mono text-xs text-slate-400 ml-2">Panel del Profesor · Supervisión Forense Pre-Evaluación</span>
+                        </div>
+                        <span class="text-xs font-mono px-2.5 py-1 rounded bg-indigo-950 text-indigo-300 border border-indigo-800">
+                            Borrador Pendiente de Firma
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Lado izquierdo: Evidencia del alumno + Detección OCR -->
+                        <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                            <div class="flex items-center justify-between text-xs text-slate-400 font-mono mb-2">
+                                <span>Evidencia Alumno (OCR)</span>
+                                <span class="text-teal-400">Confianza: 99.2%</span>
+                            </div>
+                            <div class="p-3 bg-slate-900/90 rounded-lg font-mono text-xs text-slate-300 leading-relaxed">
+                                "El sujeto de la oración es el sintagma nominal <em>'los vientos del norte'</em>. El verbo es <em>'azotaban'</em>, núcleo del predicado verbal..."
+                            </div>
+                            <div class="mt-3 flex items-center gap-2 text-[11px] text-slate-400">
+                                <i class="fas fa-check-circle text-emerald-400"></i>
+                                <span>Citas de texto reconocidas y alineadas con la rúbrica</span>
+                            </div>
+                        </div>
+
+                        <!-- Lado derecho: Desglose editable por el profesor -->
+                        <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between text-xs text-slate-400 font-mono mb-2">
+                                    <span>Borrador Propuesto por Copiloto</span>
+                                    <span class="text-amber-400 font-bold">8.75 / 10</span>
+                                </div>
+                                <div class="space-y-2 text-xs">
+                                    <div class="flex items-center justify-between p-2 rounded bg-slate-900 text-slate-300">
+                                        <span>Rigor sintáctico (C2.1):</span>
+                                        <span class="font-mono text-emerald-400 font-bold">4.0 / 4.0</span>
+                                    </div>
+                                    <div class="flex items-center justify-between p-2 rounded bg-slate-900 text-slate-300">
+                                        <span>Justificación teórica (C2.2):</span>
+                                        <span class="font-mono text-emerald-400 font-bold">3.0 / 3.0</span>
+                                    </div>
+                                    <div class="flex items-center justify-between p-2 rounded bg-slate-900 text-slate-300">
+                                        <span>Penalización ortográfica (C1):</span>
+                                        <span class="font-mono text-amber-400 font-bold">-0.25 (1 tilde)</span>
+                                    </div>
+                                    <!-- Mapeo competencial y PISA en vivo -->
+                                    <div class="p-2 rounded bg-indigo-950/60 border border-indigo-900/60 text-[11px] text-slate-300 flex items-center justify-between">
+                                        <span class="text-indigo-300 font-mono font-semibold">Competencia: CCL2 / CCEC1</span>
+                                        <span class="font-mono text-teal-300 font-bold">Nivel PISA: 5 (Avanzado)</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-4 pt-3 border-t border-slate-800 text-[11px] text-teal-300 flex items-center justify-between">
+                                <span class="flex items-center gap-1.5">
+                                    <i class="fas fa-book-bookmark"></i>
+                                    <span>BOE RD 534/2024 Criterio 2.3</span>
+                                </span>
+                                <span class="font-mono text-[10px] text-slate-400">Rúbrica C0/C1</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Botones de acción del docente -->
+                    <div class="mt-6 pt-4 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <div class="text-xs text-slate-400">
+                            <i class="fas fa-pencil mr-1 text-slate-300"></i>
+                            El docente puede modificar notas, cambiar rúbricas o añadir comentarios personales afectivos.
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <button class="px-4 py-2 text-xs font-bold text-slate-300 hover:text-white bg-slate-800 rounded-lg">
+                                Editar Feedback
+                            </button>
+                            <button class="px-5 py-2 text-xs font-black text-white bg-emerald-600 hover:bg-emerald-500 rounded-lg shadow-sm flex items-center gap-1.5">
+                                <i class="fas fa-paper-plane"></i>
+                                <span>Aprobar y Publicar en Canvas LMS</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3 Garantías del proceso de supervisión -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                    <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+                        <div class="font-black text-slate-900 text-sm mb-1">
+                            <i class="fas fa-edit text-blue-600 mr-1.5"></i> Control Total del Docente
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Cualquier puntuación o sugerencia de feedback puede sobreescribirse con el teclado en 1 segundo antes de su envío.
+                        </p>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+                        <div class="font-black text-slate-900 text-sm mb-1">
+                            <i class="fas fa-sync text-teal-600 mr-1.5"></i> Sincronización Inmediata
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Vía LTI 1.3 AGS o mediante la extensión del navegador, las notas y comentarios aparecen de inmediato en el SpeedGrader o Moodle.
+                        </p>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+                        <div class="font-black text-slate-900 text-sm mb-1">
+                            <i class="fas fa-shield-halved text-indigo-600 mr-1.5"></i> Blindaje Anti-Reclamación
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Si una familia o alumno pide revisión, el dictamen muestra la evidencia exacta manuscrita, el fragmento de la ley y el cálculo objetivo.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- EVALUACIÓN POR COMPETENCIAS, DESCRIPTORES OPERATIVOS Y NIVELES PISA -->
+                <div class="p-6 sm:p-8 rounded-2xl bg-gradient-to-br from-indigo-50/90 via-blue-50/50 to-teal-50/40 border border-indigo-200">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="w-10 h-10 rounded-xl bg-indigo-700 text-white flex items-center justify-center text-lg shadow-sm">
+                            <i class="fas fa-chart-pie"></i>
+                        </span>
+                        <div>
+                            <span class="text-[11px] font-mono font-bold text-indigo-700 uppercase tracking-widest block">Más allá de la nota numérica</span>
+                            <h3 class="text-xl font-black text-slate-900">Evaluación Competencial Multidimensional & Niveles PISA</h3>
+                        </div>
+                    </div>
+
+                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mb-6">
+                        ColabEdu no se limita a corregir puntos de un examen tradicional. Con cada entrega, el motor <strong>Grading V2</strong> mapea simultáneamente el desempeño del estudiante contra los <strong>Descriptores Operativos de Competencia (LOMLOE, NGSS, CCSS)</strong> y la escala de competencia internacional <strong>PISA de la OCDE (Niveles 1 a 6)</strong>:
+                    </p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Perfil Competencial Transversal -->
+                        <div class="p-4 rounded-xl bg-white border border-indigo-100 shadow-xs">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-xs font-bold text-slate-900 flex items-center gap-1.5">
+                                    <i class="fas fa-brain text-indigo-600"></i> Competencias Específicas & Transversales
+                                </span>
+                                <span class="text-[10px] font-mono bg-indigo-100 text-indigo-800 px-2 py-0.5 rounded font-bold">LOMLOE / IB</span>
+                            </div>
+                            <p class="text-xs text-slate-600 leading-relaxed mb-3">
+                                Cada ejercicio tiene asociados descriptores de salida (p.ej. <em>CCL2, STEM1, CPSAA4</em>). El sistema alimenta automáticamente la diana competencial del alumno, registrando su progreso a lo largo de las semanas sin trabajo administrativo adicional para el profesor.
+                            </p>
+                            <div class="flex flex-wrap gap-1.5 font-mono text-[10px]">
+                                <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-700">CCL: Comunicación Lingüística</span>
+                                <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-700">CP: Plurilingüe</span>
+                                <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-700">CCEC: Conciencia Cultural</span>
+                            </div>
+                        </div>
+
+                        <!-- Niveles PISA / OCDE -->
+                        <div class="p-4 rounded-xl bg-white border border-indigo-100 shadow-xs">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-xs font-bold text-slate-900 flex items-center gap-1.5">
+                                    <i class="fas fa-globe-americas text-teal-600"></i> Niveles de Rendimiento PISA (OCDE)
+                                </span>
+                                <span class="text-[10px] font-mono bg-teal-100 text-teal-800 px-2 py-0.5 rounded font-bold">PISA Level 1 - 6</span>
+                            </div>
+                            <p class="text-xs text-slate-600 leading-relaxed mb-3">
+                                Diagnóstico psicométrico de habilidades de orden superior: si el alumno aplica razonamiento crítico contextualizado (Nivel 5-6), si interpreta datos explícitos con andamiaje (Nivel 3-4) o si requiere refuerzo en competencias básicas (Nivel 1-2).
+                            </p>
+                            <div class="flex flex-wrap gap-1.5 font-mono text-[10px]">
+                                <span class="px-2 py-0.5 rounded bg-teal-50 text-teal-800 border border-teal-200">Lectura Crítica</span>
+                                <span class="px-2 py-0.5 rounded bg-teal-50 text-teal-800 border border-teal-200">Razonamiento Científico</span>
+                                <span class="px-2 py-0.5 rounded bg-teal-50 text-teal-800 border border-teal-200">Resolución Creativa</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Radar / Telemetría pedagógica para el docente -->
+                    <div class="mt-4 p-3.5 rounded-xl bg-white/80 border border-indigo-100 text-xs text-slate-600 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-bullseye text-indigo-600"></i>
+                            <span><strong>Diagnóstico Temprano & Auditorías Shadow:</strong> Detecta lagunas competenciales de la cohorte antes de las pruebas externas de evaluación o selectividad.</span>
+                        </div>
+                        <div class="flex items-center gap-3 shrink-0">
+                            <a href="/es/cross-competencies" class="text-teal-700 font-bold hover:underline text-[11px] font-mono flex items-center gap-1">
+                                <i class="fas fa-network-wired text-[10px]"></i>
+                                <span>Sistema de Competencias Cruzadas &rarr;</span>
+                            </a>
+                            <span class="text-slate-300">|</span>
+                            <a href="/es/grounding" class="text-indigo-700 font-bold hover:underline text-[11px] font-mono">
+                                Ver capas C0 & L0 &rarr;
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- COMPARATIVA: CORRECCIÓN MANUAL VS. GRADING V2 -->
+            <div class="precision-card p-8 sm:p-10 mb-16 bg-white border-slate-300">
+                <div class="text-center max-w-2xl mx-auto mb-8">
+                    <span class="text-xs font-mono font-bold text-slate-500 uppercase tracking-widest block mb-2">
+                        Impacto en la Calidad de Vida Docente
+                    </span>
+                    <h3 class="text-2xl sm:text-3xl font-black text-slate-900">
+                        Corrección Manual vs. Flujo Asistido ColabEdu
+                    </h3>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs text-slate-700">
+                        <thead class="bg-slate-100 text-slate-900 font-bold uppercase font-mono text-[11px]">
+                            <tr>
+                                <th class="p-3.5 rounded-l-xl">Aspecto</th>
+                                <th class="p-3.5">Corrección Manual Tradicional</th>
+                                <th class="p-3.5 bg-blue-50/80 text-blue-900 rounded-r-xl">Con Evaluación Asistida por IA</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200">
+                            <tr>
+                                <td class="p-3.5 font-bold">Tiempo por lote de 30 exámenes</td>
+                                <td class="p-3.5 text-slate-500">6 a 8 horas de fin de semana</td>
+                                <td class="p-3.5 bg-blue-50/30 text-blue-950 font-bold">45 minutos de supervisión cualitativa</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3.5 font-bold">Feedback para el estudiante</td>
+                                <td class="p-3.5 text-slate-500">Número rojo y 2 palabras por falta de tiempo</td>
+                                <td class="p-3.5 bg-blue-50/30 text-blue-950 font-bold">Rúbrica detallada + consejos constructivos personalizados</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3.5 font-bold">Justificación legal de la nota</td>
+                                <td class="p-3.5 text-slate-500">Memoria del docente expuesta a disputas</td>
+                                <td class="p-3.5 bg-blue-50/30 text-blue-950 font-bold">Trazabilidad criptográfica L0 a boletín oficial (BOE/CDE)</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3.5 font-bold">Registro en el LMS</td>
+                                <td class="p-3.5 text-slate-500">Picar notas a mano una por una</td>
+                                <td class="p-3.5 bg-blue-50/30 text-blue-950 font-bold">Sincronización LTI 1.3 Advantage o Extensión 1-Clic</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- CTA FINAL -->
+            <div class="p-8 sm:p-12 rounded-2xl bg-slate-900 text-white text-center">
+                <h3 class="text-2xl sm:text-3xl font-black mb-3">Recupera tus fines de semana sin perder rigor</h3>
+                <p class="text-slate-300 text-sm max-w-xl mx-auto mb-6">
+                    Únete a los docentes que ya utilizan ColabEdu para evaluar con justicia, precisión psicométrica y calidez pedagógica.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <a href="/es/extension" class="px-7 py-4 text-base font-extrabold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-all shadow-md flex items-center justify-center gap-2">
+                        <i class="fas fa-puzzle-piece text-lg"></i>
+                        <span>Probar la Extensión LMS (Gratis)</span>
+                    </a>
+                    <a href="/es/grounding" class="px-6 py-4 text-sm font-bold text-slate-300 hover:text-white border border-slate-700 rounded-xl transition-colors flex items-center justify-center">
+                        Ver Arquitectura de 5 Capas
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <Footer lang="es" />
+
+</body>
+</html>

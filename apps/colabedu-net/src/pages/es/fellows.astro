@@ -1,0 +1,333 @@
+---
+// src/pages/es/fellows.astro
+// Programa ColabEdu Education Fellows: Embajadores Pedagógicos, Prácticas Universitarias e Impacto Cívico
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import { appLink } from "@colabedu/ui-core/navigation";
+import "../../styles/global.css";
+
+const lang = 'es';
+const catalogUrl = appLink('catalog', '/');
+const appUrl = appLink('app', '/');
+const supportUrl = appLink('support', '/');
+---
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate icon" type="image/png" href="/favicon.png" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programa ColabEdu Fellows | Prácticas, Educación Abierta e Impacto Social</title>
+    <meta name="description" content="Únete al programa ColabEdu Education Fellows: prácticas universitarias, TFM, digitalización de currículos OER y acompañamiento pedagógico a colegios públicos y fundaciones.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+
+    <style is:global>
+        :root {
+            --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+        body {
+            font-family: var(--font-sans);
+            background-color: #FAF9F6;
+            color: #0F172A;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+        .precision-card {
+            background-color: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            border-radius: 1.25rem;
+            box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.03);
+            transition: all 0.2s ease-in-out;
+        }
+        .precision-card:hover {
+            border-color: #CBD5E1;
+            box-shadow: 0 10px 20px -4px rgba(15, 23, 42, 0.05);
+        }
+        .hero-fellows {
+            background: linear-gradient(135deg, rgba(240, 253, 250, 0.7) 0%, rgba(254, 243, 199, 0.4) 50%, rgba(238, 242, 255, 0.4) 100%);
+            border: 1px solid rgba(204, 251, 241, 0.8);
+            border-radius: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body class="selection:bg-teal-600 selection:text-white">
+
+    <Header lang={lang} />
+
+    <main class="py-12 sm:py-16">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- Hero Section -->
+            <div class="hero-fellows p-8 sm:p-14 text-center mb-16 shadow-xs">
+                <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-teal-100/90 border border-teal-300 text-teal-900 text-xs font-bold shadow-2xs mb-6">
+                    <span class="flex h-2 w-2 rounded-full bg-teal-600"></span>
+                    <span>Convocatoria Abierta · Prácticas Universitarias, TFM y Liderazgo EdTech</span>
+                </span>
+                <h1 class="text-4xl sm:text-6xl font-black text-slate-950 tracking-tight leading-tight mb-6">
+                    Programa <span class="text-teal-700">ColabEdu Education Fellows</span>.<br/>
+                    Tecnología cívica para que ningún chaval se quede atrás.
+                </h1>
+                <p class="text-lg sm:text-xl text-slate-700 font-normal leading-relaxed max-w-3xl mx-auto mb-8">
+                    Buscamos estudiantes de Máster de Formación del Profesorado, Pedagogía, EdTech y Políticas Educativas. Creemos en <strong>construir colaborativamente con instituciones aliadas</strong>: nuestros Fellows son <strong>embajadores pedagógicos</strong> que dialogan entre iguales con centros públicos, fundaciones y distritos para codiseñar el impacto en el aula y acelerar la digitalización de currículos abiertos.
+                </p>
+
+                <div class="flex flex-wrap items-center justify-center gap-4">
+                    <a
+                        href={`mailto:fellows@colabedu.org?subject=${encodeURIComponent("Candidatura Programa ColabEdu Education Fellows")}&body=${encodeURIComponent("Hola equipo de ColabEdu,\n\nMe gustaría postularme al programa ColabEdu Education Fellows. Adjunto mi universidad, titulación y motivación pedagógica:\n\n- Universidad / Máster:\n- Especialidad (Matemáticas, Lengua, Ciencias, EdTech, Políticas Públicas):\n- Motivación principal:\n- Teléfono / LinkedIn:\n\nGracias.")}`}
+                        class="px-6 py-3.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-black text-sm shadow-md hover:shadow-lg transition-all flex items-center gap-2"
+                    >
+                        <i class="fas fa-paper-plane text-xs"></i>
+                        <span>Postular como Education Fellow</span>
+                    </a>
+                    <a
+                        href="/es/sponsored"
+                        class="px-5 py-3.5 rounded-xl bg-white hover:bg-slate-50 text-slate-800 font-bold text-sm border border-slate-300 shadow-xs transition-colors flex items-center gap-2"
+                    >
+                        <i class="fas fa-hand-holding-dollar text-amber-600 text-xs"></i>
+                        <span>Conocer Programas de Esponsorización</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Tesis Fundamental: Construcción Colaborativa vs. Venta Transaccional -->
+            <div class="bg-white rounded-3xl border border-slate-200 p-8 sm:p-12 mb-16 shadow-xs">
+                <div class="max-w-3xl mx-auto text-center mb-10">
+                    <span class="text-xs font-mono font-bold uppercase tracking-wider text-teal-700 bg-teal-50 px-3 py-1 rounded-full border border-teal-200">
+                        Nuestra Filosofía
+                    </span>
+                    <h2 class="text-2xl sm:text-4xl font-black text-slate-900 mt-3">
+                        Creemos en construir colaborativamente con instituciones aliadas
+                    </h2>
+                    <p class="text-sm sm:text-base text-slate-600 mt-3 leading-relaxed">
+                        La transformación educativa sostenible no se produce mediante dinámicas de venta de software. Se construye mediante <strong>alianzas de codiseño pedagógico entre iguales, acompañamiento cercano al profesorado y un estricto rigor normativo</strong>.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200">
+                        <div class="w-10 h-10 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center text-lg mb-3">
+                            <i class="fas fa-handshake-angle"></i>
+                        </div>
+                        <h4 class="font-extrabold text-slate-900 text-sm mb-1.5">Codiseño sin Fricción Transaccional</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            No empujamos licencias ni compromisos forzados. Diagnosticamos las necesidades reales del aula y construimos conjuntamente planes de equidad escolar y digitalización.
+                        </p>
+                    </div>
+
+                    <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200">
+                        <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center text-lg mb-3">
+                            <i class="fas fa-scale-balanced"></i>
+                        </div>
+                        <h4 class="font-extrabold text-slate-900 text-sm mb-1.5">Lenguaje de Aula y Normativa</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Nuestros Fellows dialogan en el lenguaje de los docentes: conocen el BOE, las rúbricas LOMLOE, los estándares AP/IB o Common Core, y comprenden la sobrecarga real de un domingo por la tarde.
+                        </p>
+                    </div>
+
+                    <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200">
+                        <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center text-lg mb-3">
+                            <i class="fas fa-heart-pulse"></i>
+                        </div>
+                        <h4 class="font-extrabold text-slate-900 text-sm mb-1.5">Alianzas Filantrópicas de Alto Impacto</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Conectamos el compromiso social de fundaciones, empresas y entidades públicas con colegios reales, canalizando becas de supercómputo donde mayor es la brecha educativa.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ¿Qué buscamos? Perfil del Education Fellow -->
+            <div class="mb-16">
+                <div class="text-center max-w-2xl mx-auto mb-10">
+                    <span class="text-xs font-mono font-bold uppercase tracking-wider text-slate-400">
+                        Perfil del Candidato
+                    </span>
+                    <h2 class="text-2xl sm:text-3xl font-black text-slate-900 mt-1">
+                        ¿Qué perfil de Fellows buscamos?
+                    </h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="precision-card p-6 sm:p-8 flex gap-4">
+                        <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-xl shrink-0 shadow-xs">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-extrabold text-slate-900 text-base mb-1">Estudiantes de Posgrado y Máster</h3>
+                            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                                Cursando Máster de Formación del Profesorado (Secundaria/Bachillerato), Máster en Tecnología Educativa, Pedagogía, Innovación Curricular o Políticas Públicas de Educación.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="precision-card p-6 sm:p-8 flex gap-4">
+                        <div class="w-12 h-12 rounded-2xl bg-teal-50 text-teal-600 flex items-center justify-center font-bold text-xl shrink-0 shadow-xs">
+                            <i class="fas fa-book-open-reader"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-extrabold text-slate-900 text-base mb-1">Pasión por los Recursos Abiertos (OER)</h3>
+                            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                                Personas que creen en el acceso democrático al conocimiento, en el software de código abierto y en la eliminación de barreras económicas en el material escolar.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="precision-card p-6 sm:p-8 flex gap-4">
+                        <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold text-xl shrink-0 shadow-xs">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-extrabold text-slate-900 text-base mb-1">Curiosidad por la IA Soberana y Socrática</h3>
+                            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                                Interés en cómo los modelos de lenguaje y la visión artificial pueden andamiar el aprendizaje sin dar las soluciones masticadas ni vulnerar la privacidad de los menores.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="precision-card p-6 sm:p-8 flex gap-4">
+                        <div class="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center font-bold text-xl shrink-0 shadow-xs">
+                            <i class="fas fa-users-viewfinder"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-extrabold text-slate-900 text-base mb-1">Compromiso con la Equidad y Newcomers</h3>
+                            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                                Sensibilidad hacia estudiantes en riesgo de exclusión, zonas rurales desfavorecidas y alumnos de origen migrante que necesitan apoyo lingüístico en su idioma materno.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tareas Principales de los Fellows -->
+            <div class="bg-gradient-to-br from-slate-900 to-slate-950 text-white rounded-3xl p-8 sm:p-12 mb-16 shadow-xl relative overflow-hidden">
+                <div class="max-w-3xl mb-10">
+                    <span class="tag-badge bg-teal-900/80 text-teal-300 border border-teal-700 uppercase tracking-wider text-xs mb-3">
+                        Día a Día del Fellow
+                    </span>
+                    <h2 class="text-2xl sm:text-4xl font-black text-white tracking-tight">
+                        ¿Cuáles son las tareas y proyectos reales?
+                    </h2>
+                    <p class="text-slate-300 text-sm sm:text-base mt-2">
+                        Participarás en proyectos tangibles de transformación digital que impactan directamente a miles de docentes y alumnos.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-slate-800/80 p-6 rounded-2xl border border-slate-700">
+                        <div class="text-teal-400 font-mono font-bold text-xs uppercase mb-2">Proyecto 1 · Relación Institucional & Codiseño</div>
+                        <h4 class="text-lg font-bold text-white mb-2">Diálogo con Entidades Colaboradoras & Codiseño de Programas</h4>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Cuando una fundación, ayuntamiento o distrito escolar desea colaborar, el Fellow no realiza una venta: presenta un estudio de necesidades pedagógicas adaptado a la normativa local y codiseña en común cómo el copiloto socrático y las simulaciones interactivas resuelven los retos reales del aula.
+                        </p>
+                    </div>
+
+                    <div class="bg-slate-800/80 p-6 rounded-2xl border border-slate-700">
+                        <div class="text-amber-400 font-mono font-bold text-xs uppercase mb-2">Proyecto 2 · Factoría OER</div>
+                        <h4 class="text-lg font-bold text-white mb-2">Digitalización & Enriquecimiento de Currículos Abiertos</h4>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Transformación de libros de texto libres (OpenStax, INTEF, SEP) en especificaciones interactivas OPS v0.9.6, integrando simulaciones PhET, fórmulas KaTeX manipulables y ejercicios con andamiaje de 9 pasos.
+                        </p>
+                    </div>
+
+                    <div class="bg-slate-800/80 p-6 rounded-2xl border border-slate-700">
+                        <div class="text-blue-400 font-mono font-bold text-xs uppercase mb-2">Proyecto 3 · Acompañamiento de Aula</div>
+                        <h4 class="text-lg font-bold text-white mb-2">Concierge Pedagógico para Profesores</h4>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Acompañamiento a los docentes durante los primeros pilotajes escolares: configuración de rúbricas específicas, extensiones SpeedGrader en Canvas/Moodle y resolución de dudas metodológicas sin fricción informática.
+                        </p>
+                    </div>
+
+                    <div class="bg-slate-800/80 p-6 rounded-2xl border border-slate-700">
+                        <div class="text-emerald-400 font-mono font-bold text-xs uppercase mb-2">Proyecto 4 · Auditoría de Impacto</div>
+                        <h4 class="text-lg font-bold text-white mb-2">Memorias de Retorno Social (RSC) y Telemetría PISA</h4>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Redacción de informes trimestrales para los mecenas y administraciones públicas, documentando horas de tutoría socrática impartidas, reducción de tiempo docente y evolución de la competencia matemática y lectora.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Prácticas Universitarias, TFM y Convenios -->
+            <div class="bg-white rounded-3xl border border-slate-200 p-8 sm:p-12 mb-16 shadow-xs">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                    <div class="lg:col-span-7 space-y-4">
+                        <span class="text-xs font-mono font-bold uppercase tracking-wider text-teal-700 bg-teal-50 px-3 py-1 rounded-full border border-teal-200">
+                            Reconocimiento Académico
+                        </span>
+                        <h3 class="text-2xl sm:text-3xl font-black text-slate-900">
+                            Convenios de Prácticas y Trabajo de Fin de Máster (TFM)
+                        </h3>
+                        <p class="text-sm text-slate-600 leading-relaxed">
+                            El programa ColabEdu Education Fellows se articula formalmente mediante <strong>convenios de cooperación educativa universidad-empresa</strong>. Ofrecemos:
+                        </p>
+                        <ul class="space-y-2 text-xs sm:text-sm text-slate-700">
+                            <li class="flex items-start gap-2">
+                                <i class="fas fa-check-circle text-teal-600 mt-1"></i>
+                                <span><strong>Prácticas Curriculares y Extracurriculares reconocidas</strong> con asignación de créditos ECTS.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fas fa-check-circle text-teal-600 mt-1"></i>
+                                <span><strong>Codirección de Trabajo de Fin de Máster (TFM)</strong> basado en datos reales de aula, evaluación competencial o políticas públicas OER.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fas fa-check-circle text-teal-600 mt-1"></i>
+                                <span><strong>Bolsa de ayuda formativa / remuneración económica</strong> acorde a la dedicación horaria.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fas fa-check-circle text-teal-600 mt-1"></i>
+                                <span><strong>Cantera de Empleo</strong>: incorporación prioritaria al equipo núcleo de operaciones pedagógicas conforme la plataforma escala.</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="lg:col-span-5 bg-slate-50 p-6 rounded-2xl border border-slate-200 text-center space-y-4">
+                        <div class="w-14 h-14 rounded-2xl bg-teal-600 text-white flex items-center justify-center font-bold text-2xl mx-auto shadow-md">
+                            <i class="fas fa-building-columns"></i>
+                        </div>
+                        <h4 class="font-extrabold text-slate-900 text-base">¿Perteneces a una Universidad o Facultad de Educación?</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Firmamos convenios directos con facultades de Educación para acoger cohortes de estudiantes de prácticas e investigadores de tecnología educativa.
+                        </p>
+                        <a
+                            href="mailto:universities@colabedu.org?subject=Convenio%20de%20Practicas%20Universitarias%20ColabEdu%20Fellows"
+                            class="inline-block px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition-colors"
+                        >
+                            Contactar para Convenio Universitario &rarr;
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Call to Action Final -->
+            <div class="text-center max-w-2xl mx-auto py-8">
+                <h3 class="text-2xl sm:text-3xl font-black text-slate-900 mb-3">
+                    Construye el futuro de la educación abierta con nosotros
+                </h3>
+                <p class="text-sm text-slate-600 mb-6">
+                    Envíanos tu currículum o una breve carta de motivación explicándonos por qué te apasiona la educación pública y la tecnología cívica.
+                </p>
+                <a
+                    href={`mailto:fellows@colabedu.org?subject=${encodeURIComponent("Candidatura Programa ColabEdu Education Fellows")}`}
+                    class="px-8 py-4 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-black text-base shadow-md hover:shadow-lg transition-all inline-flex items-center gap-2.5"
+                >
+                    <i class="fas fa-envelope text-sm"></i>
+                    <span>Escribir a fellows@colabedu.org</span>
+                </a>
+            </div>
+
+        </div>
+    </main>
+
+    <Footer lang={lang} />
+
+</body>
+</html>

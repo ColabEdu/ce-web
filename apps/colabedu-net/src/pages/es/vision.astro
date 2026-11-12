@@ -1,0 +1,186 @@
+---
+// src/pages/es/vision.astro
+// Visión, Misión y Principios Fundacionales de ColabEdu
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import { appLink } from "@colabedu/ui-core/navigation";
+import "../../styles/global.css";
+
+const catalogUrl = appLink('catalog', '/');
+const appUrl = appLink('app', '/');
+const supportUrl = appLink('support', '/');
+---
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate icon" type="image/png" href="/favicon.png" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visión y Misión | ColabEdu.net</title>
+    <meta name="description" content="Nuestra visión y misión: devolver el tiempo y la vocación a los docentes, erradicar el fracaso escolar y construir una infraestructura educativa pública soberana.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+
+    <style is:global>
+        :root {
+            --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+        body {
+            font-family: var(--font-sans);
+            background-color: #FAF9F6;
+            color: #0F172A;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+        .precision-card {
+            background-color: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            border-radius: 1.25rem;
+            box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.03);
+            transition: all 0.2s ease-in-out;
+        }
+        .precision-card:hover {
+            border-color: #CBD5E1;
+            box-shadow: 0 10px 20px -4px rgba(15, 23, 42, 0.05);
+        }
+        .hero-vision {
+            background: linear-gradient(135deg, rgba(254, 243, 199, 0.4) 0%, rgba(240, 253, 250, 0.5) 50%, rgba(238, 242, 255, 0.3) 100%);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            border-radius: 2rem;
+        }
+    </style>
+</head>
+<body class="selection:bg-blue-600 selection:text-white">
+
+    <Header lang="es" />
+
+    <main class="py-12 sm:py-16">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- Hero Title -->
+            <div class="hero-vision p-8 sm:p-14 text-center mb-16">
+                <span class="inline-block text-xs font-mono font-bold tracking-widest uppercase text-amber-900 bg-amber-200/80 px-4 py-1.5 rounded-full border border-amber-300 mb-6">
+                    Manifiesto Fundacional ColabEdu
+                </span>
+                <h1 class="text-4xl sm:text-6xl font-black text-slate-950 tracking-tight leading-tight mb-6">
+                    Devolver el tiempo a los profesores.<br/>
+                    Garantizar la dignidad de aprender.
+                </h1>
+                <p class="text-lg sm:text-xl text-slate-700 font-normal leading-relaxed max-w-3xl mx-auto">
+                    Creemos que la tecnología educativa de la última década ha fracasado al convertir las aulas en vertederos de software inconexo. Nuestra misión es construir la infraestructura pública y soberana que una a docentes, alumnos y familias.
+                </p>
+            </div>
+
+            <!-- Visión y Misión: Dos Columnas Clave -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+                
+                <div class="precision-card p-8 bg-white border-blue-200">
+                    <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-xl mb-6">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <span class="text-xs font-mono font-bold text-blue-700 uppercase tracking-wider block mb-1">Nuestra Visión</span>
+                    <h2 class="text-2xl font-black text-slate-900 mb-4">Un aula donde el docente enseña y no padece</h2>
+                    <p class="text-slate-600 text-sm leading-relaxed mb-4">
+                        Visualizamos un sistema educativo donde ningún profesor dedique sus noches ni fines de semana a la burocracia de corregir exámenes manuscritos o rellenar cuadrículas de rúbricas.
+                    </p>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        Un mundo donde cada alumno, sin importar el código postal o si es un recién llegado (newcomer), cuente en casa con un tutor socrático riguroso y paciente que jamás le humille por equivocarse.
+                    </p>
+                </div>
+
+                <div class="precision-card p-8 bg-white border-teal-200">
+                    <div class="w-12 h-12 rounded-xl bg-teal-50 text-teal-700 flex items-center justify-center font-bold text-xl mb-6">
+                        <i class="fas fa-bullseye"></i>
+                    </div>
+                    <span class="text-xs font-mono font-bold text-teal-700 uppercase tracking-wider block mb-1">Nuestra Misión</span>
+                    <h2 class="text-2xl font-black text-slate-900 mb-4">Infraestructura abierta y sostenida en común</h2>
+                    <p class="text-slate-600 text-sm leading-relaxed mb-4">
+                        Desarrollar y mantener la factoría tecnológica continua que digitaliza leyes educativas, convierte libros de texto OER en runtime interactivo y ejecuta pregrading psicométrico sin publicidad ni ánimo especulativo.
+                    </p>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        Canalizar el mecenazgo ético y las membresías solidarias para que los colegios con menos recursos accedan al supercómputo con coste cero.
+                    </p>
+                </div>
+
+            </div>
+
+            <!-- Los 4 Principios Operativos Inmutables -->
+            <div class="mb-16">
+                <div class="text-center mb-10">
+                    <span class="text-xs font-mono font-bold text-slate-400 uppercase tracking-widest block mb-1">Doctrina de Plataforma</span>
+                    <h3 class="text-3xl font-black text-slate-900">Nuestros 4 Principios Inmutables</h3>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="precision-card p-6 bg-white flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center font-bold text-base shrink-0">1</div>
+                        <div>
+                            <h4 class="font-extrabold text-slate-900 text-base mb-1">El docente retiene la autoridad pedagógica absoluta</h4>
+                            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                                La IA jamás decide una calificación definitiva ni sustituye al profesor. Actúa como un becario incansable que propone borradores, señala evidencias textuales y calcula rúbricas. El profesor revisa, añade su mirada humana y firma.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="precision-card p-6 bg-white flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-xl bg-teal-50 text-teal-700 flex items-center justify-center font-bold text-base shrink-0">2</div>
+                        <div>
+                            <h4 class="font-extrabold text-slate-900 text-base mb-1">Pedagogía Socrática frente a Generación Perezosa</h4>
+                            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                                Los grandes modelos comerciales entregan respuestas hechas para copiar y pegar, atrofiando el pensamiento crítico. ColabEdu responde con preguntas andamiadas en 9 pasos para activar la deducción del estudiante.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="precision-card p-6 bg-white flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center font-bold text-base shrink-0">3</div>
+                        <div>
+                            <h4 class="font-extrabold text-slate-900 text-base mb-1">Soberanía de Datos y Protección Radical del Menor</h4>
+                            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                                Cero publicidad. Cero perfiles comerciales. Cumplimiento estricto RGPD de la UE y FERPA de EE.UU. Los datos de exámenes de los alumnos jamás se utilizan para entrenar modelos públicos.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="precision-card p-6 bg-white flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-700 flex items-center justify-center font-bold text-base shrink-0">4</div>
+                        <div>
+                            <h4 class="font-extrabold text-slate-900 text-base mb-1">Compromiso con el Bien Común y el Código Abierto</h4>
+                            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                                La especificación pedagógica OPS v0.9.6 y el catálogo de temarios son de dominio público en colabedu.org. Ninguna escuela puede quedar cautiva de formatos propietarios.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Call to action -->
+            <div class="p-8 sm:p-12 rounded-2xl bg-slate-900 text-white text-center">
+                <h3 class="text-2xl sm:text-3xl font-black mb-3">Sé parte de la comunidad que sostiene este cambio</h3>
+                <p class="text-slate-300 text-sm max-w-xl mx-auto mb-6">
+                    Tanto si eres un docente individual como un colegio o una fundación benéfica, tu membresía impulsa la equidad educativa.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <a href="/es/memberships" class="px-6 py-3.5 text-sm font-extrabold text-slate-900 bg-amber-400 hover:bg-amber-300 rounded-xl transition-all">
+                        Ver Planes de Membresía &rarr;
+                    </a>
+                    <a href="/es/catalog-philosophy" class="px-6 py-3.5 text-sm font-bold text-slate-300 hover:text-white border border-slate-700 rounded-xl transition-colors">
+                        Conocer la Filosofía del Catálogo
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Unified Footer -->
+    <Footer lang="es" />
+
+</body>
+</html>
