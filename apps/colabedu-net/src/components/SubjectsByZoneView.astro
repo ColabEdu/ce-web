@@ -1,0 +1,92 @@
+---
+// src/components/SubjectsByZoneView.astro
+import Header from "./Header.astro";
+import Footer from "./Footer.astro";
+import DailyCourseExplorer from "./DailyCourseExplorer.astro";
+import { appLink } from "@colabedu/ui-core/navigation";
+import "../styles/global.css";
+
+interface Props {
+    lang?: 'es' | 'en';
+}
+
+const { lang = 'es' } = Astro.props;
+const isEn = lang === 'en';
+const dailyUrl = isEn ? '/en/daily-classroom' : '/es/dia-a-dia';
+const catalogEs = appLink('catalog', '/es');
+const catalogUs = appLink('catalog', '/us');
+const catalogIntl = appLink('catalog', '/intl');
+
+const t = {
+    title: isEn ? 'Subjects & Daily Exercises by Region | ColabEdu' : 'Asignaturas y Ejercicios por Zona y Curso | ColabEdu',
+    desc: isEn
+        ? 'Explore everyday school subjects, sample exercises and Socratic hints aligned with LOMLOE, Common Core, TEKS, SEP and IB.'
+        : 'Explora las asignaturas del curso escolar, ejemplos de ejercicios cotidianos y pistas socráticas según tu zona.',
+    badge: isEn ? 'Curated School Curriculum' : 'Temario Escolar del Día a Día',
+    h1: isEn ? 'Subjects and exercises for your school year' : 'Asignaturas y ejercicios de tu curso escolar',
+    sub: isEn
+        ? 'From Primary fractions and Middle School equations to AP, IB or Bachillerato. Pick your region below and jump straight to the full SEO catalog.'
+        : 'Desde fracciones en Primaria y ecuaciones en la ESO hasta Bachillerato, AP o IB. Elige tu zona y salta directo al catálogo completo.',
+    dailyCta: isEn ? 'See how a normal week works' : 'Ver cómo es una semana normal en clase',
+    fullCatalogTitle: isEn ? 'Full Open Curricular Catalog by Region' : 'Acceso Directo al Catálogo Curricular Completo por Zona',
+};
+---
+
+<!DOCTYPE html>
+<html lang={lang} class="scroll-smooth">
+<head>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate icon" type="image/png" href="/favicon.png" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{t.title}</title>
+    <meta name="description" content={t.desc} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" />
+</head>
+<body class="bg-[#FAF9F6] text-slate-900 font-sans antialiased">
+    <Header lang={lang} />
+
+    <main class="pt-28 pb-16">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center mb-10">
+            <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-50 border border-amber-200 text-amber-900 text-xs font-bold uppercase tracking-wider mb-4">
+                <i class="fas fa-book-open text-amber-600"></i>
+                <span>{t.badge}</span>
+            </span>
+            <h1 class="text-4xl sm:text-5xl font-black text-slate-950 tracking-tight leading-tight mb-4">
+                {t.h1}
+            </h1>
+            <p class="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto mb-6">
+                {t.sub}
+            </p>
+            <a href={dailyUrl} class="inline-flex items-center gap-2 text-xs sm:text-sm font-extrabold text-blue-700 hover:text-blue-900">
+                <span>{t.dailyCta}</span>
+                <i class="fas fa-arrow-right text-[10px]"></i>
+            </a>
+        </div>
+
+        <DailyCourseExplorer lang={lang} showFullSamples={true} />
+
+        <section class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-14">
+            <div class="bg-slate-900 text-white rounded-3xl p-8 text-center">
+                <h2 class="text-xl sm:text-2xl font-black mb-5">{t.fullCatalogTitle}</h2>
+                <div class="flex flex-wrap justify-center gap-3">
+                    <a href={catalogEs} target="_blank" rel="noopener noreferrer" class="px-5 py-3 rounded-xl bg-white text-slate-900 font-bold text-xs sm:text-sm hover:bg-amber-300 transition-colors">
+                        🇪🇸 España (LOMLOE / EBAU) &rarr;
+                    </a>
+                    <a href={catalogUs} target="_blank" rel="noopener noreferrer" class="px-5 py-3 rounded-xl bg-white text-slate-900 font-bold text-xs sm:text-sm hover:bg-amber-300 transition-colors">
+                        🇺🇸 United States (CCSS / TEKS / AP) &rarr;
+                    </a>
+                    <a href={catalogIntl} target="_blank" rel="noopener noreferrer" class="px-5 py-3 rounded-xl bg-white text-slate-900 font-bold text-xs sm:text-sm hover:bg-amber-300 transition-colors">
+                        🌐 Internacional (IB MYP / DP) &rarr;
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <Footer lang={lang} />
+</body>
+</html>

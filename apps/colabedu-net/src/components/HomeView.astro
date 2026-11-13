@@ -1,0 +1,392 @@
+---
+// src/components/HomeView.astro
+// Nueva Home de ColabEdu.net: Capa 1 Día a Día del Aula arriba + Capa 2 Respaldo Institucional debajo.
+import Header from "./Header.astro";
+import Footer from "./Footer.astro";
+import DailyCourseExplorer from "./DailyCourseExplorer.astro";
+import { appLink } from "@colabedu/ui-core/navigation";
+import "../styles/global.css";
+
+interface Props {
+    lang?: 'es' | 'en';
+}
+
+const { lang = 'es' } = Astro.props;
+const isEn = lang === 'en';
+const catalogUrl = appLink('catalog', '/');
+const appUrl = appLink('app', '/');
+const dailyUrl = isEn ? '/en/daily-classroom' : '/es/dia-a-dia';
+const subjectsUrl = isEn ? '/en/subjects' : '/es/asignaturas';
+const institutionalUrl = isEn ? '/en/index-institutional' : '/es/index-institutional';
+
+const t = {
+    pageTitle: isEn
+        ? 'ColabEdu | Everyday classroom tools for teachers and students'
+        : 'ColabEdu | Tecnología que devuelve el tiempo y la vocación a tus profesores',
+    pageDesc: isEn
+        ? 'Daily interactive units, Socratic homework help and handwritten exam pre-grading aligned with your school curriculum.'
+        : 'Unidades interactivas del curso escolar, tutoría socrática para deberes y pre-corrección de exámenes en papel.',
+    topBar: isEn
+        ? 'Active School Year: Everyday units, homework help & handwritten exam grading for Primary, Middle & High School.'
+        : 'Curso Escolar Activo: Unidades diarias, ayuda socrática en deberes y corrección en papel para Primaria, ESO y Bachillerato.',
+    topBarLink: isEn ? 'Browse subjects by region' : 'Ver asignaturas por zona',
+    heroBadge: isEn ? 'For everyday classrooms · Primary, Secondary & High School' : 'Para el día a día del aula · Primaria, ESO y Bachillerato',
+    h1Part1: isEn ? 'Technology that gives time and joy back to your ' : 'Tecnología que devuelve el tiempo y la vocación a tus ',
+    h1Teachers: isEn ? 'teachers' : 'profesores',
+    h1Part2: isEn ? 'Guidance that unlocks confidence in your ' : 'Inteligencia que impulsa a tus ',
+    h1Students: isEn ? 'students' : 'alumnos',
+    heroSub: isEn
+        ? 'Ready-to-assign lessons for Monday morning, a Socratic tutor that helps with homework without giving away the answer, and AI-assisted grading for real paper exams.'
+        : 'Materiales listos para el lunes por la mañana, un tutor socrático que guía los deberes sin dar la solución hecha y corrección asistida para exámenes reales en papel.',
+    ctaPrimary: isEn ? 'Explore subjects for your grade' : 'Explorar asignaturas de tu curso',
+    ctaSecondary: isEn ? 'See a normal week in class' : 'Ver una semana normal en clase',
+    ctaSubInst: isEn ? 'Are you a school administrator or district lead? View institutional overview →' : '¿Eres equipo directivo o administración educativa? Ver portada institucional →',
+
+    rolesEyebrow: isEn ? 'Choose your daily path' : 'Elige cómo lo usas hoy',
+    rolesTitle: isEn ? 'Built for Monday morning and Tuesday evening' : 'Pensado para el lunes en clase y el martes por la tarde en casa',
+
+    teacherTag: isEn ? 'Teachers' : 'Docentes',
+    teacherTitle: isEn ? 'Reclaim your Sundays: Ready units + Paper OCR' : 'Recupera tus domingos: Unidades listas + Corrección en papel',
+    teacherDesc: isEn
+        ? 'Assign curriculum-aligned exercises in 5 minutes via Canvas, Moodle or Classroom. Scan handwritten tests with your phone and review rubric-based grading drafts.'
+        : 'Asigna ejercicios alineados con tu temario en 5 minutos desde Canvas, Moodle o Classroom. Escanea exámenes escritos a mano y valida el borrador de notas.',
+    teacherCta: isEn ? 'See teacher weekly routine →' : 'Ver rutina semanal del docente →',
+
+    studentTag: isEn ? 'Students & Families' : 'Alumnos y Familias',
+    studentTitle: isEn ? '24/7 Homework Help without embarrassment' : 'Ayuda con los deberes 24/7 sin miedo a equivocarse',
+    studentDesc: isEn
+        ? 'Practice privately in Safe Space. When you get stuck on an equation or essay, the Socratic tutor gives you the next hint instead of spoiling the answer.'
+        : 'Practica en privado en Safe Space. Si te atascaste en una ecuación o un comentario de texto, el tutor socrático te da una pista sobre tu fallo sin regalarte la solución.',
+    studentCta: isEn ? 'See student daily routine →' : 'Ver rutina diaria del alumno →',
+
+    calcBadge: isEn ? 'Teacher Time Calculator' : 'Calculadora de Tiempo Docente',
+    calcTitle: isEn ? 'How many hours do you spend grading each week?' : '¿Cuántas horas pasas corrigiendo cada semana?',
+    calcSub: isEn ? 'Move the slider to your number of students across classes.' : 'Ajusta el deslizador al total de alumnos que tienes entre todos tus grupos.',
+    calcLabel: isEn ? 'Total students:' : 'Alumnos totales:',
+    calcDefaultStudents: isEn ? '90 students' : '90 alumnos',
+    calcTrad: isEn ? 'Traditional grading' : 'Corrección tradicional',
+    calcColab: isEn ? 'With ColabEdu review' : 'Revisando con ColabEdu',
+    calcSavedPrefix: isEn ? 'You recover ' : 'Recuperarás ',
+    calcSavedUnit: isEn ? 'hours every week' : 'horas cada semana',
+    calcSavedTail: isEn ? ' to focus on teaching and personal life.' : ' para preparar tus clases o descansar el domingo.',
+
+    ocrBadge: isEn ? 'Real Paper + Socratic Aid' : 'Papel Real + Ayuda Socrática',
+    ocrTitle: isEn ? 'Handwritten exams stay on paper' : 'Los exámenes siguen siendo en papel',
+    ocrPaperLabel: isEn ? 'Scanned student notebook (8th Grade / 2º ESO Math):' : 'Cuaderno escaneado (Matemáticas 2º ESO):',
+    ocrDraftOk: isEn ? 'Draft: 1.75 / 2.00 · Method & equation setup correct' : 'Borrador: 1,75 / 2,00 · Planteamiento correcto',
+    ocrFeedback: isEn ? 'Suggested note: "Great isolation of x. Double-check the sign in the last step (-6 vs +6)."' : 'Sugerencia para el profe: "Buen despeje inicial de la x. Recordar revisar el signo al pasar el -6."',
+
+    trustEyebrow: isEn ? 'Institutional Backing & Open Standards' : 'Respaldo Institucional, Rigor y Privacidad',
+    trustTitle: isEn ? 'Why schools, publishers and districts trust ColabEdu' : 'La ingeniería y las garantías que hay detrás del aula',
+    trustSub: isEn
+        ? 'Behind a simple daily classroom experience sits a sovereign, auditable, ad-free educational infrastructure.'
+        : 'Debajo de una experiencia sencilla para el día a día, funciona una infraestructura abierta, auditable y libre de publicidad.',
+    trustCards: isEn
+        ? [
+            { title: 'Zero Normative Hallucinations (L0)', desc: 'Every rubric and unit is grounded in official decrees (LOMLOE, Common Core, TEKS, AP, IB, SEP).', href: '/en/grounding', icon: 'fa-scale-balanced', color: 'teal' },
+            { title: '65+ Open OER Repositories & OPS v0.9.6', desc: 'Declarative Open Pedagogy Specification transforming open textbooks into interactive software.', href: '/en/ops-specification', icon: 'fa-cube', color: 'blue' },
+            { title: 'Cross-Competencies & Shadow Audits', desc: 'Non-invasive cohort diagnostics and PISA-aligned competency tracking without extra testing.', href: '/en/cross-competencies', icon: 'fa-network-wired', color: 'indigo' },
+            { title: 'GDPR, FERPA & Equity Scholarships', desc: 'Zero model training on student data, zero ads, and solidary compute grants for public schools.', href: '/en/data-sovereignty-privacy', icon: 'fa-shield-halved', color: 'amber' },
+        ]
+        : [
+            { title: 'Tolerancia Cero a Alucinaciones (Grounding L0)', desc: 'Cada rúbrica y unidad deriva de normativa oficial verificada (LOMLOE, PAU, Common Core, TEKS, AP, IB, SEP).', href: '/es/grounding', icon: 'fa-scale-balanced', color: 'teal' },
+            { title: '65+ Repositorios OER y Especificación OPS v0.9.6', desc: 'Especificación abierta declarativa que convierte libros libres en lecciones y simuladores interactivos.', href: '/es/ops-specification', icon: 'fa-cube', color: 'blue' },
+            { title: 'Competencias Cruzadas y Auditorías Shadow', desc: 'Diagnóstico censal no invasivo y trazabilidad competencial PISA sin añadir burocracia al profesorado.', href: '/es/cross-competencies', icon: 'fa-network-wired', color: 'indigo' },
+            { title: 'RGPD, FERPA y Becas de Equidad', desc: 'Cero publicidad, cero entrenamiento con datos de menores y fondo solidario para centros públicos.', href: '/es/data-sovereignty-privacy', icon: 'fa-shield-halved', color: 'amber' },
+        ],
+    trustFooterCta: isEn ? 'View full institutional & B2G overview' : 'Ver portada institucional completa',
+    membershipsCta: isEn ? 'Memberships & Solidary Grants' : 'Planes y Becas Solidarias',
+    membershipsUrl: isEn ? '/en/memberships' : '/es/memberships',
+};
+---
+
+<!DOCTYPE html>
+<html lang={lang} class="scroll-smooth">
+<head>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate icon" type="image/png" href="/favicon.png" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{t.pageTitle}</title>
+    <meta name="description" content={t.pageDesc} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" />
+
+    <style is:global>
+        :root {
+            --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-handwriting: 'Caveat', cursive, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+        body {
+            font-family: var(--font-sans);
+            background-color: #FAF9F6;
+            color: #0F172A;
+            -webkit-font-smoothing: antialiased;
+        }
+        .font-handwriting { font-family: var(--font-handwriting); }
+        .font-mono-code { font-family: var(--font-mono); }
+        .hero-shell {
+            background: linear-gradient(135deg, rgba(254, 243, 199, 0.5) 0%, rgba(240, 253, 250, 0.6) 50%, rgba(238, 242, 255, 0.4) 100%);
+            border: 1px solid rgba(226, 232, 240, 0.9);
+            border-radius: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .precision-card {
+            background-color: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            border-radius: 1.25rem;
+            box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.03);
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .precision-card:hover {
+            box-shadow: 0 12px 24px -6px rgba(15, 23, 42, 0.06);
+            transform: translateY(-2px);
+        }
+        .ruled-paper {
+            background-color: #FFFDF9;
+            background-image:
+                linear-gradient(to right, rgba(203, 213, 225, 0.25) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(203, 213, 225, 0.25) 1px, transparent 1px);
+            background-size: 20px 20px;
+            border: 1px solid #E2E8F0;
+        }
+    </style>
+</head>
+<body class="selection:bg-blue-600 selection:text-white">
+
+    <!-- Top Announcement Bar -->
+    <aside aria-label="Curso escolar" class="bg-slate-900 text-slate-300 text-xs py-2.5 px-4 border-b border-slate-800">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
+            <div class="flex items-center gap-2 text-center sm:text-left">
+                <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span>{t.topBar}</span>
+            </div>
+            <div class="flex items-center gap-4 text-xs">
+                <a href={subjectsUrl} class="hover:text-amber-400 transition-colors flex items-center gap-1 font-semibold text-white">
+                    <span>{t.topBarLink}</span>
+                    <i class="fas fa-arrow-right text-[10px]"></i>
+                </a>
+            </div>
+        </div>
+    </aside>
+
+    <Header lang={lang} />
+
+    <!-- BLOQUE 1: HERO HUMANO Y DIRECTO AL AULA -->
+    <main class="pt-10 sm:pt-14 pb-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="hero-shell p-8 sm:p-14 text-center">
+                <div class="relative z-10 max-w-4xl mx-auto">
+                    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/95 border border-amber-300/80 text-amber-950 text-xs font-bold shadow-xs mb-6">
+                        <span class="flex h-2.5 w-2.5 rounded-full bg-amber-500"></span>
+                        <span>{t.heroBadge}</span>
+                    </div>
+
+                    <h1 class="text-4xl sm:text-6xl font-black text-slate-950 tracking-tight leading-[1.08] mb-6">
+                        {t.h1Part1}<span class="text-blue-600">{t.h1Teachers}</span>.<br/>
+                        {t.h1Part2}<span class="text-teal-600">{t.h1Students}</span>.
+                    </h1>
+
+                    <p class="text-base sm:text-xl text-slate-700 font-normal leading-relaxed mb-8 max-w-3xl mx-auto">
+                        {t.heroSub}
+                    </p>
+
+                    <div class="flex flex-wrap items-center justify-center gap-3.5 mb-6">
+                        <a href="#curso-escolar-hoy" class="px-6 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-black text-sm shadow-md transition-all flex items-center gap-2">
+                            <i class="fas fa-book-open"></i>
+                            <span>{t.ctaPrimary}</span>
+                        </a>
+                        <a href={dailyUrl} class="px-6 py-3.5 rounded-xl bg-slate-900 hover:bg-blue-600 text-white font-extrabold text-sm shadow-md transition-all flex items-center gap-2">
+                            <i class="fas fa-calendar-week"></i>
+                            <span>{t.ctaSecondary}</span>
+                        </a>
+                    </div>
+
+                    <div class="pt-3 text-xs text-slate-500">
+                        <a href={institutionalUrl} class="hover:text-slate-900 underline underline-offset-4 font-semibold">
+                            {t.ctaSubInst}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- BLOQUE 2: SELECTOR INTERACTIVO "TU CURSO ESCOLAR HOY" -->
+    <DailyCourseExplorer lang={lang} />
+
+    <!-- BLOQUE 3: RUTAS PRÁCTICAS DOCENTE VS ESTUDIANTE -->
+    <section class="py-16 bg-[#FAF9F6]">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-10">
+                <span class="text-[11px] font-mono font-bold uppercase tracking-wider text-slate-400">{t.rolesEyebrow}</span>
+                <h2 class="text-2xl sm:text-3xl font-black text-slate-900 mt-1">{t.rolesTitle}</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <a href={`${dailyUrl}?rol=docente`} class="precision-card p-7 border-blue-200 hover:border-blue-500 flex flex-col justify-between group">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 rounded-2xl bg-blue-600 text-white flex items-center justify-center text-xl shadow-sm">
+                                <i class="fas fa-chalkboard-teacher"></i>
+                            </div>
+                            <span class="px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-900">{t.teacherTag}</span>
+                        </div>
+                        <h3 class="text-xl font-black text-slate-900 group-hover:text-blue-600 transition-colors mb-2">{t.teacherTitle}</h3>
+                        <p class="text-sm text-slate-600 leading-relaxed">{t.teacherDesc}</p>
+                    </div>
+                    <div class="pt-4 mt-5 border-t border-slate-100 text-xs font-extrabold text-blue-600">
+                        {t.teacherCta}
+                    </div>
+                </a>
+
+                <a href={`${dailyUrl}?rol=estudiante`} class="precision-card p-7 border-teal-200 hover:border-teal-500 flex flex-col justify-between group">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 rounded-2xl bg-teal-600 text-white flex items-center justify-center text-xl shadow-sm">
+                                <i class="fas fa-graduation-cap"></i>
+                            </div>
+                            <span class="px-3 py-1 rounded-full text-xs font-bold bg-teal-100 text-teal-900">{t.studentTag}</span>
+                        </div>
+                        <h3 class="text-xl font-black text-slate-900 group-hover:text-teal-700 transition-colors mb-2">{t.studentTitle}</h3>
+                        <p class="text-sm text-slate-600 leading-relaxed">{t.studentDesc}</p>
+                    </div>
+                    <div class="pt-4 mt-5 border-t border-slate-100 text-xs font-extrabold text-teal-700">
+                        {t.studentCta}
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- BLOQUE 4: LO COTIDIANO EN ACCIÓN (OCR EN PAPEL + CALCULADORA DE TIEMPO) -->
+    <section class="py-16 bg-white border-t border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+            <!-- Papel real OCR -->
+            <div class="precision-card p-7 flex flex-col justify-between">
+                <div>
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-800 text-xs font-bold mb-4">
+                        <i class="fas fa-signature"></i> {t.ocrBadge}
+                    </span>
+                    <h3 class="text-2xl font-black text-slate-900 mb-4">{t.ocrTitle}</h3>
+
+                    <div class="ruled-paper rounded-xl p-4 mb-4">
+                        <span class="text-[10px] font-mono text-slate-400 block mb-1 uppercase font-bold">{t.ocrPaperLabel}</span>
+                        <p class="font-handwriting text-slate-800 text-2xl font-semibold leading-snug">
+                            "3(x - 2) = 2x + 5 &rarr; 3x - 6 = 2x + 5 &rarr; x = 11"
+                        </p>
+                    </div>
+
+                    <div class="bg-slate-900 text-slate-200 rounded-xl p-4 text-xs font-mono-code space-y-1.5">
+                        <div class="text-emerald-400 font-bold">✔ {t.ocrDraftOk}</div>
+                        <p class="text-[11px] text-slate-300">{t.ocrFeedback}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Calculadora de Tiempo -->
+            <div class="bg-slate-900 text-white rounded-3xl p-7 flex flex-col justify-between">
+                <div>
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400/15 border border-amber-400/30 text-amber-300 text-xs font-bold mb-4">
+                        <i class="fas fa-clock"></i> {t.calcBadge}
+                    </span>
+                    <h3 class="text-2xl font-black mb-2">{t.calcTitle}</h3>
+                    <p class="text-xs sm:text-sm text-slate-300 mb-6">{t.calcSub}</p>
+
+                    <div class="bg-white text-slate-900 rounded-2xl p-5 space-y-4">
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs font-bold text-slate-500 uppercase">{t.calcLabel}</span>
+                            <span id="student-count-display" class="text-xl font-black text-blue-600 font-mono">{t.calcDefaultStudents}</span>
+                        </div>
+                        <input type="range" id="student-slider" min="25" max="180" value="90" step="5" class="w-full accent-blue-600 cursor-pointer" />
+
+                        <div class="grid grid-cols-2 gap-3 pt-2">
+                            <div class="p-3 rounded-xl bg-red-50 border border-red-200">
+                                <div class="text-[11px] font-bold text-red-700">{t.calcTrad}</div>
+                                <div id="traditional-hours" class="text-xl font-black text-red-600 font-mono">18.0 h/sem</div>
+                            </div>
+                            <div class="p-3 rounded-xl bg-emerald-50 border border-emerald-200">
+                                <div class="text-[11px] font-bold text-emerald-800">{t.calcColab}</div>
+                                <div id="colabedu-hours" class="text-xl font-black text-emerald-600 font-mono">3.6 h/sem</div>
+                            </div>
+                        </div>
+
+                        <p class="text-xs text-slate-700 text-center pt-1">
+                            {t.calcSavedPrefix}<strong id="saved-hours" class="text-amber-700 font-extrabold">14.4 {t.calcSavedUnit}</strong>{t.calcSavedTail}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BLOQUE 5: RESPALDO INSTITUCIONAL, RIGOR Y SOBERANÍA (Capa Corporativa Ordenada) -->
+    <section class="py-16 sm:py-20 bg-slate-950 text-white border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <span class="inline-block text-xs font-mono font-bold tracking-widest uppercase text-amber-400 bg-amber-400/10 px-4 py-1.5 rounded-full border border-amber-400/20 mb-4">
+                    {t.trustEyebrow}
+                </span>
+                <h2 class="text-3xl sm:text-4xl font-black tracking-tight mb-3">{t.trustTitle}</h2>
+                <p class="text-sm sm:text-base text-slate-300 leading-relaxed">{t.trustSub}</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
+                {t.trustCards.map((card) => (
+                    <a href={card.href} class="p-6 rounded-2xl bg-slate-900 border border-slate-800 hover:border-slate-600 transition-all flex flex-col justify-between group">
+                        <div>
+                            <div class="w-10 h-10 rounded-xl bg-slate-800 text-amber-400 flex items-center justify-center text-base mb-4">
+                                <i class={`fas ${card.icon}`}></i>
+                            </div>
+                            <h3 class="text-base font-extrabold text-white group-hover:text-amber-300 transition-colors mb-2">{card.title}</h3>
+                            <p class="text-xs text-slate-400 leading-relaxed">{card.desc}</p>
+                        </div>
+                        <span class="mt-4 text-xs font-bold text-teal-400">Explorar &rarr;</span>
+                    </a>
+                ))}
+            </div>
+
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href={t.membershipsUrl} class="px-6 py-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs sm:text-sm transition-colors">
+                    {t.membershipsCta} &rarr;
+                </a>
+                <a href={institutionalUrl} class="px-6 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-200 font-bold text-xs sm:text-sm border border-slate-700 transition-colors">
+                    {t.trustFooterCta}
+                </a>
+                <a href={catalogUrl} target="_blank" rel="noopener noreferrer" class="px-6 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-200 font-bold text-xs sm:text-sm border border-slate-700 transition-colors">
+                    {isEn ? 'Open SEO Catalog' : 'Abrir Catálogo SEO'}
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <Footer lang={lang} />
+
+    <script is:inline define:vars={{ isEn }}>
+        window.addEventListener('DOMContentLoaded', () => {
+            const slider = document.getElementById('student-slider');
+            const studentDisplay = document.getElementById('student-count-display');
+            const tradHours = document.getElementById('traditional-hours');
+            const colabHours = document.getElementById('colabedu-hours');
+            const savedHours = document.getElementById('saved-hours');
+
+            if (slider && studentDisplay && tradHours && colabHours && savedHours) {
+                slider.addEventListener('input', (e) => {
+                    const count = parseInt(e.target.value, 10);
+                    studentDisplay.textContent = count + (isEn ? ' students' : ' alumnos');
+                    const traditional = (count * 0.2).toFixed(1);
+                    const colab = (count * 0.04).toFixed(1);
+                    const saved = (traditional - colab).toFixed(1);
+                    tradHours.textContent = traditional + (isEn ? ' h/wk' : ' h/sem');
+                    colabHours.textContent = colab + (isEn ? ' h/wk' : ' h/sem');
+                    savedHours.textContent = saved + (isEn ? ' hours every week' : ' horas cada semana');
+                });
+            }
+        });
+    </script>
+</body>
+</html>

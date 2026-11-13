@@ -124,7 +124,90 @@ const defaultSupportUrl = appLink('app', '/support', { embed: 'true', lang });
   </div>
 </div>
 
+<!-- 3. MODAL GENÉRICO DE DEMOSTRACIÓN EN VIVO (Lecciones A2UI, Gradebook, Visor de Aula, Tutor) -->
+<div id="colabedu-demo-modal" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-md items-center justify-center p-3 sm:p-5 lg:p-6 transition-all opacity-0">
+  <div class="bg-white rounded-3xl border border-slate-300 shadow-2xl w-full max-w-6xl max-h-[94vh] flex flex-col overflow-hidden animate-scale-in">
+    <!-- Header -->
+    <div class="flex items-center justify-between px-6 py-4 bg-slate-900 text-white border-b border-slate-800">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-blue-500 text-white flex items-center justify-center font-bold text-base">
+          <i class="fas fa-play"></i>
+        </div>
+        <div>
+          <h3 id="colabedu-demo-modal-title" class="text-base font-black tracking-tight leading-tight">
+            {isEn ? 'Interactive Classroom Demo' : 'Demostrador Interactivo de Aula'}
+          </h3>
+          <p id="colabedu-demo-modal-subtitle" class="text-[11px] text-slate-400 font-mono">
+            {isEn ? 'Live A2UI Runtime · Sandbox Mode' : 'Entorno A2UI en Vivo · Modo Demostración'}
+          </p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <a
+          id="colabedu-demo-modal-expand-btn"
+          href={defaultCatalogUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="px-3.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition flex items-center gap-1.5 border border-white/10"
+        >
+          <span>{isEn ? 'Full Screen' : 'Pantalla Completa'}</span>
+          <i class="fas fa-arrow-up-right-from-square text-[10px]"></i>
+        </a>
+        <button
+          type="button"
+          data-close-modal="colabedu-demo-modal"
+          class="w-8 h-8 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white flex items-center justify-center transition"
+          aria-label={isEn ? 'Close modal' : 'Cerrar modal'}
+        >
+          <i class="fas fa-xmark text-sm"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Iframe Container -->
+    <div class="relative flex-1 w-full bg-slate-950 min-h-[560px]">
+      <iframe
+        id="colabedu-demo-modal-iframe"
+        src="about:blank"
+        data-src={defaultCatalogUrl}
+        class="w-full h-full border-none block"
+        style="min-height: 560px; height: 78vh;"
+        loading="lazy"
+        allow="clipboard-read; clipboard-write; microphone"
+      ></iframe>
+    </div>
+  </div>
+</div>
+
 <script>
+  import { appLink, type AppTarget } from "../navigation/routes";
+
+  function detectRuntimeTenant(): string | undefined {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const qTenant = params.get('tenant');
+      if (qTenant) return qTenant;
+
+      const host = window.location.hostname.toLowerCase();
+      // Ej: colabedu-net.intef.demo.colabedu.net o app.intef.demo.colabedu.net
+      const match = host.match(/\.([a-z0-9-]+)\.demo\.colabedu\.net$/);
+      if (match && match[1]) return match[1];
+    } catch (_) {}
+    return undefined;
+  }
+
+  function resolveRuntimeUrl(target: AppTarget, path: string, extraParams: Record<string, string> = {}) {
+    const docLang = document.documentElement.lang || (window.location.pathname.startsWith('/en') ? 'en' : 'es');
+    const tenant = detectRuntimeTenant();
+    return appLink(
+      target,
+      path,
+      { embed: 'true', lang: docLang, ...extraParams },
+      tenant ? { tenant } : undefined
+    );
+  }
+
   function setupGlobalModals() {
     function openModal(modalId: string, customUrl?: string) {
       const modal = document.getElementById(modalId);
@@ -138,7 +221,10 @@ const defaultSupportUrl = appLink('app', '/support', { embed: 'true', lang });
         }
         const expandBtn = modal.querySelector<HTMLAnchorElement>('a[id$="-expand-btn"]');
         if (expandBtn) {
-          expandBtn.href = targetUrl.replace('&embed=true', '').replace('embed=true&', '').replace('embed=true', '');
+          expandBtn.href = targetUrl
+            .replace('&embed=true', '')
+            .replace('?embed=true&', '?')
+            .replace('?embed=true', '');
         }
       }
 
@@ -161,6 +247,10 @@ const defaultSupportUrl = appLink('app', '/support', { embed: 'true', lang });
         modal.classList.remove('flex');
         modal.classList.add('hidden');
         document.body.style.overflow = '';
+        if (modalId === 'colabedu-demo-modal') {
+          const iframe = modal.querySelector('iframe');
+          if (iframe) iframe.src = 'about:blank';
+        }
       }, 200);
     }
 
@@ -172,7 +262,7 @@ const defaultSupportUrl = appLink('app', '/support', { embed: 'true', lang });
       });
     });
 
-    ['colabedu-catalog-modal', 'colabedu-support-modal'].forEach(id => {
+    ['colabedu-catalog-modal', 'colabedu-support-modal', 'colabedu-demo-modal'].forEach(id => {
       const modal = document.getElementById(id);
       if (modal) {
         modal.addEventListener('click', (e) => {
@@ -181,12 +271,34 @@ const defaultSupportUrl = appLink('app', '/support', { embed: 'true', lang });
       }
     });
 
-    // Delegación global para disparadores de catálogo
+    // Delegación global para disparadores de catálogo A2UI (resuelve entorno en runtime)
     document.querySelectorAll('[data-open-catalog-modal]').forEach(trigger => {
       trigger.addEventListener('click', (e) => {
         e.preventDefault();
         const customTarget = trigger.getAttribute('data-catalog-url');
-        openModal('colabedu-catalog-modal', customTarget || undefined);
+        const customPath = trigger.getAttribute('data-catalog-path') || '/navigator/spec_root/0';
+        const finalUrl = customTarget || resolveRuntimeUrl('app', customPath);
+        openModal('colabedu-catalog-modal', finalUrl);
+      });
+    });
+
+    // Delegación global para disparadores genéricos de demos en vivo (lecciones, gradebook, visor, tutor)
+    document.querySelectorAll('[data-open-demo-modal]').forEach(trigger => {
+      trigger.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetAttr = (trigger.getAttribute('data-demo-target') as AppTarget) || 'app';
+        const demoPath = trigger.getAttribute('data-demo-path') || '/navigator/spec_root/0';
+        const explicitUrl = trigger.getAttribute('data-demo-url');
+        const demoTitle = trigger.getAttribute('data-demo-title');
+        const demoSubtitle = trigger.getAttribute('data-demo-subtitle');
+
+        const titleEl = document.getElementById('colabedu-demo-modal-title');
+        const subtitleEl = document.getElementById('colabedu-demo-modal-subtitle');
+        if (titleEl && demoTitle) titleEl.textContent = demoTitle;
+        if (subtitleEl && demoSubtitle) subtitleEl.textContent = demoSubtitle;
+
+        const finalUrl = explicitUrl || resolveRuntimeUrl(targetAttr, demoPath);
+        openModal('colabedu-demo-modal', finalUrl);
       });
     });
 
@@ -230,20 +342,16 @@ const defaultSupportUrl = appLink('app', '/support', { embed: 'true', lang });
           return;
         }
 
-        // Construir URL con parámetros
-        const supportIframe = document.getElementById('colabedu-support-modal-iframe');
-        const defaultSupportSrc = supportIframe?.getAttribute('data-src') || 'http://local.colabedu.org:8080/support';
-        const urlObj = new URL(defaultSupportSrc, window.location.origin);
+        const extra: Record<string, string> = {
+          tab: customTab,
+          lang: activeLang,
+          _v: Date.now().toString(),
+        };
+        if (category) extra.category = category;
+        if (subject) extra.subject = subject;
+        if (description) extra.description = description;
 
-        urlObj.searchParams.set('embed', 'true');
-        urlObj.searchParams.set('tab', customTab);
-        urlObj.searchParams.set('lang', activeLang);
-        urlObj.searchParams.set('_v', Date.now().toString());
-        if (category) urlObj.searchParams.set('category', category);
-        if (subject) urlObj.searchParams.set('subject', subject);
-        if (description) urlObj.searchParams.set('description', description);
-
-        openModal('colabedu-support-modal', urlObj.toString());
+        openModal('colabedu-support-modal', resolveRuntimeUrl('app', '/support', extra));
       });
     });
   }

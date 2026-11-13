@@ -1,0 +1,241 @@
+---
+// src/components/DailyClassroomView.astro
+import Header from "./Header.astro";
+import Footer from "./Footer.astro";
+import { appLink } from "@colabedu/ui-core/navigation";
+import "../styles/global.css";
+
+interface Props {
+    lang?: 'es' | 'en';
+}
+
+const { lang = 'es' } = Astro.props;
+const isEn = lang === 'en';
+const appUrl = appLink('app', '/');
+const catalogUrl = appLink('catalog', '/');
+const subjectsUrl = isEn ? '/en/subjects' : '/es/asignaturas';
+const institutionalHomeUrl = isEn ? '/en/index-institutional' : '/es/index-institutional';
+
+const t = {
+    title: isEn ? 'A Normal Week with ColabEdu | Day-to-Day Classroom' : 'Una Semana Normal con ColabEdu | El Día a Día en el Aula',
+    desc: isEn
+        ? 'How teachers and students use ColabEdu from Monday to Friday for daily homework, class units and handwritten exam grading.'
+        : 'Cómo usan ColabEdu profesores y alumnos de lunes a viernes para deberes, unidades del trimestre y corrección de exámenes.',
+    badge: isEn ? 'Day-to-Day Classroom Routine' : 'Rutina Semanal en el Aula y en Casa',
+    h1a: isEn ? 'Less Sunday prep.' : 'Menos deberes los domingos.',
+    h1b: isEn ? 'Better weeknights.' : 'Mejores tardes de estudio.',
+    subtitle: isEn
+        ? 'No complex jargon. Here is what an ordinary Tuesday or Friday actually looks like for a teacher and a student.'
+        : 'Sin tecnicismos. Así se ve un martes o un viernes cualquiera cuando usas ColabEdu en clase y en casa.',
+    tabTeacher: isEn ? 'I am a Teacher' : 'Soy Docente',
+    tabStudent: isEn ? 'I am a Student / Family' : 'Soy Estudiante / Familia',
+    exploreSubjects: isEn ? 'Browse subjects by region & grade' : 'Ver asignaturas y ejercicios por zona',
+    openApp: isEn ? 'Open ColabEdu App' : 'Entrar a la App',
+    teacherSteps: isEn
+        ? [
+            { day: 'Sunday / Monday · 5 min', title: 'Assign this week’s unit without making PDFs', text: 'Pick your grade and subject (e.g. 8th Grade Linear Equations), choose 4 guided exercises and share the link in Canvas, Moodle or Google Classroom.', icon: 'fa-calendar-check', color: 'blue' },
+            { day: 'Tuesday – Thursday · Live', title: 'See where the class got stuck before entering the room', text: 'Check the classroom radar: if 60% missed step 2 in fraction division, you know exactly what to explain in the first 10 minutes of class.', icon: 'fa-radar', color: 'teal' },
+            { day: 'Friday · 10 min', title: 'Paper exams stay on paper. AI drafts the grading.', text: 'Students write by hand as usual. Scan with your phone, review the rubric-aligned draft and suggested feedback, adjust anything you want and sign off.', icon: 'fa-camera', color: 'amber' }
+        ]
+        : [
+            { day: 'Domingo / Lunes · 5 min', title: 'Asigna la unidad de la semana sin fabricar PDFs', text: 'Eliges tu curso y asignatura (ej. Ecuaciones de 2º ESO o Lengua 3º ESO), seleccionas 4 ejercicios guiados y los envías a Canvas, Moodle o Google Classroom.', icon: 'fa-calendar-check', color: 'blue' },
+            { day: 'Martes – Jueves · En vivo', title: 'Entra a clase sabiendo dónde se atascó el grupo', text: 'Miras el resumen del aula en 30 segundos: si la mitad falló al despejar el paréntesis, ya sabes exactamente qué repasar en la pizarra al empezar.', icon: 'fa-chart-simple', color: 'teal' },
+            { day: 'Viernes · 10 min', title: 'El examen sigue siendo en papel. Tú solo revisas y firmas.', text: 'Tus alumnos escriben a mano en folios reales. Escaneas con el móvil, revisas la propuesta de nota y comentarios según tu rúbrica, y publicas.', icon: 'fa-camera', color: 'amber' }
+        ],
+    studentSteps: isEn
+        ? [
+            { day: '5:30 PM · Homework', title: 'Stuck on problem #3 without anyone around?', text: 'Open the exercise on your phone or tablet. Instead of giving you the answer to copy, the tutor asks one small question about your actual mistake.', icon: 'fa-comments', color: 'teal' },
+            { day: 'Safe Space · Private', title: 'Make 10 mistakes in a row without embarrassment', text: 'Your drafts and wrong tries stay private. Your teacher sees your progress and effort, not every clumsy first attempt.', icon: 'fa-shield-heart', color: 'amber' },
+            { day: 'Before the Test · Practice', title: 'Try similar problems at your own pace', text: 'No countdown timers, no judgment. Practice 3 extra problems of the exact topic that is on Friday’s quiz.', icon: 'fa-dumbbell', color: 'blue' }
+        ]
+        : [
+            { day: '17:30 · Deberes en casa', title: '¿Te atascaste en el ejercicio 3 y no hay nadie para preguntar?', text: 'Abres la tarea en tu móvil o tablet. En lugar de soltarte la solución para copiar, el tutor mira tu paso concreto y te da una pista para que lo saques tú.', icon: 'fa-comments', color: 'teal' },
+            { day: 'Safe Space · Confidencial', title: 'Equivócate 10 veces seguidas sin pasar vergüenza', text: 'Tus borradores y fallos de práctica son privados. Nadie de clase los ve y tampoco penalizan tu nota mientras estás aprendiendo.', icon: 'fa-shield-heart', color: 'amber' },
+            { day: 'Antes del examen · Repaso', title: 'Practica ejercicios parecidos a tu ritmo', text: 'Sin cuentas atrás estresantes. Puedes repetir problemas del tema exacto que entra en el examen del viernes hasta sentirte seguro.', icon: 'fa-dumbbell', color: 'blue' }
+        ],
+    ctaTitle: isEn ? 'Want to see the subjects for your grade?' : '¿Quieres ver las asignaturas de tu curso?',
+    ctaSub: isEn ? 'Pick your region and grade to browse real everyday units.' : 'Elige tu zona y etapa para ver unidades y ejercicios reales de esta semana.',
+    instLinkLabel: isEn ? 'Looking for institutional architecture (OPS, L0, OER)?' : '¿Buscas la visión institucional y arquitectura técnica (OPS, L0, OER)?',
+};
+---
+
+<!DOCTYPE html>
+<html lang={lang} class="scroll-smooth">
+<head>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate icon" type="image/png" href="/favicon.png" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{t.title}</title>
+    <meta name="description" content={t.desc} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" />
+</head>
+<body class="bg-[#FAF9F6] text-slate-900 font-sans antialiased">
+    <Header lang={lang} />
+
+    <main class="pt-28 pb-20">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-teal-50 border border-teal-200 text-teal-800 text-xs font-bold uppercase tracking-wider mb-5">
+                    <i class="fas fa-clock"></i>
+                    <span>{t.badge}</span>
+                </span>
+                <h1 class="text-4xl sm:text-6xl font-black text-slate-950 tracking-tight leading-tight mb-5">
+                    {t.h1a}<br/>
+                    <span class="text-blue-600">{t.h1b}</span>
+                </h1>
+                <p class="text-base sm:text-xl text-slate-600 leading-relaxed">
+                    {t.subtitle}
+                </p>
+            </div>
+
+            <!-- Selector de Rol sin cookies (query param ?rol= o localStorage) -->
+            <div class="flex justify-center mb-10" data-role-tabs>
+                <div class="inline-flex p-1.5 rounded-2xl bg-slate-200/70 border border-slate-300/80 gap-1">
+                    <button type="button" data-role-btn="teacher" class="px-5 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold bg-slate-900 text-white shadow-xs transition-all cursor-pointer flex items-center gap-2">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                        <span>{t.tabTeacher}</span>
+                    </button>
+                    <button type="button" data-role-btn="student" class="px-5 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold text-slate-700 hover:text-slate-950 transition-all cursor-pointer flex items-center gap-2">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span>{t.tabStudent}</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Panel Docente -->
+            <div id="docentes" data-role-panel="teacher" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-14">
+                {t.teacherSteps.map((step, idx) => (
+                    <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="text-[11px] font-mono font-bold uppercase tracking-wider px-2.5 py-1 rounded-md bg-blue-50 text-blue-800 border border-blue-200">
+                                    {step.day}
+                                </span>
+                                <span class="text-xs font-mono font-black text-slate-300">0{idx + 1}</span>
+                            </div>
+                            <h2 class="text-lg font-black text-slate-900 mb-2 leading-snug">{step.title}</h2>
+                            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">{step.text}</p>
+                        </div>
+                        <div class="pt-4 mt-4 border-t border-slate-100">
+                            <button
+                                type="button"
+                                data-open-demo-modal
+                                data-demo-target="app"
+                                data-demo-path={idx === 0 ? '/navigator/spec_root/0' : '/'}
+                                data-demo-title={step.title}
+                                data-demo-subtitle={step.day}
+                                class="text-xs font-extrabold text-blue-700 hover:text-blue-900 flex items-center gap-1.5 cursor-pointer"
+                            >
+                                <i class="fas fa-play text-[10px]"></i>
+                                <span>{isEn ? 'Open live preview' : 'Probar en vivo en modal'}</span>
+                            </button>
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            <!-- Panel Estudiante -->
+            <div id="estudiantes" data-role-panel="student" class="hidden grid grid-cols-1 md:grid-cols-3 gap-6 mb-14">
+                {t.studentSteps.map((step, idx) => (
+                    <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="text-[11px] font-mono font-bold uppercase tracking-wider px-2.5 py-1 rounded-md bg-teal-50 text-teal-800 border border-teal-200">
+                                    {step.day}
+                                </span>
+                                <span class="text-xs font-mono font-black text-slate-300">0{idx + 1}</span>
+                            </div>
+                            <h2 class="text-lg font-black text-slate-900 mb-2 leading-snug">{step.title}</h2>
+                            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">{step.text}</p>
+                        </div>
+                        <div class="pt-4 mt-4 border-t border-slate-100">
+                            <button
+                                type="button"
+                                data-open-demo-modal
+                                data-demo-target="app"
+                                data-demo-path="/navigator/spec_root/0"
+                                data-demo-title={step.title}
+                                data-demo-subtitle={step.day}
+                                class="text-xs font-extrabold text-teal-700 hover:text-teal-900 flex items-center gap-1.5 cursor-pointer"
+                            >
+                                <i class="fas fa-play text-[10px]"></i>
+                                <span>{isEn ? 'Open live preview' : 'Probar en vivo en modal'}</span>
+                            </button>
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            <!-- CTA hacia Asignaturas por Zona -->
+            <div class="bg-slate-900 text-white rounded-3xl p-8 sm:p-10 text-center">
+                <h2 class="text-2xl sm:text-3xl font-black mb-2">{t.ctaTitle}</h2>
+                <p class="text-sm text-slate-300 max-w-xl mx-auto mb-6">{t.ctaSub}</p>
+                <div class="flex flex-wrap justify-center gap-3">
+                    <a href={subjectsUrl} class="px-6 py-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-sm transition-colors">
+                        {t.exploreSubjects} &rarr;
+                    </a>
+                    <a href={appUrl} target="_blank" rel="noopener noreferrer" class="px-6 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-sm border border-white/20 transition-colors">
+                        {t.openApp}
+                    </a>
+                </div>
+                <div class="mt-6 pt-5 border-t border-slate-800 text-xs text-slate-400">
+                    <a href={institutionalHomeUrl} class="hover:text-white underline underline-offset-4">
+                        {t.instLinkLabel}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <Footer lang={lang} />
+
+    <script is:inline>
+        (function () {
+            const btns = document.querySelectorAll('[data-role-btn]');
+            const panels = document.querySelectorAll('[data-role-panel]');
+            const params = new URLSearchParams(window.location.search);
+            const rawRol = (params.get('rol') || params.get('role') || '').toLowerCase();
+            const hash = (window.location.hash || '').toLowerCase();
+
+            let active = 'teacher';
+            if (rawRol === 'estudiante' || rawRol === 'student' || rawRol === 'alumno' || hash === '#estudiantes') {
+                active = 'student';
+            } else if (rawRol === 'docente' || rawRol === 'teacher' || hash === '#docentes') {
+                active = 'teacher';
+            } else {
+                try {
+                    const saved = localStorage.getItem('colabedu_pref_role');
+                    if (saved === 'student' || saved === 'teacher') active = saved;
+                } catch (_) {}
+            }
+
+            function render() {
+                btns.forEach((b) => {
+                    const isAct = b.getAttribute('data-role-btn') === active;
+                    b.classList.toggle('bg-slate-900', isAct);
+                    b.classList.toggle('text-white', isAct);
+                    b.classList.toggle('shadow-xs', isAct);
+                    b.classList.toggle('text-slate-700', !isAct);
+                });
+                panels.forEach((p) => {
+                    p.classList.toggle('hidden', p.getAttribute('data-role-panel') !== active);
+                });
+            }
+
+            btns.forEach((b) => {
+                b.addEventListener('click', () => {
+                    active = b.getAttribute('data-role-btn') || 'teacher';
+                    try { localStorage.setItem('colabedu_pref_role', active); } catch (_) {}
+                    render();
+                });
+            });
+
+            render();
+        })();
+    </script>
+</body>
+</html>

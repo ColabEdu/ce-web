@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.9.12] - 2026-11-13
+
+### Added
+- **Vistas Modulares de Aula Diaria y Exploración por Zona en `colabedu-net`**:
+  - Nuevos componentes modulares (`HomeView.astro`, `DailyClassroomView.astro`, `DailyCourseExplorer.astro`, `SubjectsByZoneView.astro`) y dataset curricular `dailyCurriculum.ts`.
+  - Nuevas rutas estáticas `/en/daily-classroom`, `/en/index-institutional`, `/en/subjects` y `/es/asignaturas`.
+  - Documentación operativa de despliegue demo en `DEMO_DEPLOYMENT.md`.
+
+### Changed
+- **Refactorización de Portada, Cabecera y Modales (`colabedu-net`, `colabedu-org`, `ui-core`)**:
+  - Simplificación de `es/index.astro` y `en/index.astro` delegando en `HomeView.astro`; mejoras en `Header.astro`, `cross-competencies.astro`, `Footer.astro` y `GlobalModalHost.astro`.
+  - **Ecosystem Alignment**: Alineación de release a **`0.9.12`**.
+
 ## [0.9.11] - 2026-11-12
 
 ### Added

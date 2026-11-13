@@ -1,0 +1,308 @@
+---
+// src/components/DailyCourseExplorer.astro
+// Selector interactivo "Tu curso escolar hoy" (Zona -> Etapa -> Asignaturas cotidianas).
+// Sin cookies: lee query params (?zona=&etapa=), localStorage o timezone.
+import { appLink } from "@colabedu/ui-core/navigation";
+import { DAILY_ZONES, type ZoneId, type StageId } from "../data/dailyCurriculum";
+
+interface Props {
+    lang?: 'es' | 'en';
+    showFullSamples?: boolean;
+}
+
+const { lang = 'es', showFullSamples = false } = Astro.props;
+const isEn = lang === 'en';
+const appUrl = appLink('app', '/');
+
+const zoneIds: ZoneId[] = ['es', 'us', 'mx', 'intl'];
+const stageIds: StageId[] = ['primary', 'middle', 'high'];
+
+const colorClasses: Record<string, { badge: string; iconBg: string; border: string }> = {
+    blue: { badge: 'bg-blue-50 text-blue-800 border-blue-200', iconBg: 'bg-blue-100 text-blue-700', border: 'hover:border-blue-400' },
+    teal: { badge: 'bg-teal-50 text-teal-800 border-teal-200', iconBg: 'bg-teal-100 text-teal-700', border: 'hover:border-teal-400' },
+    amber: { badge: 'bg-amber-50 text-amber-900 border-amber-200', iconBg: 'bg-amber-100 text-amber-700', border: 'hover:border-amber-400' },
+    purple: { badge: 'bg-purple-50 text-purple-800 border-purple-200', iconBg: 'bg-purple-100 text-purple-700', border: 'hover:border-purple-400' },
+    emerald: { badge: 'bg-emerald-50 text-emerald-800 border-emerald-200', iconBg: 'bg-emerald-100 text-emerald-700', border: 'hover:border-emerald-400' },
+    indigo: { badge: 'bg-indigo-50 text-indigo-800 border-indigo-200', iconBg: 'bg-indigo-100 text-indigo-700', border: 'hover:border-indigo-400' },
+};
+
+const t = {
+    eyebrow: isEn ? 'Your school year today · Day-to-day classroom' : 'Tu curso escolar hoy · Día a día del aula',
+    title: isEn ? 'Pick your region & grade to see everyday subjects' : 'Elige tu zona y curso para ver las asignaturas de esta semana',
+    subtitle: isEn
+        ? 'Not just final exams: daily homework, step-by-step practice and ready-to-assign units aligned with your local curriculum.'
+        : 'No solo exámenes finales: deberes diarios, práctica paso a paso y unidades listas para asignar según el temario oficial de tu zona.',
+    zoneLabel: isEn ? '1. Your region / curriculum:' : '1. Tu zona educativa:',
+    stageLabel: isEn ? '2. School stage:' : '2. Etapa / Curso:',
+    todayTopic: isEn ? 'This week in class' : 'Esta semana en clase',
+    sampleTitle: isEn ? 'Sample daily exercise' : 'Ejemplo de ejercicio cotidiano',
+    hintLabel: isEn ? 'Socratic hint (no spoilers):' : 'Pista socrática (sin dar la respuesta):',
+    openCatalog: isEn ? 'Browse zone catalog' : 'Ver en catálogo de la zona',
+    openApp: isEn ? 'Practice / Assign' : 'Practicar / Asignar',
+    viewAllSubjects: isEn ? 'See all subjects & exercises by zone' : 'Ver todas las asignaturas y ejercicios por zona',
+    subjectsUrl: isEn ? '/en/subjects' : '/es/asignaturas',
+};
+---
+
+<section id="curso-escolar-hoy" class="py-14 sm:py-20 bg-white border-y border-slate-200 scroll-mt-24" data-daily-explorer>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-3xl mx-auto mb-10">
+            <span class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-800 text-xs font-bold uppercase tracking-wider mb-3">
+                <i class="fas fa-calendar-day text-blue-600"></i>
+                <span>{t.eyebrow}</span>
+            </span>
+            <h2 class="text-3xl sm:text-4xl font-black text-slate-950 tracking-tight leading-tight">
+                {t.title}
+            </h2>
+            <p class="text-sm sm:text-base text-slate-600 mt-3 leading-relaxed">
+                {t.subtitle}
+            </p>
+        </div>
+
+        <!-- Controles: Zona + Etapa -->
+        <div class="bg-slate-50 rounded-2xl border border-slate-200 p-4 sm:p-6 mb-8 space-y-4">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <div class="text-[11px] font-mono font-bold uppercase tracking-wider text-slate-500 mb-2">
+                        {t.zoneLabel}
+                    </div>
+                    <div class="flex flex-wrap gap-2" role="tablist" aria-label={t.zoneLabel}>
+                        {zoneIds.map((zid) => {
+                            const z = DAILY_ZONES[zid];
+                            return (
+                                <button
+                                    type="button"
+                                    data-zone-btn={zid}
+                                    class={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold border transition-all cursor-pointer flex items-center gap-2 ${zid === 'es' ? 'bg-slate-900 text-white border-slate-900 shadow-xs' : 'bg-white text-slate-700 border-slate-200 hover:border-slate-400'}`}
+                                >
+                                    <span>{z.flag}</span>
+                                    <span>{z.name[lang]}</span>
+                                </button>
+                            );
+                        })}
+                    </div>
+                </div>
+
+                <div>
+                    <div class="text-[11px] font-mono font-bold uppercase tracking-wider text-slate-500 mb-2">
+                        {t.stageLabel}
+                    </div>
+                    <div class="flex flex-wrap gap-2" role="tablist" aria-label={t.stageLabel}>
+                        {stageIds.map((sid) => {
+                            const label = DAILY_ZONES.es.stages[sid].label[lang];
+                            return (
+                                <button
+                                    type="button"
+                                    data-stage-btn={sid}
+                                    class={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold border transition-all cursor-pointer ${sid === 'middle' ? 'bg-blue-600 text-white border-blue-600 shadow-xs' : 'bg-white text-slate-700 border-slate-200 hover:border-blue-400'}`}
+                                >
+                                    {label}
+                                </button>
+                            );
+                        })}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Indicador de marco oficial activo -->
+            <div class="pt-3 border-t border-slate-200 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-600">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-check-circle text-teal-600"></i>
+                    <span data-active-meta class="font-semibold text-slate-800">
+                        🇪🇸 España · 1º - 4º ESO · LOMLOE
+                    </span>
+                </div>
+                <div class="flex items-center gap-4">
+                    <button
+                        type="button"
+                        data-open-catalog-modal
+                        class="font-bold text-amber-800 hover:text-amber-950 flex items-center gap-1 cursor-pointer"
+                    >
+                        <i class="fas fa-play text-[10px]"></i>
+                        <span>{isEn ? 'Open Live A2UI Catalog' : 'Abrir Catálogo A2UI en Vivo'}</span>
+                    </button>
+                    {!showFullSamples && (
+                        <a href={t.subjectsUrl} class="font-bold text-blue-700 hover:text-blue-900 flex items-center gap-1">
+                            <span>{t.viewAllSubjects}</span>
+                            <i class="fas fa-arrow-right text-[10px]"></i>
+                        </a>
+                    )}
+                </div>
+            </div>
+        </div>
+
+        <!-- Paneles estáticos por combinación Zona + Etapa -->
+        {zoneIds.map((zid) => {
+            const z = DAILY_ZONES[zid];
+            return stageIds.map((sid) => {
+                const st = z.stages[sid];
+                const isDefault = zid === 'es' && sid === 'middle';
+                const catalogZoneUrl = appLink('catalog', z.catalogBase);
+                return (
+                    <div
+                        data-curriculum-panel={`${zid}:${sid}`}
+                        data-panel-meta={`${z.flag} ${z.name[lang]} · ${st.grades[lang]} · ${z.standardLabel[lang]}`}
+                        data-stage-label={st.label[lang]}
+                        class={isDefault ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5' : 'hidden grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5'}
+                    >
+                        {st.subjects.map((sub) => {
+                            const palette = colorClasses[sub.color] || colorClasses.blue;
+                            const subCatalogUrl = appLink('catalog', sub.catalogPath);
+                            return (
+                                <article class={`precision-card p-6 bg-white border border-slate-200 ${palette.border} flex flex-col justify-between`}>
+                                    <div>
+                                        <div class="flex items-center justify-between gap-2 mb-4">
+                                            <div class={`w-10 h-10 rounded-xl ${palette.iconBg} flex items-center justify-center text-base`}>
+                                                <i class={`fas ${sub.icon}`}></i>
+                                            </div>
+                                            <span class={`text-[10px] font-mono font-bold px-2.5 py-1 rounded-full border ${palette.badge}`}>
+                                                {st.grades[lang]}
+                                            </span>
+                                        </div>
+
+                                        <h3 class="text-lg font-black text-slate-900 mb-1">
+                                            {sub.name[lang]}
+                                        </h3>
+                                        <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1">
+                                            {t.todayTopic}
+                                        </div>
+                                        <p class="text-xs sm:text-sm text-slate-700 font-medium mb-4 leading-relaxed">
+                                            {sub.topicToday[lang]}
+                                        </p>
+
+                                        <!-- Muestra de ejercicio cotidiano -->
+                                        <div class="bg-slate-50 rounded-xl p-3.5 border border-slate-200/80 mb-4 space-y-2">
+                                            <div class="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-500">
+                                                {t.sampleTitle}
+                                            </div>
+                                            <p class="text-xs text-slate-800 font-semibold leading-snug">
+                                                "{sub.samplePrompt[lang]}"
+                                            </p>
+                                            <div class="pt-2 border-t border-slate-200/70 text-[11px] text-teal-800">
+                                                <span class="font-bold">{t.hintLabel}</span> {sub.socraticHint[lang]}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="pt-3 border-t border-slate-100 flex items-center justify-between gap-2 text-xs font-bold">
+                                        <a href={subCatalogUrl || catalogZoneUrl} target="_blank" rel="noopener noreferrer" class="text-blue-700 hover:text-blue-900 flex items-center gap-1">
+                                            <span>{t.openCatalog}</span>
+                                            <i class="fas fa-arrow-up-right-from-square text-[10px]"></i>
+                                        </a>
+                                        <button
+                                            type="button"
+                                            data-open-demo-modal
+                                            data-demo-target="app"
+                                            data-demo-path="/navigator/spec_root/0"
+                                            data-demo-title={`${sub.name[lang]} · ${st.grades[lang]}`}
+                                            data-demo-subtitle={sub.topicToday[lang]}
+                                            class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-blue-600 text-white transition-colors cursor-pointer flex items-center gap-1.5"
+                                        >
+                                            <i class="fas fa-play text-[9px]"></i>
+                                            <span>{t.openApp}</span>
+                                        </button>
+                                    </div>
+                                </article>
+                            );
+                        })}
+                    </div>
+                );
+            });
+        })}
+    </div>
+</section>
+
+<script is:inline>
+    (function () {
+        const root = document.querySelector('[data-daily-explorer]');
+        if (!root) return;
+
+        const zoneBtns = root.querySelectorAll('[data-zone-btn]');
+        const stageBtns = root.querySelectorAll('[data-stage-btn]');
+        const panels = root.querySelectorAll('[data-curriculum-panel]');
+        const metaEl = root.querySelector('[data-active-meta]');
+
+        const validZones = ['es', 'us', 'mx', 'intl'];
+        const validStages = ['primary', 'middle', 'high'];
+
+        function detectDefaultZone() {
+            try {
+                const tz = (Intl.DateTimeFormat().resolvedOptions().timeZone || '').toLowerCase();
+                if (tz.includes('mexico') || tz.includes('monterrey') || tz.includes('cancun') || tz.includes('tijuana')) return 'mx';
+                if (tz.includes('america/') || tz.includes('us/')) return 'us';
+            } catch (_) {}
+            return 'es';
+        }
+
+        const params = new URLSearchParams(window.location.search);
+        const qZone = params.get('zona') || params.get('zone');
+        const qStage = params.get('etapa') || params.get('stage');
+
+        let activeZone = validZones.includes(qZone || '')
+            ? qZone
+            : (validZones.includes(localStorage.getItem('colabedu_pref_zone') || '') ? localStorage.getItem('colabedu_pref_zone') : detectDefaultZone());
+
+        let activeStage = validStages.includes(qStage || '')
+            ? qStage
+            : (validStages.includes(localStorage.getItem('colabedu_pref_stage') || '') ? localStorage.getItem('colabedu_pref_stage') : 'middle');
+
+        function render() {
+            zoneBtns.forEach((btn) => {
+                const isActive = btn.getAttribute('data-zone-btn') === activeZone;
+                btn.classList.toggle('bg-slate-900', isActive);
+                btn.classList.toggle('text-white', isActive);
+                btn.classList.toggle('border-slate-900', isActive);
+                btn.classList.toggle('bg-white', !isActive);
+                btn.classList.toggle('text-slate-700', !isActive);
+                btn.classList.toggle('border-slate-200', !isActive);
+            });
+
+            stageBtns.forEach((btn) => {
+                const isActive = btn.getAttribute('data-stage-btn') === activeStage;
+                btn.classList.toggle('bg-blue-600', isActive);
+                btn.classList.toggle('text-white', isActive);
+                btn.classList.toggle('border-blue-600', isActive);
+                btn.classList.toggle('bg-white', !isActive);
+                btn.classList.toggle('text-slate-700', !isActive);
+                btn.classList.toggle('border-slate-200', !isActive);
+            });
+
+            const key = `${activeZone}:${activeStage}`;
+            panels.forEach((panel) => {
+                const match = panel.getAttribute('data-curriculum-panel') === key;
+                panel.classList.toggle('hidden', !match);
+                if (match && metaEl) {
+                    metaEl.textContent = panel.getAttribute('data-panel-meta') || '';
+                }
+            });
+
+            // Sincronizar etiquetas de etapa según la zona (ej. ESO vs Middle School vs MYP)
+            stageBtns.forEach((btn) => {
+                const sid = btn.getAttribute('data-stage-btn');
+                const samplePanel = root.querySelector(`[data-curriculum-panel="${activeZone}:${sid}"]`);
+                if (samplePanel) {
+                    const lbl = samplePanel.getAttribute('data-stage-label');
+                    if (lbl) btn.textContent = lbl;
+                }
+            });
+        }
+
+        zoneBtns.forEach((btn) => {
+            btn.addEventListener('click', () => {
+                activeZone = btn.getAttribute('data-zone-btn') || 'es';
+                try { localStorage.setItem('colabedu_pref_zone', activeZone); } catch (_) {}
+                render();
+            });
+        });
+
+        stageBtns.forEach((btn) => {
+            btn.addEventListener('click', () => {
+                activeStage = btn.getAttribute('data-stage-btn') || 'middle';
+                try { localStorage.setItem('colabedu_pref_stage', activeStage); } catch (_) {}
+                render();
+            });
+        });
+
+        render();
+    })();
+</script>
