@@ -1,0 +1,52 @@
+{
+  "schemaVersion": "1.0.0",
+  "updatedAt": "2026-11-15T00:00:00Z",
+  "platforms": {
+    "classroom": {
+      "courseTitle": [
+        "h1",
+        "div[data-course-name]",
+        "div[data-header-title]",
+        "div.asQXV"
+      ],
+      "peopleHeader": [
+        "div[aria-label*='Alumnos']",
+        "div[aria-label*='Students']",
+        "h2",
+        "div[data-tab-id='roster']"
+      ],
+      "driveLinks": [
+        "a[href*='drive.google.com']",
+        "a[href*='docs.google.com']",
+        "a[href*='slides.google.com']"
+      ]
+    },
+    "canvas": {
+      "speedGraderHeader": [
+        "#gradebook_header",
+        ".gradebook_header",
+        "header.header"
+      ],
+      "submissionBox": [
+        "#submissions_container",
+        "#iframe_holder",
+        ".submission-details-container"
+      ]
+    },
+    "moodle": {
+      "pageHeader": [
+        "#page-header h1",
+        ".page-header-headings h1",
+        ".breadcrumb li:last-child"
+      ],
+      "courseBreadcrumb": [
+        ".breadcrumb li:nth-child(2) a",
+        ".breadcrumb li:nth-child(3) a"
+      ],
+      "mainContent": [
+        "#region-main",
+        "#page-content"
+      ]
+    }
+  }
+}
