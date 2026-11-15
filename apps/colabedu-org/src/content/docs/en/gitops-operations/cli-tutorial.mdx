@@ -650,6 +650,16 @@ Executes semantic planetary discovery and multi-criteria quality certification (
 
 ---
 
+### `oer fetch` — Physical OER Download & SHA-256 Verification
+
+Downloads a remote OER asset (or verifies a local file) into `ce-specs/sources/`, validating HTTP 200, minimum file size, and computing its SHA-256 digest via `OerPhysicalDownloadService`.
+
+```bash
+./ce-cli.sh oer fetch --source-url=<url> --subject=<subject> --framework=<framework> [--country=<code>] [--title=<title>] [--force]
+```
+
+---
+
 ### `oer health` — Sovereign OER Repository Diagnostics
 
 Real-time health check, latency monitoring, and SSL certificate verification across the federated network of sovereign OER repositories (Americas, Europe, Asia-Pacific, and Global).
@@ -2059,4 +2069,24 @@ Allows administrators to register institutional agreements with regional educati
 
 # Redeem and activate a sponsored membership voucher for a student
 ./ce-cli.sh sponsor redeem --code=MADRID-A8X9K2 --user=usr_student_456
+```
+
+
+---
+
+## 14. Hierarchical Autonomous Normative Matrix (`normative matrix`)
+
+Initializes or selectively regenerates C0/C1 normative environments from scratch (`boot` → `global` → `country` → `region` → `standard × subject × level`) without fixed OERs or PDFs, using autonomous Search Grounding, declarative `inherits_from` resolution, and zero-cost idempotency:
+
+```bash
+# Preview the full DAG execution plan from boot (Global CEFR/IB + California MS/HS/AP + Spain ESO/Bachillerato)
+./ce-cli.sh normative matrix --file=ce-specs/batches/normative/boot.v1.yaml --plan
+
+# Run only California (MS & HS) or only Spain (LOMLOE ESO & Bachillerato)
+./ce-cli.sh normative matrix --file=ce-specs/batches/normative/regions/us-ca.yaml
+./ce-cli.sh normative matrix --file=ce-specs/batches/normative/countries/es.yaml
+
+# Run or force-regenerate a single subject (automatically resolving inherits_from ancestors)
+./ce-cli.sh normative matrix --file=ce-specs/batches/normative/boot.v1.yaml --country=ES --subject=MATHEMATICS --level=BACH
+./ce-cli.sh normative matrix --file=ce-specs/batches/normative/boot.v1.yaml --standard=standard.us.ca.wl --subject=SPANISH_L2 --force
 ```

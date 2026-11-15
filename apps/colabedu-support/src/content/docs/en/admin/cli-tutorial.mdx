@@ -193,6 +193,14 @@ Executes semantic discovery and multi-criteria certification (4 vectors) across 
 | `--format` | `summary` | Output format: `summary`, `table` / `md` (Markdown table with links), `json` |
 | `--output`, `-o` | (stdout) | Disk file path to save the generated audit report |
 
+### 9.1b Physical Download & SHA-256 Verification (`oer fetch`)
+
+Downloads and physically verifies an OER into `ce-specs/sources/` (HTTP 200 + SHA-256 digest):
+
+```bash
+./ce-cli.sh oer fetch --source-url=<url> --subject=<subject> --framework=<framework> [--country=<code>] [--force]
+```
+
 ### 9.2 OER Repository Diagnostics & Resilience (`oer health`)
 
 Real-time health check, latency monitoring, and SSL certificate verification across the federated network of sovereign OER repositories:
@@ -345,3 +353,23 @@ Allows unattended bulk transformation of OER packages and media (`.elp`, `.mbz`,
 ./ce-cli.sh oer batch-status --job-id=job-batch-6ecc7dbf
 ```
 
+
+
+---
+
+## 15. Hierarchical Autonomous Normative Matrix (`normative matrix`)
+
+Initializes or selectively regenerates C0/C1 normative environments from scratch (`boot` → `global` → `country` → `region` → `standard × subject × level`) without fixed OERs or PDFs, using autonomous Search Grounding, declarative `inherits_from` resolution, and zero-cost idempotency:
+
+```bash
+# Preview the full DAG execution plan from boot (Global CEFR/IB + California MS/HS/AP + Spain ESO/Bachillerato)
+./ce-cli.sh normative matrix --file=ce-specs/batches/normative/boot.v1.yaml --plan
+
+# Run only California (MS & HS) or only Spain (LOMLOE ESO & Bachillerato)
+./ce-cli.sh normative matrix --file=ce-specs/batches/normative/regions/us-ca.yaml
+./ce-cli.sh normative matrix --file=ce-specs/batches/normative/countries/es.yaml
+
+# Run or force-regenerate a single subject (automatically resolving inherits_from ancestors)
+./ce-cli.sh normative matrix --file=ce-specs/batches/normative/boot.v1.yaml --country=ES --subject=MATHEMATICS --level=BACH
+./ce-cli.sh normative matrix --file=ce-specs/batches/normative/boot.v1.yaml --standard=standard.us.ca.wl --subject=SPANISH_L2 --force
+```
