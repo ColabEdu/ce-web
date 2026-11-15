@@ -193,6 +193,14 @@ Ejecuta el descubrimiento semántico y certificación multicriterio (4 vectores)
 | `--format` | `summary` | Formato de salida: `summary`, `table` / `md` (tabla Markdown con enlaces web), `json` |
 | `--output`, `-o` | (stdout) | Ruta de fichero para guardar directamente el informe de auditoría |
 
+### 9.1b Descarga Física y Verificación SHA-256 (`oer fetch`)
+
+Descarga y verifica físicamente un OER en `ce-specs/sources/` (HTTP 200 + hash SHA-256):
+
+```bash
+./ce-cli.sh oer fetch --source-url=<url> --subject=<materia> --framework=<marco> [--country=<código>] [--force]
+```
+
 ### 9.2 Diagnóstico y Resiliencia de Repositorios (`oer health`)
 
 Sondeo en tiempo real de latencia, estado HTTP y certificados de los repositorios OER nacionales e internacionales federados:
@@ -384,3 +392,23 @@ Permite orquestar la transformación masiva y desatendida de paquetes y fuentes 
 ```
 
 
+
+
+---
+
+## 15. Matriz Normativa Jerárquica Autónoma (`normative matrix`)
+
+Permite inicializar o regenerar desde cero entornos normativos C0/C1 completos (`boot` → `global` → `country` → `region` → `standard × subject × level`) sin OERs ni PDFs fijos, usando Search Grounding autónomo, herencia declarativa (`inherits_from`) e idempotencia por defecto:
+
+```bash
+# Simular el plan DAG completo desde boot (Global CEFR/IB + California MS/HS/AP + España ESO/Bachillerato)
+./ce-cli.sh normative matrix --file=ce-specs/batches/normative/boot.v1.yaml --plan
+
+# Ejecutar solo California (MS y HS) o solo España (LOMLOE ESO/Bachillerato)
+./ce-cli.sh normative matrix --file=ce-specs/batches/normative/regions/us-ca.yaml
+./ce-cli.sh normative matrix --file=ce-specs/batches/normative/countries/es.yaml
+
+# Ejecutar o regenerar una asignatura suelta (resolviendo sus padres inherits_from automáticamente)
+./ce-cli.sh normative matrix --file=ce-specs/batches/normative/boot.v1.yaml --country=ES --subject=MATHEMATICS --level=BACH
+./ce-cli.sh normative matrix --file=ce-specs/batches/normative/boot.v1.yaml --standard=standard.us.ca.wl --subject=SPANISH_L2 --force
+```

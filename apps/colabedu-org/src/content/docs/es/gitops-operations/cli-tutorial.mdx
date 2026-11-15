@@ -619,6 +619,16 @@ Ejecuta el descubrimiento semántico planetario y la certificación de calidad m
 
 ---
 
+### `oer fetch` — Descarga Física y Verificación SHA-256 de OERs
+
+Descarga un recurso OER remoto (o verifica un fichero local) en `ce-specs/sources/`, comprobando HTTP 200, tamaño mínimo y calculando su hash SHA-256 mediante `OerPhysicalDownloadService`.
+
+```bash
+./ce-cli.sh oer fetch --source-url=<url> --subject=<materia> --framework=<marco> [--country=<código>] [--title=<título>] [--force]
+```
+
+---
+
 ### `oer health` — Diagnóstico y Resiliencia de Repositorios OER
 
 Sondea y reporta en vivo el estado HTTP, latencia (ms) y disponibilidad de la red planetaria de repositorios OER sovereign (América, Europa, Asia-Pacífico y Globales).
@@ -1781,3 +1791,23 @@ Para habilitar el onboarding para más de 50 países en diferentes idiomas sin a
 | `--domain`, `-d` | `String` | *(auto)* | Dominio disciplinar UNESCO ISCED-F 2013 (`MATHEMATICS`, `PHYSICS`, `CHEMISTRY`, `LANGUAGE_AND_LITERATURE`, `HISTORY_AND_SOCIAL_SCIENCES`, `LIFE_SCIENCES`). |
 | `--language`, `--lang` | `String` | *(auto)* | Código de idioma ISO 639-1 (`es`, `en`, `fr`, `de`, `ca`, `zh`, `ja`). |
 
+
+
+---
+
+## 15. Matriz Normativa Jerárquica Autónoma (`normative matrix`)
+
+Permite inicializar o regenerar desde cero entornos normativos C0/C1 completos (`boot` → `global` → `country` → `region` → `standard × subject × level`) sin OERs ni PDFs fijos, usando Search Grounding autónomo, herencia declarativa (`inherits_from`) e idempotencia por defecto:
+
+```bash
+# Simular el plan DAG completo desde boot (Global CEFR/IB + California MS/HS/AP + España ESO/Bachillerato)
+./ce-cli.sh normative matrix --file=ce-specs/batches/normative/boot.v1.yaml --plan
+
+# Ejecutar solo California (MS y HS) o solo España (LOMLOE ESO/Bachillerato)
+./ce-cli.sh normative matrix --file=ce-specs/batches/normative/regions/us-ca.yaml
+./ce-cli.sh normative matrix --file=ce-specs/batches/normative/countries/es.yaml
+
+# Ejecutar o regenerar una asignatura suelta (resolviendo sus padres inherits_from automáticamente)
+./ce-cli.sh normative matrix --file=ce-specs/batches/normative/boot.v1.yaml --country=ES --subject=MATHEMATICS --level=BACH
+./ce-cli.sh normative matrix --file=ce-specs/batches/normative/boot.v1.yaml --standard=standard.us.ca.wl --subject=SPANISH_L2 --force
+```
