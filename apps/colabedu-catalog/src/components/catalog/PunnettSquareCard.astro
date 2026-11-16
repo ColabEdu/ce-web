@@ -1,0 +1,314 @@
+---
+import InteractiveCtaButton from './InteractiveCtaButton.astro';
+import { buildPunnettModel, type PunnettProps } from '@/lib/punnett';
+
+interface Props {
+  propsData?: PunnettProps;
+  index: number;
+  lessonId: string;
+  slideIndex?: number;
+  slideId?: string;
+}
+
+const { propsData = {}, index, lessonId, slideIndex, slideId } = Astro.props;
+const model = buildPunnettModel(propsData);
+const widgetDomId = `punnett-card-${slideIndex ?? index}-${index}`;
+const totalCells = model.matGametes.length * model.patGametes.length;
+const isLesson = model.mode === 'lesson';
+---
+
+<div
+  id={widgetDomId}
+  class="my-8 relative group"
+  data-punnett-widget
+  data-mat-gametes={JSON.stringify(model.matGametes)}
+  data-pat-gametes={JSON.stringify(model.patGametes)}
+  data-expected-grid={JSON.stringify(model.expectedGrid)}
+  data-max-score={String(model.maxScore)}
+  data-mode={model.mode}
+>
+  <div class="relative p-[1.5px] rounded-3xl bg-gradient-to-b from-emerald-500/35 via-cyan-500/20 to-transparent shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
+    <div class="rounded-[23px] bg-[#070b16] p-6 sm:p-8 relative overflow-hidden">
+      <!-- Top Meta Bar -->
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-5 pb-4 border-b border-white/[0.08]">
+        <div class="flex items-center gap-2.5">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-300 border border-emerald-500/25">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+            Laboratorio Genético #{index}
+          </span>
+          <span class="text-xs text-slate-400 font-mono">
+            {model.crossType === 'DIHYBRID' ? 'Dihíbrido 4×4' : 'Monohíbrido 2×2'}
+          </span>
+        </div>
+
+        <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[11px] font-semibold bg-cyan-500/10 text-cyan-300 border border-cyan-500/20">
+          {isLesson ? 'Modo Demostrativo' : `Modo Ejercicio (${model.maxScore} pt)`}
+        </span>
+      </div>
+
+      <!-- Title & Description -->
+      <h3 class="text-xl sm:text-2xl font-bold text-white mb-2 leading-snug tracking-tight">
+        {model.title}
+      </h3>
+      {model.description && (
+        <p class="text-sm text-slate-300 mb-5 leading-relaxed">{model.description}</p>
+      )}
+
+      <!-- Parent Genotypes Banner -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
+        <div class="flex items-center justify-between px-4 py-2.5 rounded-xl bg-white/[0.03] border border-pink-500/25">
+          <span class="text-xs font-semibold text-pink-300">Madre (♀)</span>
+          <span class="font-mono text-base font-bold text-white">{model.maternalGenotype}</span>
+        </div>
+        <div class="flex items-center justify-between px-4 py-2.5 rounded-xl bg-white/[0.03] border border-cyan-500/25">
+          <span class="text-xs font-semibold text-cyan-300">Padre (♂)</span>
+          <span class="font-mono text-base font-bold text-white">{model.paternalGenotype}</span>
+        </div>
+      </div>
+
+      <!-- Punnett Grid -->
+      <div class="overflow-x-auto mb-6">
+        <table class="w-full max-w-lg mx-auto border-separate border-spacing-2">
+          <thead>
+            <tr>
+              <th class="w-20 p-2 text-center text-[11px] font-mono uppercase tracking-wider text-slate-400 bg-white/[0.02] rounded-xl border border-white/[0.06]">
+                ♀ \ ♂
+              </th>
+              {model.patGametes.map((pg, cIdx) => (
+                <th class="p-1.5 bg-cyan-500/10 rounded-xl border border-cyan-500/25">
+                  {isLesson ? (
+                    <span class="block py-1.5 font-mono text-sm font-bold text-cyan-200">{pg}</span>
+                  ) : (
+                    <input
+                      type="text"
+                      maxlength={4}
+                      aria-label={`Gameto paterno ${cIdx + 1}`}
+                      placeholder="♂"
+                      data-pat-gamete={cIdx}
+                      class="w-full bg-transparent text-center font-mono text-sm font-bold text-cyan-200 placeholder-cyan-500/40 focus:outline-none py-1.5"
+                    />
+                  )}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {model.matGametes.map((mg, rIdx) => (
+              <tr>
+                <th class="p-1.5 bg-pink-500/10 rounded-xl border border-pink-500/25">
+                  {isLesson ? (
+                    <span class="block py-2 font-mono text-sm font-bold text-pink-200">{mg}</span>
+                  ) : (
+                    <input
+                      type="text"
+                      maxlength={4}
+                      aria-label={`Gameto materno ${rIdx + 1}`}
+                      placeholder="♀"
+                      data-mat-gamete={rIdx}
+                      class="w-full bg-transparent text-center font-mono text-sm font-bold text-pink-200 placeholder-pink-500/40 focus:outline-none py-2"
+                    />
+                  )}
+                </th>
+                {model.patGametes.map((_, cIdx) => {
+                  const expected = model.expectedGrid[rIdx][cIdx];
+                  return (
+                    <td
+                      data-cell-wrapper={`${rIdx}-${cIdx}`}
+                      class="p-1.5 rounded-xl bg-white/[0.03] border border-white/[0.1] transition-colors"
+                    >
+                      {isLesson ? (
+                        <span class="block py-2 text-center font-mono text-sm font-bold text-white">
+                          {expected}
+                        </span>
+                      ) : (
+                        <input
+                          type="text"
+                          maxlength={6}
+                          aria-label={`Cigoto fila ${rIdx + 1} columna ${cIdx + 1}`}
+                          placeholder="?"
+                          data-zygote-cell={`${rIdx}-${cIdx}`}
+                          class="w-full bg-transparent text-center font-mono text-sm font-bold text-white placeholder-slate-500 focus:outline-none py-2"
+                        />
+                      )}
+                    </td>
+                  );
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Interactive Controls (Exercise Mode) -->
+      {!isLesson && (
+        <div class="flex flex-wrap items-center gap-3 mb-5">
+          <button
+            type="button"
+            data-punnett-check
+            class="px-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs sm:text-sm font-bold transition-colors cursor-pointer"
+          >
+            Comprobar Cuadro de Punnett
+          </button>
+          <button
+            type="button"
+            data-punnett-solve
+            class="px-3.5 py-2.5 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] text-slate-200 text-xs font-semibold border border-white/[0.1] transition-colors cursor-pointer"
+          >
+            Ver solución
+          </button>
+          <button
+            type="button"
+            data-punnett-reset
+            class="px-3.5 py-2.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] text-slate-400 text-xs font-semibold border border-white/[0.08] transition-colors cursor-pointer"
+          >
+            Reiniciar
+          </button>
+        </div>
+      )}
+
+      <!-- Feedback Banner -->
+      <div
+        data-punnett-feedback
+        class="hidden mb-5 p-4 rounded-2xl text-xs sm:text-sm font-medium border"
+      ></div>
+
+      <!-- Mendelian Genotype Ratio Summary -->
+      <div class="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.07] mb-6">
+        <div class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2.5">
+          Proporciones Genotípicas Esperadas (F1/F2)
+        </div>
+        <div class="flex flex-wrap gap-2">
+          {Object.entries(model.genotypeCounts).map(([genotype, count]) => {
+            const pct = Math.round((count / totalCells) * 100);
+            return (
+              <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-slate-900/90 border border-slate-700/70 text-xs font-mono text-slate-200">
+                <strong class="text-cyan-300">{genotype}</strong>
+                <span class="text-slate-400">{pct}% ({count}/{totalCells})</span>
+              </span>
+            );
+          })}
+        </div>
+      </div>
+
+      <!-- Bottom Interactive Footer -->
+      <div class="pt-4 border-t border-white/[0.08] flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="flex items-center gap-2 text-xs text-slate-400">
+          <span class="text-emerald-400 font-bold">🧬</span>
+          <span>Validación determinista de alelos (mayúsculas/minúsculas).</span>
+        </div>
+
+        <InteractiveCtaButton
+          lessonId={lessonId}
+          slideIndex={slideIndex}
+          slideId={slideId}
+          text="Abrir laboratorio completo →"
+          size="sm"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+
+<script is:inline>
+  (() => {
+    const roots = document.querySelectorAll('[data-punnett-widget]');
+    roots.forEach((root) => {
+      if (root.dataset.punnettBound === 'true') return;
+      root.dataset.punnettBound = 'true';
+
+      const matGametes = JSON.parse(root.dataset.matGametes || '[]');
+      const patGametes = JSON.parse(root.dataset.patGametes || '[]');
+      const expectedGrid = JSON.parse(root.dataset.expectedGrid || '[]');
+      const maxScore = parseFloat(root.dataset.maxScore || '1');
+
+      const checkBtn = root.querySelector('[data-punnett-check]');
+      const solveBtn = root.querySelector('[data-punnett-solve]');
+      const resetBtn = root.querySelector('[data-punnett-reset]');
+      const feedbackEl = root.querySelector('[data-punnett-feedback]');
+
+      const setFeedback = (ok, text) => {
+        if (!feedbackEl) return;
+        feedbackEl.classList.remove('hidden', 'bg-emerald-500/10', 'border-emerald-500/30', 'text-emerald-300', 'bg-amber-500/10', 'border-amber-500/30', 'text-amber-300');
+        if (ok) {
+          feedbackEl.classList.add('bg-emerald-500/10', 'border-emerald-500/30', 'text-emerald-300');
+        } else {
+          feedbackEl.classList.add('bg-amber-500/10', 'border-amber-500/30', 'text-amber-300');
+        }
+        feedbackEl.textContent = text;
+      };
+
+      checkBtn?.addEventListener('click', () => {
+        let matOk = true;
+        matGametes.forEach((g, i) => {
+          const inp = root.querySelector(`[data-mat-gamete="${i}"]`);
+          const val = (inp?.value || '').trim();
+          if (val !== g) matOk = false;
+        });
+
+        let patOk = true;
+        patGametes.forEach((g, j) => {
+          const inp = root.querySelector(`[data-pat-gamete="${j}"]`);
+          const val = (inp?.value || '').trim();
+          if (val !== g) patOk = false;
+        });
+
+        let correctCells = 0;
+        const totalCells = matGametes.length * patGametes.length;
+        expectedGrid.forEach((row, r) => {
+          row.forEach((expected, c) => {
+            const inp = root.querySelector(`[data-zygote-cell="${r}-${c}"]`);
+            const wrapper = root.querySelector(`[data-cell-wrapper="${r}-${c}"]`);
+            const ok = (inp?.value || '').trim() === expected;
+            if (ok) correctCells++;
+            if (wrapper) {
+              wrapper.classList.remove('border-white/[0.1]', 'border-emerald-500/60', 'bg-emerald-500/10', 'border-rose-500/60', 'bg-rose-500/10');
+              wrapper.classList.add(ok ? 'border-emerald-500/60' : 'border-rose-500/60', ok ? 'bg-emerald-500/10' : 'bg-rose-500/10');
+            }
+          });
+        });
+
+        const allGametesOk = matOk && patOk;
+        const allCorrect = allGametesOk && correctCells === totalCells;
+        const score = totalCells > 0 ? ((correctCells / totalCells) * maxScore * (allGametesOk ? 1 : 0.8)).toFixed(2) : '0.00';
+
+        if (allCorrect) {
+          setFeedback(true, `Resultado: ${score} / ${maxScore.toFixed(1)} pt — ¡Excelente! Cuadro de Punnett perfectamente completado.`);
+        } else {
+          setFeedback(false, `Resultado: ${score} / ${maxScore.toFixed(1)} pt — ${correctCells}/${totalCells} cigotos correctos${allGametesOk ? '' : ' (revisa los gametos parentales y mayúsculas/minúsculas)'}.`);
+        }
+      });
+
+      solveBtn?.addEventListener('click', () => {
+        matGametes.forEach((g, i) => {
+          const inp = root.querySelector(`[data-mat-gamete="${i}"]`);
+          if (inp) inp.value = g;
+        });
+        patGametes.forEach((g, j) => {
+          const inp = root.querySelector(`[data-pat-gamete="${j}"]`);
+          if (inp) inp.value = g;
+        });
+        expectedGrid.forEach((row, r) => {
+          row.forEach((expected, c) => {
+            const inp = root.querySelector(`[data-zygote-cell="${r}-${c}"]`);
+            const wrapper = root.querySelector(`[data-cell-wrapper="${r}-${c}"]`);
+            if (inp) inp.value = expected;
+            if (wrapper) {
+              wrapper.classList.remove('border-rose-500/60', 'bg-rose-500/10', 'border-white/[0.1]');
+              wrapper.classList.add('border-emerald-500/60', 'bg-emerald-500/10');
+            }
+          });
+        });
+        setFeedback(true, 'Solución canónica aplicada.');
+      });
+
+      resetBtn?.addEventListener('click', () => {
+        root.querySelectorAll('input').forEach((inp) => { inp.value = ''; });
+        root.querySelectorAll('[data-cell-wrapper]').forEach((w) => {
+          w.classList.remove('border-emerald-500/60', 'bg-emerald-500/10', 'border-rose-500/60', 'bg-rose-500/10');
+          w.classList.add('border-white/[0.1]');
+        });
+        feedbackEl?.classList.add('hidden');
+      });
+    });
+  })();
+</script>

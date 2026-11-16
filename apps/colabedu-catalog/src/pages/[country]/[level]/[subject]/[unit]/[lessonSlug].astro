@@ -4,7 +4,9 @@ import CourseHero from '@/components/catalog/CourseHero.astro';
 import AxiomCallout from '@/components/catalog/AxiomCallout.astro';
 import LessonObjectives from '@/components/catalog/LessonObjectives.astro';
 import ExerciseTeaserCard from '@/components/catalog/ExerciseTeaserCard.astro';
+import PunnettSquareCard from '@/components/catalog/PunnettSquareCard.astro';
 import InteractiveCtaButton from '@/components/catalog/InteractiveCtaButton.astro';
+import { isPunnettWidgetType } from '@/lib/punnett';
 import TeacherRubricPanel from '@/components/catalog/TeacherRubricPanel.astro';
 import OerAttributionPanel from '@/components/catalog/OerAttributionPanel.astro';
 import LearningResourceJsonLd from '@/components/seo/LearningResourceJsonLd.astro';
@@ -127,14 +129,26 @@ if (!axiomText && lesson.slides) {
   }
 }
 
-// Extract quiz questions from slides
+// Extract quiz questions and specialized STEM widgets from slides
 const quizQuestions: { q: SlideQuestion; slideTitle: string; slideIndex: number; slideId?: string }[] = [];
+const punnettWidgets: { props: Record<string, any>; slideTitle: string; slideIndex: number; slideId?: string }[] = [];
 if (lesson.slides) {
   for (const [idx, s] of lesson.slides.entries()) {
     if (s.embeddedWidget?.props?.questions) {
       for (const q of s.embeddedWidget.props.questions) {
         quizQuestions.push({ q, slideTitle: s.title || "Ejercicio", slideIndex: idx, slideId: s.id });
       }
+    }
+    if (isPunnettWidgetType(s.embeddedWidget?.type)) {
+      punnettWidgets.push({
+        props: {
+          title: s.title || s.embeddedWidget?.props?.title,
+          ...s.embeddedWidget?.props,
+        },
+        slideTitle: s.title || "Laboratorio Genético",
+        slideIndex: idx,
+        slideId: s.id,
+      });
     }
   }
 }
@@ -222,6 +236,39 @@ if (lesson.slides) {
         />
       </div>
     </div>
+
+    <!-- Interactive Punnett Square STEM Labs -->
+    {punnettWidgets.length > 0 && (
+      <section class="my-12">
+        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-6 pb-3 border-b border-slate-800/80">
+          <div>
+            <span class="text-xs uppercase tracking-wider font-bold text-emerald-400 block mb-1">
+              Simulador Interactivo A2UI
+            </span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+              Laboratorio de Genética Mendeliana
+            </h2>
+          </div>
+          <span class="text-xs text-slate-400 bg-slate-900/80 border border-slate-800 px-3 py-1 rounded-full self-start sm:self-auto">
+            {punnettWidgets.length} {punnettWidgets.length === 1 ? 'laboratorio interactivo' : 'laboratorios interactivos'}
+          </span>
+        </div>
+
+        <div class="space-y-6">
+          {punnettWidgets.map((item, idx) => (
+            <div id={`slide-punnett-${idx + 1}`}>
+              <PunnettSquareCard
+                propsData={item.props}
+                index={idx + 1}
+                lessonId={lesson.id}
+                slideIndex={item.slideIndex}
+                slideId={item.slideId}
+              />
+            </div>
+          ))}
+        </div>
+      </section>
+    )}
 
     <!-- Questions & Exercises Teasers -->
     {quizQuestions.length > 0 && (
