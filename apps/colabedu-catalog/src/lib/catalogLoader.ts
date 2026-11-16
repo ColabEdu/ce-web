@@ -298,7 +298,13 @@ export function loadCatalog(): CatalogHierarchy {
         subtitle: s.subtitle,
         layout: s.layout,
         content: s.content,
-        embeddedWidget: s.embeddedWidget,
+        embeddedWidget: s.embeddedWidget ?? (typeof s.widget === 'string' ? {
+          type: s.widget,
+          props: s.props || {
+            title: s.title,
+            description: s.instruction,
+          },
+        } : (s.widget && typeof s.widget === 'object' && typeof s.widget.type === 'string' ? s.widget : undefined)),
         media: s.media,
       })),
       pedagogical_metadata: l.pedagogical_metadata,

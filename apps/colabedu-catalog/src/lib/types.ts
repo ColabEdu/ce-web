@@ -17,9 +17,18 @@ export interface SlideWidget {
   type: string;
   props?: {
     title?: string;
+    description?: string;
     questions?: SlideQuestion[];
     pairs?: Array<{ left: string; right: string }>;
     taskId?: string;
+    crossType?: string;
+    maternalGenotype?: string;
+    paternalGenotype?: string;
+    dominantTraitName?: string;
+    recessiveTraitName?: string;
+    mode?: string;
+    maxScore?: number;
+    [key: string]: any;
   };
 }
 
