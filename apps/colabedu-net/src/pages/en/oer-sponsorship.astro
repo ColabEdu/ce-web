@@ -1,0 +1,317 @@
+---
+// src/pages/en/oer-sponsorship.astro
+// Value-Based OER Book Digitization Sponsorship (Public Digital Good)
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { appLink } from "@colabedu/ui-core/navigation";
+
+const catalogUrl = appLink('catalog', '/');
+---
+<BaseLayout
+    title="OER Book Digitization Sponsorship | Public Digital Good | ColabEdu"
+    description="Sponsor the transformation of open textbooks (OER) into L0-grounded interactive A2UI lessons. 100% free public access for thousands of students with institutional recognition and SROI telemetry."
+    lang="en"
+>
+    <!-- MAIN HERO -->
+    <section class="relative pt-32 pb-16 lg:pt-40 lg:pb-20 overflow-hidden bg-gradient-to-b from-teal-50/70 via-slate-50 to-white border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center max-w-4xl mx-auto">
+                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-teal-100/80 border border-teal-300 text-teal-900 text-xs font-mono font-bold uppercase tracking-wider mb-6">
+                    <i class="fas fa-book-open-reader text-teal-700"></i>
+                    <span>Public Digital Good & OER Sponsorship</span>
+                </div>
+                <h1 class="text-4xl sm:text-6xl font-black text-slate-900 tracking-tight leading-tight mb-6">
+                    Sponsor OER Digitization.<br/>
+                    <span class="text-teal-700">Open knowledge, interactive and free forever.</span>
+                </h1>
+                <p class="text-lg sm:text-xl text-slate-600 font-normal leading-relaxed max-w-3xl mx-auto mb-8">
+                    Instead of paying commercial textbook licenses year after year, ministries, school districts, foundations, and CSR programs can sponsor the digitization of public OER textbooks into L0-grounded A2UI interactive lessons—remaining 100% free for thousands of students.
+                </p>
+
+                <div class="flex flex-wrap items-center justify-center gap-4">
+                    <a href="#tiers" class="px-6 py-3.5 rounded-xl bg-teal-700 hover:bg-teal-800 text-white font-extrabold text-sm shadow-md transition-all flex items-center gap-2">
+                        <i class="fas fa-layer-group"></i>
+                        <span>View Sponsorship Tiers</span>
+                    </a>
+                    <a href="#badge-preview" class="px-6 py-3.5 rounded-xl bg-white hover:bg-slate-50 text-slate-800 font-bold text-sm border border-slate-300 shadow-xs transition-all flex items-center gap-2">
+                        <i class="fas fa-award text-amber-600"></i>
+                        <span>Preview Sponsor Badge & SROI</span>
+                    </a>
+                </div>
+
+                <p class="mt-6 text-xs text-slate-500">
+                    Looking to fund student or cohort compute scholarships instead?
+                    <a href="/en/sponsored" class="text-amber-700 font-bold underline hover:text-amber-900 ml-1">View Sponsored Memberships &rarr;</a>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- VALUE ANCHORING VS TRADITIONAL ALTERNATIVES -->
+    <section class="py-16 bg-white border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <span class="text-xs font-mono font-bold text-slate-500 uppercase tracking-widest block mb-1">
+                    Public Impact Economics
+                </span>
+                <h2 class="text-2xl sm:text-3xl font-black text-slate-900">
+                    A fraction of traditional publishing cost, with compounding public value
+                </h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="p-7 rounded-3xl bg-slate-50 border border-slate-200">
+                    <div class="text-xs font-mono font-bold uppercase tracking-wider text-slate-500 mb-2">Commercial Licenses</div>
+                    <div class="text-2xl font-black text-slate-900 mb-2">$15 – $40 <span class="text-sm font-semibold text-slate-500">/ student / yr</span></div>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        For 10,000 students, districts spend <strong>$150,000 to $400,000 every year</strong> on closed licenses that expire at the end of the term.
+                    </p>
+                </div>
+
+                <div class="p-7 rounded-3xl bg-slate-50 border border-slate-200">
+                    <div class="text-xs font-mono font-bold uppercase tracking-wider text-slate-500 mb-2">HTML5 / SCORM Agencies</div>
+                    <div class="text-2xl font-black text-slate-900 mb-2">$25k – $80k <span class="text-sm font-semibold text-slate-500">/ book</span></div>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Static custom formatting without L0 normative grounding, without A2UI Socratic tutoring, and with costly curriculum maintenance.
+                    </p>
+                </div>
+
+                <div class="p-7 rounded-3xl bg-teal-50/70 border-2 border-teal-500 shadow-sm">
+                    <div class="text-xs font-mono font-bold uppercase tracking-wider text-teal-800 mb-2">ColabEdu OER Sponsorship</div>
+                    <div class="text-2xl font-black text-teal-900 mb-2">From €5,000 <span class="text-sm font-semibold text-teal-700">/ book</span></div>
+                    <p class="text-xs text-slate-700 leading-relaxed">
+                        Interactive A2UI lessons grounded in L0 standards, dual-audited, and permanently free to the public with verifiable SROI telemetry.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3 VALUE-BASED SPONSORSHIP TIERS -->
+    <section id="tiers" class="py-20 bg-slate-50 border-b border-slate-200 scroll-mt-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-14">
+                <span class="text-xs font-mono font-bold text-teal-700 uppercase tracking-widest block mb-2">
+                    Institutional Sponsorship Packages
+                </span>
+                <h2 class="text-3xl sm:text-4xl font-black text-slate-900">
+                    Annual &amp; Multi-Year Sponsorship Tiers
+                </h2>
+                <p class="text-sm text-slate-600 mt-3">
+                    Structured for agile public procurement (including Spain/EU <em>contrato menor</em> &lt; €15,000), philanthropic foundations, and Corporate Social Responsibility (CSR) initiatives.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
+                <!-- TIER 1 -->
+                <div class="p-8 rounded-3xl bg-white border border-slate-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-4">
+                            <span class="text-[11px] font-mono font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-slate-100 text-slate-700">Tier 1</span>
+                            <span class="text-[11px] font-mono font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-full">Agile Procurement (&lt; €15k)</span>
+                        </div>
+                        <h3 class="text-xl font-black text-slate-900 mb-2">Single Book / Subject</h3>
+                        <div class="text-3xl font-black text-slate-900 mb-4">€5,000 – €14,900</div>
+                        <p class="text-xs text-slate-600 leading-relaxed mb-6">
+                            Ideal for sponsoring a flagship OER textbook (e.g., Physics, Biology, or Mathematics) under simplified direct-award procurement thresholds.
+                        </p>
+                        <ul class="text-xs text-slate-700 space-y-3 mb-8">
+                            <li class="flex items-start gap-2.5">
+                                <i class="fas fa-check text-teal-600 mt-0.5"></i>
+                                <span>Full <strong>A2UI InteractiveLessons</strong> digitization (Socratic slides and verifiable widgets).</span>
+                            </li>
+                            <li class="flex items-start gap-2.5">
+                                <i class="fas fa-check text-teal-600 mt-0.5"></i>
+                                <span>Official <strong>L0 normative alignment</strong> (State Standards, AP, IB, or LOMLOE).</span>
+                            </li>
+                            <li class="flex items-start gap-2.5">
+                                <i class="fas fa-check text-teal-600 mt-0.5"></i>
+                                <span>Institutional <em>"Sponsored by..."</em> badge displayed on all free public lessons.</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <a href="mailto:instituciones@colabedu.net?subject=OER%20Sponsorship%20Inquiry%20-%20Tier%201" class="w-full py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs text-center transition-colors">
+                        Request Tier 1 &rarr;
+                    </a>
+                </div>
+
+                <!-- TIER 2 (FEATURED) -->
+                <div class="p-8 rounded-3xl bg-white border-2 border-teal-600 shadow-lg flex flex-col justify-between relative">
+                    <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-teal-700 text-white text-[11px] font-mono font-bold uppercase tracking-wider shadow-xs">
+                        Most Popular · Foundations &amp; CSR
+                    </div>
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-4 mt-2">
+                            <span class="text-[11px] font-mono font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-teal-50 text-teal-800">Tier 2</span>
+                            <span class="text-[11px] font-mono font-bold text-teal-800 bg-teal-50 border border-teal-200 px-2.5 py-1 rounded-full">Dual Audit + SROI</span>
+                        </div>
+                        <h3 class="text-xl font-black text-slate-900 mb-2">Certified Course + Annual SROI</h3>
+                        <div class="text-3xl font-black text-teal-800 mb-4">€15,000 – €45,000 <span class="text-sm font-semibold text-slate-500">/ yr</span></div>
+                        <p class="text-xs text-slate-600 leading-relaxed mb-6">
+                            Complete course coverage with independent dual-audit certification and auditable Social Return on Investment (SROI) reporting for boards and trustees.
+                        </p>
+                        <ul class="text-xs text-slate-700 space-y-3 mb-8">
+                            <li class="flex items-start gap-2.5">
+                                <i class="fas fa-check text-teal-600 mt-0.5"></i>
+                                <span>Everything in <strong>Tier 1</strong> across the full course pathway.</span>
+                            </li>
+                            <li class="flex items-start gap-2.5">
+                                <i class="fas fa-check text-teal-600 mt-0.5"></i>
+                                <span><strong>Dual Audit Certification</strong> (OPS White-Box verification + independent external LLM-as-a-Judge).</span>
+                            </li>
+                            <li class="flex items-start gap-2.5">
+                                <i class="fas fa-check text-teal-600 mt-0.5"></i>
+                                <span><strong>Annual SROI Impact Report</strong> exportable for foundation boards and CSR disclosures.</span>
+                            </li>
+                            <li class="flex items-start gap-2.5">
+                                <i class="fas fa-check text-teal-600 mt-0.5"></i>
+                                <span>Continuous curriculum and interactive widget updates throughout the year.</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <a href="mailto:instituciones@colabedu.net?subject=OER%20Sponsorship%20Inquiry%20-%20Tier%202%20(SROI)" class="w-full py-3.5 rounded-xl bg-teal-700 hover:bg-teal-800 text-white font-extrabold text-xs text-center transition-colors shadow-sm">
+                        Request Tier 2 with SROI &rarr;
+                    </a>
+                </div>
+
+                <!-- TIER 3 -->
+                <div class="p-8 rounded-3xl bg-slate-900 text-white border border-slate-800 shadow-md flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-4">
+                            <span class="text-[11px] font-mono font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-amber-400/15 text-amber-300 border border-amber-400/30">Tier 3</span>
+                            <span class="text-[11px] font-mono font-bold text-amber-300">NextGenEU / MRR / Districts</span>
+                        </div>
+                        <h3 class="text-xl font-black text-white mb-2">Regional Stage / Catalog</h3>
+                        <div class="text-3xl font-black text-amber-400 mb-4">€100,000 – €300,000 <span class="text-sm font-semibold text-slate-400">/ yr</span></div>
+                        <p class="text-xs text-slate-300 leading-relaxed mb-6">
+                            Full digitization of 10–15 textbooks (e.g., complete secondary stage or state track) with native LMS integration and inspector governance.
+                        </p>
+                        <ul class="text-xs text-slate-200 space-y-3 mb-8">
+                            <li class="flex items-start gap-2.5">
+                                <i class="fas fa-check text-amber-400 mt-0.5"></i>
+                                <span>Full catalog of <strong>10–15 OER textbooks</strong> certified against official standards.</span>
+                            </li>
+                            <li class="flex items-start gap-2.5">
+                                <i class="fas fa-check text-amber-400 mt-0.5"></i>
+                                <span>Native <strong>LTI 1.3 Advantage / OneRoster</strong> sync (Canvas, Moodle, Google Classroom).</span>
+                            </li>
+                            <li class="flex items-start gap-2.5">
+                                <i class="fas fa-check text-amber-400 mt-0.5"></i>
+                                <span><em>Human-in-the-Loop</em> governance console for curriculum inspectors and ministry advisors.</span>
+                            </li>
+                            <li class="flex items-start gap-2.5">
+                                <i class="fas fa-check text-amber-400 mt-0.5"></i>
+                                <span>Full RFP technical specification support (NextGenEU / MRR / Cooperative Purchasing).</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <a href="mailto:instituciones@colabedu.net?subject=OER%20Sponsorship%20Inquiry%20-%20Tier%203%20(District)" class="w-full py-3.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs text-center transition-colors">
+                        Request Tier 3 Proposal &rarr;
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PUBLIC DIGITAL GOOD & SPONSOR BADGE PREVIEW -->
+    <section id="badge-preview" class="py-20 bg-white border-b border-slate-200 scroll-mt-20">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <span class="text-xs font-mono font-bold text-amber-700 uppercase tracking-widest block mb-2">
+                        Public Recognition &amp; SROI Telemetry
+                    </span>
+                    <h2 class="text-3xl font-black text-slate-900 mb-4">
+                        Your institutional badge on every free public lesson
+                    </h2>
+                    <p class="text-sm text-slate-600 leading-relaxed mb-6">
+                        Every sponsored OER textbook is published in ColabEdu's open catalog under a <strong>CC BY 4.0</strong> license with permanent zero-cost access. Each interactive lesson displays a clean institutional attribution badge alongside aggregated classroom impact telemetry.
+                    </p>
+                    <div class="space-y-4">
+                        <div class="flex items-start gap-3">
+                            <div class="w-9 h-9 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center shrink-0">
+                                <i class="fas fa-shield-check"></i>
+                            </div>
+                            <div>
+                                <div class="text-sm font-bold text-slate-900">100% Ad-Free &amp; Zero Outbound Links</div>
+                                <p class="text-xs text-slate-600">No ads, no outbound commercial links, and no student tracking. For corporate CSR sponsorships, branding stays in the public catalog and SROI report, keeping K-12 classrooms 100% brand-free.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <div class="w-9 h-9 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">
+                                <i class="fas fa-chart-pie"></i>
+                            </div>
+                            <div>
+                                <div class="text-sm font-bold text-slate-900">Aggregated SROI Telemetry (GDPR / FERPA)</div>
+                                <p class="text-xs text-slate-600">Track students reached, L0 competencies mastered, teacher hours saved, and effective cost per learner.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PUBLIC LESSON BADGE MOCKUP -->
+                <div class="p-6 sm:p-8 rounded-3xl bg-slate-900 text-white border border-slate-800 shadow-xl">
+                    <div class="flex flex-wrap items-center justify-between gap-2 pb-4 mb-5 border-b border-slate-800">
+                        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-400/15 border border-amber-400/40 text-amber-300 text-xs font-bold">
+                            <i class="fas fa-landmark"></i>
+                            <span>Sponsored by Open Education Foundation</span>
+                        </div>
+                        <span class="text-[11px] font-mono text-emerald-400 bg-emerald-400/10 px-2.5 py-1 rounded-md border border-emerald-400/20">
+                            CC BY 4.0 · Free Public Access
+                        </span>
+                    </div>
+
+                    <div class="mb-6">
+                        <div class="text-[11px] font-mono uppercase tracking-wider text-teal-400 mb-1">
+                            High School Physics · L0 Standards Grounded
+                        </div>
+                        <h3 class="text-xl font-black text-white mb-2">
+                            Unit 3: Kinematics &amp; Newton's Laws (InteractiveLesson)
+                        </h3>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            9 Socratic scaffolding slides, interactive velocity-time graph simulator, and self-verifying A2UI exercises.
+                        </p>
+                    </div>
+
+                    <!-- SROI MINI DASHBOARD -->
+                    <div class="grid grid-cols-3 gap-3 p-4 rounded-2xl bg-slate-800/90 border border-slate-700">
+                        <div>
+                            <div class="text-[10px] font-mono text-slate-400 uppercase">Students</div>
+                            <div class="text-lg font-black text-white">18,420</div>
+                        </div>
+                        <div>
+                            <div class="text-[10px] font-mono text-slate-400 uppercase">L0 Mastery</div>
+                            <div class="text-lg font-black text-teal-400">+34%</div>
+                        </div>
+                        <div>
+                            <div class="text-[10px] font-mono text-slate-400 uppercase">Cost / Student</div>
+                            <div class="text-lg font-black text-amber-400">€0.49</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- INSTITUTIONAL LEAD CTA -->
+    <section class="py-20 bg-slate-900 text-white">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <span class="text-xs font-mono font-bold text-teal-400 uppercase tracking-widest block mb-2">
+                Institutional Partnerships &amp; OER Endowments
+            </span>
+            <h2 class="text-3xl sm:text-4xl font-black mb-4">
+                Turn an open textbook into a lasting public digital good
+            </h2>
+            <p class="text-sm text-slate-300 mb-8 max-w-2xl mx-auto leading-relaxed">
+                Our partnerships team will prepare a tailored technical scope, tier budget, and dual-audit schedule for your ministry, school district, foundation, or CSR program within 48 hours.
+            </p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="mailto:instituciones@colabedu.net?subject=OER%20Book%20Digitization%20Sponsorship%20Inquiry" class="px-7 py-3.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-sm transition-colors">
+                    Contact: instituciones@colabedu.net &rarr;
+                </a>
+                <a href={catalogUrl} target="_blank" rel="noopener noreferrer" class="px-7 py-3.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-sm border border-slate-700 transition-colors">
+                    Explore Live OER Catalog
+                </a>
+            </div>
+        </div>
+    </section>
+</BaseLayout>

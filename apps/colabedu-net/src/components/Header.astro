@@ -18,6 +18,8 @@ const t = {
     membershipsDesc: isEn ? 'For teachers, students & families' : 'Para docentes, estudiantes y familias',
     sponsored: isEn ? 'Sponsored Memberships' : 'Membresías Esponsorizadas',
     sponsoredDesc: isEn ? 'District funds, B2G grants & vouchers' : 'Fondos de distrito, B2G y vouchers',
+    oerSponsorship: isEn ? 'OER Book Sponsorship' : 'Esponsorización OER',
+    oerSponsorshipDesc: isEn ? 'Fund free interactive public textbooks' : 'Financia libros OER interactivos gratuitos',
     institutions: isEn ? 'Schools & Networks' : 'Colegios y Redes',
     institutionsDesc: isEn ? 'Districts & whole-school deployment' : 'Convenios y despliegue integral',
     pedagogy: isEn ? 'Pedagogy' : 'Pedagogía',
@@ -349,6 +351,13 @@ const t = {
                                 <span>{t.sponsored}</span>
                             </div>
                             <div class="text-[10px] text-slate-500 font-normal mt-0.5">{t.sponsoredDesc}</div>
+                        </a>
+                        <a href={`/${lang}/oer-sponsorship`} class="block px-3.5 py-2 rounded-xl hover:bg-slate-50 transition-colors">
+                            <div class="text-xs font-bold text-teal-800 flex items-center gap-1.5">
+                                <i class="fas fa-book-open-reader text-[11px] text-teal-600"></i>
+                                <span>{t.oerSponsorship}</span>
+                            </div>
+                            <div class="text-[10px] text-slate-500 font-normal mt-0.5">{t.oerSponsorshipDesc}</div>
                         </a>
                         <a href={`/${lang}/fellows`} class="block px-3.5 py-2 rounded-xl hover:bg-slate-50 transition-colors">
                             <div class="text-xs font-bold text-teal-800 flex items-center gap-1.5">

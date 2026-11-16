@@ -1,0 +1,317 @@
+---
+// src/pages/es/oer-sponsorship.astro
+// Esponsorización por Valor de Digitalización de Libros OER Abiertos (Bien Público Digital)
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { appLink } from "@colabedu/ui-core/navigation";
+
+const catalogUrl = appLink('catalog', '/');
+---
+<BaseLayout
+    title="Esponsorización de Digitalización OER | Bien Público Digital | ColabEdu"
+    description="Patrocine la transformación de libros de texto abiertos (OER) en lecciones interactivas A2UI alineadas con el currículo oficial L0. Acceso 100% gratuito para miles de estudiantes con badge institucional y telemetría SROI."
+    lang="es"
+>
+    <!-- HERO PRINCIPAL -->
+    <section class="relative pt-32 pb-16 lg:pt-40 lg:pb-20 overflow-hidden bg-gradient-to-b from-teal-50/70 via-slate-50 to-white border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center max-w-4xl mx-auto">
+                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-teal-100/80 border border-teal-300 text-teal-900 text-xs font-mono font-bold uppercase tracking-wider mb-6">
+                    <i class="fas fa-book-open-reader text-teal-700"></i>
+                    <span>Bien Público Digital & Mecenazgo OER</span>
+                </div>
+                <h1 class="text-4xl sm:text-6xl font-black text-slate-900 tracking-tight leading-tight mb-6">
+                    Esponsorice Libros OER.<br/>
+                    <span class="text-teal-700">Conocimiento abierto, interactivo y gratuito.</span>
+                </h1>
+                <p class="text-lg sm:text-xl text-slate-600 font-normal leading-relaxed max-w-3xl mx-auto mb-8">
+                    En lugar de pagar licencias editoriales año tras año, consejerías, distritos, fundaciones y programas de RSC pueden financiar la digitalización de manuales OER en lecciones interactivas A2UI alineadas con la normativa oficial L0, manteniéndolos gratuitos al 100% para miles de estudiantes.
+                </p>
+
+                <div class="flex flex-wrap items-center justify-center gap-4">
+                    <a href="#tiers" class="px-6 py-3.5 rounded-xl bg-teal-700 hover:bg-teal-800 text-white font-extrabold text-sm shadow-md transition-all flex items-center gap-2">
+                        <i class="fas fa-layer-group"></i>
+                        <span>Ver Niveles de Patrocinio</span>
+                    </a>
+                    <a href="#badge-preview" class="px-6 py-3.5 rounded-xl bg-white hover:bg-slate-50 text-slate-800 font-bold text-sm border border-slate-300 shadow-xs transition-all flex items-center gap-2">
+                        <i class="fas fa-award text-amber-600"></i>
+                        <span>Vista Previa del Badge & SROI</span>
+                    </a>
+                </div>
+
+                <p class="mt-6 text-xs text-slate-500">
+                    ¿Busca financiar becas de cómputo para alumnos o cohortes concretas?
+                    <a href="/es/sponsored" class="text-amber-700 font-bold underline hover:text-amber-900 ml-1">Ver Membresías Esponsorizadas &rarr;</a>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ANCLAJE DE VALOR VS ALTERNATIVAS TRADICIONALES -->
+    <section class="py-16 bg-white border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <span class="text-xs font-mono font-bold text-slate-500 uppercase tracking-widest block mb-1">
+                    Economía de Impacto Público
+                </span>
+                <h2 class="text-2xl sm:text-3xl font-black text-slate-900">
+                    Una fracción del coste editorial tradicional, con impacto multiplicador
+                </h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="p-7 rounded-3xl bg-slate-50 border border-slate-200">
+                    <div class="text-xs font-mono font-bold uppercase tracking-wider text-slate-500 mb-2">Licencias Comerciales</div>
+                    <div class="text-2xl font-black text-slate-900 mb-2">$15 – $40 <span class="text-sm font-semibold text-slate-500">/ alumno / año</span></div>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Para 10.000 estudiantes supone entre <strong>$150.000 y $400.000 cada curso</strong> en licencias cerradas que caducan al finalizar el año escolar.
+                    </p>
+                </div>
+
+                <div class="p-7 rounded-3xl bg-slate-50 border border-slate-200">
+                    <div class="text-xs font-mono font-bold uppercase tracking-wider text-slate-500 mb-2">Agencias HTML5 / SCORM</div>
+                    <div class="text-2xl font-black text-slate-900 mb-2">$25k – $80k <span class="text-sm font-semibold text-slate-500">/ libro</span></div>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Maquetación estática a medida sin alineación normativa L0, sin tutoría socrática A2UI y con costes prohibitivos de actualización curricular.
+                    </p>
+                </div>
+
+                <div class="p-7 rounded-3xl bg-teal-50/70 border-2 border-teal-500 shadow-sm">
+                    <div class="text-xs font-mono font-bold uppercase tracking-wider text-teal-800 mb-2">Esponsorización OER ColabEdu</div>
+                    <div class="text-2xl font-black text-teal-900 mb-2">Desde €5.000 <span class="text-sm font-semibold text-teal-700">/ libro</span></div>
+                    <p class="text-xs text-slate-700 leading-relaxed">
+                        Lecciones interactivas A2UI con rigor L0, auditoría dual y acceso abierto permanente para todo el ecosistema educativo con telemetría SROI.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- LOS 3 NIVELES DE PATROCINIO ANUAL POR VALOR -->
+    <section id="tiers" class="py-20 bg-slate-50 border-b border-slate-200 scroll-mt-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-14">
+                <span class="text-xs font-mono font-bold text-teal-700 uppercase tracking-widest block mb-2">
+                    Catálogo de Paquetes Institucionales
+                </span>
+                <h2 class="text-3xl sm:text-4xl font-black text-slate-900">
+                    Niveles de Esponsorización por Valor
+                </h2>
+                <p class="text-sm text-slate-600 mt-3">
+                    Diseñados para tramitación ágil en administraciones públicas (incluyendo contrato menor &lt; €15.000), fundaciones educativas y programas de Responsabilidad Social Corporativa.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
+                <!-- NIVEL 1 -->
+                <div class="p-8 rounded-3xl bg-white border border-slate-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-4">
+                            <span class="text-[11px] font-mono font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-slate-100 text-slate-700">Nivel 1</span>
+                            <span class="text-[11px] font-mono font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-full">Contrato Menor (&lt; €15k)</span>
+                        </div>
+                        <h3 class="text-xl font-black text-slate-900 mb-2">Libro o Asignatura Individual</h3>
+                        <div class="text-3xl font-black text-slate-900 mb-4">€5.000 – €14.900</div>
+                        <p class="text-xs text-slate-600 leading-relaxed mb-6">
+                            Ideal para patrocinar un manual OER concreto (p. ej. Física, Biología o Matemáticas) con tramitación administrativa directa sin licitación compleja.
+                        </p>
+                        <ul class="text-xs text-slate-700 space-y-3 mb-8">
+                            <li class="flex items-start gap-2.5">
+                                <i class="fas fa-check text-teal-600 mt-0.5"></i>
+                                <span>Digitalización completa en <strong>InteractiveLessons A2UI</strong> (diapositivas socráticas y widgets verificables).</span>
+                            </li>
+                            <li class="flex items-start gap-2.5">
+                                <i class="fas fa-check text-teal-600 mt-0.5"></i>
+                                <span>Alineación oficial con normativa <strong>L0</strong> (BOE, LOMLOE, CDE o estándares estatales).</span>
+                            </li>
+                            <li class="flex items-start gap-2.5">
+                                <i class="fas fa-check text-teal-600 mt-0.5"></i>
+                                <span>Badge institucional <em>«Patrocinado por...»</em> visible en todas las lecciones públicas gratuitas.</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <a href="mailto:instituciones@colabedu.net?subject=Solicitud%20Patrocinio%20OER%20Nivel%201" class="w-full py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs text-center transition-colors">
+                        Solicitar Nivel 1 &rarr;
+                    </a>
+                </div>
+
+                <!-- NIVEL 2 (DESTACADO) -->
+                <div class="p-8 rounded-3xl bg-white border-2 border-teal-600 shadow-lg flex flex-col justify-between relative">
+                    <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-teal-700 text-white text-[11px] font-mono font-bold uppercase tracking-wider shadow-xs">
+                        Más Solicitado · Fundaciones & CSR
+                    </div>
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-4 mt-2">
+                            <span class="text-[11px] font-mono font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-teal-50 text-teal-800">Nivel 2</span>
+                            <span class="text-[11px] font-mono font-bold text-teal-800 bg-teal-50 border border-teal-200 px-2.5 py-1 rounded-full">Auditoría Dual + SROI</span>
+                        </div>
+                        <h3 class="text-xl font-black text-slate-900 mb-2">Curso Certificado + SROI Anual</h3>
+                        <div class="text-3xl font-black text-teal-800 mb-4">€15.000 – €45.000 <span class="text-sm font-semibold text-slate-500">/ año</span></div>
+                        <p class="text-xs text-slate-600 leading-relaxed mb-6">
+                            Cobertura integral de un curso completo con certificación pericial dual y métricas auditables de Retorno Social de la Inversión (SROI) para patronatos.
+                        </p>
+                        <ul class="text-xs text-slate-700 space-y-3 mb-8">
+                            <li class="flex items-start gap-2.5">
+                                <i class="fas fa-check text-teal-600 mt-0.5"></i>
+                                <span>Todo lo incluido en el <strong>Nivel 1</strong> para el curso completo.</span>
+                            </li>
+                            <li class="flex items-start gap-2.5">
+                                <i class="fas fa-check text-teal-600 mt-0.5"></i>
+                                <span><strong>Auditoría Dual</strong> (White-Box de esquema OPS + Juez LLM externo independiente).</span>
+                            </li>
+                            <li class="flex items-start gap-2.5">
+                                <i class="fas fa-check text-teal-600 mt-0.5"></i>
+                                <span><strong>Informe Anual de Impacto SROI</strong> exportable para memorias de patronato y RSC.</span>
+                            </li>
+                            <li class="flex items-start gap-2.5">
+                                <i class="fas fa-check text-teal-600 mt-0.5"></i>
+                                <span>Actualizaciones continuas de currículo y nuevos widgets interactivos durante el año.</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <a href="mailto:instituciones@colabedu.net?subject=Solicitud%20Patrocinio%20OER%20Nivel%202%20(SROI)" class="w-full py-3.5 rounded-xl bg-teal-700 hover:bg-teal-800 text-white font-extrabold text-xs text-center transition-colors shadow-sm">
+                        Solicitar Nivel 2 con SROI &rarr;
+                    </a>
+                </div>
+
+                <!-- NIVEL 3 -->
+                <div class="p-8 rounded-3xl bg-slate-900 text-white border border-slate-800 shadow-md flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-4">
+                            <span class="text-[11px] font-mono font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-amber-400/15 text-amber-300 border border-amber-400/30">Nivel 3</span>
+                            <span class="text-[11px] font-mono font-bold text-amber-300">NextGenEU / MRR / Distritos</span>
+                        </div>
+                        <h3 class="text-xl font-black text-white mb-2">Etapa Educativa o Catálogo Regional</h3>
+                        <div class="text-3xl font-black text-amber-400 mb-4">€100.000 – €300.000 <span class="text-sm font-semibold text-slate-400">/ año</span></div>
+                        <p class="text-xs text-slate-300 leading-relaxed mb-6">
+                            Digitalización de 10 a 15 manuales (p. ej. etapa completa de ESO/Bachillerato o itinerario estatal) con integración LMS y gobernanza de inspección.
+                        </p>
+                        <ul class="text-xs text-slate-200 space-y-3 mb-8">
+                            <li class="flex items-start gap-2.5">
+                                <i class="fas fa-check text-amber-400 mt-0.5"></i>
+                                <span>Catálogo completo de <strong>10–15 libros OER</strong> certificados bajo normativa oficial.</span>
+                            </li>
+                            <li class="flex items-start gap-2.5">
+                                <i class="fas fa-check text-amber-400 mt-0.5"></i>
+                                <span>Conector nativo <strong>LTI 1.3 Advantage / OneRoster</strong> (Canvas, Moodle, Google Classroom).</span>
+                            </li>
+                            <li class="flex items-start gap-2.5">
+                                <i class="fas fa-check text-amber-400 mt-0.5"></i>
+                                <span>Panel de validación <em>Human-in-the-Loop</em> para inspectores y asesores (INTEF, CRIF, CEP).</span>
+                            </li>
+                            <li class="flex items-start gap-2.5">
+                                <i class="fas fa-check text-amber-400 mt-0.5"></i>
+                                <span>Soporte completo de pliegos técnicos LCSP / NextGenEU y acuerdos marco inter-distritales.</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <a href="mailto:instituciones@colabedu.net?subject=Solicitud%20Patrocinio%20OER%20Nivel%203%20(Regional)" class="w-full py-3.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs text-center transition-colors">
+                        Solicitar Pliego Nivel 3 &rarr;
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- VISTA PREVIA DEL BADGE INSTITUCIONAL Y TELEMETRÍA SROI -->
+    <section id="badge-preview" class="py-20 bg-white border-b border-slate-200 scroll-mt-20">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <span class="text-xs font-mono font-bold text-amber-700 uppercase tracking-widest block mb-2">
+                        Visibilidad Pública & Transparencia SROI
+                    </span>
+                    <h2 class="text-3xl font-black text-slate-900 mb-4">
+                        Su marca institucional junto a cada lección gratuita
+                    </h2>
+                    <p class="text-sm text-slate-600 leading-relaxed mb-6">
+                        Cada libro OER patrocinado se publica en el catálogo abierto de ColabEdu con licencia <strong>CC BY 4.0</strong> y acceso gratuito permanente. En la cabecera de cada lección interactiva figura el distintivo oficial de la entidad mecenas y los indicadores agregados de impacto real en el aula.
+                    </p>
+                    <div class="space-y-4">
+                        <div class="flex items-start gap-3">
+                            <div class="w-9 h-9 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center shrink-0">
+                                <i class="fas fa-shield-check"></i>
+                            </div>
+                            <div>
+                                <div class="text-sm font-bold text-slate-900">100% Libre de Publicidad y Enlaces Salientes</div>
+                                <p class="text-xs text-slate-600">Sin banners, sin enlaces comerciales salientes ni rastreo de menores. En patrocinios corporativos (CSR), la marca se limita al catálogo público e informe SROI, manteniendo el aula libre de marcas comerciales.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <div class="w-9 h-9 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">
+                                <i class="fas fa-chart-pie"></i>
+                            </div>
+                            <div>
+                                <div class="text-sm font-bold text-slate-900">Telemetría SROI Agregada (RGPD / FERPA)</div>
+                                <p class="text-xs text-slate-600">Mida alumnos alcanzados, competencias dominadas, horas docentes ahorradas y coste efectivo por estudiante.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MOCKUP DE LECCIÓN PÚBLICA CON BADGE -->
+                <div class="p-6 sm:p-8 rounded-3xl bg-slate-900 text-white border border-slate-800 shadow-xl">
+                    <div class="flex flex-wrap items-center justify-between gap-2 pb-4 mb-5 border-b border-slate-800">
+                        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-400/15 border border-amber-400/40 text-amber-300 text-xs font-bold">
+                            <i class="fas fa-landmark"></i>
+                            <span>Patrocinado por Fundación Educación Abierta</span>
+                        </div>
+                        <span class="text-[11px] font-mono text-emerald-400 bg-emerald-400/10 px-2.5 py-1 rounded-md border border-emerald-400/20">
+                            CC BY 4.0 · Acceso Gratuito
+                        </span>
+                    </div>
+
+                    <div class="mb-6">
+                        <div class="text-[11px] font-mono uppercase tracking-wider text-teal-400 mb-1">
+                            Física y Química 4º ESO · LOMLOE L0 Verificado
+                        </div>
+                        <h3 class="text-xl font-black text-white mb-2">
+                            Unidad 3: Cinemática y Leyes de Newton (InteractiveLesson)
+                        </h3>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            9 diapositivas con andamiaje socrático, simulador de gráficas v-t y ejercicios autoverificables A2UI.
+                        </p>
+                    </div>
+
+                    <!-- MINI DASHBOARD SROI -->
+                    <div class="grid grid-cols-3 gap-3 p-4 rounded-2xl bg-slate-800/90 border border-slate-700">
+                        <div>
+                            <div class="text-[10px] font-mono text-slate-400 uppercase">Estudiantes</div>
+                            <div class="text-lg font-black text-white">18.420</div>
+                        </div>
+                        <div>
+                            <div class="text-[10px] font-mono text-slate-400 uppercase">Maestría L0</div>
+                            <div class="text-lg font-black text-teal-400">+34%</div>
+                        </div>
+                        <div>
+                            <div class="text-[10px] font-mono text-slate-400 uppercase">Coste / Alumno</div>
+                            <div class="text-lg font-black text-amber-400">€0,49</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA FINAL INSTITUCIONAL -->
+    <section class="py-20 bg-slate-900 text-white">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <span class="text-xs font-mono font-bold text-teal-400 uppercase tracking-widest block mb-2">
+                Dirección de Convenios y Mecenazgo OER
+            </span>
+            <h2 class="text-3xl sm:text-4xl font-black mb-4">
+                Transforme un libro abierto en un bien público interactivo
+            </h2>
+            <p class="text-sm text-slate-300 mb-8 max-w-2xl mx-auto leading-relaxed">
+                Nuestro equipo prepara en 48 horas la memoria técnica, el presupuesto por nivel y el calendario de auditoría dual adaptado a su organismo, fundación o programa CSR.
+            </p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="mailto:instituciones@colabedu.net?subject=Propuesta%20Esponsorizacion%20Digitalizacion%20OER" class="px-7 py-3.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-sm transition-colors">
+                    Contactar: instituciones@colabedu.net &rarr;
+                </a>
+                <a href={catalogUrl} target="_blank" rel="noopener noreferrer" class="px-7 py-3.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-sm border border-slate-700 transition-colors">
+                    Explorar Catálogo OER Actual
+                </a>
+            </div>
+        </div>
+    </section>
+</BaseLayout>
