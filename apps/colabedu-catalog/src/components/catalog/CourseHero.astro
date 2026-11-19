@@ -12,6 +12,7 @@ interface Props {
   subject?: string;
   language?: string;
   estimatedMinutes?: number;
+  seoStatus?: 'DRAFT' | 'EXPERIMENTAL' | 'ACTIVE';
   breadcrumbs?: Breadcrumb[];
 }
 
@@ -23,6 +24,7 @@ const {
   subject,
   language,
   estimatedMinutes,
+  seoStatus = 'ACTIVE',
   breadcrumbs = [],
 } = Astro.props;
 ---
@@ -55,6 +57,12 @@ const {
 
     <!-- Pill Badges -->
     <div class="flex flex-wrap items-center gap-2 mb-6">
+      {seoStatus === 'EXPERIMENTAL' && (
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-500/15 text-amber-300 border border-amber-500/35">
+          <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+          Experimental · AI Preview
+        </span>
+      )}
       {standard && (
         <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-300 border border-emerald-500/25 shadow-[0_0_15px_-4px_rgba(16,185,129,0.3)]">
           <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
