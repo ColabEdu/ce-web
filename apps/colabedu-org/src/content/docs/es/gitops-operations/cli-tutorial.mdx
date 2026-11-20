@@ -593,6 +593,16 @@ docs sources
 docs sources --scope us --subject spanish_language
 ```
 
+### `oer probe-all` — Sondeo en Vivo por Protocolo de los 71 Repositorios Soberanos
+
+Ejecuta en paralelo los 71 perfiles declarativos `OerRepositoryProfile` (`ce-specs/catalog/global/oer_repositories/`) mediante sus adaptadores de protocolo (`CKAN`, `OAI_PMH`, `REST_JSON`, `PRESSBOOKS_WP`, `OPDS_ATOM`, `HTML_INDEX`) e informa los activos reales descubiertos y la latencia por repositorio:
+
+```bash
+./ce-cli.sh oer probe-all --subject=BIOLOGY --level=HS --locale=es
+```
+
+---
+
 ### `oer discover` — Descubrimiento Federado y Auditoría Forense Planetaria OER
 
 Ejecuta el descubrimiento semántico planetario y la certificación de calidad multicriterio (4 vectores) a través de la red de repositorios federados (>65 repositorios soberanos en 52 países). Permite exportar el informe de auditoría forense en tabla Markdown con enlaces a los recursos, volcado a fichero o formato JSON estructurado.
