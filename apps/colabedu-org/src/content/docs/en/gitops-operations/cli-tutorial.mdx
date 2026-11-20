@@ -624,6 +624,16 @@ docs stats
 
 ---
 
+### `oer probe-all` — Live Protocol-Family Probe Across All 71 Sovereign Repositories
+
+Executes all 71 declarative `OerRepositoryProfile` specs (`ce-specs/catalog/global/oer_repositories/`) in parallel via their protocol adapters (`CKAN`, `OAI_PMH`, `REST_JSON`, `PRESSBOOKS_WP`, `OPDS_ATOM`, `HTML_INDEX`) and reports live asset yield and latency:
+
+```bash
+./ce-cli.sh oer probe-all --subject=BIOLOGY --level=HS --locale=es
+```
+
+---
+
 ### `oer discover` — Federated OER Discovery & Planetary Forensic Audit
 
 Executes semantic planetary discovery and multi-criteria quality certification (4 vectors) across the federated network of open educational repositories (>65 sovereign repositories across 52 countries). Supports forensic audit export as Markdown tables with direct resource URLs, disk file output, or structured JSON.
