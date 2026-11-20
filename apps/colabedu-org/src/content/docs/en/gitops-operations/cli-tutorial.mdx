@@ -2119,3 +2119,25 @@ Executes the 7-phase autonomous backend DAG pipeline (Normative C0/C1 ➔ OER Di
   --primary-oer-file=ce-specs/sources/oer/es/standard_ebau_madrid/biology/oer.openstax.biology_2e.pdf \
   --visual --unit=u2 --all-slides
 ```
+
+---
+
+## 16. Optional Zero-PII Gateway & Ephemeral Retention in Grading (`grading evaluate --zero-pii`)
+
+Enables on-demand activation (per CLI invocation or globally via `colabedu.ai.zero-pii-gateway.enabled=true`) of the **Pre-Inference Zero-PII Gateway** during `./ce-cli.sh grading evaluate`:
+
+1. **Multimodal Binary Metadata Stripping (`ExifAndDocumentMetadataStripper`)**: Strips `EXIF/GPS/COM` (JPEG), `tEXt/zTXt/iTXt/eXIf` (PNG), `PDDocumentInformation`/XMP (PDF), and `ID3v1/v2`/`RIFF INFO` (MP3/WAV) in memory while preserving 100% of handwriting pixels and audio waveforms.
+2. **Prompt & Filename De-identification (`PiiTextScrubber`)**: Replaces student names with an opaque pseudonym (`stu_001`), hashes filenames to `<sha256>.<ext>`, and scrubs emails, phone numbers, and national IDs (DNI/NIE/SSN) between transcription and evaluation.
+3. **Local Name Re-hydration**: Upon receiving the LLM evaluation (Gemini or Qwen), locally re-hydrates `stu_001` back to the student's display name according to `--anonymity` (`first-name`, `semi-anonymous`, `anonymous`, `full`).
+
+```bash
+# Evaluate with Zero-PII Gateway enabled (LLM receives stu_001 and SHA-256 filename; local report rehydrates display name)
+./ce-cli.sh grading evaluate \
+  --path="submissions/Kimberly.pdf" \
+  --exercise="ce-specs/catalog/ib/spanish_b/exercises/ib.c2.spanish_b_hl.writing_mock3_paper1.v1.yaml" \
+  --level="HL" \
+  --anonymity="first-name" \
+  --zero-pii=true \
+  --llm=true \
+  --model="qwen3.8-omni-flash"
+```

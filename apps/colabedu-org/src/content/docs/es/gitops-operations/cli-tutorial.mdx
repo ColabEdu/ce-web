@@ -1840,3 +1840,25 @@ Ejecuta el pipeline DAG autónomo de 7 fases en el backend (Normativa C0/C1 ➔ 
   --primary-oer-file=ce-specs/sources/oer/es/standard_ebau_madrid/biology/oer.openstax.biology_2e.pdf \
   --visual --unit=u2 --all-slides
 ```
+
+---
+
+## 17. Pasarela Opcional Zero-PII & Retención Efímera en Evaluación (`grading evaluate --zero-pii`)
+
+Permite activar bajo demanda (por ejecución o globalmente mediante `colabedu.ai.zero-pii-gateway.enabled=true`) la pasarela **Pre-Inference Zero-PII Gateway** durante `./ce-cli.sh grading evaluate`:
+
+1. **Purga Binaria Multimodal (`ExifAndDocumentMetadataStripper`)**: Elimina en memoria metadatos `EXIF/GPS/COM` (JPEG), `tEXt/zTXt/iTXt/eXIf` (PNG), `PDDocumentInformation`/XMP (PDF) e `ID3v1/v2`/`RIFF INFO` (MP3/WAV) conservando intactos los píxeles y el audio.
+2. **Des-identificación de Prompts y Ficheros (`PiiTextScrubber`)**: Sustituye el nombre del estudiante por un alias opaco (`stu_001`), renombra el documento a `<sha256>.<ext>` y limpia emails, teléfonos y DNI/NIE/SSN entre la fase de transcripción y la llamada al modelo evaluador.
+3. **Rehidratación Local**: Al recibir el informe del LLM (Gemini o Qwen), reemplaza localmente `stu_001` por el nombre del alumno según la política `--anonymity` elegida (`first-name`, `semi-anonymous`, `anonymous`, `full`).
+
+```bash
+# Evaluar con pasarela Zero-PII activada (el LLM recibe stu_001 y hash SHA-256; el informe local rehidrata el nombre)
+./ce-cli.sh grading evaluate \
+  --path="entregas/Kimberly.pdf" \
+  --exercise="ce-specs/catalog/ib/spanish_b/exercises/ib.c2.spanish_b_hl.writing_mock3_paper1.v1.yaml" \
+  --level="HL" \
+  --anonymity="first-name" \
+  --zero-pii=true \
+  --llm=true \
+  --model="qwen3.8-omni-flash"
+```

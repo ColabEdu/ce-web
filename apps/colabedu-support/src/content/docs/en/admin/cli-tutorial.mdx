@@ -402,3 +402,20 @@ Executes the 7-phase autonomous backend DAG pipeline (Normative C0/C1 ➔ OER Di
   --primary-oer-file=ce-specs/sources/oer/es/standard_ebau_madrid/biology/oer.openstax.biology_2e.pdf \
   --visual --unit=u2 --all-slides
 ```
+
+---
+
+## 17. Optional Zero-PII Gateway & Ephemeral Retention in Grading (`grading evaluate --zero-pii`)
+
+Enables on-demand activation (`--zero-pii=true` or globally via `colabedu.ai.zero-pii-gateway.enabled=true`) of the **Pre-Inference Zero-PII Gateway** during `./ce-cli.sh grading evaluate`, stripping binary metadata (`EXIF/GPS`, `XMP`, `ID3`, `RIFF INFO`) across PDFs, images, and audio files, replacing the student's name with `stu_001` and `<sha256>.<ext>` before calling the LLM, and locally re-hydrating the display name in the final report:
+
+```bash
+./ce-cli.sh grading evaluate \
+  --path="submissions/Kimberly.pdf" \
+  --exercise="ce-specs/catalog/ib/spanish_b/exercises/ib.c2.spanish_b_hl.writing_mock3_paper1.v1.yaml" \
+  --level="HL" \
+  --anonymity="first-name" \
+  --zero-pii=true \
+  --llm=true \
+  --model="qwen3.8-omni-flash"
+```
