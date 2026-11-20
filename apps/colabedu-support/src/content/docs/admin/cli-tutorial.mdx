@@ -458,3 +458,23 @@ Permite activar bajo demanda (`--zero-pii=true` o globalmente vía `colabedu.ai.
   --llm=true \
   --model="qwen3.8-omni-flash"
 ```
+
+---
+
+## 18. Ingesta de Slides Visuales OER, Esquemas Mudos y Enriquecimiento Tripartito (`course import-slides` / `course upgrade --vectors=visual-slides`)
+
+Convierte mazos de slides PDF/OER (o figuras de capítulos OER) en láminas visuales 16:9 HD (`1600x900`), genera variantes localizadas (`.en.png`, `.es.png`) y esquemas mudos (`.blind.png` con `[ 1 ]`..`[ 4 ]`), empareja cada lámina 1:1 con su sección del SmartBook OER y sustituye paredes de texto denso en cursos canónicos manteniendo el enlace de **📖 Lectura Complementaria SmartBook OER** (`deepDiveOerRefs`):
+
+```bash
+./ce-cli.sh course import-slides \
+  --pdf=ce-specs/sources/us/ap/openstax_ap_bio_ch05_slides.pdf \
+  --pair-textbook=course.oer.openstax_biology_for_ap_courses.v1 \
+  --target-langs=en,es \
+  --with-audio-overview
+
+./ce-cli.sh course upgrade \
+  --course-ref=course.us.ap_science.hs.BIOLOGY.v1 \
+  --unit=2 \
+  --vectors=visual-slides \
+  --with-audio-overview
+```

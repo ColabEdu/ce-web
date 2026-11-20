@@ -2141,3 +2141,25 @@ Enables on-demand activation (per CLI invocation or globally via `colabedu.ai.ze
   --llm=true \
   --model="qwen3.8-omni-flash"
 ```
+
+---
+
+## 17. OER Visual Slide-PDF Ingestion, Blind Diagrams & Tripartite Course Upgrade (`course import-slides` / `course upgrade --vectors=visual-slides`)
+
+Converts OER/teacher Slide-PDF decks (or extracted OER textbook chapter figures) into 16:9 HD visual slide assets (`1600x900`), generates localized variants (`.en.png`, `.es.png`) and blind assessment diagrams (`.blind.png` with `[ 1 ]`..`[ 4 ]` markers), pairs each slide 1:1 with its SmartBook OER section (`linkedTextbookRefs`), and upgrades canonical lessons by replacing dense prose walls with visual slides while preserving a 1-click **📖 Complementary SmartBook Reading** reference (`deepDiveOerRefs`):
+
+```bash
+# 1. Ingest OER/teacher slide deck and pair 1:1 with the SmartBook OER
+./ce-cli.sh course import-slides \
+  --pdf=ce-specs/sources/us/ap/openstax_ap_bio_ch05_slides.pdf \
+  --pair-textbook=course.oer.openstax_biology_for_ap_courses.v1 \
+  --target-langs=en,es \
+  --with-audio-overview
+
+# 2. Upgrade canonical course lessons with 16:9 visual slides, blind-diagram hotspots, and complementary SmartBook links
+./ce-cli.sh course upgrade \
+  --course-ref=course.us.ap_science.hs.BIOLOGY.v1 \
+  --unit=2 \
+  --vectors=visual-slides \
+  --with-audio-overview
+```
