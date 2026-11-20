@@ -1,4 +1,7 @@
+export type SeoPublicationStatus = 'DRAFT' | 'EXPERIMENTAL' | 'ACTIVE';
+
 export interface SeoMetadata {
+  status?: SeoPublicationStatus;
   slug?: string;
   meta_title?: string;
   meta_description?: string;
@@ -77,6 +80,7 @@ export interface InteractiveLessonItem {
   transversalCompetencies?: string[];
   criteriaRefs?: string[];
   seo?: SeoMetadata;
+  seoStatus?: SeoPublicationStatus;
   resolvedSources?: OerSourceItem[];
   country: string;
   educationLevel?: string;
@@ -125,6 +129,7 @@ export interface CourseSpecItem {
   rubric_refs?: string[];
   units: CourseUnitItem[];
   seo?: SeoMetadata;
+  seoStatus?: SeoPublicationStatus;
   resolvedSources?: OerSourceItem[];
   mtime?: number;
   daysAgo?: number;

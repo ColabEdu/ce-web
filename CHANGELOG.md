@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.9.13] - 2026-11-19
+
+### Added
+- **Trust & Compliance Center de 2 Niveles y Páginas Legales Bilingües (`apps/colabedu-net`)**:
+  - Publicados los 9 PDFs de Nivel 1 en `apps/colabedu-net/public/legal/` (`ColabEdu-DPA-GDPR-LOPDGDD-ES.pdf`, `ColabEdu-DPA-GDPR-EN.pdf`, `ColabEdu-US-SDPC-FERPA-Exhibit.pdf`, `ColabEdu-EU-AI-Act-Transparency-Sheet.pdf`, `ColabEdu-Extension-Security-OnePager.pdf`, `ColabEdu-Privacy-Policy-and-COPPA-Notice-{ES,EN}.pdf` y `ColabEdu-Terms-of-Service-and-AUP-{ES,EN}.pdf`).
+  - Nuevas páginas legales `/{es,en}/privacy.astro` (Política de Privacidad & Aviso COPPA) y `/{es,en}/terms.astro` (Términos del Servicio & AUP) enlazadas desde `Footer.astro`.
+  - Actualizado `/{es,en}/trust.astro` con diseño en 2 niveles (Nivel 1 de descarga pública directa y Nivel 2 de solicitud del Paquete de Auditoría Institucional para DPDs y CISOs).
+- **Documentación del Flag `--zero-pii` en Tutoriales del CLI (`apps/colabedu-org`, `apps/colabedu-support`)**:
+  - Sincronizados los 4 tutoriales del CLI (`es`/`en` en `colabedu-org` y `colabedu-support`) documentando `--zero-pii=true|false` en `./ce-cli.sh grading evaluate`.
+
 ## [0.9.12] - 2026-11-13
 
 ### Added

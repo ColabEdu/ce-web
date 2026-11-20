@@ -187,11 +187,22 @@ export function loadCatalog(): CatalogHierarchy {
 
       const stats = fs.statSync(file);
       const itemWithMtime = { ...doc, _mtime: stats.mtimeMs, _filePath: file };
+      const rawStatus = String(doc.metadata?.seo?.status || 'ACTIVE').toUpperCase();
+      const allowedStatuses = new Set(
+        (process.env.CATALOG_SEO_STATUSES || 'ACTIVE,EXPERIMENTAL')
+          .split(',')
+          .map((s) => s.trim().toUpperCase())
+          .filter(Boolean)
+      );
 
       if (doc.kind === 'CourseSpec' || doc.kind === 'CourseBundle') {
-        rawCourses.push(itemWithMtime);
+        if (allowedStatuses.has(rawStatus)) {
+          rawCourses.push({ ...itemWithMtime, _seoStatus: rawStatus });
+        }
       } else if (doc.kind === 'InteractiveLesson') {
-        rawLessons.push(itemWithMtime);
+        if (allowedStatuses.has(rawStatus)) {
+          rawLessons.push({ ...itemWithMtime, _seoStatus: rawStatus });
+        }
       } else if (doc.kind === 'Taxonomy') {
         rawTaxonomies.push(itemWithMtime);
       } else if (doc.kind === 'Rubric' || doc.kind === 'BlockRubric' || doc.kind === 'RubricSpec') {
@@ -456,6 +467,7 @@ export function loadCatalog(): CatalogHierarchy {
       rubric_refs: spec.rubric_refs || [],
       units,
       seo: meta.seo,
+      seoStatus: c._seoStatus || 'ACTIVE',
       resolvedSources,
       mtime,
       daysAgo,

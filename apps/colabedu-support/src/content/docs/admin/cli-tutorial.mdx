@@ -160,8 +160,11 @@ Publicación de catálogos estáticos Astro, optimización de carga instantánea
 # Compilar catálogo apuntando al entorno demo institucional (con tenant específico)
 ./ce-cli.sh catalog build --env=demo --tenant=intef
 
-# Publicar a producción activando precarga anticipada en segundo plano
+# Publicar a producción activando precarga anticipada en segundo plano (salta build si no hay cambios; usa --force para forzar)
 ./ce-cli.sh catalog publish --env=prod
+
+# Activar estado SEO (DRAFT | EXPERIMENTAL | ACTIVE) por país, nivel o asignatura y publicar
+./ce-cli.sh catalog seo-activate --country=US --level=HS --status=EXPERIMENTAL --publish --env=prod
 
 # Inicializar la Factoría Autónoma de Catálogo (Gitea + MicroK8s + remoto Git 'factory')
 ./ce-cli.sh catalog factory bootstrap
@@ -275,8 +278,8 @@ Al resolver una incidencia en una fase previa, el comando detecta los artefactos
 ./ce-cli.sh course bootstrap-all --standard=standard.lomloe.es --subject=FISICA --country=es --level=BACHILLERATO_2 \
   --primary-oer-file=ce-specs/sources/test/unit_1_familias_comunidades_oer_test.pdf
 
-# Inyección de URL directa alternativa
-./ce-cli.sh course bootstrap-all --standard=standard.lomloe.es --subject=FISICA --country=es --level=BACHILLERATO_2 \
+# Inyección de URL directa alternativa (timeout configurable vía COLABEDU_CURL_TIMEOUT, por defecto 3600s)
+COLABEDU_CURL_TIMEOUT=3600 ./ce-cli.sh course bootstrap-all --standard=standard.lomloe.es --subject=FISICA --country=es --level=BACHILLERATO_2 \
   --primary-oer-url=https://recursos.educacion.gob.es/fisica_bach2_completo.pdf
 ```
 
@@ -411,4 +414,47 @@ Permite inicializar o regenerar desde cero entornos normativos C0/C1 completos (
 # Ejecutar o regenerar una asignatura suelta (resolviendo sus padres inherits_from automáticamente)
 ./ce-cli.sh normative matrix --file=ce-specs/batches/normative/boot.v1.yaml --country=ES --subject=MATHEMATICS --level=BACH
 ./ce-cli.sh normative matrix --file=ce-specs/batches/normative/boot.v1.yaml --standard=standard.us.ca.wl --subject=SPANISH_L2 --force
+```
+
+---
+
+## 16. Orquestación End-to-End de Cursos y Fase 8 Visual Gate (`course bootstrap-all --visual`)
+
+Ejecuta el pipeline DAG autónomo de 7 fases en el backend (Normativa C0/C1 ➔ OER Discovery ➔ Descarga/SHA-256 ➔ Deconstrucción 1:1 SmartBook `Chapter -> Section X.Y` ➔ Lecciones Socráticas A2UI + `deepDiveOerRefs` ➔ Cuarteto de Cursos L5 ➔ Radar OPS de 6 Capas) y, al pasar `--visual` (`-v`), lanza automáticamente la **Fase 8: Post-Bootstrap Visual & A2UI Verification Gate** en Chrome Headless (`2x` Retina DPR) contra Flutter Web (`:8090`):
+
+```bash
+# Bootstrap completo de Biología 2º Bachillerato + SmartBook 1:1 OpenStax Biology 2e + Verificación Visual Chrome Headless
+./ce-cli.sh course bootstrap-all \
+  --standard=standard.ebau.madrid \
+  --country=ES \
+  --level=BACH \
+  --subject=BIOLOGY \
+  --primary-oer-file=ce-specs/sources/oer/es/standard_ebau_madrid/biology/oer.openstax.biology_2e.pdf \
+  --visual
+
+# Recorrido visual Black-Box de todas las lecciones de una unidad completa (--unit=u2) y sus slides (--all-slides)
+./ce-cli.sh course bootstrap-all \
+  --standard=standard.ebau.madrid \
+  --country=ES \
+  --level=BACH \
+  --subject=BIOLOGY \
+  --primary-oer-file=ce-specs/sources/oer/es/standard_ebau_madrid/biology/oer.openstax.biology_2e.pdf \
+  --visual --unit=u2 --all-slides
+```
+
+---
+
+## 17. Pasarela Opcional Zero-PII & Retención Efímera en Evaluación (`grading evaluate --zero-pii`)
+
+Permite activar bajo demanda (`--zero-pii=true` o globalmente vía `colabedu.ai.zero-pii-gateway.enabled=true`) la pasarela **Pre-Inference Zero-PII Gateway** durante `./ce-cli.sh grading evaluate`, purgando metadatos binarios (`EXIF/GPS`, `XMP`, `ID3`, `RIFF INFO`) en PDFs, imágenes y audios, sustituyendo el nombre del alumno por `stu_001` y `<sha256>.<ext>` hacia el LLM, y rehidratando localmente el nombre en el informe final:
+
+```bash
+./ce-cli.sh grading evaluate \
+  --path="entregas/Kimberly.pdf" \
+  --exercise="ce-specs/catalog/ib/spanish_b/exercises/ib.c2.spanish_b_hl.writing_mock3_paper1.v1.yaml" \
+  --level="HL" \
+  --anonymity="first-name" \
+  --zero-pii=true \
+  --llm=true \
+  --model="qwen3.8-omni-flash"
 ```

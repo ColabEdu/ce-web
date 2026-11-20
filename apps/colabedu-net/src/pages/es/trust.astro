@@ -1,6 +1,6 @@
 ---
 // src/pages/es/trust.astro
-// Trust & Compliance Pack: Verificación en 60 segundos para Directores TIC, DPD y Distritos
+// Trust & Compliance Pack: Arquitectura en 2 Niveles (Nivel 1 Público + Nivel 2 Paquete de Auditoría Institucional)
 import Header from "../../components/Header.astro";
 import Footer from "../../components/Footer.astro";
 import "../../styles/global.css";
@@ -12,8 +12,8 @@ import "../../styles/global.css";
     <link rel="alternate icon" type="image/png" href="/favicon.png" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trust & Compliance Pack (DPA, RGPD, EU AI Act, FERPA) | ColabEdu.net</title>
-    <meta name="description" content="Paquete de cumplimiento institucional listo para firmar: DPA RGPD Art. 28 / LOPDGDD, Ficha EU AI Act, Adenda FERPA/SDPC y Arquitectura de Seguridad Chrome Manifest V3.">
+    <title>Trust & Compliance Pack (DPA, RGPD, EU AI Act, FERPA, Zero-PII) | ColabEdu.net</title>
+    <meta name="description" content="Paquete de cumplimiento institucional en 2 niveles: descarga directa de DPA RGPD Art. 28 / LOPDGDD, Ficha EU AI Act, Adenda FERPA/SDPC, Extensión Chrome MV3 y solicitud de Paquete de Auditoría CISO/DPD (Whitepaper Stack IT, DPIA, HECVAT/ENS, VPAT).">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -44,92 +44,176 @@ import "../../styles/global.css";
     <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-12">
         <section class="text-center space-y-4">
             <span class="inline-block px-3 py-1 rounded-full bg-teal-50 border border-teal-200 text-teal-800 text-xs font-bold uppercase tracking-wider">
-                Verificación Institucional en 60 Segundos
+                Verificación Institucional en 60 Segundos · Arquitectura Zero-PII
             </span>
             <h1 class="text-3xl sm:text-5xl font-black tracking-tight text-slate-900">
                 Trust &amp; Compliance Pack
             </h1>
             <p class="text-base sm:text-lg text-slate-600 max-w-3xl mx-auto">
-                Documentación técnica y contractual lista para Directores TIC, Delegados de Protección de Datos (DPD) y Administraciones Educativas.
+                Documentación técnica, legal y contractual estructurada en dos niveles para Directores TIC, CISOs, Delegados de Protección de Datos (DPD) y Administraciones Educativas.
             </p>
+            <div class="flex flex-wrap justify-center gap-3 pt-2 text-xs font-semibold">
+                <a href="/es/privacy" class="px-3.5 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-700 hover:border-teal-500 transition">
+                    Política de Privacidad &amp; COPPA &rarr;
+                </a>
+                <a href="/es/terms" class="px-3.5 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-700 hover:border-teal-500 transition">
+                    Términos de Servicio (ToS) &amp; AUP &rarr;
+                </a>
+                <a href="/es/data-sovereignty-privacy" class="px-3.5 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-700 hover:border-teal-500 transition">
+                    Doctrina de Soberanía de Datos &rarr;
+                </a>
+            </div>
         </section>
 
         <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="precision-card p-6 space-y-3">
-                <h2 class="text-lg font-extrabold text-slate-900">1. Arquitectura Zero External Retention</h2>
+                <h2 class="text-lg font-extrabold text-slate-900">1. Modo Aula Anónima &amp; Pasarela ZeroPiiLlmGateway</h2>
                 <p class="text-sm text-slate-600 leading-relaxed">
-                    La extensión Chrome (Manifest V3) procesa rúbricas y entregas de forma efímera en la pestaña autenticada del docente. Ningún dato identificativo de alumnos (PII) se vende, comparte ni retiene en servidores intermedios.
+                    En Modo Aula Anónima (<code>shared/pii_anonymizer.js</code>), los nombres reales jamás salen del navegador del docente (mapeados en <code>chrome.storage.local</code> a <code>stu_001</code>). En backend, la pasarela obligatoria <code>ZeroPiiLlmGateway</code> elimina nombres, emails, DNI/NIE y metadatos EXIF/PDF, y con <code>ephemeralZeroRetention</code> destruye archivos multimedia en bloque <code>finally</code> tras evaluar.
                 </p>
             </div>
             <div class="precision-card p-6 space-y-3">
-                <h2 class="text-lg font-extrabold text-slate-900">2. EU AI Act &amp; Cero Entrenamiento</h2>
+                <h2 class="text-lg font-extrabold text-slate-900">2. EU AI Act &amp; Cero Entrenamiento de Modelos</h2>
                 <p class="text-sm text-slate-600 leading-relaxed">
-                    Supervisión humana obligatoria (<em>Human-in-the-Loop</em>): las calificaciones y comentarios requieren validación explícita del docente. Las voces, manuscritos y ensayos de menores jamás entrenan modelos fundacionales.
+                    Supervisión humana obligatoria (<em>Human-in-the-Loop</em>, Art. 14 EU AI Act): las calificaciones y comentarios requieren validación explícita del docente y evalúan a ciegas (<em>Blind Grading</em> sin sesgo demográfico). Las voces, manuscritos y ensayos de menores jamás entrenan modelos fundacionales.
                 </p>
             </div>
             <div class="precision-card p-6 space-y-3">
-                <h2 class="text-lg font-extrabold text-slate-900">3. Mínimo Privilegio en Chrome MV3</h2>
+                <h2 class="text-lg font-extrabold text-slate-900">3. Mínimo Privilegio en Chrome MV3 y LTI 1.3 sin Cookies 3P</h2>
                 <p class="text-sm text-slate-600 leading-relaxed">
-                    Sin <code>&lt;all_urls&gt;</code> ni ejecución de código remoto (<code>eval</code> prohibido). El paquete de producción limita <code>host_permissions</code> a dominios LMS oficiales y solicita dominios propios (<code>.edu</code>/<code>.org</code>) solo bajo demanda vía <code>optional_host_permissions</code>.
+                    Sin <code>&lt;all_urls&gt;</code> ni ejecución de código remoto (<code>eval</code> prohibido). El paquete de producción solicita dominios propios (<code>.edu</code>/<code>.org</code>/<code>.es</code>) solo bajo demanda vía <code>optional_host_permissions</code> y soporta lanzamientos LTI 1.3 con tokens en memoria para Chromebooks con cookies de terceros bloqueadas.
                 </p>
             </div>
             <div class="precision-card p-6 space-y-3">
-                <h2 class="text-lg font-extrabold text-slate-900">4. Soberanía Regional UE / EE. UU.</h2>
+                <h2 class="text-lg font-extrabold text-slate-900">4. Soberanía Regional UE / EE. UU. y Zero-PII Logging</h2>
                 <p class="text-sm text-slate-600 leading-relaxed">
-                    Aislamiento multi-tenant estricto con residencia de datos en la Unión Europea (RGPD / LOPDGDD) o en Estados Unidos (FERPA / COPPA / SOPPA / SDPC).
+                    Aislamiento multi-tenant con <em>Row-Level Security (RLS)</em> en PostgreSQL <code>pgvector</code>, bóveda de identidad cifrada con KMS BYOK, logs de producción con <code>colabedu.ai.log-payloads=false</code> y residencia estricta en Frankfurt (UE — RGPD/LOPDGDD) o Iowa/Virginia (EE. UU. — FERPA/COPPA/SDPC).
                 </p>
             </div>
         </section>
 
-        <section class="precision-card p-8 space-y-6">
-            <div>
-                <h2 class="text-2xl font-black text-slate-900">Documentos Descargables (PDF Firmables)</h2>
-                <p class="text-sm text-slate-600 mt-1">
-                    Listos para adjuntar a expedientes de contratación, auditorías MDM / Google Workspace o registro de actividades del DPD.
-                </p>
+        <!-- NIVEL 1: ACCESO 100% PÚBLICO Y DESCARGA DIRECTA -->
+        <section class="precision-card p-8 space-y-6 border-teal-200">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div>
+                    <span class="inline-block px-2.5 py-0.5 rounded-md bg-emerald-100 text-emerald-800 text-xs font-bold uppercase tracking-wide mb-2">
+                        Nivel 1 · Acceso 100% Público y Descarga Directa (Sin Registro)
+                    </span>
+                    <h2 class="text-2xl font-black text-slate-900">Contratos DPA, Políticas Oficiales y Fichas Ejecutivas (PDF)</h2>
+                    <p class="text-sm text-slate-600 mt-1">
+                        Listos para firmar y adjuntar a expedientes de contratación menor, autorización MDM / Google Workspace for Education o revisión inicial del DPD.
+                    </p>
+                </div>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <a href="/legal/ColabEdu-DPA-GDPR-LOPDGDD-ES.pdf" download class="flex items-center justify-between p-4 rounded-xl border border-slate-200 hover:border-teal-500 hover:bg-teal-50/40 transition">
                     <div>
-                        <div class="font-bold text-slate-900 text-sm">DPA Estándar RGPD Art. 28 &amp; LOPDGDD</div>
-                        <div class="text-xs text-slate-500">Español · Incluye bloque de firma institucional</div>
+                        <div class="font-bold text-slate-900 text-sm">1. DPA Estándar RGPD Art. 28 &amp; LOPDGDD (Disp. Adic. 19ª)</div>
+                        <div class="text-xs text-slate-500">Español · Incluye Anexos I–III (TOMs, Subencargados UE) y Bloque de Firma</div>
                     </div>
-                    <span class="text-teal-700 font-bold text-xs px-2.5 py-1 bg-teal-100 rounded-lg">PDF</span>
+                    <span class="text-teal-700 font-bold text-xs px-2.5 py-1 bg-teal-100 rounded-lg shrink-0 ml-2">PDF</span>
                 </a>
-                <a href="/legal/ColabEdu-EU-AI-Act-Transparency-Sheet.pdf" download class="flex items-center justify-between p-4 rounded-xl border border-slate-200 hover:border-teal-500 hover:bg-teal-50/40 transition">
+                <a href="/legal/ColabEdu-DPA-GDPR-EN.pdf" download class="flex items-center justify-between p-4 rounded-xl border border-slate-200 hover:border-teal-500 hover:bg-teal-50/40 transition">
                     <div>
-                        <div class="font-bold text-slate-900 text-sm">Ficha de Transparencia EU AI Act</div>
-                        <div class="text-xs text-slate-500">Reglamento (UE) 2024/1689 · Trazabilidad OPS</div>
+                        <div class="font-bold text-slate-900 text-sm">2. EU GDPR Article 28 Data Processing Agreement (English)</div>
+                        <div class="text-xs text-slate-500">Inglés · EEA / International Institutions · Signature Block included</div>
                     </div>
-                    <span class="text-teal-700 font-bold text-xs px-2.5 py-1 bg-teal-100 rounded-lg">PDF</span>
+                    <span class="text-teal-700 font-bold text-xs px-2.5 py-1 bg-teal-100 rounded-lg shrink-0 ml-2">PDF</span>
                 </a>
                 <a href="/legal/ColabEdu-US-SDPC-FERPA-Exhibit.pdf" download class="flex items-center justify-between p-4 rounded-xl border border-slate-200 hover:border-teal-500 hover:bg-teal-50/40 transition">
                     <div>
-                        <div class="font-bold text-slate-900 text-sm">Adenda EE. UU. (FERPA / COPPA / SDPC)</div>
-                        <div class="text-xs text-slate-500">Inglés · Distritos escolares EE. UU.</div>
+                        <div class="font-bold text-slate-900 text-sm">3. Adenda EE. UU. (FERPA / COPPA / SDPC NDPA v2.1 + Exhibit E)</div>
+                        <div class="text-xs text-slate-500">Inglés · Distritos escolares EE. UU. · Cláusula Piggybacking 24h</div>
                     </div>
-                    <span class="text-teal-700 font-bold text-xs px-2.5 py-1 bg-teal-100 rounded-lg">PDF</span>
+                    <span class="text-teal-700 font-bold text-xs px-2.5 py-1 bg-teal-100 rounded-lg shrink-0 ml-2">PDF</span>
+                </a>
+                <a href="/legal/ColabEdu-EU-AI-Act-Transparency-Sheet.pdf" download class="flex items-center justify-between p-4 rounded-xl border border-slate-200 hover:border-teal-500 hover:bg-teal-50/40 transition">
+                    <div>
+                        <div class="font-bold text-slate-900 text-sm">4. Ficha de Transparencia EU AI Act (Reglamento UE 2024/1689)</div>
+                        <div class="text-xs text-slate-500">Bilingüe ES/EN · Supervisión Docente Art. 14, Grounding L0 y Blind Grading</div>
+                    </div>
+                    <span class="text-teal-700 font-bold text-xs px-2.5 py-1 bg-teal-100 rounded-lg shrink-0 ml-2">PDF</span>
                 </a>
                 <a href="/legal/ColabEdu-Extension-Security-OnePager.pdf" download class="flex items-center justify-between p-4 rounded-xl border border-slate-200 hover:border-teal-500 hover:bg-teal-50/40 transition">
                     <div>
-                        <div class="font-bold text-slate-900 text-sm">One-Pager Seguridad Extensión Chrome MV3</div>
-                        <div class="text-xs text-slate-500">Auditoría MDM / Google Workspace Allowlist</div>
+                        <div class="font-bold text-slate-900 text-sm">5. One-Pager Seguridad Extensión Chrome MV3 + LTI 1.3 Advantage</div>
+                        <div class="text-xs text-slate-500">Bilingüe ES/EN · Guía paso a paso Google Admin / Intune MDM Allowlist</div>
                     </div>
-                    <span class="text-teal-700 font-bold text-xs px-2.5 py-1 bg-teal-100 rounded-lg">PDF</span>
+                    <span class="text-teal-700 font-bold text-xs px-2.5 py-1 bg-teal-100 rounded-lg shrink-0 ml-2">PDF</span>
+                </a>
+                <a href="/legal/ColabEdu-Privacy-Policy-and-COPPA-Notice-ES.pdf" download class="flex items-center justify-between p-4 rounded-xl border border-slate-200 hover:border-teal-500 hover:bg-teal-50/40 transition">
+                    <div>
+                        <div class="font-bold text-slate-900 text-sm">6. Política de Privacidad Global y Aviso Infantil COPPA</div>
+                        <div class="text-xs text-slate-500">Español · <span class="underline">Ver online en /es/privacy</span> o descargar PDF oficial</div>
+                    </div>
+                    <span class="text-teal-700 font-bold text-xs px-2.5 py-1 bg-teal-100 rounded-lg shrink-0 ml-2">PDF</span>
+                </a>
+                <a href="/legal/ColabEdu-Terms-of-Service-and-AUP-ES.pdf" download class="flex items-center justify-between p-4 rounded-xl border border-slate-200 hover:border-teal-500 hover:bg-teal-50/40 transition sm:col-span-2">
+                    <div>
+                        <div class="font-bold text-slate-900 text-sm">7. Términos de Servicio (ToS) Institucionales y de Usuario &amp; Política de Uso Aceptable (AUP)</div>
+                        <div class="text-xs text-slate-500">Español · 100% Propiedad Intelectual del Alumno/Centro, Cero Entrenamiento de IA · <span class="underline">Ver online en /es/terms</span></div>
+                    </div>
+                    <span class="text-teal-700 font-bold text-xs px-2.5 py-1 bg-teal-100 rounded-lg shrink-0 ml-2">PDF</span>
                 </a>
             </div>
+        </section>
 
-            <div class="pt-4 border-t border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div class="text-sm text-slate-600">
-                    ¿Necesitas que firmemos un DPA propio del centro o nos añadamos a tu <em>allowlist</em> MDM?
+        <!-- NIVEL 2: PAQUETE AVANZADO DE AUDITORÍA INSTITUCIONAL BAJO SOLICITUD -->
+        <section class="precision-card p-8 space-y-6 bg-slate-900 text-white border-slate-800">
+            <div class="space-y-2">
+                <span class="inline-block px-2.5 py-0.5 rounded-md bg-amber-400/20 border border-amber-400/40 text-amber-300 text-xs font-bold uppercase tracking-wide">
+                    Nivel 2 · Entrega Institucional Bajo Solicitud (CISOs, Directores TIC y DPDs)
+                </span>
+                <h2 class="text-2xl font-black text-white">
+                    Paquete Avanzado para Auditoría de Distritos Escolares, Consejerías y DPDs
+                </h2>
+                <p class="text-sm text-slate-300 leading-relaxed max-w-3xl">
+                    Para proteger la arquitectura interna frente a scraping automatizado y brindar soporte directo durante procesos formales de homologación TIC o licitación pública, los siguientes documentos técnicos detallados se entregan bajo solicitud desde un correo institucional (<code>@edu</code>, <code>@gob</code>, <code>@org</code>, <code>@es</code>):
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-left">
+                <div class="p-5 rounded-xl bg-slate-800/90 border border-slate-700 space-y-1.5">
+                    <div class="text-xs font-mono text-teal-400 font-bold">DOC-AUDIT-01 · CISO &amp; IT ARCHITECTURE</div>
+                    <div class="font-bold text-white text-sm">Whitepaper Técnico de Stack IT, Flujo de Datos (DFD) y Lista de Subprocesadores</div>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        Detalle de las 4 capas de <code>ZeroPiiLlmGateway</code>, comparativa soberana Google Cloud vs. Alibaba Cloud / Qwen Cloud Enterprise (0% PII), cifrado KMS BYOK, RTO/RPO (&lt;2h / &lt;15m) y respuesta ante incidentes (&lt;48h).
+                    </p>
                 </div>
-                <div class="flex gap-3">
-                    <a href="/es/data-sovereignty-privacy" class="px-4 py-2 rounded-lg border border-slate-300 text-slate-700 font-semibold text-sm hover:bg-slate-50 transition">
-                        Ver Doctrina Completa
-                    </a>
-                    <a href="mailto:privacy@colabedu.org?subject=Solicitud%20DPA%20y%20Allowlist%20ColabEdu" class="px-4 py-2 rounded-lg bg-slate-900 text-white font-semibold text-sm hover:bg-slate-800 transition">
-                        Contactar DPD
+                <div class="p-5 rounded-xl bg-slate-800/90 border border-slate-700 space-y-1.5">
+                    <div class="text-xs font-mono text-teal-400 font-bold">DOC-AUDIT-02 · ART. 35 RGPD / RAT DEL CENTRO</div>
+                    <div class="font-bold text-white text-sm">Plantilla Completa DPIA / EIPD Pre-Rellenada para el DPD del Centro</div>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        Evaluación de Impacto en la Protección de Datos con análisis de necesidad, proporcionalidad y matriz de riesgos inherentes vs. residuales, lista para rellenar los datos del colegio y archivar en el RAT.
+                    </p>
+                </div>
+                <div class="p-5 rounded-xl bg-slate-800/90 border border-slate-700 space-y-1.5">
+                    <div class="text-xs font-mono text-teal-400 font-bold">DOC-AUDIT-03 · SECURITY &amp; ACCESSIBILITY</div>
+                    <div class="font-bold text-white text-sm">Cuestionarios Pre-Respondidos (HECVAT Lite, CAIQ, ENS) + Informe VPAT WCAG 2.1 AA</div>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        Matriz de controles HECVAT Lite / CAIQ para universidades y distritos, adecuación al Esquema Nacional de Seguridad (RD 311/2022) y conformidad de accesibilidad Section 508 / EN 301 549.
+                    </p>
+                </div>
+                <div class="p-5 rounded-xl bg-slate-800/90 border border-slate-700 space-y-1.5">
+                    <div class="text-xs font-mono text-teal-400 font-bold">DOC-AUDIT-04 · THIRD-PARTY ATTESTATIONS</div>
+                    <div class="font-bold text-white text-sm">Certificados SOC 2 Type II / ISO 27001 / ISO 27018 de Subprocesadores Cloud</div>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        Dossier de certificaciones auditadas y adendas de residencia regional europea (<code>europe-west3</code> / <code>eu-central-1</code> Frankfurt) y estadounidense (<code>us-central1</code> / <code>us-east-1</code>).
+                    </p>
+                </div>
+            </div>
+
+            <div class="pt-4 border-t border-slate-700/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div class="text-xs text-slate-300">
+                    Envío garantizado en el mismo día laborable para equipos TIC, DPDs y responsables de compras educativas.
+                </div>
+                <div class="flex flex-wrap gap-3">
+                    <a
+                        href="mailto:privacy@colabedu.org?subject=Solicitud%20Paquete%20de%20Auditoria%20Institucional%20(Nivel%202%20-%20DPD%20%2F%20CISO)&body=Hola%20equipo%20de%20Compliance%20de%20ColabEdu%2C%0A%0ASolicitamos%20el%20Paquete%20de%20Auditor%C3%ADa%20Institucional%20(Nivel%202%3A%20Whitepaper%20Stack%20IT%2C%20Plantilla%20DPIA%2FEIPD%2C%20HECVAT%2FENS%20y%20VPAT)%20para%3A%0A-%20Instituci%C3%B3n%20%2F%20Centro%20%2F%20Consejer%C3%ADa%3A%20%0A-%20Cargo%20(DPD%20%2F%20Director%20TIC%20%2F%20Equipo%20Directivo)%3A%20%0A-%20Jurisdicci%C3%B3n%20(Espa%C3%B1a%2FUE%20o%20EE.%20UU.)%3A%20"
+                        class="px-5 py-2.5 rounded-xl bg-amber-400 text-slate-950 font-extrabold text-sm hover:bg-amber-300 transition shadow-sm"
+                    >
+                        🔒 Solicitar Paquete de Auditoría Institucional
                     </a>
                 </div>
             </div>

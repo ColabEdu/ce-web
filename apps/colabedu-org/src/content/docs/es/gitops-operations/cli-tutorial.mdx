@@ -1611,8 +1611,11 @@ Herramientas conectadas a la base de conocimiento (`ce-web support kb`) y Postgr
 # Compilar catálogo para piloto demo con tenant específico e inyección de endpoints
 ./ce-cli.sh catalog build --env=demo --tenant=intef
 
-# Publicar catálogo a producción con prefetching Wasm para apertura instantánea
+# Publicar catálogo a producción con prefetching Wasm para apertura instantánea (salta build si no hay cambios; usa --force para forzar)
 ./ce-cli.sh catalog publish --env=prod
+
+# Activar/cambiar estado SEO (DRAFT | EXPERIMENTAL | ACTIVE) por país, nivel o asignatura y publicar
+./ce-cli.sh catalog seo-activate --country=US --level=HS --status=EXPERIMENTAL --publish --env=prod
 
 # Inicializar la Factoría Autónoma de Catálogo (Gitea + MicroK8s + remoto Git 'factory')
 ./ce-cli.sh catalog factory bootstrap
@@ -1693,8 +1696,8 @@ Al resolver una incidencia en una fase previa, el comando detecta los artefactos
 ./ce-cli.sh course bootstrap-all --standard=standard.lomloe.es --subject=FISICA --country=es --level=BACHILLERATO_2 \
   --primary-oer-file=ce-specs/sources/test/unit_1_familias_comunidades_oer_test.pdf
 
-# Inyección de URL directa alternativa
-./ce-cli.sh course bootstrap-all --standard=standard.lomloe.es --subject=FISICA --country=es --level=BACHILLERATO_2 \
+# Inyección de URL directa alternativa (timeout configurable vía COLABEDU_CURL_TIMEOUT, por defecto 3600s)
+COLABEDU_CURL_TIMEOUT=3600 ./ce-cli.sh course bootstrap-all --standard=standard.lomloe.es --subject=FISICA --country=es --level=BACHILLERATO_2 \
   --primary-oer-url=https://recursos.educacion.gob.es/fisica_bach2_completo.pdf
 ```
 
@@ -1810,4 +1813,52 @@ Permite inicializar o regenerar desde cero entornos normativos C0/C1 completos (
 # Ejecutar o regenerar una asignatura suelta (resolviendo sus padres inherits_from automáticamente)
 ./ce-cli.sh normative matrix --file=ce-specs/batches/normative/boot.v1.yaml --country=ES --subject=MATHEMATICS --level=BACH
 ./ce-cli.sh normative matrix --file=ce-specs/batches/normative/boot.v1.yaml --standard=standard.us.ca.wl --subject=SPANISH_L2 --force
+```
+
+---
+
+## 16. Orquestación End-to-End de Cursos y Fase 8 Visual Gate (`course bootstrap-all --visual`)
+
+Ejecuta el pipeline DAG autónomo de 7 fases en el backend (Normativa C0/C1 ➔ OER Discovery ➔ Descarga/SHA-256 ➔ Deconstrucción 1:1 SmartBook `Chapter -> Section X.Y` ➔ Lecciones Socráticas A2UI + `deepDiveOerRefs` ➔ Cuarteto de Cursos L5 ➔ Radar OPS de 6 Capas) y, al pasar `--visual` (`-v`), lanza automáticamente la **Fase 8: Post-Bootstrap Visual & A2UI Verification Gate** en Chrome Headless (`2x` Retina DPR) contra Flutter Web (`:8090`):
+
+```bash
+# Bootstrap completo de Biología 2º Bachillerato + SmartBook 1:1 OpenStax Biology 2e + Verificación Visual Chrome Headless
+./ce-cli.sh course bootstrap-all \
+  --standard=standard.ebau.madrid \
+  --country=ES \
+  --level=BACH \
+  --subject=BIOLOGY \
+  --primary-oer-file=ce-specs/sources/oer/es/standard_ebau_madrid/biology/oer.openstax.biology_2e.pdf \
+  --visual
+
+# Recorrido visual Black-Box de todas las lecciones de una unidad completa (--unit=u2) y sus slides (--all-slides)
+./ce-cli.sh course bootstrap-all \
+  --standard=standard.ebau.madrid \
+  --country=ES \
+  --level=BACH \
+  --subject=BIOLOGY \
+  --primary-oer-file=ce-specs/sources/oer/es/standard_ebau_madrid/biology/oer.openstax.biology_2e.pdf \
+  --visual --unit=u2 --all-slides
+```
+
+---
+
+## 17. Pasarela Opcional Zero-PII & Retención Efímera en Evaluación (`grading evaluate --zero-pii`)
+
+Permite activar bajo demanda (por ejecución o globalmente mediante `colabedu.ai.zero-pii-gateway.enabled=true`) la pasarela **Pre-Inference Zero-PII Gateway** durante `./ce-cli.sh grading evaluate`:
+
+1. **Purga Binaria Multimodal (`ExifAndDocumentMetadataStripper`)**: Elimina en memoria metadatos `EXIF/GPS/COM` (JPEG), `tEXt/zTXt/iTXt/eXIf` (PNG), `PDDocumentInformation`/XMP (PDF) e `ID3v1/v2`/`RIFF INFO` (MP3/WAV) conservando intactos los píxeles y el audio.
+2. **Des-identificación de Prompts y Ficheros (`PiiTextScrubber`)**: Sustituye el nombre del estudiante por un alias opaco (`stu_001`), renombra el documento a `<sha256>.<ext>` y limpia emails, teléfonos y DNI/NIE/SSN entre la fase de transcripción y la llamada al modelo evaluador.
+3. **Rehidratación Local**: Al recibir el informe del LLM (Gemini o Qwen), reemplaza localmente `stu_001` por el nombre del alumno según la política `--anonymity` elegida (`first-name`, `semi-anonymous`, `anonymous`, `full`).
+
+```bash
+# Evaluar con pasarela Zero-PII activada (el LLM recibe stu_001 y hash SHA-256; el informe local rehidrata el nombre)
+./ce-cli.sh grading evaluate \
+  --path="entregas/Kimberly.pdf" \
+  --exercise="ce-specs/catalog/ib/spanish_b/exercises/ib.c2.spanish_b_hl.writing_mock3_paper1.v1.yaml" \
+  --level="HL" \
+  --anonymity="first-name" \
+  --zero-pii=true \
+  --llm=true \
+  --model="qwen3.8-omni-flash"
 ```
