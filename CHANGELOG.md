@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.9.16] - 2026-11-20
+
+### Added
+- **Esponsorización OER, Filtrado `seoStatus` y Refinamiento de Páginas Curriculares (`apps/colabedu-net`, `apps/colabedu-catalog`)**:
+  - Nueva página bilingüe de esponsorización de digitalización de libros OER (`#4`).
+  - Filtrado de catálogo por `metadata.seo.status` con insignia `Experimental` y actualización de `catalog-philosophy.astro` e `interactive-lessons.astro` (`/{es,en}`).
+  - Gate de validación JSON Schema en CI para `extension-selectors.v1.json`.
+
+### Changed
+- **Ecosystem Alignment**: Alineación de release a **`0.9.16`**.
+
 ## [0.9.13] - 2026-11-19
 
 ### Added

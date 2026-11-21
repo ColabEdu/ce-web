@@ -215,6 +215,58 @@ const appUrl = appLink('app', '/');
                 </div>
             </div>
 
+            <!-- Arquitectura Multi-OER en 2 Niveles y Deep-Dive Bidireccional -->
+            <div class="precision-card p-8 sm:p-12 bg-white border-indigo-200 mb-16">
+                <div class="max-w-4xl mx-auto">
+                    <span class="text-xs font-mono font-bold text-indigo-700 uppercase tracking-wider block mb-2">Arquitectura en 2 Niveles · Coste Marginal $0.00 por Jurisdicción</span>
+                    <h2 class="text-2xl sm:text-3xl font-black text-slate-900 mb-4">
+                        Multi-OER Live SmartBooks (1:1) &amp; Cursos Soberanos Federados
+                    </h2>
+                    <p class="text-slate-600 text-sm sm:text-base leading-relaxed mb-8">
+                        En lugar de resumir un libro de texto o crear un curso aislado por país, ColabEdu separa el <strong>libro vivo completo (Tier 1)</strong> del <strong>currículo oficial soberano (Tier 2)</strong>: cada obra abierta se digitaliza una única vez capítulo a capítulo y sección a sección (<code>X.Y</code>), y se federa mediante enlaces bidireccionales <code>deepDiveOerRefs</code> hacia cualquier currículo oficial (LOMLOE, EBAU/PAU, AP, IB DP).
+                    </p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                        <div class="p-6 rounded-2xl bg-indigo-50/70 border border-indigo-200">
+                            <div class="text-xs font-mono font-bold text-indigo-700 uppercase mb-2">Tier 1 · SmartBook 1:1 Vivo</div>
+                            <h3 class="text-lg font-extrabold text-slate-900 mb-2">Fidelidad total Capítulo → Sección X.Y</h3>
+                            <p class="text-xs text-slate-600 leading-relaxed mb-3">
+                                Cada sección del libro (p. ej. OpenStax <em>Biology 2e</em>, 45 capítulos y 210 secciones <code>X.Y</code>) se convierte en una lección interactiva completa de 12 diapositivas con mapa estructural Mermaid, formulación KaTeX, glosario y rango exacto de páginas del PDF original.
+                            </p>
+                            <div class="text-[11px] font-mono text-indigo-800 bg-white/80 px-3 py-1.5 rounded-lg border border-indigo-200">
+                                Digitalizado 1 vez &rarr; Reutilizado en N países a coste $0.00
+                            </div>
+                        </div>
+
+                        <div class="p-6 rounded-2xl bg-teal-50/70 border border-teal-200">
+                            <div class="text-xs font-mono font-bold text-teal-700 uppercase mb-2">Tier 2 · Cuarteto Multi-OER + Deep-Dive</div>
+                            <h3 class="text-lg font-extrabold text-slate-900 mb-2">4 Roles OER enlazados en cada lección</h3>
+                            <p class="text-xs text-slate-600 leading-relaxed mb-3">
+                                Cada lección del curso canónico combina la normativa oficial con 4 botones directos <code>deepDiveOerRefs</code> para ampliar conocimiento sin salir del aula: <strong>Libro Primario 1:1</strong>, <strong>Guía Curricular Oficial</strong>, <strong>Laboratorio Experimental</strong> y <strong>Banco Oficial de Exámenes</strong>.
+                            </p>
+                            <div class="text-[11px] font-mono text-teal-800 bg-white/80 px-3 py-1.5 rounded-lg border border-teal-200">
+                                4 variantes de ritmo: Completo · Intensivo · Examen · Remediación
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <figure class="rounded-xl overflow-hidden border border-slate-200 bg-slate-50">
+                            <img src="/images/showcase/canonical-deep-dive-oer.png" alt="Lección Canónica con enlaces deepDiveOerRefs y KaTeX" class="w-full h-auto block" loading="lazy" />
+                            <figcaption class="p-3 text-[11px] text-slate-600 border-t border-slate-200">
+                                <strong>Lección Canónica EBAU/PAU:</strong> barra interactiva <code>deepDiveOerRefs</code> con salto directo a SmartBook 1:1, Guía, Lab y Banco de Exámenes.
+                            </figcaption>
+                        </figure>
+                        <figure class="rounded-xl overflow-hidden border border-slate-200 bg-slate-50">
+                            <img src="/images/showcase/smartbook-1to1-mermaid.png" alt="SmartBook 1:1 OpenStax con Mapa Estructural Mermaid" class="w-full h-auto block" loading="lazy" />
+                            <figcaption class="p-3 text-[11px] text-slate-600 border-t border-slate-200">
+                                <strong>SmartBook 1:1 (Sección 3.2, págs. 65-72):</strong> contenido completo del libro abierto con Mapa Estructural Mermaid contextualizado.
+                            </figcaption>
+                        </figure>
+                    </div>
+                </div>
+            </div>
+
             <!-- Por qué colabedu.org es 100% abierto -->
             <div class="p-8 sm:p-12 rounded-2xl bg-slate-900 text-white flex flex-col sm:flex-row items-center justify-between gap-8">
                 <div class="max-w-xl">
