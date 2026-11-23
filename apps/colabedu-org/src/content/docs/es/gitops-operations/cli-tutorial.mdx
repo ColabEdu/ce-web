@@ -1893,4 +1893,49 @@ Permite convertir mazos de slides PDF/OER (o figuras de capítulos OER) en lámi
   --unit=2 \
   --vectors=visual-slides \
   --with-audio-overview
+
+# 3. Planificar cohorte horizontal multipaís (HS -> MS) con Soberanía OER en 4 Anillos y analizar impacto DAG ($0.00 LLM)
+COLABEDU_DEV_ROLE=CONTENT_CREATOR ./ce-cli.sh normative matrix \
+  --countries=ES,MX,CO,CL --subjects=BIOLOGY,MATHEMATICS --levels=HS,MS --plan
+
+COLABEDU_DEV_ROLE=CONTENT_CREATOR ./ce-cli.sh course cohort \
+  --subject=BIOLOGY --countries=ES,MX,CO,CL --levels=HS,MS --plan
+
+# 3b. Modo Academia 35 Semanas + Pool Supranacional + Cosecha Anillo 5 + Enrutador Qwen TTS
+./ce-cli.sh --env=curriculum oer harvest-seeds \
+  --subject=ENGLISH_L2 --standard=standard.cefr --language=en --count=30
+./ce-cli.sh --env=curriculum course academy-status \
+  --subjects=ENGLISH_L2,SPANISH_L2,MATHEMATICS,BIOLOGY --countries=ES,BR,US,FR
+COLABEDU_DEV_ROLE=CONTENT_CREATOR ./ce-cli.sh --env=curriculum course cohort \
+  --subjects=ENGLISH_L2,SPANISH_L2 --countries=ES,BR,US,CN --levels=HS,MS \
+  --academy-mode --reuse-supranational-pool=true --tts-tier=QWEN_SELF_HOSTED_TTS --plan
+
+./ce-cli.sh spec impact --from-git
+./ce-cli.sh spec impact --node=global.exercise_type.cartesian_graph.v1
+
+# 4. Upgrade diferencial multi-entidad aislado en Copy-on-Write DAG Overlay (Redis) y promoción atómica
+./ce-cli.sh course upgrade --course-ref=course.es.lomloe.biology.hs.v1 \
+  --vectors=widget-codemod,universal-widget-hints,slide-companion,exercise-rubric-sync,stem-cas-check \
+  --bump=MINOR --skip-llm --to-overlay=ovl-canary-01
+./ce-cli.sh spec overlay list
+./ce-cli.sh spec overlay inspect --id=ovl-canary-01
+./ce-cli.sh spec overlay promote --id=ovl-canary-01
+
+# 5. Demonio de Factoría Curricular aislada en puerto :8083 + 2ª BD PostgreSQL (colabedudb_curriculum) y Redis DB #2
+./ce-cli.sh factory init-db
+./ce-cli.sh factory ensure
+./ce-cli.sh factory status
+./ce-cli.sh --env=curriculum course cohort --subject=BIOLOGY --countries=ES,MX --levels=HS,MS --plan
+
+# 6. Flujo Híbrido Antigravity + CLI ↔ ColabEdu Gradebook UX (Paso 1 -> Paso 2 Partner Teacher)
+./ce-cli.sh grading batch-drive \
+  --folder-url="https://drive.google.com/drive/folders/15bhGLJq28sjpmyxDmw5XhoAIqQhvKZme" \
+  --spec="ce-specs/catalog/ib/spanish_b/exercises/ib.c2.spanish_b_hl.writing_carta_amigo_personal.v2.yaml" \
+  --level=HL \
+  --stage-in-colabedu \
+  --defer-gdocs \
+  --assignment-title="IB Spanish B HL — Carta a un amigo"
+
+# 7. Suite E2E Híbrida de ColabEdu Editorial Studio & Multi-LMS (4 Capas: Backend + MV3 + Tier A Dart + Tier B Chromium)
+./ce-cli.sh test e2e-studio-lms
 ```
