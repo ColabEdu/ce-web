@@ -127,7 +127,7 @@ if (!axiomText && lesson.slides) {
   }
 }
 
-// Extract quiz questions from slides
+// Extract quiz & ordering questions from slides
 const quizQuestions: { q: SlideQuestion; slideTitle: string; slideIndex: number; slideId?: string }[] = [];
 if (lesson.slides) {
   for (const [idx, s] of lesson.slides.entries()) {
@@ -135,6 +135,20 @@ if (lesson.slides) {
       for (const q of s.embeddedWidget.props.questions) {
         quizQuestions.push({ q, slideTitle: s.title || "Ejercicio", slideIndex: idx, slideId: s.id });
       }
+    } else if (s.embeddedWidget?.type === 'ordering_widget' && s.embeddedWidget?.props) {
+      const p = s.embeddedWidget.props as any;
+      const pool: string[] = Array.isArray(p.candidatePool)
+        ? p.candidatePool.map((c: any) => typeof c === 'object' ? `${c.id}: ${c.text}` : String(c))
+        : (Array.isArray(p.segments)
+            ? p.segments.map((c: any) => typeof c === 'object' ? `${c.id}: ${c.text}` : String(c))
+            : []);
+      const promptText = p.passageTemplate || p.anchoredPassage || p.leadInParagraph || p.instruction || s.title || "Coherencia Discursiva";
+      quizQuestions.push({
+        q: { id: `order_${idx}`, text: String(promptText), options: pool },
+        slideTitle: s.title || "Coherencia Discursiva",
+        slideIndex: idx,
+        slideId: s.id,
+      });
     }
   }
 }
